@@ -27,7 +27,7 @@ Alguns dels punts que han de quedar explicats:
        - Programes web: Penpot, Taiga, Github, Chat GPT i Google Docs. 
        - Aplicacións: Node, Laravel, MYSQL, React. 
        - Programes: CSS, HTML. PHP.
-       - Plugins: Visual Studio Code, GitHub Copilot, Error Lens, Live Server, MySQL i node-snippets.
+       - Plugins: Visual Studio Code, GitHub Copilot, Error Lens, Live Server, MySQL, node-snippets i ES7 + React-Native.
    * Interrelació entre els diversos components
        -
        -
