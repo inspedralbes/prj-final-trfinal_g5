@@ -23,8 +23,8 @@ return new class extends Migration
             $table->date('data_naixement')->nullable();
             $table->decimal('altura', 10, 2)->default(0);
             $table->decimal('pes', 10, 2)->default(0);
-            $table->integer('telefon')->nullable()->default(0); // Ajuste aquí, se permiten valores nulos
-            $table->string('foto_perfil')->nullable(); // Ajuste aquí, se permiten valores nulos
+            $table->integer('telefon')->nullable()->default(0); 
+            $table->string('foto_perfil')->nullable();
         });
     }
     
