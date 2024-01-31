@@ -21,7 +21,6 @@ return new class extends Migration
             $table->decimal('proteines', 10, 2)->nullable();
             $table->decimal('carbohidrats', 10, 2)->nullable();
             $table->decimal('grases', 10, 2)->nullable();
-            $table->timestamps();
         });
     }
 

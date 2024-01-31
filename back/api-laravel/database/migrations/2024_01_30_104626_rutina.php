@@ -13,7 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('rutinas', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('usuari_id')->constrained('usuaris')->onDelete('cascade');
+            $table->string('nom');
+            $table->string('series')->nullable();
+            $table->string('repeticions')->nullable();
+
+        });
     }
 
     /**
