@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Hola soy Arturo, tu asistente de Google</h1>
+    <h1>Hola soy Arturo, tu asistente personal</h1>
     <div class="chat">
       <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
         <div v-if="message.role === 'user'" class="user-message">
@@ -18,12 +18,10 @@
         </div>
       </div>
       <!-- Mostrar animación de carga si isLoading es true -->
-      <div v-if="isLoading" class="loading-animation"></div>
+      <div v-if="isLoading || isSending" class="loading-animation"></div>
     </div>
-    <div class="input-container">
-      <textarea v-model="message" class="message-input" placeholder="Mensaje Arturo"></textarea>
-      <button @click="enviarMensaje" class="send-button">Enviar</button>
-    </div>
+    <textarea v-model="message" class="message-input" placeholder="Mensaje Arturo"></textarea>
+    <button @click="enviarMensaje" class="send-button" :disabled="!message.trim() || isSending">Enviar</button>
   </div>
 </template>
 
@@ -36,21 +34,30 @@ export default {
       message: '',
       chatMessages: [],
       isLoading: false,
+      isSending: false,
     };
   },
   methods: {
     async enviarMensaje() {
       try {
+        // Verificar si el mensaje está vacío
+        if (!this.message.trim()) {
+          // Si el mensaje está vacío, no hagas nada y sal del método
+          return;
+        }
+
         // Agregar el mensaje del usuario al historial de chat
         this.chatMessages.push({
           role: 'user',
           content: this.message,
         });
 
-        // Activar la animación de carga
+        // Activar la animación de carga y el indicador de envío
         this.isLoading = true;
+        this.isSending = true;
 
-        // Realizar la solicitud a la API
+        const resposta = this.message;
+        this.message = '';
         const apiUrl = 'http://localhost:1234/v1/chat/completions';
         const response = await axios.post(apiUrl, {
           "messages": [
@@ -60,7 +67,7 @@ export default {
             },
             {
               "role": "user",
-              content: this.message,
+              content: resposta,
             }
           ],
         });
@@ -68,15 +75,15 @@ export default {
         // Agregar la respuesta de la API al historial de chat
         this.chatMessages.push(...response.data.choices.map(choice => choice.message));
 
-        // Desactivar la animación de carga
+        // Desactivar la animación de carga y el indicador de envío
         this.isLoading = false;
+        this.isSending = false;
 
-        // Limpiar el campo de entrada después de enviar el mensaje
-        this.message = '';
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);
-        // En caso de error, también desactivar la animación de carga
+        // En caso de error, también desactivar la animación de carga y el indicador de envío
         this.isLoading = false;
+        this.isSending = false;
       }
     },
     getMessageClass(message) {
@@ -94,11 +101,6 @@ export default {
   max-width: 600px;
   margin: 0 auto;
   text-align: center;
-}
-
-.input-container {
-  display: flex;
-  justify-content: space-between; /* Alinea los elementos a los extremos */
 }
 
 h1 {
@@ -152,6 +154,7 @@ h1 {
 
 .assistant-message-content {
   max-width: 70%;
+  text-align: left; /* Alinea el texto a la izquierda */
 }
 
 .loading-animation {
@@ -171,7 +174,7 @@ h1 {
 }
 
 .message-input {
-  flex: 1; /* Ocupa todo el espacio restante */
+  width: calc(100% - 20px);
   padding: 10px;
   margin: 10px 0;
   box-sizing: border-box;
@@ -184,6 +187,7 @@ h1 {
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
+  display: inline-block;
   font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
@@ -191,5 +195,10 @@ h1 {
 
 .send-button:hover {
   background-color: #45a049;
+}
+
+.error-message {
+  color: red;
+  margin-top: 5px;
 }
 </style>
