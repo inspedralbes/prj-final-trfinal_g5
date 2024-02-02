@@ -11,7 +11,7 @@
           <p>{{ message.content }}</p>
         </div>
         <div v-else-if="message.role === 'assistant'" class="assistant-message">
-          <img src="./public/img/icono_Arturo.jpg" alt="Arturo Avatar" class="assistant-avatar" />
+          <img src="/img/icono_Arturo.jpg" alt="Arturo Avatar" class="assistant-avatar" />
           <div class="assistant-message-content">
             <p><strong>Arturo</strong><br> {{ message.content }}</p>
           </div>
@@ -63,7 +63,7 @@ export default {
           "messages": [
             {
               "role": "system",
-              "content": "Respondeme en español, tu nombre es Arturo, puedes responderme en formato JSON, solo quiero que me lo dividas por número de días y solo quiero que guardes el ejercicio, los sets y las repeticiones"
+              "content": "Respondeme en español, tu nombre es Arturo"
             },
             {
               "role": "user",
