@@ -4,12 +4,16 @@
     <div class="chat">
       <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
         <div v-if="message.role === 'user'" class="user-message">
+          <div class="user-info">
+            <img src="" alt="User Avatar" class="user-avatar" />
+            <p class="user-name">Nombre del Usuario</p>
+          </div>
           <p>{{ message.content }}</p>
         </div>
         <div v-else-if="message.role === 'assistant'" class="assistant-message">
-          <img src="" alt="Arturo Avatar" class="assistant-avatar" />
+          <img src="./public/img/icono_Arturo.jpg" alt="Arturo Avatar" class="assistant-avatar" />
           <div class="assistant-message-content">
-            <p><strong>Arturo:</strong> {{ message.content }}</p>
+            <p><strong>Arturo</strong><br> {{ message.content }}</p>
           </div>
         </div>
       </div>
@@ -107,6 +111,23 @@ h1 {
   border-radius: 8px;
   align-self: flex-end;
   margin-bottom: 8px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-name {
+  font-weight: bold;
 }
 
 .assistant-message {
