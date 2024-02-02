@@ -20,8 +20,10 @@
       <!-- Mostrar animación de carga si isLoading es true -->
       <div v-if="isLoading" class="loading-animation"></div>
     </div>
-    <textarea v-model="message" class="message-input" placeholder="Mensaje Arturo"></textarea>
-    <button @click="enviarMensaje" class="send-button">Enviar</button>
+    <div class="input-container">
+      <textarea v-model="message" class="message-input" placeholder="Mensaje Arturo"></textarea>
+      <button @click="enviarMensaje" class="send-button">Enviar</button>
+    </div>
   </div>
 </template>
 
@@ -94,6 +96,11 @@ export default {
   text-align: center;
 }
 
+.input-container {
+  display: flex;
+  justify-content: space-between; /* Alinea los elementos a los extremos */
+}
+
 h1 {
   color: #333;
   font-size: 24px;
@@ -164,7 +171,7 @@ h1 {
 }
 
 .message-input {
-  width: calc(100% - 20px);
+  flex: 1; /* Ocupa todo el espacio restante */
   padding: 10px;
   margin: 10px 0;
   box-sizing: border-box;
@@ -177,7 +184,6 @@ h1 {
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
