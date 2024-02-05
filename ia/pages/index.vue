@@ -4,7 +4,7 @@
             <div class="logo-container">
                 <img src="../public/logo_fithub.png" alt="FitHub Logo" class="logo-image" />
             </div>
-            <!-- Formulario de inicio de sesión -->
+
             <form class="form-container" @submit.prevent="login">
                 <div class="form-field">
                     <label class="form-label" for="username">Correu electrónic:</label>
@@ -12,8 +12,8 @@
                         :class="{ 'error': showError && !isValid }" />
                 </div>
                 <div class="form-field">
-                    <label class="form-label" for="password">Contrasenya:</label>
-                    <input v-model="password" class="form-input" type="password" placeholder="Contrasenya"
+                    <label class="form-label" for="contrasenya">Contrasenya:</label>
+                    <input v-model="contrasenya" class="form-input" type="password" placeholder="Contrasenya"
                         :class="{ 'error': showError && !isValid }" />
                     <p v-if="showError && !isValid" class="form-error">Correu electrónic o contrasenya incorrectes.</p>
                 </div>
@@ -31,21 +31,25 @@ export default {
     data() {
         return {
             email: '',
-            password: '',
+            contrasenya: '',
             showError: false,
             isValid: true
         };
     },
     methods: {
         async login() {
-            if (!this.email || !this.password) {
+            console.log('Inicio de sesión iniciado');
+
+            if (!this.email || !this.contrasenya) {
                 // Validar si los campos están vacíos
                 this.showError = true;
                 this.isValid = false;
+                console.log('Campos vacíos');
                 return;
             }
 
             try {
+                console.log('Enviando solicitud fetch');
                 const response = await fetch('http://localhost:8000/api/loguejat', {
                     method: 'POST',
                     headers: {
@@ -53,35 +57,35 @@ export default {
                     },
                     body: JSON.stringify({
                         email: this.email,
-                        contrasenya: this.password
+                        contrasenya: this.contrasenya
                     })
                 });
 
-                const data = await response.json(); // Convertir la respuesta a JSON
+                console.log('Respuesta recibida');
+
+                const data = await response.json();
 
                 if (response.ok) {
-                    // Si la respuesta es correcta, pero el usuario no está autenticado
                     if (!data.loggedIn) {
                         this.showError = true;
                         this.isValid = false;
+                        console.log('Usuario no autenticado');
                     } else {
-                        // Si la autenticación es exitosa y el usuario está autenticado
                         this.$router.push('/home');
                     }
                 } else {
-                    // Si la respuesta no es correcta, mostrar error
                     this.showError = true;
                     this.isValid = false;
+                    console.log('Respuesta no exitosa');
                 }
             } catch (error) {
                 console.error('Error al iniciar sesión:', error);
-                // Manejar el error, por ejemplo, mostrar un mensaje al usuario
                 this.showError = true;
                 this.isValid = false;
+                console.log('Error en la solicitud fetch');
             }
         },
         goToRegister() {
-            // Lógica para redirigir a la página de registro
             this.$router.push('/registro');
         }
     }

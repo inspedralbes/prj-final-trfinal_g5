@@ -16,11 +16,6 @@
     </body>
 </template>
 
-<script>
-export default {
-
-}
-</script>
 
 <style scoped>
 /* Estilos de los divs en el componente */
