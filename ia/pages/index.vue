@@ -53,30 +53,30 @@ export default {
                 const response = await fetch('http://localhost:8000/api/loguejat', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                         email: this.email,
-                        contrasenya: this.contrasenya
-                    })
+                        contrasenya: this.contrasenya,
+                    }),
                 });
 
-                console.log('Respuesta recibida');
-
-                const data = await response.json();
+                console.log('Respuesta recibida', response);
 
                 if (response.ok) {
-                    if (!data.loggedIn) {
+                    const data = await response.json();
+
+                    if (data.status === 1) {
+                        this.$router.push('/home');
+                    } else {
                         this.showError = true;
                         this.isValid = false;
                         console.log('Usuario no autenticado');
-                    } else {
-                        this.$router.push('/home');
                     }
                 } else {
                     this.showError = true;
                     this.isValid = false;
-                    console.log('Respuesta no exitosa');
+                    console.log('Respuesta no exitosa', response.statusText);
                 }
             } catch (error) {
                 console.error('Error al iniciar sesión:', error);
@@ -86,7 +86,7 @@ export default {
             }
         },
         goToRegister() {
-            this.$router.push('/registro');
+            this.$router.push('/registre');
         }
     }
 };
