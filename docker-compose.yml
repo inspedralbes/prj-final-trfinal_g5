@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  nuxt:
+    build:
+      context: ./ia
+      dockerfile: Dockerfile
+    volumes:
+      - ./ia:/home/node/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - laravel
+
+  laravel:
+    build:
+      context: ./back/api-laravel
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back/api-laravel:/var/www/html
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: fithub
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    # command: "composer install && php artisan serve"
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fithub
+      MYSQL_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_RANDOM_ROOT_PASSWORD: "no"
+    volumes:
+      - ./basedatos:/var/lib/mysql
