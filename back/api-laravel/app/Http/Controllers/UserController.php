@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Usuaris;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Models\Usuaris;
-
 
 class UserController extends Controller
 {
-
-    public function registre(Request $request){
+    public function registre(Request $request)
+    {
+        \Log::info($request->all());
         try {
-            $validador = $request->validate([
+            $validator = $request->validate([
                 'email' => 'required|string|email|max:255|unique:usuaris',
                 'contrasenya' => 'required|string|min:6',
                 'nom' => 'required|string|max:255',
                 'cognoms' => 'required|string|max:255',
                 'data_naixement' => 'date',
                 'genere' => 'required|string',
-                'pes' => 'numeric|max:10',
-                'altura' => 'numeric|max:10',
+                'pes' => 'numeric',
+                'altura' => 'numeric',
                 'telefon' => 'integer|digits:9',
                 'foto_perfil' => 'image|mimes:jpeg,png,jpg',
             ]);
-    
+
+
             $usuari = new Usuaris();
             $usuari->email = $request->email;
             $usuari->contrasenya = Hash::make($request->contrasenya);
@@ -33,48 +35,43 @@ class UserController extends Controller
             $usuari->cognoms = $request->cognoms;
             $usuari->data_naixement = $request->data_naixement;
             $usuari->genere = $request->genere;
-    
-            // Verifica si se proporcionó un valor para 'pes' antes de establecerlo
+
             if ($request->has('pes')) {
                 $usuari->pes = $request->pes;
             }
-    
-            // Verifica si se proporcionó un valor para 'altura' antes de establecerlo
+
             if ($request->has('altura')) {
                 $usuari->altura = $request->altura;
             }
-    
-            // Verifica si se proporcionó un valor para 'telefon' antes de establecerlo
+
             if ($request->has('telefon')) {
                 $usuari->telefon = $request->telefon;
             }
-    
+
             $usuari->foto_perfil = $request->foto_perfil;
             $usuari->save();
-    
+
             return response()->json([
                 'status' => 1,
                 'message' => 'Usuari creat correctament'
             ]);
         } catch (ValidationException $e) {
-            // Captura excepciones de validación
+            // Captura las excepciones de validación y obtén los mensajes de error
+            $errors = $e->errors();
+
             return response()->json([
                 'status' => 0,
-                'message' => 'Error de validación',
-                'errors' => $e->errors(),
+                'message' => 'Error en el registro: ' . implode(', ', Arr::flatten($errors))
             ]);
         } catch (\Exception $e) {
-            // Captura otras excepciones
+            // Captura otras excepciones y proporciona un mensaje de error general
             return response()->json([
                 'status' => 0,
-                'message' => 'Error al crear usuari',
-                'error' => $e->getMessage(),
+                'message' => 'Error en el registro: ' . $e->getMessage()
             ]);
         }
     }
     
-    
-
     public function loguejat(Request $request){
         $request->validate([
             'email' => 'required|string|email|max:255',
