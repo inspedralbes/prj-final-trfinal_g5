@@ -129,6 +129,11 @@ export default {
             this.showStartButton = false;
         },
         async seguentPregunta() {
+            // Deshabilitar el botón de "Següent" si el campo de texto está vacío
+            if (this.currentAnswer.trim() === "") {
+                return;
+            }
+
             if (this.currentQuestionIndex === this.registrationQuestions.length - 1) {
                 // Si es la última pregunta, llamar a registerUser
                 console.log('Registrando usuario...');
@@ -179,7 +184,6 @@ export default {
                 console.log(`Pregunta ${this.currentQuestionIndex + 1}: ${currentQuestion.question}`);
                 console.log(`Respuesta: ${this.currentAnswer}`);
 
-
                 // Incrementar el índice de la pregunta y restablecer la respuesta actual
                 this.currentQuestionIndex++;
                 this.currentAnswer = "";
@@ -187,50 +191,34 @@ export default {
         },
 
         async saltarPregunta() {
+            // Obtener la pregunta actual
             const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
-            this.userData[currentQuestion.inputType] = this.currentAnswer;
 
-            if (this.currentQuestionIndex === this.registrationQuestions.length - 1) {
-                // Si es la última pregunta, llamar a registerUser
-                console.log('Registrando usuario...');
+            // Verificar si la pregunta actual es requerida
+            if (currentQuestion.required) {
+                // Mostrar un mensaje de error indicando que la pregunta es requerida
+                this.showErrorMessage = true;
+                this.errorMessage = "Esta pregunta es requerida. Por favor, responde antes de continuar.";
+                return;
+            }
+
+            // Si la pregunta no es requerida, o si es requerida pero no tiene respuesta, proceder a la siguiente pregunta
+
+            // Incrementar el índice de la pregunta
+            this.currentQuestionIndex++;
+
+            // Reiniciar la respuesta actual
+            this.currentAnswer = "";
+
+            // Si es la última pregunta, registra al usuario
+            if (this.currentQuestionIndex === this.registrationQuestions.length) {
                 await this.registerUser();
-            } else {
-                // Verificar si la pregunta actual es requerida y si la respuesta está vacía o si se ha escrito algo
-                if (currentQuestion.required && this.currentAnswer.trim() === "") {
-                    this.showErrorMessage = true;
-                    this.errorMessage = "Por favor, responde a esta pregunta antes de continuar.";
-                    return;
-                }
-
-                // Reiniciar el mensaje de error
-                this.showErrorMessage = false;
-
-                // Agregar el console.log aquí para mostrar la pregunta y respuesta actual antes de saltar a la siguiente pregunta
-                console.log(`Pregunta ${this.currentQuestionIndex + 1}: ${currentQuestion.question}`);
-                console.log(`Respuesta: ${this.currentAnswer}`);
-
-                // Incrementar el índice de la pregunta
-                this.currentQuestionIndex++;
-
-                // Reiniciar la respuesta actual
-                this.currentAnswer = "";
-
-                // Verificar si la siguiente pregunta es requerida y si ya se ha respondido
-                const nextQuestion = this.registrationQuestions[this.currentQuestionIndex];
-                if (nextQuestion && nextQuestion.required && this.currentAnswer.trim() === "") {
-                    this.showErrorMessage = true;
-                    this.errorMessage = "Por favor, responde a esta pregunta antes de continuar.";
-                    // Retroceder al índice de la pregunta actual
-                    this.currentQuestionIndex--;
-                    return; // Salir de la función si hay un error
-                }
-
-                // Si es la última pregunta, registra al usuario
-                if (this.currentQuestionIndex === this.registrationQuestions.length - 1) {
-                    await this.registerUser();
-                }
             }
         },
+
+
+
+
         goToLogin() {
             this.$router.push('/');
         },
