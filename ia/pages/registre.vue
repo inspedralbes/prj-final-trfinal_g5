@@ -28,11 +28,11 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'altura'"
                     v-model="currentAnswer" type="text" placeholder="Altura" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
-                    v-model="currentAnswer" type="text" placeholder="Numero de telefon" @input="validateTelefonInput">
+                    v-model="currentAnswer" type="tel" placeholder="Número de teléfono" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'date'" v-model="currentAnswer"
                     type="date">
                 <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index">
-                    <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
+                    <input type="genere" :id="'option' + index" :value="option" v-model="currentAnswer">
                     <label :for="'option' + index">{{ option }}</label>
                 </div>
 
@@ -41,9 +41,6 @@
                 </div>
                 <button @click="seguentPregunta">Seguent</button>
                 <button @click="saltarPregunta">Saltar</button>
-            </div>
-            <div v-else>
-                <p>¡Registro completado! Gracias por registrarte.</p>
             </div>
         </div>
     </div>
@@ -136,7 +133,6 @@ export default {
 
             if (this.currentQuestionIndex === this.registrationQuestions.length - 1) {
                 // Si es la última pregunta, llamar a registerUser
-                console.log('Registrando usuario...');
                 await this.registerUser();
             } else {
                 // Verificar si la pregunta actual es requerida y si la respuesta está vacía
@@ -151,44 +147,51 @@ export default {
                 // Reiniciar el mensaje de error
                 this.showErrorMessage = false;
 
+                // Manejar casos específicos como contraseña, número de teléfono y género
+                if (currentQuestion.inputType === 'password') {
+                    this.userData.contrasenya = this.currentAnswer;
+                } else if (currentQuestion.inputType === 'telefon') {
+                    this.userData.telefon = this.currentAnswer;
+                } else if (currentQuestion.inputType === 'genere') {
+                    // El género puede ser un caso especial, asegúrate de que la lógica maneje los casos correctamente
+                    this.userData.genere = this.currentAnswer;
+                }
+
                 // Validar la entrada según el tipo de pregunta
                 switch (currentQuestion.inputType) {
-    case 'date':
-        const selectedDate = new Date(this.currentAnswer);
-        const today = new Date();
-        if (selectedDate > today) {
-            this.errorMessage = "La fecha de nacimiento no puede ser en el futuro.";
-            this.showErrorMessage = true;
-            return;
-        }
-        // Asignar valor a userData
-        this.userData.dataNaixement = this.currentAnswer;
-        break;
-    case 'email':
-        // Validar el correo electrónico
-        this.validateEmailInput();
-        if (this.showErrorMessage) {
-            return; // No avanzar si hay un error en el correo electrónico
-        }
-        // Asignar valor a userData
-        this.userData.email = this.currentAnswer;
-        break;
-    case 'telefon':
-        // Validar el número de teléfono
-        this.validateTelefonInput();
-        if (!this.phoneNumberValid) {
-            this.errorMessage = 'Por favor, introduce un número de teléfono válido.';
-            this.showErrorMessage = true;
-            return; // Detener el proceso si hay un error
-        }
-        // Asignar valor a userData
-        this.userData.telefon = this.currentAnswer;
-        break;
-    default:
-        // Asignar valor a userData para los otros tipos de pregunta
-        this.userData[currentQuestion.inputType] = this.currentAnswer;
-        break;
-}
+                    case 'date':
+                        const selectedDate = new Date(this.currentAnswer);
+                        const today = new Date();
+                        if (selectedDate > today) {
+                            this.errorMessage = "La fecha de nacimiento no puede ser en el futuro.";
+                            this.showErrorMessage = true;
+                            return;
+                        }
+                        // Asignar valor a userData
+                        this.userData.dataNaixement = this.currentAnswer;
+                        break;
+                    case 'email':
+                        // Validar el correo electrónico
+                        this.validateEmailInput();
+                        if (this.showErrorMessage) {
+                            return; // No avanzar si hay un error en el correo electrónico
+                        }
+                        // Asignar valor a userData
+                        this.userData.email = this.currentAnswer;
+                        break;
+                    case 'telefon':
+                        // Validar el número de teléfono
+                        this.validateTelefonInput();
+                        if (!this.phoneNumberValid) {
+                            this.errorMessage = 'Por favor, introduce un número de teléfono válido.';
+                            this.showErrorMessage = true;
+                            return; // Detener el proceso si hay un error
+                        }
+                        // No necesitas asignar esto de nuevo aquí, ya lo has manejado anteriormente
+                        break;
+                    default:
+                        break;
+                }
 
                 // Agregar el console.log aquí para mostrar la pregunta y respuesta actual antes de avanzar a la siguiente pregunta
                 console.log(`Pregunta ${this.currentQuestionIndex + 1}: ${currentQuestion.question}`);
@@ -247,7 +250,7 @@ export default {
             this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, '').slice(0, 9);
 
             // Verificar si el número de teléfono tiene exactamente 9 dígitos
-            this.phoneNumberValid = this.currentAnswer.length === 9;
+            this.phoneNumberValid = this.currentAnswer.length === 9 || this.currentAnswer === "";
 
             // Reiniciar el mensaje de error si la validación es exitosa
             this.showErrorMessage = false;
@@ -284,36 +287,27 @@ export default {
 
         async registerUser() {
             try {
-                const userData = {
-                    email: this.userData.email,
-                    contrasenya: this.userData.contrasenya,
-                    nom: this.userData.nom,
-                    cognoms: this.userData.cognoms,
-                    dataNaixement: this.userData.dataNaixement,
-                    genere: this.userData.genere,
-                    pes: this.userData.pes,
-                    altura: this.userData.altura,
-                    telefon: this.userData.telefon,
-                };
+                // Console log para ver los datos de usuario que se enviarán a la API
+                console.log('Datos de usuario enviados a la API:');
+                console.log(JSON.stringify(this.userData, null, 2));
 
-                // Console log para ver lo que se enviará a la API
-                console.log('Datos de usuario enviados a la API:', userData);
-
-                // Realizar la solicitud de registro
+                // Realizar la solicitud de registro con los datos del usuario
                 const response = await fetch('http://localhost:8000/api/registre', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(userData),
+                    body: JSON.stringify(this.userData),
                 });
 
                 // Analizar la respuesta JSON
                 const responseData = await response.json();
 
                 if (!response.ok) {
-                    // Si la respuesta no es exitosa, lanzar un error con el mensaje de error de la respuesta
-                    throw new Error(`Error al registrar usuario: ${responseData.message}`);
+                    // Si la respuesta no es exitosa, mostrar un mensaje de error pero no redirigir
+                    this.errorMessage = `Error al registrar usuario: ${responseData.message}`;
+                    this.showErrorMessage = true;
+                    return; // Salir del método para evitar el redireccionamiento
                 }
 
                 // Registro exitoso, redirigir al usuario a la página de inicio
@@ -322,11 +316,15 @@ export default {
                 // Error al realizar la solicitud o al procesar la respuesta
                 console.error('Error al registrar usuario:', error.message);
                 this.errorMessage = 'Se produjo un error al registrar el usuario. Por favor, inténtalo de nuevo más tarde.';
+                this.showErrorMessage = true;
             }
         }
 
 
-    },
+
+
+    }
+
 };
 </script>
 
