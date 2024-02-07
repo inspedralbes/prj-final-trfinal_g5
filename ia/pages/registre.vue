@@ -153,32 +153,42 @@ export default {
 
                 // Validar la entrada según el tipo de pregunta
                 switch (currentQuestion.inputType) {
-                    case 'date':
-                        const selectedDate = new Date(this.currentAnswer);
-                        const today = new Date();
-                        if (selectedDate > today) {
-                            this.errorMessage = "La fecha de nacimiento no puede ser en el futuro.";
-                            this.showErrorMessage = true;
-                            return;
-                        }
-                        break;
-                    case 'email':
-                        this.validateEmailInput(); // Validar el correo electrónico
-                        if (this.showErrorMessage) {
-                            return; // No avanzar si hay un error en el correo electrónico
-                        }
-                        break;
-                    case 'telefon':
-                        this.validateTelefonInput(); // Validar el número de teléfono
-                        if (!this.phoneNumberValid) {
-                            this.errorMessage = 'Por favor, introduce un número de teléfono válido.';
-                            this.showErrorMessage = true;
-                            return; // Detener el proceso si hay un error
-                        }
-                        break;
-                    default:
-                        break;
-                }
+    case 'date':
+        const selectedDate = new Date(this.currentAnswer);
+        const today = new Date();
+        if (selectedDate > today) {
+            this.errorMessage = "La fecha de nacimiento no puede ser en el futuro.";
+            this.showErrorMessage = true;
+            return;
+        }
+        // Asignar valor a userData
+        this.userData.dataNaixement = this.currentAnswer;
+        break;
+    case 'email':
+        // Validar el correo electrónico
+        this.validateEmailInput();
+        if (this.showErrorMessage) {
+            return; // No avanzar si hay un error en el correo electrónico
+        }
+        // Asignar valor a userData
+        this.userData.email = this.currentAnswer;
+        break;
+    case 'telefon':
+        // Validar el número de teléfono
+        this.validateTelefonInput();
+        if (!this.phoneNumberValid) {
+            this.errorMessage = 'Por favor, introduce un número de teléfono válido.';
+            this.showErrorMessage = true;
+            return; // Detener el proceso si hay un error
+        }
+        // Asignar valor a userData
+        this.userData.telefon = this.currentAnswer;
+        break;
+    default:
+        // Asignar valor a userData para los otros tipos de pregunta
+        this.userData[currentQuestion.inputType] = this.currentAnswer;
+        break;
+}
 
                 // Agregar el console.log aquí para mostrar la pregunta y respuesta actual antes de avanzar a la siguiente pregunta
                 console.log(`Pregunta ${this.currentQuestionIndex + 1}: ${currentQuestion.question}`);
@@ -275,16 +285,19 @@ export default {
         async registerUser() {
             try {
                 const userData = {
-                    email: this.currentAnswer,
-                    contrasenya: this.currentAnswer,
-                    nom: this.currentAnswer,
-                    cognoms: this.currentAnswer,
-                    dataNaixement: this.currentAnswer,
-                    genere: this.currentAnswer,
-                    pes: this.currentAnswer,
-                    altura: this.currentAnswer,
-                    telefon: this.currentAnswer,
+                    email: this.userData.email,
+                    contrasenya: this.userData.contrasenya,
+                    nom: this.userData.nom,
+                    cognoms: this.userData.cognoms,
+                    dataNaixement: this.userData.dataNaixement,
+                    genere: this.userData.genere,
+                    pes: this.userData.pes,
+                    altura: this.userData.altura,
+                    telefon: this.userData.telefon,
                 };
+
+                // Console log para ver lo que se enviará a la API
+                console.log('Datos de usuario enviados a la API:', userData);
 
                 // Realizar la solicitud de registro
                 const response = await fetch('http://localhost:8000/api/registre', {
@@ -293,7 +306,6 @@ export default {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(userData),
-
                 });
 
                 // Analizar la respuesta JSON
