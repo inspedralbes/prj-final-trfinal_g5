@@ -37,7 +37,7 @@
                 </div>
 
                 <div v-if="showErrorMessage" class="error-message">
-                    Por favor, ingresa una respuesta antes de continuar.
+                    {{ errorMessage }}
                 </div>
                 <button @click="seguentPregunta">Seguent</button>
                 <button @click="saltarPregunta">Saltar</button>
@@ -54,9 +54,23 @@ export default {
     data() {
         return {
             showStartButton: true,
+            errorMessage: "",
+            showErrorMessage: false,
             currentQuestionIndex: 0,
             currentAnswer: "",
             selectedOptions: [],
+            phoneNumberValid: false,
+            userData: {
+                email: "",
+                contrasenya: "",
+                nom: "",
+                cognoms: "",
+                dataNaixement: "",
+                genere: "",
+                pes: "",
+                altura: "",
+                telefon: ""
+            },
             registrationQuestions: [
                 {
                     question: "Quin es el teu correu electronic?",
@@ -114,34 +128,108 @@ export default {
         startRegistration() {
             this.showStartButton = false;
         },
-        seguentPregunta() {
-            if (this.currentAnswer.trim() === "") {
-                this.showErrorMessage = true;
-                return;
-            }
+        async seguentPregunta() {
+            if (this.currentQuestionIndex === this.registrationQuestions.length - 1) {
+                // Si es la última pregunta, llamar a registerUser
+                console.log('Registrando usuario...');
+                await this.registerUser();
+            } else {
+                // Verificar si la pregunta actual es requerida y si la respuesta está vacía
+                const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
+                this.userData[currentQuestion.inputType] = this.currentAnswer;
+                if (currentQuestion.required && this.currentAnswer.trim() === "") {
+                    this.showErrorMessage = true;
+                    this.errorMessage = "Por favor, responde a esta pregunta antes de continuar.";
+                    return;
+                }
 
-            console.log(`Pregunta ${this.currentQuestionIndex + 1}, Respuesta: ${this.currentAnswer}`);
-            this.showErrorMessage = false;
-            this.currentQuestionIndex++;
-            this.currentAnswer = "";
+                // Reiniciar el mensaje de error
+                this.showErrorMessage = false;
+
+                // Validar la entrada según el tipo de pregunta
+                switch (currentQuestion.inputType) {
+                    case 'date':
+                        const selectedDate = new Date(this.currentAnswer);
+                        const today = new Date();
+                        if (selectedDate > today) {
+                            this.errorMessage = "La fecha de nacimiento no puede ser en el futuro.";
+                            this.showErrorMessage = true;
+                            return;
+                        }
+                        break;
+                    case 'email':
+                        this.validateEmailInput(); // Validar el correo electrónico
+                        if (this.showErrorMessage) {
+                            return; // No avanzar si hay un error en el correo electrónico
+                        }
+                        break;
+                    case 'telefon':
+                        this.validateTelefonInput(); // Validar el número de teléfono
+                        if (!this.phoneNumberValid) {
+                            this.errorMessage = 'Por favor, introduce un número de teléfono válido.';
+                            this.showErrorMessage = true;
+                            return; // Detener el proceso si hay un error
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                // Agregar el console.log aquí para mostrar la pregunta y respuesta actual antes de avanzar a la siguiente pregunta
+                console.log(`Pregunta ${this.currentQuestionIndex + 1}: ${currentQuestion.question}`);
+                console.log(`Respuesta: ${this.currentAnswer}`);
+
+
+                // Incrementar el índice de la pregunta y restablecer la respuesta actual
+                this.currentQuestionIndex++;
+                this.currentAnswer = "";
+            }
         },
-        saltarPregunta() {
+
+        async saltarPregunta() {
             const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
+            this.userData[currentQuestion.inputType] = this.currentAnswer;
 
-            // Verificar si la pregunta actual es obligatoria y si la respuesta está vacía
-            if (currentQuestion.required && this.currentAnswer.trim() === "") {
-                this.showErrorMessage = true;
-                return;
+            if (this.currentQuestionIndex === this.registrationQuestions.length - 1) {
+                // Si es la última pregunta, llamar a registerUser
+                console.log('Registrando usuario...');
+                await this.registerUser();
+            } else {
+                // Verificar si la pregunta actual es requerida y si la respuesta está vacía o si se ha escrito algo
+                if (currentQuestion.required && this.currentAnswer.trim() === "") {
+                    this.showErrorMessage = true;
+                    this.errorMessage = "Por favor, responde a esta pregunta antes de continuar.";
+                    return;
+                }
+
+                // Reiniciar el mensaje de error
+                this.showErrorMessage = false;
+
+                // Agregar el console.log aquí para mostrar la pregunta y respuesta actual antes de saltar a la siguiente pregunta
+                console.log(`Pregunta ${this.currentQuestionIndex + 1}: ${currentQuestion.question}`);
+                console.log(`Respuesta: ${this.currentAnswer}`);
+
+                // Incrementar el índice de la pregunta
+                this.currentQuestionIndex++;
+
+                // Reiniciar la respuesta actual
+                this.currentAnswer = "";
+
+                // Verificar si la siguiente pregunta es requerida y si ya se ha respondido
+                const nextQuestion = this.registrationQuestions[this.currentQuestionIndex];
+                if (nextQuestion && nextQuestion.required && this.currentAnswer.trim() === "") {
+                    this.showErrorMessage = true;
+                    this.errorMessage = "Por favor, responde a esta pregunta antes de continuar.";
+                    // Retroceder al índice de la pregunta actual
+                    this.currentQuestionIndex--;
+                    return; // Salir de la función si hay un error
+                }
+
+                // Si es la última pregunta, registra al usuario
+                if (this.currentQuestionIndex === this.registrationQuestions.length - 1) {
+                    await this.registerUser();
+                }
             }
-
-            // Reiniciar el mensaje de error
-            this.showErrorMessage = false;
-
-            // Incrementar el índice de la pregunta
-            this.currentQuestionIndex++;
-
-            // Reiniciar la respuesta actual
-            this.currentAnswer = "";
         },
         goToLogin() {
             this.$router.push('/');
@@ -157,43 +245,92 @@ export default {
             }
         },
         validateTelefonInput() {
-            // Validar que la entrada sea un número
-            this.currentAnswer = this.currentAnswer.replace(/[^0-9]/g, '');
+            // Validar que la entrada sea un número y limitar la longitud a 9 dígitos
+            this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, '').slice(0, 9);
 
-            // Limitar la longitud máxima a 9
-            if (this.currentAnswer.length > 9) {
-                this.currentAnswer = this.currentAnswer.slice(0, 9);
-            }
+            // Verificar si el número de teléfono tiene exactamente 9 dígitos
+            this.phoneNumberValid = this.currentAnswer.length === 9;
+
+            // Reiniciar el mensaje de error si la validación es exitosa
+            this.showErrorMessage = false;
         },
         validateNameInput() {
+            // Eliminar caracteres no alfabéticos del nombre
+            this.currentAnswer = this.currentAnswer.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+
             // Convertir la primera letra de cada palabra a mayúscula
             this.currentAnswer = this.currentAnswer.replace(/\b\w/g, match => match.toUpperCase());
         },
         validateEmailInput() {
-            // Validar que el formato del correo electrónico sea correcto
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            // Validar el correo electrónico como se muestra en la respuesta anterior
+            // Si hay un error, establecer el mensaje de error
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
             if (!emailRegex.test(this.currentAnswer)) {
-                this.showErrorMessage = 'El formato del correo electrónico es incorrecto.';
+                this.errorMessage = 'El formato del correo electrónico es incorrecto.';
+                this.showErrorMessage = true; // Mostrar el mensaje de error
                 return;
             }
 
-            // Validar que el dominio sea gmail o hotmail
             const allowedDomains = ['gmail.com', 'hotmail.com'];
             const domain = this.currentAnswer.split('@')[1];
             if (!allowedDomains.includes(domain)) {
-                this.showErrorMessage = 'Solo se permiten correos electrónicos con dominio gmail.com o hotmail.com.';
+                this.errorMessage = 'Solo se permiten correos electrónicos con dominio gmail.com o hotmail.com.';
+                this.showErrorMessage = true; // Mostrar el mensaje de error
                 return;
             }
 
+            // Si el correo electrónico es válido, asegúrate de que no haya otros mensajes de error
             this.showErrorMessage = false;
         },
+
+        async registerUser() {
+            try {
+                const userData = {
+                    email: this.currentAnswer,
+                    contrasenya: this.currentAnswer,
+                    nom: this.currentAnswer,
+                    cognoms: this.currentAnswer,
+                    dataNaixement: this.currentAnswer,
+                    genere: this.currentAnswer,
+                    pes: this.currentAnswer,
+                    altura: this.currentAnswer,
+                    telefon: this.currentAnswer,
+                };
+
+                // Realizar la solicitud de registro
+                const response = await fetch('http://localhost:8000/api/registre', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData),
+
+                });
+
+                // Analizar la respuesta JSON
+                const responseData = await response.json();
+
+                if (!response.ok) {
+                    // Si la respuesta no es exitosa, lanzar un error con el mensaje de error de la respuesta
+                    throw new Error(`Error al registrar usuario: ${responseData.message}`);
+                }
+
+                // Registro exitoso, redirigir al usuario a la página de inicio
+                this.$router.push('/home');
+            } catch (error) {
+                // Error al realizar la solicitud o al procesar la respuesta
+                console.error('Error al registrar usuario:', error.message);
+                this.errorMessage = 'Se produjo un error al registrar el usuario. Por favor, inténtalo de nuevo más tarde.';
+            }
+        }
+
+
     },
 };
 </script>
 
-  
-  
-<style scoped >
+<style scoped>
 /* Estilos de la página de inicio de sesión */
 
 html,
@@ -324,4 +461,3 @@ body {
     margin-top: 0.5rem;
 }
 </style>
-                
