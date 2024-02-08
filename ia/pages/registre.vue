@@ -17,7 +17,7 @@
                     v-model="currentAnswer" placeholder="Escribe tu respuesta"></textarea>
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'email'" v-model="currentAnswer"
                     type="email" placeholder="Correo electrónico" @input="validateEmailInput">
-                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'password'"
+                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
                     v-model="currentAnswer" type="password" placeholder="Contraseña">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom'" v-model="currentAnswer"
                     type="text" placeholder="Nom" @input="validateNameInput">
@@ -29,11 +29,13 @@
                     v-model="currentAnswer" type="text" placeholder="Altura" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
                     v-model="currentAnswer" type="tel" placeholder="Número de teléfono" @input="validateTelefonInput">
-                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'date'" v-model="currentAnswer"
-                    type="date">
-                <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index">
-                    <input type="genere" :id="'option' + index" :value="option" v-model="currentAnswer">
-                    <label :for="'option' + index">{{ option }}</label>
+                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
+                    v-model="currentAnswer" type="date">
+                <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
+                    <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index">
+                        <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
+                        <label :for="'option' + index">{{ option }}</label>
+                    </div>
                 </div>
 
                 <div v-if="showErrorMessage" class="error-message">
@@ -62,7 +64,7 @@ export default {
                 contrasenya: "",
                 nom: "",
                 cognoms: "",
-                dataNaixement: "",
+                data_naixement: "",
                 genere: "",
                 pes: "",
                 altura: "",
@@ -77,7 +79,7 @@ export default {
                 },
                 {
                     question: "Quina es la teva contrasenya?",
-                    inputType: 'password',
+                    inputType: 'contrasenya',
                     required: true,
 
                 },
@@ -93,16 +95,16 @@ export default {
                     required: true,
 
                 },
-                {
-                    question: "Quin es la teva data de naixement?",
-                    inputType: 'date',
-                },
+
                 {
                     question: "Quin es el teu genere?",
-                    inputType: 'checkbox',
+                    inputType: 'genere',
                     respuesta: ['Home', 'Dona', 'Altres'],
                 },
-
+                {
+                    question: "Quin es la teva data de naixement?",
+                    inputType: 'data_naixement',
+                },
 
                 {
                     question: "Quin es el teu pes?",
@@ -131,77 +133,94 @@ export default {
                 return;
             }
 
+            // Verificar si es la última pregunta
             if (this.currentQuestionIndex === this.registrationQuestions.length - 1) {
-                // Si es la última pregunta, llamar a registerUser
-                await this.registerUser();
-            } else {
-                // Verificar si la pregunta actual es requerida y si la respuesta está vacía
+                // Agregar console.log para mostrar la pregunta y respuesta actual antes de registrar al usuario
                 const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
-                this.userData[currentQuestion.inputType] = this.currentAnswer;
-                if (currentQuestion.required && this.currentAnswer.trim() === "") {
-                    this.showErrorMessage = true;
-                    this.errorMessage = "Por favor, responde a esta pregunta antes de continuar.";
-                    return;
-                }
-
-                // Reiniciar el mensaje de error
-                this.showErrorMessage = false;
-
-                // Manejar casos específicos como contraseña, número de teléfono y género
-                if (currentQuestion.inputType === 'password') {
-                    this.userData.contrasenya = this.currentAnswer;
-                } else if (currentQuestion.inputType === 'telefon') {
-                    this.userData.telefon = this.currentAnswer;
-                } else if (currentQuestion.inputType === 'genere') {
-                    // El género puede ser un caso especial, asegúrate de que la lógica maneje los casos correctamente
-                    this.userData.genere = this.currentAnswer;
-                }
-
-                // Validar la entrada según el tipo de pregunta
-                switch (currentQuestion.inputType) {
-                    case 'date':
-                        const selectedDate = new Date(this.currentAnswer);
-                        const today = new Date();
-                        if (selectedDate > today) {
-                            this.errorMessage = "La fecha de nacimiento no puede ser en el futuro.";
-                            this.showErrorMessage = true;
-                            return;
-                        }
-                        // Asignar valor a userData
-                        this.userData.dataNaixement = this.currentAnswer;
-                        break;
-                    case 'email':
-                        // Validar el correo electrónico
-                        this.validateEmailInput();
-                        if (this.showErrorMessage) {
-                            return; // No avanzar si hay un error en el correo electrónico
-                        }
-                        // Asignar valor a userData
-                        this.userData.email = this.currentAnswer;
-                        break;
-                    case 'telefon':
-                        // Validar el número de teléfono
-                        this.validateTelefonInput();
-                        if (!this.phoneNumberValid) {
-                            this.errorMessage = 'Por favor, introduce un número de teléfono válido.';
-                            this.showErrorMessage = true;
-                            return; // Detener el proceso si hay un error
-                        }
-                        // No necesitas asignar esto de nuevo aquí, ya lo has manejado anteriormente
-                        break;
-                    default:
-                        break;
-                }
-
-                // Agregar el console.log aquí para mostrar la pregunta y respuesta actual antes de avanzar a la siguiente pregunta
                 console.log(`Pregunta ${this.currentQuestionIndex + 1}: ${currentQuestion.question}`);
                 console.log(`Respuesta: ${this.currentAnswer}`);
 
-                // Incrementar el índice de la pregunta y restablecer la respuesta actual
-                this.currentQuestionIndex++;
-                this.currentAnswer = "";
+                // Si es la última pregunta, llamar a registerUser
+                await this.registerUser();
+                return; // Salir del método después de registrar al usuario
             }
+
+            // Si no es la última pregunta, continuar con el proceso de la siguiente pregunta
+            const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
+            this.userData[currentQuestion.inputType] = this.currentAnswer;
+            if (currentQuestion.required && this.currentAnswer.trim() === "") {
+                this.showErrorMessage = true;
+                this.errorMessage = "Por favor, responde a esta pregunta antes de continuar.";
+                return;
+            }
+
+            // Reiniciar el mensaje de error
+            this.showErrorMessage = false;
+
+            // Manejar casos específicos como contraseña, número de teléfono y género
+            if (currentQuestion.inputType === 'contrasenya') {
+                this.userData.contrasenya = this.currentAnswer;
+            } else if (currentQuestion.inputType === 'telefon') {
+                this.validateTelefonInput();
+                if (!this.phoneNumberValid) {
+                    this.errorMessage = 'Por favor, introduce un número de teléfono válido.';
+                    this.showErrorMessage = true;
+                    return; // Detener el proceso si hay un error
+                }
+                // Asignar el número de teléfono validado
+                this.userData.telefon = this.currentAnswer;
+            } else if (currentQuestion.inputType === 'genere') {
+                // El género puede ser un caso especial, asegúrate de que la lógica maneje los casos correctamente
+                this.userData.genere = this.currentAnswer;
+            }
+
+            // Validar la entrada según el tipo de pregunta
+            switch (currentQuestion.inputType) {
+                case 'data_naixement':
+                    const selectedDate = new Date(this.currentAnswer);
+                    const today = new Date();
+                    if (selectedDate > today) {
+                        this.errorMessage = "La fecha de nacimiento no puede ser en el futuro.";
+                        this.showErrorMessage = true;
+                        return;
+                    }
+                    // Asignar valor a userData
+                    this.userData.data_naixement = this.currentAnswer;
+                    break;
+                case 'email':
+                    // Validar el correo electrónico
+                    this.validateEmailInput();
+                    if (this.showErrorMessage) {
+                        return; // No avanzar si hay un error en el correo electrónico
+                    }
+                    // Asignar valor a userData
+                    this.userData.email = this.currentAnswer;
+                    break;
+                case 'telefon':
+                    // Validar el número de teléfono
+                    this.validateTelefonInput();
+                    if (!this.phoneNumberValid) {
+                        this.errorMessage = 'Por favor, introduce un número de teléfono válido.';
+                        this.showErrorMessage = true;
+                        return; // Detener el proceso si hay un error
+                    }
+                    // No necesitas asignar esto de nuevo aquí, ya lo has manejado anteriormente
+                    break;
+                default:
+                    break;
+            }
+
+            // Agregar console.log para mostrar la pregunta y respuesta actual antes de avanzar a la siguiente pregunta
+            console.log(`Pregunta ${this.currentQuestionIndex + 1}: ${currentQuestion.question}`);
+            console.log(`Respuesta: ${this.currentAnswer}`);
+
+            // Incrementar el índice de la pregunta y restablecer la respuesta actual
+            this.currentQuestionIndex++;
+            this.currentAnswer = "";
         },
+
+
+
 
         async saltarPregunta() {
             // Obtener la pregunta actual
