@@ -1,32 +1,29 @@
 <template>
-  <body>
-    <div class="chat-container">
-      <div class="header">Asesoramiento</div>
-      <div class="chat">
-        <!-- Mostrar mensaje inicial si no hay mensajes en el chat -->
-        <div v-if="chatMessages.length === 0" class="initial-message">
-          <p>¿En qué puedo ayudarte?</p>
-        </div>
-        <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-          <div v-if="message.role === 'user'" class="user-message">
-            <p>{{ message.content }}</p>
+  <div class="container">
+    <h1>Hola soy Arturo, tu asistente personal</h1>
+    <div class="chat">
+      <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+        <div v-if="message.role === 'user'" class="user-message">
+          <div class="user-info">
+            <img src="" alt="User Avatar" class="user-avatar" />
+            <p class="user-name">Nombre del Usuario</p>
           </div>
-          <div v-else-if="message.role === 'assistant'" class="assistant-message">
-            <div class="assistant-avatar"></div>
-            <div class="assistant-message-content">
-              <p><strong>Arturo:</strong> {{ message.content }}</p>
-            </div>
+          <p>{{ message.content }}</p>
+        </div>
+        <div v-else-if="message.role === 'assistant'" class="assistant-message">
+          <img src="./public/img/icono_Arturo.jpg" alt="Arturo Avatar" class="assistant-avatar" />
+          <img src="/img/icono_Arturo.jpg" alt="Arturo Avatar" class="assistant-avatar" />
+          <div class="assistant-message-content">
+            <p><strong>Arturo</strong><br> {{ message.content }}</p>
           </div>
         </div>
-        <!-- Mostrar animación de carga si isLoading es true -->
-        <div v-if="isLoading" class="loading-animation"></div>
       </div>
-      <div class="footer">
-        <textarea v-model="message" class="message-input" placeholder="Mensaje Arturo"></textarea>
-        <button @click="enviarMensaje" class="send-button">Enviar</button>
-      </div>
+      <!-- Mostrar animación de carga si isLoading es true -->
+      <div v-if="isLoading || isSending" class="loading-animation"></div>
     </div>
-  </body>
+    <textarea v-model="message" class="message-input" placeholder="Mensaje Arturo"></textarea>
+    <button @click="enviarMensaje" class="send-button" :disabled="!message.trim() || isSending">Enviar</button>
+  </div>
 </template>
 
 <script>
@@ -38,25 +35,30 @@ export default {
       message: '',
       chatMessages: [],
       isLoading: false,
-      initialMessageShown: false // Para controlar si se mostró el mensaje inicial
+      isSending: false,
     };
   },
   methods: {
     async enviarMensaje() {
       try {
+        // Verificar si el mensaje está vacío
+        if (!this.message.trim()) {
+          // Si el mensaje está vacío, no hagas nada y sal del método
+          return;
+        }
+
         // Agregar el mensaje del usuario al historial de chat
         this.chatMessages.push({
           role: 'user',
           content: this.message,
         });
 
-        // Ocultar el mensaje inicial después del primer mensaje
-        this.initialMessageShown = true;
-
-        // Activar la animación de carga
+        // Activar la animación de carga y el indicador de envío
         this.isLoading = true;
+        this.isSending = true;
 
-        // Realizar la solicitud a la API
+        const resposta = this.message;
+        this.message = '';
         const apiUrl = 'http://localhost:1234/v1/chat/completions';
         const response = await axios.post(apiUrl, {
           "messages": [
@@ -66,7 +68,7 @@ export default {
             },
             {
               "role": "user",
-              content: this.message,
+              content: resposta,
             }
           ],
         });
@@ -74,15 +76,15 @@ export default {
         // Agregar la respuesta de la API al historial de chat
         this.chatMessages.push(...response.data.choices.map(choice => choice.message));
 
-        // Desactivar la animación de carga
+        // Desactivar la animación de carga y el indicador de envío
         this.isLoading = false;
+        this.isSending = false;
 
-        // Limpiar el campo de entrada después de enviar el mensaje
-        this.message = '';
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);
-        // En caso de error, también desactivar la animación de carga
+        // En caso de error, también desactivar la animación de carga y el indicador de envío
         this.isLoading = false;
+        this.isSending = false;
       }
     },
     getMessageClass(message) {
@@ -94,60 +96,47 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  /* Establecer la fuente predeterminada */
-  background-color: #FFA500;
-  /* Color de fondo */
-}
-
-.chat-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #FFA500;
-  padding-bottom: 60px;
-  /* Para mantener espacio para el cuadro de entrada */
-  overflow-y: auto;
-  /* Habilitar desplazamiento vertical */
-}
-
-.header {
-  background-color: #FFA500;
-  color: black;
-  padding: 10px 0;
-  font-size: 24px;
+.container {
+  max-width: 600px;
+  margin: 0 auto;
   text-align: center;
-  font-weight: bold;
-  font-size: 2.5em;
+}
+
+h1 {
+  color: #333;
+  font-size: 24px;
 }
 
 .chat {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  padding: 0 20px;
-  /* Añadido espacio alrededor de los mensajes */
 }
 
 .user-message {
-  background-color: #FFDAB9;
-  /* Naranja claro */
+  background-color: #DCF8C6;
   padding: 10px;
   border-radius: 8px;
   align-self: flex-end;
   margin-bottom: 8px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-name {
+  font-weight: bold;
 }
 
 .assistant-message {
@@ -161,12 +150,11 @@ body {
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
-  background-color: #FFA500;
-  /* Naranja */
 }
 
 .assistant-message-content {
   max-width: 70%;
+  text-align: left; /* Alinea el texto a la izquierda */
 }
 
 .loading-animation {
@@ -181,13 +169,8 @@ body {
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .message-input {
@@ -195,14 +178,10 @@ body {
   padding: 10px;
   margin: 10px 0;
   box-sizing: border-box;
-  background-color: #f0f0f0;
-  /* Gris claro */
-  border: none;
-  border-radius: 8px;
 }
 
 .send-button {
-  background-color: #000;
+  background-color: #4CAF50;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -212,18 +191,14 @@ body {
   font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
-  margin: 10px 10px 0;
-  width: calc(100% - 20px);
-  /* Ajuste de ancho */
 }
 
 .send-button:hover {
-  background-color: #333;
+  background-color: #45a049;
 }
 
-.footer {
-  background-color: #FFA500;
-  padding: 10px 0;
-  text-align: center;
+.error-message {
+  color: red;
+  margin-top: 5px;
 }
 </style>
