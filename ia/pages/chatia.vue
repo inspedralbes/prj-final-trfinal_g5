@@ -26,6 +26,7 @@
         <button @click="enviarMensaje" class="send-button">Enviar</button>
       </div>
     </div>
+    <navBar />
   </body>
 </template>
 
@@ -108,11 +109,12 @@ body {
   /* Establecer la fuente predeterminada */
   background-color: #FFA500;
   /* Color de fondo */
+  height: 86vh;
 }
 
 .chat-container {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

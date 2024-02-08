@@ -20,19 +20,8 @@
         <navBar />
     </body>
 </template>
-
 <script>
 export default {
-    data() {
-        return {
-            usuario: ''
-        };
-    },
-    created() {
-        // Accede al nombre de usuario desde tu sistema de autenticación
-        // Suponiendo que has almacenado el nombre de usuario en localStorage
-        this.usuario = localStorage.getItem('nombreUsuario');
-    },
     methods: {
         redirectTo(page) {
             this.$router.push(page);
