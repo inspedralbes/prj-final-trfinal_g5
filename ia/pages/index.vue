@@ -71,6 +71,8 @@ export default {
                         this.isValid = false;
                         console.log('Usuario no autenticado');
                     } else {
+                        // Guardar el nombre del usuario en el local storage
+                        localStorage.setItem('username', data.username);
                         this.$router.push('/home');
                     }
                 } else {

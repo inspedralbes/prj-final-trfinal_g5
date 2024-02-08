@@ -25,28 +25,12 @@ services:
       DB_PORT: 3306
       DB_DATABASE: fithub
       DB_USERNAME: root
-      DB_PASSWORD: root
-    # command: "composer install && php artisan serve"
+      DB_PASSWORD: 
 
-  # mysql:
-  #   image: mysql:5.7
-  #   ports:
-  #     - "3306:3306"
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: root
-  #     MYSQL_DATABASE: fithub
-  #     MYSQL_PASSWORD: root
-  #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-  #     MYSQL_RANDOM_ROOT_PASSWORD: "no"
-  #   volumes:
-  #     - ./basedatos:/var/lib/mysql
-
-  phpmyadmin:
-    image: phpmyadmin
+  adminer:
+    image: adminer
     restart: always
     ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: root
+      - "8081:8080"
+    depends_on:
+      - laravel
