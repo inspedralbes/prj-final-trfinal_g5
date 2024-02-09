@@ -125,31 +125,31 @@
       {
         "ID": 21,
         "Nombre": "Lentejas",
-        "Foto": "lentejas.jpg",
+        "Foto": "lenteja.jpg",
         "Categoria": 5
       },
       {
         "ID": 22,
         "Nombre": "Garbanzos",
-        "Foto": "garbanzos.jpg",
+        "Foto": "garbanzo.jpg",
         "Categoria": 5
       },
       {
         "ID": 23,
         "Nombre": "Alubias",
-        "Foto": "alubias.jpg",
+        "Foto": "alubia.jpg",
         "Categoria": 5
       },
       {
         "ID": 24,
         "Nombre": "Judías",
-        "Foto": "judias.jpg",
+        "Foto": "judia.jpg",
         "Categoria": 5
       },
       {
         "ID": 25,
         "Nombre": "Habas",
-        "Foto": "habas.jpg",
+        "Foto": "haba.jpg",
         "Categoria": 5
       },
       {
@@ -197,7 +197,7 @@
       {
         "ID": 33,
         "Nombre": "Espinacas",
-        "Foto": "espinacas.jpg",
+        "Foto": "espinaca.jpg",
         "Categoria": 4
       },
       {
@@ -220,8 +220,8 @@
       },
       {
         "ID": 37,
-        "Nombre": "Huevos",
-        "Foto": "huevos.jpg",
+        "Nombre": "Huevo",
+        "Foto": "huevo.jpg",
         "Categoria": 2
       },
       {
@@ -238,8 +238,8 @@
       },
       {
         "ID": 40,
-        "Nombre": "Patatas",
-        "Foto": "patatas.jpg",
+        "Nombre": "Patata",
+        "Foto": "patata.jpg",
         "Categoria": 4
       }
       
@@ -250,22 +250,22 @@
     "categorias": [
       {
         "IDCategoria": 1,
-        "NombreCategoria": "Pescado",
+        "NombreCategoria": "Pescados",
         "ImagenCategoria" :"pescado.jpg"
       },
       {
         "IDCategoria": 2,
         "NombreCategoria": "Lácteos",
-        "ImagenCategoria" :"lacteos.jpg"
+        "ImagenCategoria" :"lacteo.jpg"
       },
       {
         "IDCategoria": 3,
-        "NombreCategoria": "Carne",
+        "NombreCategoria": "Carnes",
         "ImagenCategoria" :"carne.jpg"
       },
       {
         "IDCategoria": 4,
-        "NombreCategoria": "Verdura/Fruta",
+        "NombreCategoria": "Verduras/Frutas",
         "ImagenCategoria":"verdura_fruta.jpg"
       },
       {
@@ -276,7 +276,7 @@
       {
         "IDCategoria": 6,
         "NombreCategoria": "Cereales/Derivados",
-        "ImagenCategoria":"cereales_derivados.jpg"
+        "ImagenCategoria":"cereal_derivado.jpg"
       }
     ]
   }
