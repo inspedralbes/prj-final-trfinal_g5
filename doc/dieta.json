@@ -1,0 +1,283 @@
+{
+    "alimentos": [
+     {
+    "alimentos": [
+      {
+        "ID": 1,
+        "Nombre": "Salmón",
+        "Foto": "salmon.jpg",
+        "Categoria": 1
+      },
+      {
+        "ID": 2,
+        "Nombre": "Trucha",
+        "Foto": "trucha.jpg",
+        "Categoria": 1
+      },
+      {
+        "ID": 3,
+        "Nombre": "Atún",
+        "Foto": "atun.jpg",
+        "Categoria": 1
+      },
+      {
+        "ID": 4,
+        "Nombre": "Merluza",
+        "Foto": "merluza.jpg",
+        "Categoria": 1
+      },
+      {
+        "ID": 5,
+        "Nombre": "Bacalao",
+        "Foto": "bacalao.jpg",
+        "Categoria": 1
+      },
+      {
+        "ID": 6,
+        "Nombre": "Leche",
+        "Foto": "leche.jpg",
+        "Categoria": 2
+      },
+      {
+        "ID": 7,
+        "Nombre": "Queso",
+        "Foto": "queso.jpg",
+        "Categoria": 2
+      },
+      {
+        "ID": 8,
+        "Nombre": "Yogur",
+        "Foto": "yogur.jpg",
+        "Categoria": 2
+      },
+      {
+        "ID": 9,
+        "Nombre": "Mantequilla",
+        "Foto": "mantequilla.jpg",
+        "Categoria": 2
+      },
+      {
+        "ID": 10,
+        "Nombre": "Crema de leche",
+        "Foto": "crema_leche.jpg",
+        "Categoria": 2
+      },
+      {
+        "ID": 11,
+        "Nombre": "Carne de res",
+        "Foto": "carne_res.jpg",
+        "Categoria": 3
+      },
+      {
+        "ID": 12,
+        "Nombre": "Pollo",
+        "Foto": "pollo.jpg",
+        "Categoria": 3
+      },
+      {
+        "ID": 13,
+        "Nombre": "Cordero",
+        "Foto": "cordero.jpg",
+        "Categoria": 3
+      },
+      {
+        "ID": 14,
+        "Nombre": "Cerdo",
+        "Foto": "cerdo.jpg",
+        "Categoria": 3
+      },
+      {
+        "ID": 15,
+        "Nombre": "Ternera",
+        "Foto": "ternera.jpg",
+        "Categoria": 3
+      },
+      {
+        "ID": 16,
+        "Nombre": "Manzana",
+        "Foto": "manzana.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 17,
+        "Nombre": "Plátano",
+        "Foto": "platano.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 18,
+        "Nombre": "Pera",
+        "Foto": "pera.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 19,
+        "Nombre": "Naranja",
+        "Foto": "naranja.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 20,
+        "Nombre": "Fresa",
+        "Foto": "fresa.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 21,
+        "Nombre": "Lentejas",
+        "Foto": "lentejas.jpg",
+        "Categoria": 5
+      },
+      {
+        "ID": 22,
+        "Nombre": "Garbanzos",
+        "Foto": "garbanzos.jpg",
+        "Categoria": 5
+      },
+      {
+        "ID": 23,
+        "Nombre": "Alubias",
+        "Foto": "alubias.jpg",
+        "Categoria": 5
+      },
+      {
+        "ID": 24,
+        "Nombre": "Judías",
+        "Foto": "judias.jpg",
+        "Categoria": 5
+      },
+      {
+        "ID": 25,
+        "Nombre": "Habas",
+        "Foto": "habas.jpg",
+        "Categoria": 5
+      },
+      {
+        "ID": 26,
+        "Nombre": "Arroz",
+        "Foto": "arroz.jpg",
+        "Categoria": 6
+      },
+      {
+        "ID": 27,
+        "Nombre": "Pan",
+        "Foto": "pan.jpg",
+        "Categoria": 6
+      },
+      {
+        "ID": 28,
+        "Nombre": "Pasta",
+        "Foto": "pasta.jpg",
+        "Categoria": 6
+      },
+      {
+        "ID": 29,
+        "Nombre": "Avena",
+        "Foto": "avena.jpg",
+        "Categoria": 6
+      },
+      {
+        "ID": 30,
+        "Nombre": "Maíz",
+        "Foto": "maiz.jpg",
+        "Categoria": 6
+      },
+      {
+        "ID": 31,
+        "Nombre": "Calabacín",
+        "Foto": "calabacin.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 32,
+        "Nombre": "Lechuga",
+        "Foto": "lechuga.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 33,
+        "Nombre": "Espinacas",
+        "Foto": "espinacas.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 34,
+        "Nombre": "Brócoli",
+        "Foto": "brocoli.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 35,
+        "Nombre": "Zanahoria",
+        "Foto": "zanahoria.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 36,
+        "Nombre": "Tomate",
+        "Foto": "tomate.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 37,
+        "Nombre": "Huevos",
+        "Foto": "huevos.jpg",
+        "Categoria": 2
+      },
+      {
+        "ID": 38,
+        "Nombre": "Aguacate",
+        "Foto": "aguacate.jpg",
+        "Categoria": 4
+      },
+      {
+        "ID": 39,
+        "Nombre": "Cereal",
+        "Foto": "cereal.jpg",
+        "Categoria": 6
+      },
+      {
+        "ID": 40,
+        "Nombre": "Patatas",
+        "Foto": "patatas.jpg",
+        "Categoria": 4
+      }
+      
+    ]
+  }
+  
+    ],
+    "categorias": [
+      {
+        "IDCategoria": 1,
+        "NombreCategoria": "Pescado",
+        "ImagenCategoria" :"pescado.jpg"
+      },
+      {
+        "IDCategoria": 2,
+        "NombreCategoria": "Lácteos",
+        "ImagenCategoria" :"lacteos.jpg"
+      },
+      {
+        "IDCategoria": 3,
+        "NombreCategoria": "Carne",
+        "ImagenCategoria" :"carne.jpg"
+      },
+      {
+        "IDCategoria": 4,
+        "NombreCategoria": "Verdura/Fruta",
+        "ImagenCategoria":"verdura_fruta.jpg"
+      },
+      {
+        "IDCategoria": 5,
+        "NombreCategoria": "Legumbres",
+        "ImagenCategoria":"legumbre.jpg"
+      },
+      {
+        "IDCategoria": 6,
+        "NombreCategoria": "Cereales/Derivados",
+        "ImagenCategoria":"cereales_derivados.jpg"
+      }
+    ]
+  }
+  
