@@ -1,27 +1,24 @@
 <template>
-    <body>
-        <div class="flex-container">
-            <div class="header-container">
-                <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                <h1 class="title">Benvingut {{ usuario }}</h1>
-            </div>
-            <div class="button-container">
-                <button class="large-button rutina-button" @click="redirectTo('rutina')">
-                    Rutina
-                </button>
-                <button class="large-button dieta-button" @click="redirectTo('dieta')">
-                    Dieta
-                </button>
-                <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
-                    Assesorament
-                </button>
-            </div>
+    <div class="flex-container">
+        <div class="header-container">
+            <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
+            <h1 class="title">Benvingut {{ usuario }}</h1>
         </div>
-        <navBar />
-    </body>
+        <!-- Resto del contenido de la página /home -->
+    </div>
 </template>
+  
 <script>
 export default {
+    data() {
+        return {
+            usuario: '' // Inicializamos usuario como una cadena vacía
+        };
+    },
+    mounted() {
+        // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
+        this.usuario = localStorage.getItem('username');
+    },
     methods: {
         redirectTo(page) {
             this.$router.push(page);
