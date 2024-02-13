@@ -3,7 +3,7 @@
         <div class="flex-container">
             <div class="header-container">
                 <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                <h1 class="title">Benvingut {{ usuario }}</h1>
+                <h1 class="title">{{ nombreUsuario }}</h1>
             </div>
             <div class="button-container">
                 <button class="large-button rutina-button" @click="redirectTo('rutina')">
@@ -20,8 +20,18 @@
         <navBar />
     </body>
 </template>
+
 <script>
 export default {
+    data() {
+        return {
+            nombreUsuario: '' // Variable para almacenar el nombre de usuario
+        }
+    },
+    mounted() {
+        // Recuperar el nombre de usuario del localStorage
+        this.nombreUsuario = localStorage.getItem('nombreUsuario');
+    },
     methods: {
         redirectTo(page) {
             this.$router.push(page);
