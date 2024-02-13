@@ -15,7 +15,14 @@ class ejercicios extends Model
      * @var array
      */
     protected $fillable = [
-        'id', // Agrega 'id' aquí para permitir la asignación masiva
-        // Agrega otros atributos asignables aquí si los hay
+        'id',
+        'nombre', 
+        'dificultad',
+        'idCategoria',
+        'imagen',
+        'descripcion'
     ];
+    
+    
+    public $timestamps = false;
 }

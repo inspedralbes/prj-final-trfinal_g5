@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ejerciciosController;
-use App\Http\Controllers\categoriasController;
+use App\Http\Controllers\categoriasMController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +20,4 @@ Route::get('/', function () {
 });
 
 Route::get('/ejercicios', [ejerciciosController::class, 'processJson']);
+Route::get('/categorias', [categoriasMController::class, 'processJson']);

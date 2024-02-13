@@ -14,15 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('ejercicios', function (Blueprint $table) {
-            $table->string('id');
+            $table->id();
             $table->string('nombre');
             $table->string('dificultad');
-            $table->string('idCategoria');
+            $table->unsignedBigInteger('idCategoria'); // Cambiando a unsignedBigInteger, que es el tipo recomendado para las claves foráneas.
             $table->string('imagen');
             $table->string('descripcion');
-            $table->foreign('idCategoria')->references('idCategoria')->on('categoriasM');
+            $table->foreign('idCategoria')->references('idCategoria')->on('categoriasm');
         });
     }
+    
+
+
 
     /**
      * Reverse the migrations.
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('ejercicios');
     }
 };
