@@ -1,24 +1,28 @@
 <template>
-    <div class="flex-container">
-        <div class="header-container">
-            <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-            <h1 class="title">Benvingut {{ usuario }}</h1>
-            <div class="button-container">
-          <button class="large-button rutina-button" @click="redirectTo('rutina')">
-            Rutina
-          </button>
-          <button class="large-button dieta-button" @click="redirectTo('dieta')">
-            Dieta
-          </button>
-          <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
-            Assesorament
-          </button>
-        </div>
+  <body>
+      <div class="flex-container">
+          <div class="header-container">
+              <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
+              <h1 class="title">Benvingut {{ usuario }}</h1>
+          </div>
+          <div class="button-container">
+              <button class="large-button rutina-button" @click="redirectTo('rutina')">
+                  Rutina
+              </button>
+              <button class="large-button dieta-button" @click="redirectTo('dieta')">
+                  Dieta
+              </button>
+              <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
+                  Assesorament
+              </button>
+          </div>
       </div>
-      <navBar /> <!-- Debes importar y utilizar el componente de Vue adecuadamente -->
-    </div>
-  </template>
+      <navBar />
+  </body>
+</template>
         
+
+     
 <script>
 export default {
     data() {
