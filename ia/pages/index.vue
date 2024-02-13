@@ -67,8 +67,10 @@ export default {
                     const data = await response.json();
 
                     if (data.status === 1) {
+
                         // El inicio de sesión fue exitoso
                         localStorage.setItem('username', data.nom);
+
                         this.$router.push('/home');
                     } else {
                         // El inicio de sesión falló
@@ -95,6 +97,7 @@ export default {
         }
     }
 };
+
 </script>
   
 <style scoped >

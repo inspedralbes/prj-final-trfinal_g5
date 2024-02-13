@@ -3,11 +3,22 @@
         <div class="header-container">
             <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
             <h1 class="title">Benvingut {{ usuario }}</h1>
+            <div class="button-container">
+          <button class="large-button rutina-button" @click="redirectTo('rutina')">
+            Rutina
+          </button>
+          <button class="large-button dieta-button" @click="redirectTo('dieta')">
+            Dieta
+          </button>
+          <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
+            Assesorament
+          </button>
         </div>
-        <!-- Resto del contenido de la página /home -->
+      </div>
+      <navBar /> <!-- Debes importar y utilizar el componente de Vue adecuadamente -->
     </div>
-</template>
-  
+  </template>
+        
 <script>
 export default {
     data() {
@@ -18,14 +29,16 @@ export default {
     mounted() {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
         this.usuario = localStorage.getItem('username');
+
     },
     methods: {
-        redirectTo(page) {
-            this.$router.push(page);
-        }
+      redirectTo(page) {
+        this.$router.push(page);
+      }
     }
-}
-</script>
+  }
+  </script>
+  
 
 <style scoped>
 /* Estilos de los divs en el componente */
