@@ -3,7 +3,7 @@
         <div class="flex-container">
             <div class="header-container">
                 <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                <h1 class="title">Benvingut {{ usuario }}</h1>
+                <h1 class="title"> {{ usuario }}</h1>
             </div>
             <div class="main-content">
                 <div class="exercise-list">
@@ -27,6 +27,7 @@
 export default {
     data() {
         return {
+            usuario: '',
             selectedDay: 'pecho', // Aquí puedes establecer el día inicial seleccionado
             exercises: {
                 pecho: [
@@ -46,6 +47,12 @@ export default {
                 // Añade más días y ejercicios según sea necesario
             }
         }
+    },
+    mounted() {
+        // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
+        this.usuario = localStorage.getItem('username');
+
+
     },
     computed: {
         selectedDayExercises() {

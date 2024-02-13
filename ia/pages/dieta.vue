@@ -4,7 +4,7 @@
         <div class="flex-container">
             <div class="header-container">
                 <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                <h1 class="title">Benvingut {{ usuario }}</h1>
+                <h1 class="title">{{ usuario }}</h1>
             </div>
             <div class="meal-container">
                 <h2 class="meal-type">Desayuno</h2>
@@ -59,8 +59,14 @@
 export default {
     data() {
         return {
-            usuario: 'Miquel' // Cambia esto por el nombre de usuario real o hazlo dinámico si es necesario
+            usuario: '' // Cambia esto por el nombre de usuario real o hazlo dinámico si es necesario
         };
+    },
+    mounted() {
+        // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
+        this.usuario = localStorage.getItem('username');
+
+
     }
 }
 </script>
