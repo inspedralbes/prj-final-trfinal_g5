@@ -67,6 +67,11 @@ export default {
                     const data = await response.json();
 
                     if (data.status === 1) {
+                        // Guardar el nombre de usuario en el localStorage
+                        localStorage.setItem('nombreUsuario', data.nombre);
+                        console.log('Usuario autenticado', data.nombre);-
+
+                        // Redirigir al usuario a la página de inicio
                         this.$router.push('/home');
                     } else {
                         this.showError = true;

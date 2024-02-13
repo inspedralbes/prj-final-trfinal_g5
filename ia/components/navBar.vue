@@ -2,8 +2,8 @@
   <nav class="navbar">
     <div class="navbar-container">
       <div class="navbar-links">
-        <a class="navbar-link" href="/"><img src="../public/diet_white.png" alt="Dieta"></a>
-        <a class="navbar-link" href="/pagina1"><img src="../public/rutina_white.png" alt="Dieta"></a>
+        <a class="navbar-link" href="/dieta"><img src="../public/diet_white.png" alt="Dieta"></a>
+        <a class="navbar-link" href="/rutina"><img src="../public/rutina_white.png" alt="Dieta"></a>
         <a class="navbar-link" href="/home"><img src="../public/dumbbell_white (1).png" alt="Dieta"></a>
         <a class="navbar-link" href="/pagina3"><img src="../public/actividad.png" alt="Dieta"></a>
         <a class="navbar-link" href="/chatia"><img src="../public/chatgpt.png" alt="Dieta"></a>
