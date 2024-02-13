@@ -118,4 +118,36 @@ class UserController extends Controller
         }
     }
 
+    public function mostrarUsuarios()
+{
+    $usuarios = Usuaris::all();
+
+    return response()->json([
+        'status' => 1,
+        'usuarios' => $usuarios
+    ]);
+}
+
+public function mostrarUsuario(Request $request)
+{
+    $id = $request->input('id');
+    $nombre = $request->input('nombre');
+
+    $usuario = Usuaris::where('id', $id)
+        ->orWhere('nom', 'LIKE', '%' . $nombre . '%')
+        ->first();
+
+    if ($usuario) {
+        return response()->json([
+            'status' => 1,
+            'usuario' => $usuario
+        ]);
+    } else {
+        return response()->json([
+            'status' => 0,
+            'message' => 'No se encontró ningún usuario'
+        ]);
+    }
+}
+
 }
