@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('categoriasm', function (Blueprint $table) {
             $table->bigIncrements('idCategoria'); // Usamos bigIncrements para definir la columna idCategoria como clave primaria autoincremental.
-            $table->string('nombre');
+            $table->string('nombreCategoria');
             $table->string('imagenCategoria');
         });
     }

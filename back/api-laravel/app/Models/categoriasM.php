@@ -9,15 +9,13 @@ class categoriasM extends Model
 {
     use HasFactory;
 
+    protected $table = 'categoriasm';
+
     protected $fillable = [
         'idCategoria',
-        'nombre', 
+        'nombreCategoria', 
         'imagenCategoria'
-        
-     
     ];
-    
-    
-    public $timestamps = false;
 
+    public $timestamps = false;
 }
