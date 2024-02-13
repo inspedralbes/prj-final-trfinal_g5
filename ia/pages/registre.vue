@@ -311,7 +311,7 @@ export default {
                 console.log(JSON.stringify(this.userData, null, 2));
 
                 // Realizar la solicitud de registro con los datos del usuario
-                const response = await fetch('http://fithub.pre.daw.inspedralbes.cat/output/api-laravel/public/api/registre', {
+                const response = await fetch('http://localhost:8000/api/registre', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

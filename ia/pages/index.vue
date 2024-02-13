@@ -50,7 +50,7 @@ export default {
 
             try {
                 console.log('Enviando solicitud fetch');
-                const response = await fetch('http://fithub.pre.daw.inspedralbes.cat/output/api-laravel/public/api/loguejat', {
+                const response = await fetch('http://localhost:8000/api/loguejat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -67,6 +67,9 @@ export default {
                     const data = await response.json();
 
                     if (data.status === 1) {
+                        // Almacena el nombre del usuario en Vuex o en el estado local
+                        this.$store.commit('setUser', data.nombre);
+                        // Redirige a la página de inicio
                         this.$router.push('/home');
                     } else {
                         this.showError = true;
@@ -90,6 +93,7 @@ export default {
         }
     }
 };
+
 </script>
   
 <style scoped >

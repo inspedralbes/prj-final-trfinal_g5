@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ejercicios;
-use App\Models\categoriasM;
 
 
 class ejerciciosController extends Controller

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('ejercicios', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
             $table->string('nombre');
             $table->string('dificultad');
             $table->unsignedBigInteger('idCategoria'); // Cambiando a unsignedBigInteger, que es el tipo recomendado para las claves foráneas.

@@ -1,34 +1,48 @@
 <template>
-    <body>
-        <div class="flex-container">
-            <div class="header-container">
-                <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                <h1 class="title">Benvingut {{ usuario }}</h1>
-            </div>
-            <div class="button-container">
-                <button class="large-button rutina-button" @click="redirectTo('rutina')">
-                    Rutina
-                </button>
-                <button class="large-button dieta-button" @click="redirectTo('dieta')">
-                    Dieta
-                </button>
-                <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
-                    Assesorament
-                </button>
-            </div>
+    <div>
+      <div class="flex-container">
+        <div class="header-container">
+          <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
+          <h1 class="title">Benvingut {{ userName }}</h1>
         </div>
-        <navBar />
-    </body>
-</template>
-<script>
-export default {
+        <div class="button-container">
+          <button class="large-button rutina-button" @click="redirectTo('rutina')">
+            Rutina
+          </button>
+          <button class="large-button dieta-button" @click="redirectTo('dieta')">
+            Dieta
+          </button>
+          <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
+            Assesorament
+          </button>
+        </div>
+      </div>
+      <navBar /> <!-- Debes importar y utilizar el componente de Vue adecuadamente -->
+    </div>
+  </template>
+  
+  <script>
+  import NavBar from './NavBar.vue'; // Ajusta la ruta según la ubicación del componente NavBar.vue
+  
+  export default {
+    name: 'Home',
+    components: {
+      NavBar // Registra el componente NavBar
+    },
+    computed: {
+      userName() {
+        // Acceder al nombre del usuario desde Vuex
+        return this.$store.state.user.name; // Suponiendo que tienes una propiedad 'name' en el estado del usuario
+      }
+    },
     methods: {
-        redirectTo(page) {
-            this.$router.push(page);
-        }
+      redirectTo(page) {
+        this.$router.push(page);
+      }
     }
-}
-</script>
+  }
+  </script>
+  
 
 <style scoped>
 /* Estilos de los divs en el componente */
