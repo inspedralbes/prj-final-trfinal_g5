@@ -50,7 +50,7 @@ export default {
 
             try {
                 console.log('Enviando solicitud fetch');
-                const response = await fetch('http://localhost:8000/api/loguejat', {
+                const response = await fetch('http://fithub.pre.daw.inspedralbes.cat/output/api-laravel/public/api/loguejat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

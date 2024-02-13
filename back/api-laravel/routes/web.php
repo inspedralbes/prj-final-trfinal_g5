@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ejerciciosController;
+use App\Http\Controllers\categoriasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+        return view('welcome');
 });
+
+Route::get('/ejercicios', [ejerciciosController::class, 'processJson']);
