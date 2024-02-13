@@ -1,11 +1,9 @@
 <template>
-    <div>
-      <div class="flex-container">
+    <div class="flex-container">
         <div class="header-container">
-          <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-          <h1 class="title">Benvingut {{ userName }}</h1>
-        </div>
-        <div class="button-container">
+            <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
+            <h1 class="title">Benvingut {{ usuario }}</h1>
+            <div class="button-container">
           <button class="large-button rutina-button" @click="redirectTo('rutina')">
             Rutina
           </button>
@@ -20,20 +18,18 @@
       <navBar /> <!-- Debes importar y utilizar el componente de Vue adecuadamente -->
     </div>
   </template>
-  
-  <script>
-  import NavBar from './NavBar.vue'; // Ajusta la ruta según la ubicación del componente NavBar.vue
-  
-  export default {
-    name: 'Home',
-    components: {
-      NavBar // Registra el componente NavBar
+        
+<script>
+export default {
+    data() {
+        return {
+            usuario: '' // Inicializamos usuario como una cadena vacía
+        };
     },
-    computed: {
-      userName() {
-        // Acceder al nombre del usuario desde Vuex
-        return this.$store.state.user.name; // Suponiendo que tienes una propiedad 'name' en el estado del usuario
-      }
+    mounted() {
+        // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
+        this.usuario = localStorage.getItem('username');
+
     },
     methods: {
       redirectTo(page) {

@@ -67,21 +67,25 @@ export default {
                     const data = await response.json();
 
                     if (data.status === 1) {
-                        // Almacena el nombre del usuario en Vuex o en el estado local
-                        this.$store.commit('setUser', data.nombre);
-                        // Redirige a la página de inicio
+
+                        // El inicio de sesión fue exitoso
+                        localStorage.setItem('username', data.nom);
+
                         this.$router.push('/home');
                     } else {
+                        // El inicio de sesión falló
                         this.showError = true;
                         this.isValid = false;
                         console.log('Usuario no autenticado');
                     }
                 } else {
+                    // Manejar errores de respuesta HTTP
                     this.showError = true;
                     this.isValid = false;
                     console.log('Respuesta no exitosa', response.statusText);
                 }
             } catch (error) {
+                // Manejar errores de red u otros errores
                 console.error('Error al iniciar sesión:', error);
                 this.showError = true;
                 this.isValid = false;

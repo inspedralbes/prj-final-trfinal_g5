@@ -20,7 +20,7 @@ class UserController extends Controller
                 'nom' => 'required|string|max:255',
                 'cognoms' => 'required|string|max:255',
                 'data_naixement' => 'date',
-                'genere' => 'required|string',
+                'genere' => 'string',
                 'pes' => 'numeric',
                 'altura' => 'numeric',
                 'telefon' => 'integer|digits:9',
