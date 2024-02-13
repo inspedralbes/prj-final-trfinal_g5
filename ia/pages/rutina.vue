@@ -180,3 +180,4 @@ navBar {
         /* Ajuste para dos columnas en pantallas más pequeñas */
     }
 }</style>
+

@@ -1,4 +1,5 @@
 <template>
+
     <body>
         <div class="flex-container">
             <div class="header-container">
@@ -153,3 +154,4 @@ navBar {
     text-align: center;
 }
 </style>
+
