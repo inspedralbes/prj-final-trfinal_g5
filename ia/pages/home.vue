@@ -1,4 +1,5 @@
 <template>
+
   <body>
       <div class="flex-container">
           <div class="header-container">
@@ -23,16 +24,19 @@
         
 
      
+
 <script>
 export default {
     data() {
         return {
+
             usuario: '' // Inicializamos usuario como una cadena vacía
         };
     },
     mounted() {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
         this.usuario = localStorage.getItem('username');
+
 
     },
     methods: {
