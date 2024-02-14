@@ -2,10 +2,7 @@
     <body>
         <div>
             <div class="flex-container">
-                <div class="header-container">
-                    <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                    <h1 class="title">{{ usuario.nom }} {{ usuario.cognoms }}</h1>
-                </div>
+                <capçalera />
                 <div class="user-info-container">
                     <div class="input-container">
                         <label>Nom:</label>
@@ -128,30 +125,6 @@ body {
     align-items: stretch;
     min-height: 100vh;
     background-color: #FFF;
-}
-
-.header-container {
-    background-color: #FFA500;
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    width: 100%;
-    padding-left: 12%;
-    padding-top: 25px;
-    padding-bottom: 25px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-.user-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
-
-.title {
-    font-weight: bold;
-    font-size: 24px;
 }
 
 .user-info-container {
