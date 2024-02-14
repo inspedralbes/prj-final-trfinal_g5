@@ -2,10 +2,7 @@
 
     <body>
         <div class="flex-container">
-            <div class="header-container">
-                <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                <h1 class="title">{{ usuario }}</h1>
-            </div>
+            <capçalera />
             <div class="meal-container">
                 <h2 class="meal-type">Desayuno</h2>
                 <div class="meal-item">
@@ -94,30 +91,6 @@ body {
     min-height: 100%;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
-}
-
-.header-container {
-    background-color: #FFA500;
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    width: 100%;
-    padding-left: 12%;
-    padding-top: 25px;
-    padding-bottom: 25px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-.user-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
-
-.title {
-    font-weight: bold;
-    font-size: 24px;
 }
 
 .meal-container {

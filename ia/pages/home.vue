@@ -2,10 +2,7 @@
 
   <body>
       <div class="flex-container">
-          <div class="header-container">
-              <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-              <h1 class="title">Benvingut {{ usuario }}</h1>
-          </div>
+          <capçalera />
           <div class="button-container">
               <button class="large-button rutina-button" @click="redirectTo('rutina')">
                   Rutina
@@ -27,18 +24,6 @@
 
 <script>
 export default {
-    data() {
-        return {
-
-            usuario: '' // Inicializamos usuario como una cadena vacía
-        };
-    },
-    mounted() {
-        // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
-        this.usuario = localStorage.getItem('username');
-
-
-    },
     methods: {
       redirectTo(page) {
         this.$router.push(page);
@@ -73,29 +58,9 @@ body {
     background-color: #FFF;
 }
 
-.header-container {
-    background-color: #FFA500;
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    width: 100%;
-    padding-left: 12%;
-    padding-top: 25px;
-    padding-bottom: 25px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
 
-.user-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
 
-.title {
-    font-weight: bold;
-    font-size: 24px;
-}
+
 
 .button-container {
     display: flex;
