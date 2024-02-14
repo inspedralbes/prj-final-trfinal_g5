@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('ejercicios', function (Blueprint $table) {
             $table->id('id');
-            $table->string('nombre');
+            $table->string('nombre')->unique();
             $table->string('dificultad');
             $table->unsignedBigInteger('idCategoria'); // Cambiando a unsignedBigInteger, que es el tipo recomendado para las claves foráneas.
             $table->string('imagen');
@@ -24,9 +24,6 @@ return new class extends Migration
         });
     }
     
-
-
-
     /**
      * Reverse the migrations.
      *
