@@ -71,6 +71,8 @@ export default {
 
                         // El inicio de sesión fue exitoso
                         localStorage.setItem('username', data.nom);
+                        localStorage.setItem('email', data.email);
+
 
 
                         this.$router.push('/home');

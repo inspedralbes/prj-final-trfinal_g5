@@ -3,7 +3,7 @@
   <body>
       <div class="flex-container">
           <div class="header-container">
-              <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
+              <img src="../public/usuario.png" alt="Usuario" class="user-icon" @click="redirectTo('perfil')">
               <h1 class="title">Benvingut {{ usuario }}</h1>
           </div>
           <div class="button-container">
