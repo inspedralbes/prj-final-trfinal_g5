@@ -1,10 +1,7 @@
 <template>
     <body>
         <div class="flex-container">
-            <div class="header-container">
-                <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                <h1 class="title">Benvingut {{ usuario }}</h1>
-            </div>
+            <capçalera />
             <div class="main-content">
                 <div class="exercise-list">
                     <h1>Dia de pecho</h1>
@@ -27,6 +24,7 @@
 export default {
     data() {
         return {
+            usuario: '',
             selectedDay: 'pecho', // Aquí puedes establecer el día inicial seleccionado
             exercises: {
                 pecho: [
@@ -46,6 +44,12 @@ export default {
                 // Añade más días y ejercicios según sea necesario
             }
         }
+    },
+    mounted() {
+        // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
+        this.usuario = localStorage.getItem('username');
+
+
     },
     computed: {
         selectedDayExercises() {
@@ -87,38 +91,12 @@ body {
     background-color: #FFF;
 }
 
-.header-container {
-    background-color: #FFA500;
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    width: 100%;
-    padding-left: 12%;
-    padding-top: 25px;
-    padding-bottom: 25px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    position: fixed;
-    top: 0;
-    z-index: 1;
-}
-
-.user-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
-
-.title {
-    font-weight: bold;
-    font-size: 24px;
-}
 
 .main-content {
     flex-grow: 1;
     overflow-y: auto;
     /* Habilita el scroll si el contenido es más grande que la ventana */
-    padding-top: 120px;
+    padding-top: 10px;
     /* Altura del header */
     padding-bottom: 50px;
     /* Altura del navBar */
@@ -180,3 +158,4 @@ navBar {
         /* Ajuste para dos columnas en pantallas más pequeñas */
     }
 }</style>
+

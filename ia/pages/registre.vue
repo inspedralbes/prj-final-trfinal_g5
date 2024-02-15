@@ -204,7 +204,8 @@ export default {
                         this.showErrorMessage = true;
                         return; // Detener el proceso si hay un error
                     }
-                    // No necesitas asignar esto de nuevo aquí, ya lo has manejado anteriormente
+                    this.userData.telefon = this.currentAnswer;
+
                     break;
                 default:
                     break;
@@ -308,7 +309,8 @@ export default {
             try {
                 // Console log para ver los datos de usuario que se enviarán a la API
                 console.log('Datos de usuario enviados a la API:');
-                console.log(JSON.stringify(this.userData, null, 2));
+                console.log(JSON.stringify(this.userData, null, 2)); // <-- Agregar este console.log
+
 
                 // Realizar la solicitud de registro con los datos del usuario
                 const response = await fetch('http://localhost:8000/api/registre', {
@@ -338,6 +340,7 @@ export default {
                 this.showErrorMessage = true;
             }
         }
+
 
 
 

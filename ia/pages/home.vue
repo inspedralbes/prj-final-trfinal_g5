@@ -1,34 +1,37 @@
 <template>
-    <body>
-        <div class="flex-container">
-            <div class="header-container">
-                <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-                <h1 class="title">Benvingut {{ usuario }}</h1>
-            </div>
-            <div class="button-container">
-                <button class="large-button rutina-button" @click="redirectTo('rutina')">
-                    Rutina
-                </button>
-                <button class="large-button dieta-button" @click="redirectTo('dieta')">
-                    Dieta
-                </button>
-                <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
-                    Assesorament
-                </button>
-            </div>
-        </div>
-        <navBar />
-    </body>
+
+  <body>
+      <div class="flex-container">
+          <capçalera />
+          <div class="button-container">
+              <button class="large-button rutina-button" @click="redirectTo('rutina')">
+                  Rutina
+              </button>
+              <button class="large-button dieta-button" @click="redirectTo('dieta')">
+                  Dieta
+              </button>
+              <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
+                  Assesorament
+              </button>
+          </div>
+      </div>
+      <navBar />
+  </body>
 </template>
+        
+
+     
+
 <script>
 export default {
     methods: {
-        redirectTo(page) {
-            this.$router.push(page);
-        }
+      redirectTo(page) {
+        this.$router.push(page);
+      }
     }
-}
-</script>
+  }
+  </script>
+  
 
 <style scoped>
 /* Estilos de los divs en el componente */
@@ -55,29 +58,9 @@ body {
     background-color: #FFF;
 }
 
-.header-container {
-    background-color: #FFA500;
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    width: 100%;
-    padding-left: 12%;
-    padding-top: 25px;
-    padding-bottom: 25px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
 
-.user-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
 
-.title {
-    font-weight: bold;
-    font-size: 24px;
-}
+
 
 .button-container {
     display: flex;
