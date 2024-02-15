@@ -4,11 +4,10 @@
       <div class="contenedor">
         <div class="cabecera">Asesoramiento</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-        <h2 class="mensaje-bienvenida">Soy Arturo, ¿en qué puedo ayudarte?</h2>
+        <h2 class="mensaje-bienvenida">Soy Arturo tu asesor nutricional y deportivo, ¿en qué puedo ayudarte?</h2>
         <div class="chat">
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje"
-              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+            <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
               <div class="info-usuario" v-if="message.role === 'user'">
                 <img src="" alt="Avatar usuario" class="avatar-usuario" />
                 <p class="nombre-usuario">{{ usuario }}</p>
@@ -64,23 +63,23 @@ export default {
         // URL de la API de OpenAI
         const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
-        // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
-        const apiKey = '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';
+    // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
+    const apiKey = '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';
 
-        // Preparar el payload de la solicitud
-        const payload = {
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content: "Tu mensaje de sistema aquí si es necesario",
-            },
-            {
-              role: "user",
-              content: this.message,
-            },
-          ],
-        };
+    // Preparar el payload de la solicitud
+    const payload = {
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "Tienes prohibido hablar de algo que no tenga relacion con fitness y nutricion ya que eres un experto en nutricion y fitnes pero tienes muy prohibido hacer rutinas y dietas. Si te piden una rutina o dieta di lo siguiente: En este apartado solo puedo dar consejos de nutricion y deportivos si quieres generar rutinas ves al apartado de Rutinas y si quieres una dieta en el apartado de Dietas. Si puedes dar consejos y argumentos pero hazlo de forma resumina en unas 2 lineas a menos que te indiquen que quieren mas informacion .",
+        },
+        {
+          role: "user",
+          content: this.message,
+        },
+      ],
+    };
 
         // Hacer la solicitud POST
         const response = await fetch(apiUrl, {
