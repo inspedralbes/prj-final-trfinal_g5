@@ -64,7 +64,7 @@ export default {
     const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
     // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
-    const apiKey = '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';
+    const apiKey = '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';
 
     // Preparar el payload de la solicitud
     const payload = {
