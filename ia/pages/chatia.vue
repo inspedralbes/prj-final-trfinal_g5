@@ -1,44 +1,44 @@
 <template>
   <body>
-    <div class="contenedor">
-      <div class="cabecera">Asesoramiento</div>
-      <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-      <h2 class="mensaje-bienvenida">Soy Arturo tu asesor nutricional y deportivo, ¿en qué puedo ayudarte?</h2>
-      <div class="chat">
-        <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-          <div v-if="message.role === 'user'" class="mensaje-usuario">
-            <div class="info-usuario">
-              <img src="" alt="Avatar del usuario" class="avatar-usuario" />
-              <p class="nombre-usuario">Nombre del Usuario</p>
+    <div>
+      <div class="contenedor">
+        <div class="cabecera">Asesoramiento</div>
+        <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
+        <h2 class="mensaje-bienvenida">Soy Arturo tu asesor nutricional y deportivo, ¿en qué puedo ayudarte?</h2>
+        <div class="chat">
+          <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+            <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+              <div class="info-usuario" v-if="message.role === 'user'">
+                <img src="" alt="Avatar usuario" class="avatar-usuario" />
+                <p class="nombre-usuario">{{ usuario }}</p>
+              </div>
+              <div class="contenido-mensaje">
+                <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                  class="avatar-asistente" />
+                <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+              </div>
             </div>
-            <p>{{ message.content }}</p>
           </div>
-          <div v-else-if="message.role === 'assistant'" class="mensaje-asistente">
-            <img src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo" class="avatar-asistente" />
-            <div class="contenido-mensaje-asistente">
-              <p><strong>Arturo</strong><br> {{ message.content }}</p>
-            </div>
-          </div>
+          <!-- Mostrar animación de carga si isLoading es true -->
+          <div v-if="isLoading || isSending" class="animacion-carga"></div>
         </div>
-        <!-- Mostrar animación de carga si isLoading es true -->
-        <div v-if="isLoading || isSending" class="animacion-carga"></div>
+        <!-- Movido el textarea y el botón al final del contenedor -->
+        <div class="controles-inferiores">
+          <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
+            placeholder="Mensaje Arturo"></textarea>
+          <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+        </div>
       </div>
-      <!-- Movido el textarea y el botón al final del contenedor -->
-      <div class="controles-inferiores">
-        <textarea v-model="message" class="entrada-mensaje" placeholder="Mensaje Arturo"></textarea>
-        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
-      </div>
+      <navBar />
     </div>
-    <navBar />
   </body>
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data() {
     return {
+      usuario: '',
       message: '',
       chatMessages: [],
       isLoading: false,
@@ -47,21 +47,21 @@ export default {
   },
   methods: {
     async enviarMensaje() {
-  try {
-    if (!this.message.trim()) {
-      return;
-    }
+      try {
+        if (!this.message.trim()) {
+          return;
+        }
 
-    this.chatMessages.push({
-      role: 'user',
-      content: this.message,
-    });
+        this.chatMessages.push({
+          role: 'user',
+          content: this.message,
+        });
 
-    this.isLoading = true;
-    this.isSending = true;
+        this.isLoading = true;
+        this.isSending = true;
 
-    // URL de la API de OpenAI
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+        // URL de la API de OpenAI
+        const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
     // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
     const apiKey = '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';
@@ -81,49 +81,59 @@ export default {
       ],
     };
 
-    // Hacer la solicitud POST
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+        // Hacer la solicitud POST
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-    const data = await response.json();
+        const data = await response.json();
 
-    // Asumimos que la respuesta incluye el texto generado
-    const generatedText = data.choices[0].message.content;
+        // Asumimos que la respuesta incluye el texto generado
+        const generatedText = data.choices[0].message.content;
 
-    // Agregar la respuesta al chat
-    this.chatMessages.push({
-      role: 'assistant',
-      content: generatedText,
-    });
+        // Agregar la respuesta al chat
+        this.chatMessages.push({
+          role: 'assistant',
+          content: generatedText,
+        });
 
-    this.message = ''; // Limpiar el input después de enviar
-  } catch (error) {
-    console.error('Error al enviar el mensaje:', error);
-    // Manejo específico para diferentes tipos de errores, como límites de tasa
-    if (error.message.startsWith("HTTP error! status: 429")) {
-      alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
-    }
-  } finally {
-    this.isLoading = false;
-    this.isSending = false;
-  }
-},
+        this.message = ''; // Limpiar el input después de enviar
+      } catch (error) {
+        console.error('Error al enviar el mensaje:', error);
+        // Manejo específico para diferentes tipos de errores, como límites de tasa
+        if (error.message.startsWith("HTTP error! status: 429")) {
+          alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
+        }
+      } finally {
+        this.isLoading = false;
+        this.isSending = false;
+      }
+    },
+    async enviarMensajeOnEnter(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // Evitar el salto de línea
+        await this.enviarMensaje(); // Llamar al método enviarMensaje al presionar Enter
+      }
+    },
     getMessageClass(message) {
       return {
         'mensaje-usuario': message.role === 'user',
         'mensaje-asistente': message.role === 'assistant',
       };
     },
+  },
+  mounted() {
+    // Recuperar el nombre de usuario del almacenamiento local
+    this.usuario = localStorage.getItem('username');
   },
 };
 </script>
@@ -188,6 +198,10 @@ body {
   display: flex;
   align-items: flex-start;
   margin-bottom: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #FFDAB9;
+  margin-right: 10%;
 }
 
 .avatar-asistente {
@@ -199,9 +213,9 @@ body {
 }
 
 .contenido-mensaje-asistente {
-  max-width: 70%;
+  max-width: 100%;
+  
 }
-
 .animacion-carga {
   width: 20px;
   height: 20px;
@@ -259,4 +273,14 @@ body {
 .boton-enviar:hover {
   background-color: #333;
 }
-</style>
+
+navBar {
+  position: fixed;
+  /* Para que el navbar sea fijo */
+  bottom: 0;
+  /* Lo posiciona en la parte inferior */
+  width: 100%;
+  /* Ocupa todo el ancho de la pantalla */
+  z-index: 999;
+  /* Asegura que esté por encima del contenido */
+}</style>
