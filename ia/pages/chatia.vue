@@ -47,53 +47,77 @@ export default {
   },
   methods: {
     async enviarMensaje() {
-      try {
-        // Verificar si el mensaje está vacío
-        if (!this.message.trim()) {
-          // Si el mensaje está vacío, no hagas nada y sal del método
-          return;
-        }
+  try {
+    if (!this.message.trim()) {
+      return;
+    }
 
-        // Agregar el mensaje del usuario al historial de chat
-        this.chatMessages.push({
-          role: 'user',
+    this.chatMessages.push({
+      role: 'user',
+      content: this.message,
+    });
+
+    this.isLoading = true;
+    this.isSending = true;
+
+    // URL de la API de OpenAI
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+
+    // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
+    const apiKey = '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';
+
+    // Preparar el payload de la solicitud
+    const payload = {
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "Tu mensaje de sistema aquí si es necesario",
+        },
+        {
+          role: "user",
           content: this.message,
-        });
+        },
+      ],
+    };
 
-        // Activar la animación de carga y el indicador de envío
-        this.isLoading = true;
-        this.isSending = true;
+    // Hacer la solicitud POST
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
 
-        const resposta = this.message;
-        this.message = '';
-        const apiUrl = 'http://localhost:1234/v1/chat/completions';
-        const response = await axios.post(apiUrl, {
-          "messages": [
-            {
-              "role": "system",
-              "content": "Respondeme en español, tu nombre es Arturo, puedes responderme en formato JSON, solo quiero que me lo dividas por número de días y solo quiero que guardes el ejercicio, los sets y las repeticiones"
-            },
-            {
-              "role": "user",
-              content: resposta,
-            }
-          ],
-        });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-        // Agregar la respuesta de la API al historial de chat
-        this.chatMessages.push(...response.data.choices.map(choice => choice.message));
+    const data = await response.json();
 
-        // Desactivar la animación de carga y el indicador de envío
-        this.isLoading = false;
-        this.isSending = false;
+    // Asumimos que la respuesta incluye el texto generado
+    const generatedText = data.choices[0].message.content;
 
-      } catch (error) {
-        console.error('Error al enviar el mensaje:', error);
-        // En caso de error, también desactivar la animación de carga y el indicador de envío
-        this.isLoading = false;
-        this.isSending = false;
-      }
-    },
+    // Agregar la respuesta al chat
+    this.chatMessages.push({
+      role: 'assistant',
+      content: generatedText,
+    });
+
+    this.message = ''; // Limpiar el input después de enviar
+  } catch (error) {
+    console.error('Error al enviar el mensaje:', error);
+    // Manejo específico para diferentes tipos de errores, como límites de tasa
+    if (error.message.startsWith("HTTP error! status: 429")) {
+      alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
+    }
+  } finally {
+    this.isLoading = false;
+    this.isSending = false;
+  }
+},
     getMessageClass(message) {
       return {
         'mensaje-usuario': message.role === 'user',
@@ -119,6 +143,7 @@ body {
   /* Color de fondo */
   height: 100vh;
 }
+
 .contenedor {
   display: flex;
   flex-direction: column;
