@@ -15,6 +15,7 @@
                     </div>
                 </div>
             </div>
+            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
         </div>
         <navBar />
     </body>
@@ -144,6 +145,27 @@ body {
     margin-bottom: 5px;
 }
 
+.dieta-button {
+    width: 160%;
+    /* Ancho del 80% del contenedor padre */
+    max-width: 400px;
+    height: 100px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    /* Espacio entre los botones */
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-position: center;
+    font-size: 30px;
+    color: #000;
+    background-color: #666;
+}
+
 navBar {
     position: fixed;
     bottom: 0;
@@ -157,5 +179,6 @@ navBar {
         width: calc(50% - 20px);
         /* Ajuste para dos columnas en pantallas más pequeñas */
     }
-}</style>
+}
+</style>
 

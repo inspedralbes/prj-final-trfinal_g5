@@ -47,6 +47,7 @@
                     <p class="calories">360 calorías</p>
                 </div>
             </div>
+            <button class="dieta-button" @click="redirectTo('chatDieta')">Crear Dieta</button>
         </div>
         <navBar />
     </body>
@@ -64,6 +65,11 @@ export default {
         this.usuario = localStorage.getItem('username');
 
 
+    },
+    methods: {
+      redirectTo(page) {
+        this.$router.push(page);
+      }
     }
 }
 </script>
@@ -118,6 +124,26 @@ body {
     margin-bottom: 5px;
 }
 
+.dieta-button {
+    width: 160%;
+    /* Ancho del 80% del contenedor padre */
+    max-width: 400px;
+    height: 100px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    /* Espacio entre los botones */
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-position: center;
+    font-size: 30px;
+    color: #000;
+    background-color: #666;
+}
 .calories {
     font-size: 16px;
     color: #666;
