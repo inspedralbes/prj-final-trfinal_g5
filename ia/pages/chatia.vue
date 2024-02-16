@@ -4,7 +4,7 @@
       <div class="contenedor">
         <div class="cabecera">Asesoramiento</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-        <h2 class="mensaje-bienvenida">Soy Arturo tu asesor nutricional y deportivo, ¿en qué puedo ayudarte?</h2>
+        <h2 class="mensaje-bienvenida">"Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?"</h2>
         <div class="chat">
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
             <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
@@ -64,7 +64,7 @@ export default {
         const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
     // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
-    const apiKey = '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';
+    const apiKey = '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';
 
     // Preparar el payload de la solicitud
     const payload = {
@@ -72,7 +72,7 @@ export default {
       messages: [
         {
           role: "system",
-          content: "Tienes prohibido hablar de algo que no tenga relacion con fitness y nutricion ya que eres un experto en nutricion y fitnes pero tienes muy prohibido hacer rutinas y dietas. Si te piden una rutina o dieta di lo siguiente: En este apartado solo puedo dar consejos de nutricion y deportivos si quieres generar rutinas ves al apartado de Rutinas y si quieres una dieta en el apartado de Dietas. Si puedes dar consejos y argumentos pero hazlo de forma resumina en unas 2 lineas a menos que te indiquen que quieren mas informacion .",
+          content: "Eres una persona que solo habla en catalan y tienes prohibido hablar de algo que no tenga relacion con fitness y nutricion ya que eres un experto en nutricion y fitnes pero tienes muy prohibido hacer rutinas y dietas. Si te piden una rutina o dieta di lo siguiente: En este apartado solo puedo dar consejos de nutricion y deportivos si quieres generar rutinas ves al apartado de Rutinas y si quieres una dieta en el apartado de Dietas. Si puedes dar consejos y argumentos pero hazlo de forma resumina en unas 2 lineas a menos que te indiquen que quieren mas informacion .",
         },
         {
           role: "user",
@@ -111,7 +111,7 @@ export default {
         console.error('Error al enviar el mensaje:', error);
         // Manejo específico para diferentes tipos de errores, como límites de tasa
         if (error.message.startsWith("HTTP error! status: 429")) {
-          alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
+          alert("Has superat el límit de sol·licituds. Si us plau, espera un moment abans de tornar-ho a intentar.");
         }
       } finally {
         this.isLoading = false;

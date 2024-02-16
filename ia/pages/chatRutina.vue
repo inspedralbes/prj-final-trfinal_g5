@@ -4,7 +4,7 @@
       <div class="contenedor">
         <div class="cabecera">Asesoramiento</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-        <h2 class="mensaje-bienvenida">Soy Arturo tu asesor nutricional y deportivo, ¿en qué puedo ayudarte?</h2>
+        <h2 class="mensaje-bienvenida">Sóc Arturo, el teu assessor esportiu, ¿en què puc ajudar-te?</h2>
         <div class="chat">
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
             <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
@@ -72,7 +72,7 @@ export default {
       messages: [
         {
           role: "system",
-          content: "Tienes prohibido hablar de algo que no tenga relacion con fitness y nutricion ya que eres un experto en nutricion y fitnes pero tienes muy prohibido hacer rutinas y dietas. Si te piden una rutina o dieta di lo siguiente: En este apartado solo puedo dar consejos de nutricion y deportivos si quieres generar rutinas ves al apartado de Rutinas y si quieres una dieta en el apartado de Dietas. Si puedes dar consejos y argumentos pero hazlo de forma resumina en unas 2 lineas a menos que te indiquen que quieren mas informacion .",
+          content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb el fitness ja que ets un expert en fitness només tens permès parlar de fer rutines. Si et demanen alguna cosa que no sigui una rutina digues el següent: En aquest apartat només puc donar consells de nutrició i generar rutines. Pots donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació.",
         },
         {
           role: "user",
