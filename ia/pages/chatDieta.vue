@@ -2,7 +2,7 @@
   <body>
     <div>
       <div class="contenedor">
-        <div class="cabecera">Asesoramiento</div>
+        <div class="cabecera">Assessor de Dieta</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
         <h2 class="mensaje-bienvenida">Sóc Arturo, el teu assessor nutricional, ¿en què puc ajudar-te?</h2>
         <div class="chat">
