@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
+       
         Schema::create('rutinas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuari_id')->constrained('usuaris')->onDelete('cascade');
-            $table->string('nombre'); // Cambiado el nombre de la columna para la relación
-            $table->foreign('nombre')->references('nombre')->on('ejercicios'); // Definiendo la relación
+            $table->string('nom');
             $table->string('series')->nullable();
-            $table->string('repeticiones')->nullable();
+            $table->string('repeticions')->nullable();
+            $table->unsignedBigInteger('ejercicio_id');
+            $table->foreign('ejercicio_id')->references('id')->on('ejercicios');
+
         });
     }
 

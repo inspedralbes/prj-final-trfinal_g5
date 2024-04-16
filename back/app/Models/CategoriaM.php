@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class categoriasM extends Model
+class CategoriaM extends Model
 {
     use HasFactory;
 
@@ -13,9 +13,10 @@ class categoriasM extends Model
 
     protected $fillable = [
         'idCategoria',
-        'nombreCategoria', 
-        'imagenCategoria'
+        'nomCategoria', 
+        'imatgeCategoria'
     ];
+
 
     public $timestamps = false;
 }

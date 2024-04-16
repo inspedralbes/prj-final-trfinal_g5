@@ -14,16 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('ejercicios', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('nombre')->unique();
-            $table->string('dificultad');
-            $table->unsignedBigInteger('idCategoria'); // Cambiando a unsignedBigInteger, que es el tipo recomendado para las claves foráneas.
-            $table->string('imagen');
-            $table->string('descripcion');
+            $table->id();
+            $table->string('nom')->unique();
+            $table->string('dificultat');
+            $table->string('imatge');
+            $table->string('descripció');
+            $table->boolean('desitjat')->default(true);
+            $table->unsignedBigInteger('idCategoria');
             $table->foreign('idCategoria')->references('idCategoria')->on('categoriasm');
+
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Dieta extends Model
 {
     use HasFactory;
+    
+    protected $table = 'dietas';
 
     protected $fillable = [
         'nom',
@@ -23,9 +25,5 @@ class Dieta extends Model
         
     ];
     public $timestamps = false;
-    public function usuario()
-    {
-        return $this->belongsTo(Usuaris::class, 'user_id');
-    }
 }
 

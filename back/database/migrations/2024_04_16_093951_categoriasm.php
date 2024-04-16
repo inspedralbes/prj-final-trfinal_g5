@@ -14,21 +14,21 @@ return new class extends Migration
     public function up()
     {
         Schema::create('categoriasm', function (Blueprint $table) {
-            $table->bigIncrements('idCategoria'); // Usamos bigIncrements para definir la columna idCategoria como clave primaria autoincremental.
-            $table->string('nombreCategoria');
-            $table->string('imagenCategoria');
+            $table->bigIncrements('idCategoria');
+            $table->string('nomCategoria');
+            $table->string('imatgeCategoria');
+
         });
     }
-    
 
-    /**
+       /**
      * Reverse the migrations.
      *
      * @return void
      */
     public function down()
     {
-        Schema::dropIfExists('categoriasM');
+        Schema::dropIfExists('categoriasm');
 
     }
 };
