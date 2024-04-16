@@ -23,10 +23,10 @@
                     type="text" placeholder="Nom" @input="validateNameInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
                     v-model="currentAnswer" type="text" placeholder="Cognoms" @input="validateNameInput">
+                    <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'altura'"
+                    v-model="currentAnswer" type="text" placeholder="Altura" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'" v-model="currentAnswer"
                     type="text" placeholder="Pes" @input="validateNumberInput">
-                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'altura'"
-                    v-model="currentAnswer" type="text" placeholder="Altura" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
                     v-model="currentAnswer" type="tel" placeholder="Número de teléfono" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
@@ -105,14 +105,13 @@ export default {
                     question: "Quin es la teva data de naixement?",
                     inputType: 'data_naixement',
                 },
-
-                {
-                    question: "Quin es el teu pes?",
-                    inputType: 'pes',
-                },
                 {
                     question: "Quina es la teva altura?",
                     inputType: 'altura',
+                },
+                {
+                    question: "Quin es el teu pes?",
+                    inputType: 'pes',
                 },
                 {
                     question: "Quin es el teu numero de telefon?",
@@ -307,18 +306,27 @@ export default {
 
         async registerUser() {
             try {
-                // Console log para ver los datos de usuario que se enviarán a la API
                 console.log('Datos de usuario enviados a la API:');
-                console.log(JSON.stringify(this.userData, null, 2)); // <-- Agregar este console.log
+                console.log(JSON.stringify(this.userData)); // <-- Agregar este console.log
 
 
                 // Realizar la solicitud de registro con los datos del usuario
-                const response = await fetch('http://localhost:8000/api/registre', {
+                const response = await fetch('http://127.0.0.1:8000/api/registre', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(this.userData),
+                    body: JSON.stringify({
+                        email: this.userData.email,
+                        contrasenya: this.userData.contrasenya,
+                        nom: this.userData.nom,
+                        cognoms: this.userData.cognoms,
+                        genere: this.userData.genere,
+                        data_naixement: this.userData.data_naixement,
+                        altura: this.userData.altura,
+                        pes: this.userData.pes,
+
+                    }),
                 });
 
                 // Analizar la respuesta JSON
