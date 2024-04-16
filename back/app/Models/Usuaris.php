@@ -13,7 +13,6 @@ class Usuaris extends Model implements Authenticatable
     use HasFactory, Notifiable, AuthenticableTrait;
 
     protected $table = 'usuaris';
-    protected $primaryKey = 'id';
 
     protected $fillable = [
         'email',
@@ -28,10 +27,15 @@ class Usuaris extends Model implements Authenticatable
         'foto_perfil',
     ];
 
-    public $timestamps = false;
 
     public function dietas()
     {
-        return $this->hasMany(Dieta::class);
+        return $this->hasMany(Dieta::class,'idDieta');
     }
+    public function rutinas()
+    {
+        return $this->hasMany(Rutina::class,'idRutina');
+    }
+    public $timestamps = false;
+
 }
