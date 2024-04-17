@@ -24,7 +24,6 @@ class UserController extends Controller
                 'pes' => 'numeric',
                 'altura' => 'numeric',
                 'telefon' => 'integer|digits:9',
-                'foto_perfil' => 'image|mimes:jpeg,png,jpg',
             ]);
 
 
@@ -48,7 +47,6 @@ class UserController extends Controller
                 $usuari->telefon = $request->telefon;
             }
 
-            $usuari->foto_perfil = $request->foto_perfil;
             $usuari->save();
 
             return response()->json([
