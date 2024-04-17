@@ -174,6 +174,8 @@ export default {
         async saltarPregunta() {
             // Obtener la pregunta actual
             const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
+            this.currentAnswer = "";
+
             if (currentQuestion.required) {
                 // Mostrar un mensaje de error indicando que la pregunta es requerida
                 this.showErrorMessage = true;
