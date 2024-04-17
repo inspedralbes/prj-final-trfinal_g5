@@ -42,9 +42,9 @@
                     {{ errorMessage }}
                 </div>
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
-                     class="error-message">{{ passwordErrorMessage }}</div>
+                    class="error-message">{{ passwordErrorMessage }}</div>
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
-                     class="error-message">{{ dateErrorMessage }}</div>
+                    class="error-message">{{ dateErrorMessage }}</div>
                 <button @click="seguentPregunta">Seguent</button>
                 <button @click="saltarPregunta">Saltar</button>
             </div>
@@ -76,7 +76,7 @@ export default {
                 altura: "",
                 telefon: ""
             },
-            
+
             registrationQuestions: [
                 {
                     question: "Quin es el teu correu electronic?",
@@ -144,6 +144,13 @@ export default {
                 this.errorMessage = "Esta pregunta es requerida. Por favor, responde antes de continuar.";
                 return;
             }
+            if (currentQuestion.inputType === 'contrasenya' && !this.validatePassword()) {
+                return;
+            }
+
+            if (currentQuestion.inputType === 'data_naixement' && !this.validateDate()) {
+                return;
+            }
 
             // Si la pregunta no es requerida, o si es requerida pero tiene respuesta, proceder a la siguiente pregunta
 
@@ -155,50 +162,34 @@ export default {
 
             // Reiniciar la respuesta actual
             this.currentAnswer = "";
+            this.showErrorMessage = false;
+
+
 
             // Si es la última pregunta, registra al usuario
             if (this.currentQuestionIndex === this.registrationQuestions.length) {
                 await this.registerUser();
             }
         },
-
-
-
-
-
         async saltarPregunta() {
             // Obtener la pregunta actual
             const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
 
-            // Verificar si la pregunta actual es requerida
-            if (currentQuestion.required) {
-                // Mostrar un mensaje de error indicando que la pregunta es requerida
-                this.showErrorMessage = true;
-                this.errorMessage = "Esta pregunta es requerida. Por favor, responde antes de continuar.";
-                return;
-            }
-            if (currentQuestion.inputType === 'contrasenya' && !this.validatePassword()) {
-                return;
-            }
-
-            if (currentQuestion.inputType === 'data_naixement' && !this.validateDate()) {
-                return;
-            }
-
-            // Si la pregunta no es requerida, o si es requerida pero no tiene respuesta, proceder a la siguiente pregunta
+            // Guardar la respuesta actual en el objeto de datos del usuario
+            this.userData[currentQuestion.inputType] = this.currentAnswer;
 
             // Incrementar el índice de la pregunta
             this.currentQuestionIndex++;
 
             // Reiniciar la respuesta actual
             this.currentAnswer = "";
+            this.showErrorMessage = false;
 
             // Si es la última pregunta, registra al usuario
             if (this.currentQuestionIndex === this.registrationQuestions.length) {
                 await this.registerUser();
             }
         },
-
 
 
 
@@ -279,26 +270,17 @@ export default {
         },
 
         async registerUser() {
-            try {
-                console.log(this.userData);
-                const response = await fetch('http://127.0.0.1:8000/api/registre', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(this.userData), // Enviar userData como cuerpo de la solicitud
-                });
+            console.log(this.userData);
+            const response = await fetch('http://127.0.0.1:8000/api/registre', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.userData), // Enviar userData como cuerpo de la solicitud
+            });
 
-                this.$router.push('/home');
-            } catch (error) {
-                // ...
-            }
+            this.$router.push('/home');
         }
-
-
-
-
-
     }
 
 };
