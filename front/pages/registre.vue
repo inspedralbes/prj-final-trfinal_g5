@@ -174,9 +174,16 @@ export default {
         async saltarPregunta() {
             // Obtener la pregunta actual
             const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
-
-            // Guardar la respuesta actual en el objeto de datos del usuario
-            this.userData[currentQuestion.inputType] = this.currentAnswer;
+            if (currentQuestion.required) {
+                // Mostrar un mensaje de error indicando que la pregunta es requerida
+                this.showErrorMessage = true;
+                this.errorMessage = "Esta pregunta es requerida. Por favor, responde antes de continuar.";
+                return;
+            }
+            // Si hay una respuesta, guardarla en el objeto de datos del usuario
+            if (this.currentAnswer.trim() !== "") {
+                this.userData[currentQuestion.inputType] = this.currentAnswer;
+            }
 
             // Incrementar el índice de la pregunta
             this.currentQuestionIndex++;
@@ -187,9 +194,15 @@ export default {
 
             // Si es la última pregunta, registra al usuario
             if (this.currentQuestionIndex === this.registrationQuestions.length) {
+                // Filtrar userData para eliminar campos vacíos
+
+
+                // Realizar el registro solo si hay datos válidos
+
                 await this.registerUser();
             }
         },
+
 
 
 
@@ -271,12 +284,17 @@ export default {
 
         async registerUser() {
             console.log(this.userData);
+            // Filtrar los campos que no estén vacíos
+            const filteredUserData = Object.fromEntries(
+                Object.entries(this.userData).filter(([key, value]) => value !== "")
+            );
+
             const response = await fetch('http://127.0.0.1:8000/api/registre', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(this.userData), // Enviar userData como cuerpo de la solicitud
+                body: JSON.stringify(filteredUserData), // Enviar solo los datos llenos como cuerpo de la solicitud
             });
 
             this.$router.push('/home');
