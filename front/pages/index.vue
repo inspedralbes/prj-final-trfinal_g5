@@ -75,9 +75,10 @@ export default {
                         // El inicio de sesión fue exitoso
                         const store = useUsuariPerfilStore();
                         store.iniciarSesionExitoso();
+                        store.id_usuari = data.id;
                         store.nom_usuari = data.nom;
                         store.email_usuari = data.email;
-
+                        
                         this.$router.push('/home');
                     } else {
                         // El inicio de sesión falló

@@ -3,40 +3,50 @@
         <div>
             <div class="flex-container">
                 <capçalera />
-                <div class="user-info-container">
-                    <div class="input-container">
-                        <label>Nom:</label>
-                        <input type="text" v-model="usuario.nom">
+                <form @submit.prevent="guardarDatosUsuario">
+                    <div class="user-info-container">
+                        <div class="input-container">
+                            <label>Nom:</label>
+                            <input type="text" v-model="usuario.nom">
+                        </div>
+                        <div class="input-container">
+                            <label>Cognoms:</label>
+                            <input type="text" v-model="usuario.cognoms">
+                        </div>
+                        <div class="input-container">
+                            <label>Correu electrònic:</label>
+                            <input type="email" v-model="usuario.email">
+                        </div>
+                        <div class="input-container">
+                            <label>Telefon:</label>
+                            <input type="tel" v-model="usuario.telefon">
+                        </div>
+                        <div class="input-container">
+                            <label>Data naixement:</label>
+                            <input type="date" v-model="usuario.data_naixement">
+                        </div>
+                        <div class="input-container">
+                            <label>Altura (cm):</label>
+                            <input type="number" v-model="usuario.altura">
+                        </div>
+                        <div class="input-container">
+                            <label>Pes (kg):</label>
+                            <input type="number" v-model="usuario.pes">
+                        </div>
+                        <div class="input-container">
+                            <label>Gènere:</label>
+                            <select v-model="usuario.genere">
+                                <option value="masculino">Masculino</option>
+                                <option value="femenino">Femenino</option>
+                            </select>
+                        </div>
+                        <div class="input-container">
+                            <label>Foto de Perfil:</label>
+                            <input type="file" @change="onFileChange">
+                        </div>
+                        <button type="submit" class="large-button">Guardar</button>
                     </div>
-                    <div class="input-container">
-                        <label>Cognoms:</label>
-                        <input type="text" v-model="usuario.cognoms">
-                    </div>
-                    <div class="input-container">
-                        <label>Data naixement:</label>
-                        <input type="date" v-model="usuario.data_naixement">
-                    </div>
-                    <div class="input-container">
-                        <label>Altura (cm):</label>
-                        <input type="number" v-model="usuario.altura">
-                    </div>
-                    <div class="input-container">
-                        <label>Pes (kg):</label>
-                        <input type="number" v-model="usuario.pes">
-                    </div>
-                    <div class="input-container">
-                        <label>Gènere:</label>
-                        <select v-model="usuario.genere">
-                            <option value="masculino">Masculino</option>
-                            <option value="femenino">Femenino</option>
-                        </select>
-                    </div>
-                    <div class="input-container">
-                        <label>Foto de Perfil:</label>
-                        <input type="file" @change="onFileChange">
-                    </div>
-                    <button class="large-button" @click="guardarDatosUsuario">Guardar</button>
-                </div>
+                </form>
             </div>
             <navBar />
         </div>
@@ -44,12 +54,15 @@
 </template>
 
 <script>
+import { useUsuariPerfilStore } from '@/stores/index'
 export default {
     data() {
         return {
             usuario: {
                 nom: '',
                 cognoms: '',
+                email: '',
+                telefon: '',
                 data_naixement: '',
                 altura: '',
                 pes: '',
@@ -63,11 +76,24 @@ export default {
     },
     methods: {
         obtenerDatosUsuario() {
-            const idUsuario = localStorage.getItem('idUsuario');
-            fetch(`http://localhost:8000/api/usuario/${idUsuario}`)
+            const store = useUsuariPerfilStore();
+            const idUsuario = store.id_usuari;
+
+            fetch(`http://localhost:8000/api/usuari/${idUsuario}`)
                 .then(response => response.json())
                 .then(data => {
-                    this.usuario = data;
+                    this.usuario = {
+                        nom: data.usuario.nom,
+                        cognoms: data.usuario.cognoms,
+                        email: data.usuario.email,
+                        telefon: data.usuario.telefon,
+                        data_naixement: data.usuario.data_naixement,
+                        altura: data.usuario.altura,
+                        pes: data.usuario.pes,
+                        genere: data.usuario.genere,
+                        fotoPerfil: data.usuario.foto_perfil // Asegúrate de que coincida con la clave del objeto recibido
+                    };
+                    console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
                     console.error('Error al obtener los datos del usuario:', error);
@@ -78,28 +104,32 @@ export default {
             this.usuario.fotoPerfil = file;
         },
         guardarDatosUsuario() {
-            const idUsuario = localStorage.getItem('idUsuario');
-            
-            const formData = new FormData();
-            formData.append('nom', this.usuario.nom);
-            formData.append('cognoms', this.usuario.cognoms);
-            formData.append('data_naixement', this.usuario.data_naixement);
-            formData.append('altura', this.usuario.altura);
-            formData.append('pes', this.usuario.pes);
-            formData.append('genere', this.usuario.genere);
-            formData.append('fotoPerfil', this.usuario.fotoPerfil);
+            const store = useUsuariPerfilStore();
+            const idUsuario = store.id_usuari;
 
-            fetch(`http://localhost:8000/api/editar-usuario/${idUsuario}`, {
+            const formData = {
+                nom: this.usuario.nom,
+                cognoms: this.usuario.cognoms,
+                email: this.usuario.email,
+                telefon: this.usuario.telefon,
+                data_naixement: this.usuario.data_naixement,
+                altura: this.usuario.altura,
+                pes: this.usuario.pes,
+                genere: this.usuario.genere
+            };
+
+            console.log('Datos a enviar en la solicitud PUT:', formData);
+
+            fetch(`http://localhost:8000/api/editar-usuari/${idUsuario}`, {
                 method: 'PUT',
                 body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Datos del usuario actualizados:', data);
-            })
-            .catch(error => {
-                console.error('Error al guardar los datos del usuario:', error);
-            });
+            }).then(response => response.json())
+                .then(data => {
+                    console.log('Datos del usuario actualizados:', data);
+                    this.$router.push('/home');
+                }).catch(error => {
+                    console.error('Error al guardar los datos del usuario:', error);
+                });
         }
     }
 };
@@ -148,6 +178,7 @@ body {
 .user-info-container label {
     font-weight: bold;
 }
+
 .input-container input,
 .input-container select {
     flex: 1;

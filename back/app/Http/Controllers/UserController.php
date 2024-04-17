@@ -87,6 +87,7 @@ class UserController extends Controller
                     'status' => 1,
                     'nom' => $usuari->nom,
                     'email' => $usuari->email,
+                    'id' => $usuari->id,
                 ]);
             } else {
                 return response()->json([
@@ -119,35 +120,70 @@ class UserController extends Controller
     }
 
     public function mostrarUsuarios()
-{
-    $usuarios = Usuaris::all();
+    {
+        $usuarios = Usuaris::all();
 
-    return response()->json([
-        'status' => 1,
-        'usuarios' => $usuarios
-    ]);
-}
-
-public function mostrarUsuario(Request $request)
-{
-    $id = $request->input('id');
-    $nombre = $request->input('nombre');
-
-    $usuario = Usuaris::where('id', $id)
-        ->orWhere('nom', 'LIKE', '%' . $nombre . '%')
-        ->first();
-
-    if ($usuario) {
         return response()->json([
             'status' => 1,
-            'usuario' => $usuario
-        ]);
-    } else {
-        return response()->json([
-            'status' => 0,
-            'message' => 'No se encontró ningún usuario'
+            'usuarios' => $usuarios
         ]);
     }
-}
 
+    public function mostrarUsuario(Request $request, string $id)
+    {
+        $usuario = Usuaris::find($id);
+
+        if ($usuario) {
+            return response()->json([
+                'status' => 1,
+                'usuario' => $usuario
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No se encontró ningún usuario'
+            ]);
+        }
+
+        $id = $request->input('id');
+        $nombre = $request->input('nombre');
+
+        $usuario = Usuaris::where('id', $id)
+            ->orWhere('nom', 'LIKE', '%' . $nombre . '%')
+            ->first();
+
+        if ($usuario) {
+            return response()->json([
+                'status' => 1,
+                'usuario' => $usuario
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No se encontró ningún usuario'
+            ]);
+        }
+    }
+
+    public function editarUsuari(Request $request, string $id)
+    {
+        $usuario = Usuaris::findOrFail($id);
+
+        
+
+        $usuario->update([
+            'email' => $request->email,
+            'nom' => $request->nom,
+            'cognoms' => $request->cognoms,
+            'data_naixement' => $request->data_naixement,
+            'genere' => $request->genere,
+            'pes' => $request->pes,
+            'altura' => $request->altura,
+            'telefon' => $request->telefon,
+            'foto_perfil' => $request->foto_perfil,
+        ]);
+
+    
+        return response()->json($usuario, 200);
+    }
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('contrasenya');
             $table->string('nom');
-            $table->string('cognoms');
+            $table->string('cognoms')->nullable();
             $table->string('genere')->nullable();
             $table->date('data_naixement')->nullable();
             $table->decimal('altura', 10, 2)->nullable();
