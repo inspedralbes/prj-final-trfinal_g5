@@ -1,41 +1,31 @@
 <template>
     <div class="header-container">
-        <a href="/perfil">
+        <nuxt-link :to="`/perfil/${nom_usuari}`">
             <img src="../public/usuario.png" alt="Usuario" class="user-icon" />
-        </a>
-        <h1 class="title">{{ saludo }}</h1>
+        </nuxt-link>
+        <h1 class="title">{{ usuari }}</h1>
     </div>
 </template>
 
 <script>
+import { useUsuariPerfilStore } from '@/stores/index'
+
 export default {
     data() {
         return {
-            usuario: '',
+            usuari: '',
             saludo: ''
         };
     },
+    computed: {
+        nom_usuari() {
+            return useUsuariPerfilStore().nom_usuari;
+        },
+    },
     mounted() {
-        // Recuperar el nombre de usuario del almacenamiento local
-        this.usuario = localStorage.getItem('username');
-
-        // Recuperar el número de visitas del usuario del almacenamiento local
-        let visitas = localStorage.getItem('visitas');
-        if (!visitas) {
-            visitas = 1;
-        } else {
-            visitas = parseInt(visitas) + 1;
-        }
-
-        // Mostrar saludo solo en las dos primeras visitas
-        if (visitas <= 2) {
-            this.saludo = 'Benvingut ' + this.usuario;
-        } else {
-            this.saludo = this.usuario;
-        }
-
-        // Actualizar el número de visitas en el almacenamiento local
-        localStorage.setItem('visitas', visitas);
+        // Recuperar el nombre de usuario del pinia
+        const store = useUsuariPerfilStore();
+        this.usuari = store.nom_usuari;
     },
 }
 </script>
@@ -47,7 +37,7 @@ export default {
     align-items: center;
     padding: 1rem;
     width: 100%;
-    padding-left: 12%;            
+    padding-left: 12%;
     padding-top: 25px;
     padding-bottom: 25px;
     border-bottom-left-radius: 10px;
