@@ -11,6 +11,7 @@ Route::post('/editar-usuari{id}', [UserController::class, 'editarUsuari']);
 Route::post('/registre', [UserController::class, 'registre']);
 Route::post('/loguejat', [UserController::class, 'loguejat']);
 Route::post('/deslojegat', [UserController::class, 'deslojegat']);
+Route::post('/comprovaremail', [UserController::class, 'comprovarCorreuUsuari']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

@@ -144,16 +144,32 @@ export default {
                 this.errorMessage = "Esta pregunta es requerida. Por favor, responde antes de continuar.";
                 return;
             }
-            if (currentQuestion.inputType === 'contrasenya' && !this.validatePassword()) {
-                return;
-            }
 
-            if (currentQuestion.inputType === 'data_naixement' && !this.validateDate()) {
-                return;
+            // Verificar si el correo electrónico no está vacío y es la pregunta actual
+            if (this.currentAnswer !== "" && currentQuestion.inputType === 'email') {
+                // Realizar la verificación del correo electrónico
+                const response = await fetch('http://localhost:8000/api/comprovaremail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: this.currentAnswer
+                    }),
+                });
+
+                // Convertir la respuesta a formato JSON
+                const responseData = await response.json();
+
+                // Si el correo ya existe, mostrar el mensaje de error y no avanzar
+                if (responseData.status === 1) {
+                    this.showErrorMessage = true;
+                    this.errorMessage = responseData.message;
+                    return;
+                }
             }
 
             // Si la pregunta no es requerida, o si es requerida pero tiene respuesta, proceder a la siguiente pregunta
-
             // Guardar la respuesta actual en el objeto de datos del usuario
             this.userData[currentQuestion.inputType] = this.currentAnswer;
 
@@ -164,13 +180,13 @@ export default {
             this.currentAnswer = "";
             this.showErrorMessage = false;
 
-
-
             // Si es la última pregunta, registra al usuario
             if (this.currentQuestionIndex === this.registrationQuestions.length) {
                 await this.registerUser();
             }
         },
+
+
         async saltarPregunta() {
             // Obtener la pregunta actual
             const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
@@ -249,7 +265,7 @@ export default {
                 return;
             }
 
-            const allowedDomains = ['gmail.com', 'hotmail.com','inspedralbes.cat'];
+            const allowedDomains = ['gmail.com', 'hotmail.com', 'inspedralbes.cat'];
             const domain = this.currentAnswer.split('@')[1];
             if (!allowedDomains.includes(domain)) {
                 this.errorMessage = 'Solo se permiten correos electrónicos con dominio gmail.com o hotmail.com.';

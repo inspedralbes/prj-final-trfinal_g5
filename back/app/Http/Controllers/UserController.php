@@ -150,5 +150,25 @@ public function mostrarUsuario(Request $request)
         ]);
     }
 }
+    public function comprovarCorreuUsuari(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255',
+        ]);
+
+        $usuari = Usuaris::where('email', $request->email)->first();
+
+        if ($usuari) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'El correo se encuentra registrado'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Correo no encontrado'
+            ]);
+        }
+    }
 
 }
