@@ -4,7 +4,9 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
     const loguejat = ref(false);
     const tipus_usuari = ref("");
     const nom_usuari = ref("");
+    const id_usuari = ref("");
     const email_usuari = ref("");
+    const foto_perfil = ref("");
 
     function iniciarSesionExitoso() {
         loguejat.value = true;
@@ -16,5 +18,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         tipus_usuari,
         nom_usuari,
         email_usuari,
+        id_usuari,
+        foto_perfil,
     };
 });
