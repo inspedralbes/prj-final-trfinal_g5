@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Mail\RegistroCorreo;
 
 class UserController extends Controller
 {
@@ -48,6 +49,8 @@ class UserController extends Controller
             }
 
             $usuari->save();
+            \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
+
 
             return response()->json([
                 'status' => 1,

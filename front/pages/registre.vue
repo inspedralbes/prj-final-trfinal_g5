@@ -249,7 +249,7 @@ export default {
                 return;
             }
 
-            const allowedDomains = ['gmail.com', 'hotmail.com'];
+            const allowedDomains = ['gmail.com', 'hotmail.com','inspedralbes.cat'];
             const domain = this.currentAnswer.split('@')[1];
             if (!allowedDomains.includes(domain)) {
                 this.errorMessage = 'Solo se permiten correos electrónicos con dominio gmail.com o hotmail.com.';
