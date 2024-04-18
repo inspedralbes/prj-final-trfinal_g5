@@ -79,6 +79,7 @@ export default {
                         store.nom_usuari = data.nom;
                         store.email_usuari = data.email;
                         store.foto_perfil = data.foto_perfil;
+                        store.registre = data.registre;
 
                         console.log('Usuario autenticado:', data);
                         

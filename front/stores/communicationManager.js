@@ -3,44 +3,49 @@ const url = 'http://localhost:8000/api';
 
 
 //ejemplo de peticion fetch get
-export function getAllMovies() {
+export function getDatosUsuario(idUsuario) {
     return new Promise((resolve, reject) => {
-        fetch(`${url}/movies`)
+        fetch(`http://localhost:8000/api/usuari/${idUsuario}`)
             .then(response => {
-                if (response.status == 200) {
+                if (response.ok) {
                     return response.json();
                 } else {
-                    reject('Error al obtener las peliculas');
+                    reject('Error al obtener los datos del usuario: ' + response.statusText);
                 }
-            }).then(data => {
-                JSON.stringify(data);
+            })
+            .then(data => {
                 resolve(data);
-            }).catch(error => {
-                reject(error);
+            })
+            .catch(error => {
+                reject('Error de red al obtener los datos del usuario: ' + error.message);
             });
     });
 }
 
+
 //ejemplo de peticion fetch post
-export function postValidateEmail (data) {
+
+
+
+//ejemplo de peticion fetch put
+export function actualizarDatosUsuario(idUsuario, formData) {
     return new Promise((resolve, reject) => {
-        fetch(`${url}/entradas/validate`, {
-            method: 'POST',
+        fetch(`http://localhost:8000/api/editar-usuari/${idUsuario}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
-        }).then(response => {
-            if (response.status == 200) {
-                return response.json();
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                resolve('Datos actualizados exitosamente');
             } else {
-                reject('Error al validar el email: ' + response.statusText);
+                reject('Error al actualizar los datos del usuario: ' + response.statusText);
             }
-        }).then(data => {
-            JSON.stringify(data);
-            resolve(data);
-        }).catch(error => {
-            reject(error);
+        })
+        .catch(error => {
+            reject('Error de red al actualizar los datos del usuario: ' + error.message);
         });
     });
 }

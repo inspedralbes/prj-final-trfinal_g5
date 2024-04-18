@@ -7,9 +7,18 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
     const id_usuari = ref("");
     const email_usuari = ref("");
     const foto_perfil = ref("");
+    const registre = ref(false);
 
     function iniciarSesionExitoso() {
         loguejat.value = true;
+    }
+
+    function registratExitosament() {
+        registre.value = true;
+    }
+
+    function registreIncomplet() {
+        registre.value = false;
     }
 
     return { 
@@ -20,5 +29,8 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         email_usuari,
         id_usuari,
         foto_perfil,
+        registre,
+        registreIncomplet,
+        registratExitosament,
     };
 });

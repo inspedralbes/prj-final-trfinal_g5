@@ -28,6 +28,7 @@ class UserController extends Controller
                 'foto_perfil' => 'image|mimes:jpeg,png,jpg',
                 'alergia_intolerancia' => 'string',
                 'lesio' => 'string',
+                'registre' => 'boolean',
             ]);
 
 
@@ -207,6 +208,7 @@ class UserController extends Controller
             'foto_perfil' => $request->foto_perfil,
             'alergia_intolerancia' => $request->alergia_intolerancia,
             'lesio' => $request->lesio,
+            'registre' => $request->registre,
         ]);
 
     
