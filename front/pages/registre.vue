@@ -1,40 +1,53 @@
 <template>
-    <div class="login-container">
-        <div class="logo-container">
-            <img src="../public/logo_fithub.png" alt="FitHub Logo" class="logo-image" />
-        </div>
+    <div class="register-container">
+        
         <div v-if="showStartButton">
+            
+            <div class="logo-container">
+                <img src="../public/logo_fithub.png" alt="FitHub Logo" class="logo-image" />
+            </div>
             <div class="button-container">
-                <button class="button button--primary" @click="startRegistration">Empezar Registro</button>
-                <button class="button button--secondary" type="button" @click="goToLogin">Iniciar sesión</button>
+                <button class="button button--secondary" @click="startRegistration">Empezar Registro</button>
             </div>
         </div>
 
         <div v-else>
-            <div v-if="currentQuestionIndex < registrationQuestions.length">
-                <h2>{{ registrationQuestions[currentQuestionIndex].question }}</h2>
-                <textarea v-if="registrationQuestions[currentQuestionIndex].inputType === 'textarea'"
-                    v-model="currentAnswer" placeholder="Escribe tu respuesta"></textarea>
+            <div class="progress-bar" :style="{ width: progressPercentage + '%' }"></div>
+
+            <div v-if="currentQuestionIndex === registrationQuestions.length" class="loading">
+                <img src="../public/dumbbell_white.png" alt="" class="loading-image">
+            </div>
+
+            <div v-if="currentQuestionIndex < registrationQuestions.length" class="question-container fade-in">
+                <div v-if="currentQuestionIndex<=registrationQuestions.length" class="question-counter">
+                    {{ currentQuestionIndex +1 }} / {{ totalQuestions }}
+                </div>
+                <h2 class="registrationQuestion fade-in">{{ registrationQuestions[currentQuestionIndex].question }}</h2>
+                
+                <input v-if="registrationQuestions[currentQuestionIndex].inputType === 'textarea'"
+                    v-model="currentAnswer" placeholder="Escribe tu respuesta"></input>
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'email'"
-                    v-model="currentAnswer" type="email" placeholder="Correo electrónico" @input="validateEmailInput">
-                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
-                    v-model="currentAnswer" type="password" placeholder="Contraseña">
+                    v-model="currentAnswer" type="email" placeholder="Correu electrònic" @input="validateEmailInput">
+                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrassenya'"
+                    v-model="currentAnswer" type="password" placeholder="Contrassenya">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom'"
                     v-model="currentAnswer" type="text" placeholder="Nom" @input="validateNameInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
                     v-model="currentAnswer" type="text" placeholder="Cognoms" @input="validateNameInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'altura'"
-                    v-model="currentAnswer" type="text" placeholder="Altura" @input="validateNumberInput">
+                    v-model="currentAnswer" type="text" placeholder="Altura (Cm)" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'"
-                    v-model="currentAnswer" type="text" placeholder="Pes" @input="validateNumberInput">
+                    v-model="currentAnswer" type="text" placeholder="Pes (Kg)" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
-                    v-model="currentAnswer" type="tel" placeholder="Número de teléfono" @input="validateTelefonInput">
+                    v-model="currentAnswer" type="tel" placeholder="Número de telèfon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
-                    <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index">
-                        <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
-                        <label :for="'option' + index">{{ option }}</label>
+                    <div class="gender-options">
+                        <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index" class="gender-option">
+                            <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
+                            <label :for="'option' + index">{{ option }}</label>
+                        </div>
                     </div>
                 </div>
 
@@ -45,8 +58,12 @@
                     class="error-message">{{ passwordErrorMessage }}</div>
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     class="error-message">{{ dateErrorMessage }}</div>
-                <button @click="seguentPregunta">Seguent</button>
-                <button @click="saltarPregunta">Saltar</button>
+                
+                <div class="buttons fade-in">
+                    <button @click="seguentPregunta">Seguent</button>
+                    <button v-if="!registrationQuestions[currentQuestionIndex].required" @click="saltarPregunta">Saltar</button>
+                </div>
+                    
             </div>
         </div>
     </div>
@@ -76,17 +93,19 @@ export default {
                 altura: "",
                 telefon: ""
             },
+            totalQuestions: 0,
+            progressPercentage: 0,
 
             registrationQuestions: [
                 {
-                    question: "Quin es el teu correu electronic?",
+                    question: "Quin es el teu correu electrònic?",
                     inputType: 'email',
                     required: true,
 
                 },
                 {
-                    question: "Quina es la teva contrasenya?",
-                    inputType: 'contrasenya',
+                    question: "Quina es la teva contrassenya?",
+                    inputType: 'contrassenya',
                     required: true,
 
                 },
@@ -104,34 +123,49 @@ export default {
                 },
 
                 {
-                    question: "Quin es el teu genere?",
+                    question: "Quin es el teu gènere?",
                     inputType: 'genere',
                     respuesta: ['Home', 'Dona', 'Altres'],
+                    required: false,
                 },
                 {
                     question: "Quin es la teva data de naixement?",
                     inputType: 'data_naixement',
+                    required: false,
+
                 },
                 {
                     question: "Quina es la teva altura?",
                     inputType: 'altura',
+                    required: false,
+
                 },
                 {
                     question: "Quin es el teu pes?",
                     inputType: 'pes',
+                    required: false,
+
                 },
                 {
                     question: "Quin es el teu numero de telefon?",
                     inputType: 'telefon',
+                    required: false,
+
                 }
 
             ],
             showErrorMessage: false,
         };
     },
+    computed: {
+        progressPercentage() {
+      return (this.currentQuestionIndex / this.totalQuestions) * 100;
+    },
+    },
     methods: {
         startRegistration() {
             this.showStartButton = false;
+            this.totalQuestions = this.registrationQuestions.length; // Establecer el número total de preguntas
         },
         async seguentPregunta() {
             // Obtener la pregunta actual
@@ -319,18 +353,70 @@ body {
 body {
     font-family: Arial, sans-serif;
     /* Establecer la fuente predeterminada */
-    background-color: #f0f0f0;
+    background-color: #FFA500;
     /* Color de fondo */
 }
 
-.login-container {
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
+
+
+
+.progress-bar {
+    height: 5px;
+    background-color: #ff5100; /* Color de la barra de progreso */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 12px;
+    transition: width 0.3s ease; /* Transición suave del cambio de ancho */
+    z-index: 9999; /* Para asegurarse de que la barra de progreso esté en la parte superior */
+  }
+
+.register-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
     background-color: #FFA500;
-    /* Orange color */
+    padding: 0% 10% 0% 10%;
+    margin: auto;
+}
+
+.question-counter {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.5s ease-in-out;
+
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    opacity: 1;
+    transition: opacity .5s ease-in-out;
+}
+
+.fade-in.active {
+    opacity: 0;
 }
 
 .logo-container {
@@ -361,7 +447,7 @@ body {
 
 .form-label {
     display: block;
-    color: #333;
+    color: #ccc;
     /* Text color */
     font-size: 1.5rem;
     /* Equivalente a 16px */
@@ -369,6 +455,102 @@ body {
     margin-bottom: 0.5rem;
     /* Equivalente a 2px */
 }
+
+.registrationQuestion{
+    font-size: 2.5rem;
+    /* Equivalente a 16px */
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    /* Equivalente a 2px */
+    color: #181818;
+    font-weight: bolder;   
+    animation: fadeIn 0.5s ease-in-out;
+
+
+}
+
+
+
+input{
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 3px solid #f1f1f1;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    background-color: transparent;
+    margin-bottom: 10px;
+    animation: fadeIn 0.5s ease-in-out;
+
+
+}
+
+
+
+.buttons{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-weight: bolder;
+    animation: fadeIn 0.5s ease-in-out;
+
+}
+
+.buttons button{
+    margin-top: 10px;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 80%;
+    background-color: #f1f1f1;
+    color: #2b2b2b;
+    font-weight: bold;
+    font-size: 1rem;
+    animation: fadeIn 0.5s ease-in-out;
+
+
+}
+
+.gender-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.gender-option {
+    
+    border: 2px solid rgb(43, 43, 43);
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.gender-option:hover {
+    border-color: white;
+}
+
+.gender-option input {
+    display: none;
+}
+
+.gender-option label {
+    cursor: pointer;
+}
+
+.gender-option input:checked + label {
+    border: 2px solid rgb(43, 43, 43);
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #ccc;
+}
+
 
 .form-input {
     width: 100%;
@@ -378,7 +560,7 @@ body {
     border-radius: 0.25rem;
     font-size: 1rem;
     /* Equivalente a 14px */
-    color: #333;
+    color: #ccc;
     /* Text color */
     outline: none;
 }
@@ -399,6 +581,29 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-image {
+    width: 100px; /* Tamaño deseado para la imagen */
+    height: auto; /* Mantener la proporción de aspecto */
+    animation: spin 2s linear infinite; /* Animación de rotación */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .button--primary {

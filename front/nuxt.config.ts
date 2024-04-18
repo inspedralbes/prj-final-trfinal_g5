@@ -2,4 +2,8 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@pinia/nuxt'],
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' }
+  },
+  
 })
