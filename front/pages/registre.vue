@@ -27,19 +27,19 @@
                 <input v-if="registrationQuestions[currentQuestionIndex].inputType === 'textarea'"
                     v-model="currentAnswer" placeholder="Escribe tu respuesta"></input>
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'email'"
-                    v-model="currentAnswer" type="email" placeholder="Correu electrònic" @input="validateEmailInput">
-                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrassenya'"
-                    v-model="currentAnswer" type="password" placeholder="Contrassenya">
+                    v-model="currentAnswer" type="email" placeholder="Correo electrónico" @input="validateEmailInput">
+                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
+                    v-model="currentAnswer" type="password" placeholder="Contraseña">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom'"
                     v-model="currentAnswer" type="text" placeholder="Nom" @input="validateNameInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
                     v-model="currentAnswer" type="text" placeholder="Cognoms" @input="validateNameInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'altura'"
-                    v-model="currentAnswer" type="text" placeholder="Altura (Cm)" @input="validateNumberInput">
+                    v-model="currentAnswer" type="text" placeholder="Altura" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'"
-                    v-model="currentAnswer" type="text" placeholder="Pes (Kg)" @input="validateNumberInput">
+                    v-model="currentAnswer" type="text" placeholder="Pes" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
-                    v-model="currentAnswer" type="tel" placeholder="Número de telèfon" @input="validateTelefonInput">
+                    v-model="currentAnswer" type="tel" placeholder="Número de teléfono" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
@@ -98,14 +98,14 @@ export default {
 
             registrationQuestions: [
                 {
-                    question: "Quin es el teu correu electrònic?",
+                    question: "Quin es el teu correu electronic?",
                     inputType: 'email',
                     required: true,
 
                 },
                 {
-                    question: "Quina es la teva contrassenya?",
-                    inputType: 'contrassenya',
+                    question: "Quina es la teva contrasenya?",
+                    inputType: 'contrasenya',
                     required: true,
 
                 },
@@ -123,34 +123,25 @@ export default {
                 },
 
                 {
-                    question: "Quin es el teu gènere?",
+                    question: "Quin es el teu genere?",
                     inputType: 'genere',
                     respuesta: ['Home', 'Dona', 'Altres'],
-                    required: false,
                 },
                 {
                     question: "Quin es la teva data de naixement?",
                     inputType: 'data_naixement',
-                    required: false,
-
                 },
                 {
                     question: "Quina es la teva altura?",
                     inputType: 'altura',
-                    required: false,
-
                 },
                 {
                     question: "Quin es el teu pes?",
                     inputType: 'pes',
-                    required: false,
-
                 },
                 {
                     question: "Quin es el teu numero de telefon?",
                     inputType: 'telefon',
-                    required: false,
-
                 }
 
             ],
