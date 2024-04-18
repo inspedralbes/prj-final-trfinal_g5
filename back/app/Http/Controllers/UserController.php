@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Mail\RegistroCorreo;
 
 class UserController extends Controller
 {
@@ -51,6 +52,8 @@ class UserController extends Controller
             }
 
             $usuari->save();
+            \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
+
 
             return response()->json([
                 'status' => 1,
@@ -154,15 +157,35 @@ class UserController extends Controller
             ->orWhere('nom', 'LIKE', '%' . $nombre . '%')
             ->first();
 
-        if ($usuario) {
+    if ($usuario) {
+        return response()->json([
+            'status' => 1,
+            'usuario' => $usuario
+        ]);
+    } else {
+        return response()->json([
+            'status' => 0,
+            'message' => 'No se encontró ningún usuario'
+        ]);
+    }
+}
+    public function comprovarCorreuUsuari(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255',
+        ]);
+
+        $usuari = Usuaris::where('email', $request->email)->first();
+
+        if ($usuari) {
             return response()->json([
                 'status' => 1,
-                'usuario' => $usuario
+                'message' => 'El correo se encuentra registrado'
             ]);
         } else {
             return response()->json([
                 'status' => 0,
-                'message' => 'No se encontró ningún usuario'
+                'message' => 'Correo no encontrado'
             ]);
         }
     }
