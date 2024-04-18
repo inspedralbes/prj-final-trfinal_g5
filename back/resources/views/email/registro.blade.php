@@ -3,24 +3,30 @@
 <head>
     <title>Registro Exitoso</title>
     <style>
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
         }
+        .header {
+            
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
         .container {
             max-width: 600px;
             margin: auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            
         }
         h1, p {
             margin: 0 0 20px;
         }
         .footer {
+            text-align: center;
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid #ccc;
@@ -28,7 +34,9 @@
     </style>
 </head>
 <body>
-    <img src="../public/img/logo.png" alt="Fithub">
+    <div class="header">
+<img src="{{ asset('logo.png') }}" alt="Fithub">
+</div>
     <div class="container">
         <h1>¡Registro Exitoso!</h1>
         <p>Hola {{ $usuari->nom }} {{$usuari->cognoms}},</p>
