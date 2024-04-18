@@ -50,7 +50,6 @@ class UserController extends Controller
                 $usuari->telefon = $request->telefon;
             }
 
-            $usuari->foto_perfil = $request->foto_perfil;
             $usuari->save();
 
             return response()->json([

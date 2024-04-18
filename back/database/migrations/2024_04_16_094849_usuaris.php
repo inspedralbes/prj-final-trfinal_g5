@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('data_naixement')->nullable();
             $table->decimal('altura', 10, 2)->nullable();
             $table->decimal('pes', 10, 2)->nullable();
-            $table->integer('telefon')->nullable(); 
+            $table->string('telefon')->nullable(); 
             $table->string('foto_perfil')->nullable();
             $table->string('alergia_intolerancia')->nullable();
             $table->string ('lesio')->nullable();
