@@ -41,8 +41,17 @@
                             </select>
                         </div>
                         <div class="input-container">
+                            <label>Aleriga/Intolerancia:</label>
+                            <input type="text" v-model="usuario.alergia_intolerancia">
+                        </div>
+                        <div class="input-container">
+                            <label>Lesió:</label>
+                            <input type="text" v-model="usuario.lesio">
+                        </div>
+                        <div class="input-container">
                             <label>Foto de Perfil:</label>
-                            <input type="file" @change="onFileChange">
+                            <input type="text" v-model="usuario.fotoPerfil">
+                            <!-- <input type="file" @change="onFileChange"> -->
                         </div>
                         <button type="submit" class="large-button">Guardar</button>
                     </div>
@@ -67,7 +76,9 @@ export default {
                 altura: '',
                 pes: '',
                 genere: '',
-                fotoPerfil: null
+                fotoPerfil: null,
+                alergia_intolerancia: '',
+                lesio: '',
             }
         };
     },
@@ -91,7 +102,9 @@ export default {
                         altura: data.usuario.altura,
                         pes: data.usuario.pes,
                         genere: data.usuario.genere,
-                        fotoPerfil: data.usuario.foto_perfil // Asegúrate de que coincida con la clave del objeto recibido
+                        fotoPerfil: data.usuario.foto_perfil, // Asegúrate de que coincida con la clave del objeto recibido
+                        alergia_intolerancia: data.usuario.alergia_intolerancia,
+                        lesio: data.usuario.lesio
                     };
                     console.log('Datos del usuario obtenidos:', data);
                 })
@@ -115,21 +128,31 @@ export default {
                 data_naixement: this.usuario.data_naixement,
                 altura: this.usuario.altura,
                 pes: this.usuario.pes,
-                genere: this.usuario.genere
+                genere: this.usuario.genere,
+                foto_perfil: this.usuario.fotoPerfil,
+                alergia_intolerancia: this.usuario.alergia_intolerancia,
+                lesio: this.usuario.lesio,
             };
 
             console.log('Datos a enviar en la solicitud PUT:', formData);
 
             fetch(`http://localhost:8000/api/editar-usuari/${idUsuario}`, {
                 method: 'PUT',
-                body: formData
-            }).then(response => response.json())
-                .then(data => {
-                    console.log('Datos del usuario actualizados:', data);
-                    this.$router.push('/home');
-                }).catch(error => {
-                    console.error('Error al guardar los datos del usuario:', error);
-                });
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Datos actualizados exitosamente');
+                    // Redireccionar a la página de detalles de sesión
+                    this.$router.push(`/home`);
+                } else {
+                    console.error('Error al actualizar la sesión:', response.statusText);
+                }
+            }).catch(error => {
+                console.error('Error de red:', error);
+            });
         }
     }
 };

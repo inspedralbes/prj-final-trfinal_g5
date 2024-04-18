@@ -25,6 +25,8 @@ class UserController extends Controller
                 'altura' => 'numeric',
                 'telefon' => 'integer|digits:9',
                 'foto_perfil' => 'image|mimes:jpeg,png,jpg',
+                'alergia_intolerancia' => 'string',
+                'lesio' => 'string',
             ]);
 
 
@@ -88,6 +90,7 @@ class UserController extends Controller
                     'nom' => $usuari->nom,
                     'email' => $usuari->email,
                     'id' => $usuari->id,
+                    'foto_perfil' => $usuari->foto_perfil,
                 ]);
             } else {
                 return response()->json([
@@ -166,11 +169,10 @@ class UserController extends Controller
     }
 
     public function editarUsuari(Request $request, string $id)
-    {
+    {    
         $usuario = Usuaris::findOrFail($id);
 
-        
-
+       
         $usuario->update([
             'email' => $request->email,
             'nom' => $request->nom,
@@ -181,6 +183,8 @@ class UserController extends Controller
             'altura' => $request->altura,
             'telefon' => $request->telefon,
             'foto_perfil' => $request->foto_perfil,
+            'alergia_intolerancia' => $request->alergia_intolerancia,
+            'lesio' => $request->lesio,
         ]);
 
     

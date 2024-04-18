@@ -25,6 +25,10 @@ class Usuaris extends Model implements Authenticatable
         'altura',
         'telefon',
         'foto_perfil',
+        'alergia_intolerancia',
+        'lesio',
+        'idRutina',
+        'idDieta'
     ];
 
 

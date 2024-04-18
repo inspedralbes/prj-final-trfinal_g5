@@ -78,6 +78,9 @@ export default {
                         store.id_usuari = data.id;
                         store.nom_usuari = data.nom;
                         store.email_usuari = data.email;
+                        store.foto_perfil = data.foto_perfil;
+
+                        console.log('Usuario autenticado:', data);
                         
                         this.$router.push('/home');
                     } else {

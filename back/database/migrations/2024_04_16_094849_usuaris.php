@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('pes', 10, 2)->nullable();
             $table->integer('telefon')->nullable(); 
             $table->string('foto_perfil')->nullable();
-            $table->string('alergia/intolerancia')->nullable();
+            $table->string('alergia_intolerancia')->nullable();
             $table->string ('lesio')->nullable();
             $table->unsignedBigInteger('idRutina')->nullable();
             $table->unsignedBigInteger('idDieta')->nullable();
