@@ -16,7 +16,7 @@ export default {
         return {
             usuari: '',
             saludo: '',
-            foto_perfil: '', // Cambié foto_usuari a foto_perfil para coincidir con el nombre en la data
+            foto_perfil: '',
         };
     },
     computed: {
@@ -28,7 +28,7 @@ export default {
         // Recuperar el nombre de usuario y la foto de perfil del pinia
         const store = useUsuariPerfilStore();
         this.usuari = store.nom_usuari;
-        this.foto_perfil = store.foto_perfil; // Actualizado a foto_perfil
+        this.foto_perfil = store.foto_perfil; 
     },
 }
 </script>

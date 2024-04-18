@@ -28,7 +28,7 @@ class UserController extends Controller
                 'foto_perfil' => 'image|mimes:jpeg,png,jpg',
                 'alergia_intolerancia' => 'string',
                 'lesio' => 'string',
-                'registre' => 'boolean',
+                'registre' => 'string',
             ]);
 
 
@@ -94,6 +94,7 @@ class UserController extends Controller
                     'email' => $usuari->email,
                     'id' => $usuari->id,
                     'foto_perfil' => $usuari->foto_perfil,
+                    'registre' => $usuari->registre,
                 ]);
             } else {
                 return response()->json([

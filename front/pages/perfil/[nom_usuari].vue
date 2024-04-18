@@ -135,6 +135,7 @@ export default {
                 this.usuario.pes &&
                 this.usuario.genere &&
                 this.usuario.alergia_intolerancia &&
+                this.usuario.foto_perfil &&
                 this.usuario.lesio
             ) {
                 store.registratExitosament();
@@ -148,6 +149,8 @@ export default {
             actualizarDatosUsuario(idUsuario, formData)
                 .then(message => {
                     console.log(message);
+
+                    this.usuario.foto_perfil = store.foto_perfil;
                     // Redireccionar a la página de detalles de sesión
                     this.$router.push(`/home`);
                 })

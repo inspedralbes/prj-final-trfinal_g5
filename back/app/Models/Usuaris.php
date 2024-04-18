@@ -28,7 +28,8 @@ class Usuaris extends Model implements Authenticatable
         'alergia_intolerancia',
         'lesio',
         'idRutina',
-        'idDieta'
+        'idDieta',
+        'registre',
     ];
 
 
