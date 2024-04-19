@@ -31,13 +31,14 @@
                         </div>
                         <div class="input-container">
                             <label>Pes (kg):</label>
-                            <input type="number" v-model="usuario.pes">
+                            <input type="decimal" v-model="usuario.pes">
                         </div>
                         <div class="input-container">
                             <label>Gènere:</label>
                             <select v-model="usuario.genere">
-                                <option value="masculino">Masculino</option>
-                                <option value="femenino">Femenino</option>
+                                <option value="Home">Home</option>
+                                <option value="Dona">Dona</option>
+                                <option value="Altres">Altres</option>
                             </select>
                         </div>
                         <div class="input-container">
