@@ -1,8 +1,8 @@
 <template>
     <div class="register-container">
-        
+
         <div v-if="showStartButton">
-            
+
             <div class="logo-container">
                 <img src="../public/logo_fithub.png" alt="FitHub Logo" class="logo-image" />
             </div>
@@ -19,17 +19,17 @@
             </div>
 
             <div v-if="currentQuestionIndex < registrationQuestions.length" class="question-container fade-in">
-                <div v-if="currentQuestionIndex<=registrationQuestions.length" class="question-counter">
-                    {{ currentQuestionIndex +1 }} / {{ totalQuestions }}
+                <div v-if="currentQuestionIndex <= registrationQuestions.length" class="question-counter">
+                    {{ currentQuestionIndex + 1 }} / {{ totalQuestions }}
                 </div>
                 <h2 class="registrationQuestion fade-in">{{ registrationQuestions[currentQuestionIndex].question }}</h2>
-                
+
                 <input v-if="registrationQuestions[currentQuestionIndex].inputType === 'textarea'"
                     v-model="currentAnswer" placeholder="Escribe tu respuesta"></input>
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'email'"
                     v-model="currentAnswer" type="email" placeholder="Correu electronic" @input="validateEmailInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
-                    v-model="currentAnswer" type="password" placeholder="Contraseña">
+                    v-model="currentAnswer" type="password" placeholder="Contraseña" @input="validatePassword">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom'"
                     v-model="currentAnswer" type="text" placeholder="Nom" @input="validateNameInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
@@ -44,7 +44,8 @@
                     v-model="currentAnswer" type="date">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
                     <div class="gender-options">
-                        <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index" class="gender-option">
+                        <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta"
+                            :key="index" class="gender-option">
                             <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
                             <label :for="'option' + index">{{ option }}</label>
                         </div>
@@ -58,12 +59,13 @@
                     class="error-message">{{ passwordErrorMessage }}</div>
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     class="error-message">{{ dateErrorMessage }}</div>
-                
+
                 <div class="buttons fade-in">
                     <button @click="seguentPregunta">Seguent</button>
-                    <button v-if="!registrationQuestions[currentQuestionIndex].required" @click="saltarPregunta">Saltar</button>
+                    <button v-if="!registrationQuestions[currentQuestionIndex].required"
+                        @click="saltarPregunta">Saltar</button>
                 </div>
-                    
+
             </div>
         </div>
     </div>
@@ -150,8 +152,8 @@ export default {
     },
     computed: {
         progressPercentage() {
-      return (this.currentQuestionIndex / this.totalQuestions) * 100;
-    },
+            return (this.currentQuestionIndex / this.totalQuestions) * 100;
+        },
     },
     methods: {
         startRegistration() {
@@ -168,6 +170,19 @@ export default {
                 this.showErrorMessage = true;
                 this.errorMessage = "Aquesta pregunta és requerida. Si us plau, respon abans de continuar.";
                 return;
+            }
+            if (this.currentAnswer === "") {
+                // Mostrar un mensaje de error indicando que la respuesta es requerida
+                this.showErrorMessage = true;
+                this.errorMessage = "Aquest camp no pot estar buit. Si us plau, respon abans de continuar.";
+                return;
+            }
+            if (currentQuestion.inputType === 'contrasenya') {
+                const isPasswordValid = this.validatePassword();
+                if (!isPasswordValid) {
+                    // Mostrar mensaje de error si la contraseña no es válida
+                    return;
+                }
             }
 
             // Verificar si el correo electrónico no está vacío y es la pregunta actual
@@ -366,26 +381,30 @@ body {
 
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.4s;
+    transition: all 0.4s;
 }
+
 .page-enter-from,
 .page-leave-to {
-  opacity: 0;
-  filter: blur(1rem);
+    opacity: 0;
+    filter: blur(1rem);
 }
 
 
 
 .progress-bar {
     height: 5px;
-    background-color: #ff5100; /* Color de la barra de progreso */
+    background-color: #ff5100;
+    /* Color de la barra de progreso */
     position: fixed;
     top: 0;
     left: 0;
     height: 12px;
-    transition: width 0.3s ease; /* Transición suave del cambio de ancho */
-    z-index: 9999; /* Para asegurarse de que la barra de progreso esté en la parte superior */
-  }
+    transition: width 0.3s ease;
+    /* Transición suave del cambio de ancho */
+    z-index: 9999;
+    /* Para asegurarse de que la barra de progreso esté en la parte superior */
+}
 
 .register-container {
     display: flex;
@@ -411,6 +430,7 @@ body {
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -463,14 +483,14 @@ body {
     /* Equivalente a 2px */
 }
 
-.registrationQuestion{
+.registrationQuestion {
     font-size: 2.5rem;
     /* Equivalente a 16px */
     font-weight: bold;
     margin-bottom: 0.5rem;
     /* Equivalente a 2px */
     color: #181818;
-    font-weight: bolder;   
+    font-weight: bolder;
     animation: fadeIn 0.5s ease-in-out;
 
 
@@ -478,7 +498,7 @@ body {
 
 
 
-input{
+input {
     width: 100%;
     padding: 0.5rem;
     border: none;
@@ -496,7 +516,7 @@ input{
 
 
 
-.buttons{
+.buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
     font-weight: bolder;
@@ -504,7 +524,7 @@ input{
 
 }
 
-.buttons button{
+.buttons button {
     margin-top: 10px;
     padding: 0.5rem 1rem;
     border: none;
@@ -530,7 +550,7 @@ input{
 }
 
 .gender-option {
-    
+
     border: 2px solid rgb(43, 43, 43);
     border-radius: 5px;
     padding: 10px;
@@ -550,7 +570,7 @@ input{
     cursor: pointer;
 }
 
-.gender-option input:checked + label {
+.gender-option input:checked+label {
     border: 2px solid rgb(43, 43, 43);
     border-radius: 5px;
     padding: 10px;
@@ -599,15 +619,19 @@ input{
 }
 
 .loading-image {
-    width: 100px; /* Tamaño deseado para la imagen */
-    height: auto; /* Mantener la proporción de aspecto */
-    animation: spin 2s linear infinite; /* Animación de rotación */
+    width: 100px;
+    /* Tamaño deseado para la imagen */
+    height: auto;
+    /* Mantener la proporción de aspecto */
+    animation: spin 2s linear infinite;
+    /* Animación de rotación */
 }
 
 @keyframes spin {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }

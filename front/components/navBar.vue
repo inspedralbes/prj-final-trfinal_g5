@@ -4,7 +4,7 @@
       <div class="navbar-links">
         <nuxt-link class="navbar-link" href="/dieta"><img src="../public/diet_white.png" alt="Dieta"></nuxt-link>
         <nuxt-link class="navbar-link" href="/rutina"><img src="../public/rutina_white.png" alt="Dieta"></nuxt-link>
-        <nuxt-link class="navbar-link" href="/home"><img src="../public/dumbbell_white (1).png" alt="Dieta"></nuxt-link>
+        <nuxt-link class="navbar-link" href="/home"><img src="../public/dumbbell_white.png" alt="Dieta"></nuxt-link>
         <nuxt-link class="navbar-link" href="/joc"><img src="../public/actividad.png" alt="Dieta"></nuxt-link>
         <nuxt-link class="navbar-link" href="/chatia"><img src="../public/chatgpt.png" alt="Dieta"></nuxt-link>
       </div>

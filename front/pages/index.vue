@@ -51,7 +51,7 @@ export default {
                 return;
             }
 
-            console.log('Enviando solicitud fetch');
+            // console.log('Enviando solicitud fetch');
             fetch('http://localhost:8000/api/loguejat', {
                 method: 'POST',
                 headers: {
