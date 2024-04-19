@@ -44,6 +44,7 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
                     v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
+
                     v-model="currentAnswer" type="date" @input="validateDate">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
                     <div class="gender-options">
@@ -51,6 +52,7 @@
                             :key="index" class="gender-option">
                             <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
                             <label :for="'option' + index" @click="selectGenderOption(option)">{{ option }}</label>
+
                         </div>
                     </div>
                 </div>
@@ -276,6 +278,7 @@ export default {
                 await this.registerUser();
             }
         },
+
         selectGenderOption(option) {
             // Establecer el valor de la respuesta como la opción seleccionada
             this.currentAnswer = option;
@@ -415,9 +418,22 @@ export default {
                 body: JSON.stringify(filteredUserData), // Enviar solo los datos llenos como cuerpo de la solicitud
             });
 
+            if (!response.ok) {
+                // Manejar el caso de error si la respuesta no fue exitosa
+                // Puedes mostrar un mensaje de error o manejar la situación de otra manera
+                return;
+            }
+
+            // Convertir la respuesta a formato JSON
+            const userDataResponse = await response.json();
+
+            console.log(userDataResponse)
+
             useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
             useUsuariPerfilStore().email_usuari = filteredUserData.email;
             useUsuariPerfilStore().loguejat = true;
+            useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
+
 
             this.$router.push('/home');
         }
