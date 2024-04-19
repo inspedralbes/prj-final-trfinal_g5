@@ -41,7 +41,7 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
                     v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
-                    v-model="currentAnswer" type="date"@input="validateDate">
+                    v-model="currentAnswer" type="date" @input="validateDate">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
                     <div class="gender-options" @click="selectGenderOption">
                         <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta"
@@ -394,9 +394,9 @@ export default {
             }
         },
         validateAlturaInput() {
-    // Validar que la entrada sea un número entero
-    this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, ''); // Eliminar todos los caracteres que no sean dígitos
-},
+            // Validar que la entrada sea un número entero
+            this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, ''); // Eliminar todos los caracteres que no sean dígitos
+        },
 
 
         async registerUser() {
