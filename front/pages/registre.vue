@@ -17,6 +17,9 @@
             <div v-if="currentQuestionIndex === registrationQuestions.length" class="loading">
                 <img src="../public/dumbbell_white.png" alt="" class="loading-image">
             </div>
+            <div v-if="checkingEmail" class="loading">
+                <img src="../public/dumbbell_white.png" alt="" class="loading-image">
+            </div>
 
             <div v-if="currentQuestionIndex < registrationQuestions.length" class="question-container fade-in">
                 <div v-if="currentQuestionIndex <= registrationQuestions.length" class="question-counter">
@@ -43,11 +46,11 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date" @input="validateDate">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
-                    <div class="gender-options" @click="selectGenderOption">
+                    <div class="gender-options">
                         <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta"
                             :key="index" class="gender-option">
                             <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
-                            <label :for="'option' + index">{{ option }}</label>
+                            <label :for="'option' + index" @click="selectGenderOption(option)">{{ option }}</label>
                         </div>
                     </div>
                 </div>
@@ -78,6 +81,7 @@ export default {
     data() {
         return {
             showStartButton: true,
+            checkingEmail: false,
             errorMessage: "",
             showErrorMessage: false,
             currentQuestionIndex: 0,
@@ -196,6 +200,8 @@ export default {
 
             // Verificar si el correo electrónico no está vacío y es la pregunta actual
             if (this.currentAnswer !== "" && currentQuestion.inputType === 'email') {
+                this.checkingEmail = true;
+
                 // Realizar la verificación del correo electrónico
                 const response = await fetch('http://localhost:8000/api/comprovaremail', {
                     method: 'POST',
@@ -206,6 +212,7 @@ export default {
                         email: this.currentAnswer
                     }),
                 });
+                this.checkingEmail = false;
 
                 // Convertir la respuesta a formato JSON
                 const responseData = await response.json();
@@ -269,16 +276,10 @@ export default {
                 await this.registerUser();
             }
         },
-
-
-        selectGenderOption(event) {
-            // Obtener el valor seleccionado del género
-            const selectedGender = event.target.textContent.trim();
-
-            // Asignar el valor seleccionado al modelo de datos
-            this.currentAnswer = selectedGender;
+        selectGenderOption(option) {
+            // Establecer el valor de la respuesta como la opción seleccionada
+            this.currentAnswer = option;
         },
-
 
 
         goToLogin() {
