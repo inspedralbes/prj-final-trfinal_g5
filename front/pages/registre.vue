@@ -42,14 +42,15 @@
                     v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date">
-                    <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
-                        <div class="gender-options" @click="selectGenderOption">
-                            <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index" class="gender-option">
-                                <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
-                                <label :for="'option' + index">{{ option }}</label>
-                            </div>
+                <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
+                    <div class="gender-options" @click="selectGenderOption">
+                        <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta"
+                            :key="index" class="gender-option">
+                            <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
+                            <label :for="'option' + index">{{ option }}</label>
                         </div>
                     </div>
+                </div>
 
                 <div v-if="showErrorMessage" class="error-message">
                     {{ errorMessage }}
@@ -185,6 +186,13 @@ export default {
                     return;
                 }
             }
+            if (currentQuestion.inputType === 'telefon') {
+                this.validateTelefonInput(); // Validar el número de teléfono
+                if (this.showErrorMessage) {
+                    // Mostrar mensaje de error si el número de teléfono no es válido
+                    return;
+                }
+            }
 
             // Verificar si el correo electrónico no está vacío y es la pregunta actual
             if (this.currentAnswer !== "" && currentQuestion.inputType === 'email') {
@@ -264,12 +272,12 @@ export default {
 
 
         selectGenderOption(event) {
-        // Obtener el valor seleccionado del género
-        const selectedGender = event.target.textContent.trim();
+            // Obtener el valor seleccionado del género
+            const selectedGender = event.target.textContent.trim();
 
-        // Asignar el valor seleccionado al modelo de datos
-        this.currentAnswer = selectedGender;
-    },
+            // Asignar el valor seleccionado al modelo de datos
+            this.currentAnswer = selectedGender;
+        },
 
 
 
@@ -291,11 +299,21 @@ export default {
             this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, '').slice(0, 9);
 
             // Verificar si el número de teléfono tiene exactamente 9 dígitos
-            this.phoneNumberValid = this.currentAnswer.length === 9 || this.currentAnswer === "";
+            const phoneNumberLength = this.currentAnswer.length;
+            if (phoneNumberLength !== 9) {
+                // Si el número de teléfono no tiene 9 dígitos, mostrar un mensaje de error
+                this.showErrorMessage = true;
+                this.errorMessage = "El número de telèfon ha de tenir exactament 9 dígits.";
+                return;
+            } else {
+                // Si el número de teléfono tiene 9 dígitos, ocultar cualquier mensaje de error anterior
+                this.showErrorMessage = false;
+            }
 
             // Reiniciar el mensaje de error si la validación es exitosa
             this.showErrorMessage = false;
         },
+
         validateNameInput() {
             // Eliminar caracteres no alfabéticos del nombre
             this.currentAnswer = this.currentAnswer.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
@@ -364,9 +382,9 @@ export default {
                 body: JSON.stringify(filteredUserData), // Enviar solo los datos llenos como cuerpo de la solicitud
             });
 
-            useUsuariPerfilStore().nom_usuari=filteredUserData.nom;
-            useUsuariPerfilStore().email_usuari=filteredUserData.email;
-            useUsuariPerfilStore().loguejat=true;
+            useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
+            useUsuariPerfilStore().email_usuari = filteredUserData.email;
+            useUsuariPerfilStore().loguejat = true;
 
             this.$router.push('/home');
         }
@@ -383,13 +401,9 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    /* Establecer la fuente predeterminada */
     background-color: #FFA500;
-    /* Color de fondo */
+    font-family: Arial, sans-serif;
+
 }
 
 .page-enter-active,
