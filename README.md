@@ -3,6 +3,17 @@
 ## Descripció
 Aquest projecte té com a objectiu desenvolupar un projecte final que tracta d'una aplicacio de gimnas que amb un chatIA et fa les rutines i dietes i assesorament de gimnas
 
+## Esquema Carpetes
+Aquest es el nostre esquema de carpetes:
+- .github
+- back
+- doc
+- front
+- seguiment
+- vendor
+- docker-compose.yml
+- README.md
+
 ## Integrants
 - Aitor Barreiro
 - Alex Delgado
