@@ -59,60 +59,17 @@ export default {
 
         this.isLoading = true;
         this.isSending = true;
+        
+        const response = await enviarMensajeOpenAI(this.message);
 
-        // URL de la API de OpenAI
-        const apiUrl = 'https://api.openai.com/v1/chat/completions';
-
-    // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
-    const apiKey = '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';
-
-    // Preparar el payload de la solicitud
-    const payload = {
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "Eres una persona que solo habla en catalan y tienes prohibido hablar de algo que no tenga relacion con fitness y nutricion ya que eres un experto en nutricion y fitnes pero tienes muy prohibido hacer rutinas y dietas. Si te piden una rutina o dieta di lo siguiente: En este apartado solo puedo dar consejos de nutricion y deportivos si quieres generar rutinas ves al apartado de Rutinas y si quieres una dieta en el apartado de Dietas. Si puedes dar consejos y argumentos pero hazlo de forma resumina en unas 2 lineas a menos que te indiquen que quieren mas informacion .",
-        },
-        {
-          role: "user",
-          content: this.message,
-        },
-      ],
-    };
-
-        // Hacer la solicitud POST
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        // Asumimos que la respuesta incluye el texto generado
-        const generatedText = data.choices[0].message.content;
-
-        // Agregar la respuesta al chat
         this.chatMessages.push({
           role: 'assistant',
-          content: generatedText,
+          content: response,
         });
 
-        this.message = ''; // Limpiar el input después de enviar
+        this.message = ''; // Limpiar el campo de texto
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);
-        // Manejo específico para diferentes tipos de errores, como límites de tasa
-        if (error.message.startsWith("HTTP error! status: 429")) {
-          alert("Has superat el límit de sol·licituds. Si us plau, espera un moment abans de tornar-ho a intentar.");
-        }
       } finally {
         this.isLoading = false;
         this.isSending = false;
