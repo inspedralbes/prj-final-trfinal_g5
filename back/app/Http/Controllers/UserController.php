@@ -53,12 +53,14 @@ class UserController extends Controller
             }
 
             $usuari->save();
-            \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
+           // \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
 
+            $idUsuario = $usuari->id;
 
             return response()->json([
                 'status' => 1,
-                'message' => 'Usuari creat correctament'
+                'message' => 'Usuari creat correctament',
+                'idUsuario' => $idUsuario,
             ]);
         } catch (ValidationException $e) {
             // Captura las excepciones de validación y obtén los mensajes de error

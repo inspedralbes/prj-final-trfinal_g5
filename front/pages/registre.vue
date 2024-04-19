@@ -42,14 +42,15 @@
                     v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date">
-                    <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
-                        <div class="gender-options" @click="selectGenderOption">
-                            <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index" class="gender-option">
-                                <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
-                                <label :for="'option' + index">{{ option }}</label>
-                            </div>
+                <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
+                    <div class="gender-options" @click="selectGenderOption">
+                        <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta"
+                            :key="index" class="gender-option">
+                            <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
+                            <label :for="'option' + index">{{ option }}</label>
                         </div>
                     </div>
+                </div>
 
                 <div v-if="showErrorMessage" class="error-message">
                     {{ errorMessage }}
@@ -264,12 +265,12 @@ export default {
 
 
         selectGenderOption(event) {
-        // Obtener el valor seleccionado del género
-        const selectedGender = event.target.textContent.trim();
+            // Obtener el valor seleccionado del género
+            const selectedGender = event.target.textContent.trim();
 
-        // Asignar el valor seleccionado al modelo de datos
-        this.currentAnswer = selectedGender;
-    },
+            // Asignar el valor seleccionado al modelo de datos
+            this.currentAnswer = selectedGender;
+        },
 
 
 
@@ -364,9 +365,21 @@ export default {
                 body: JSON.stringify(filteredUserData), // Enviar solo los datos llenos como cuerpo de la solicitud
             });
 
-            useUsuariPerfilStore().nom_usuari=filteredUserData.nom;
-            useUsuariPerfilStore().email_usuari=filteredUserData.email;
-            useUsuariPerfilStore().loguejat=true;
+            if (!response.ok) {
+                // Manejar el caso de error si la respuesta no fue exitosa
+                // Puedes mostrar un mensaje de error o manejar la situación de otra manera
+                return;
+            }
+
+            // Convertir la respuesta a formato JSON
+            const userDataResponse = await response.json();
+
+            console.log(userDataResponse)
+
+            useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
+            useUsuariPerfilStore().email_usuari = filteredUserData.email;
+            useUsuariPerfilStore().loguejat = true;
+            useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
 
             this.$router.push('/home');
         }
