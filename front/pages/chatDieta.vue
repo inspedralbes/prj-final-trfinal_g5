@@ -1,4 +1,5 @@
 <template>
+
   <body>
     <div>
       <div class="contenedor">
@@ -7,7 +8,8 @@
         <h2 class="mensaje-bienvenida">Sóc Arturo, el teu assessor nutricional, ¿en què puc ajudar-te?</h2>
         <div class="chat">
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+            <div class="mensaje"
+              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
               <div class="info-usuario" v-if="message.role === 'user'">
                 <img src="" alt="Avatar usuario" class="avatar-usuario" />
                 <p class="nombre-usuario">{{ usuario }}</p>
@@ -63,23 +65,23 @@ export default {
         // URL de la API de OpenAI
         const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
-    // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
-    const apiKey = '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';
+        // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
+        const apiKey = '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';
 
-    // Preparar el payload de la solicitud
-    const payload = {
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb la nutrició ja que ets un expert en nutrició només tens permès parlar de fer dietes. Si et demanen alguna cosa que no sigui una dieta digues el següent: En aquest apartat només puc donar consells de nutrició i generar dietes. Puc donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació.",
-        },
-        {
-          role: "user",
-          content: this.message,
-        },
-      ],
-    };
+        // Preparar el payload de la solicitud
+        const payload = {
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "system",
+              content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb la nutrició ja que ets un expert en nutrició només tens permès parlar de fer dietes. Si et demanen alguna cosa que no sigui una dieta digues el següent: En aquest apartat només puc donar consells de nutrició i generar dietes. Puc donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació.",
+            },
+            {
+              role: "user",
+              content: this.message,
+            },
+          ],
+        };
 
         // Hacer la solicitud POST
         const response = await fetch(apiUrl, {
@@ -214,8 +216,9 @@ body {
 
 .contenido-mensaje-asistente {
   max-width: 100%;
-  
+
 }
+
 .animacion-carga {
   width: 20px;
   height: 20px;
@@ -283,4 +286,5 @@ navBar {
   /* Ocupa todo el ancho de la pantalla */
   z-index: 999;
   /* Asegura que esté por encima del contenido */
-}</style>
+}
+</style>
