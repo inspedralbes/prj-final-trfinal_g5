@@ -46,7 +46,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         registre.value = dades.registre;
     }
 
-    return { 
+    return {
         iniciarSesionExitoso,
         loguejat,
         tipus_usuari,
@@ -59,4 +59,8 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         registratExitosament,
         actualitzarDadesUsuari,
     };
-});
+},
+    {
+        persist: true,
+    },
+);
