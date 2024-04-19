@@ -609,7 +609,7 @@ input {
 }
 
 .gender-option {
-
+    text-align: center;
     border: 2px solid rgb(43, 43, 43);
     border-radius: 5px;
     padding: 10px;
@@ -624,9 +624,6 @@ input {
 .gender-option input {
     display: none;
 }
-
-
-
 
 .form-input {
     width: 100%;
