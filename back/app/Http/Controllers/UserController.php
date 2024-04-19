@@ -182,7 +182,7 @@ class UserController extends Controller
         if ($usuari) {
             return response()->json([
                 'status' => 1,
-                'message' => 'El correo se encuentra registrado'
+                'message' => 'El correu ja es troba registrar'
             ]);
         } else {
             return response()->json([

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('cognoms')->nullable();
             $table->string('genere')->nullable();
             $table->date('data_naixement')->nullable();
-            $table->decimal('altura', 10, 2)->nullable();
+            $table->integer('altura')->nullable();
             $table->decimal('pes', 10, 2)->nullable();
             $table->string('telefon')->nullable(); 
             $table->string('foto_perfil')->nullable();
