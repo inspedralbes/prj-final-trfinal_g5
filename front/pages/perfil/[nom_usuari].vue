@@ -110,21 +110,7 @@ export default {
         guardarDatosUsuario() {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
-
-            const formData = {
-                nom: this.usuario.nom,
-                cognoms: this.usuario.cognoms,
-                email: this.usuario.email,
-                telefon: this.usuario.telefon,
-                data_naixement: this.usuario.data_naixement,
-                altura: this.usuario.altura,
-                pes: this.usuario.pes,
-                genere: this.usuario.genere,
-                foto_perfil: this.usuario.foto_perfil,
-                alergia_intolerancia: this.usuario.alergia_intolerancia,
-                lesio: this.usuario.lesio,
-                registre: store.registre,
-            };
+            
             if (
                 this.usuario.nom &&
                 this.usuario.cognoms &&
@@ -143,14 +129,29 @@ export default {
                 store.registreIncomplet();
             }
 
+            const formData = {
+                nom: this.usuario.nom,
+                cognoms: this.usuario.cognoms,
+                email: this.usuario.email,
+                telefon: this.usuario.telefon,
+                data_naixement: this.usuario.data_naixement,
+                altura: this.usuario.altura,
+                pes: this.usuario.pes,
+                genere: this.usuario.genere,
+                foto_perfil: this.usuario.foto_perfil,
+                alergia_intolerancia: this.usuario.alergia_intolerancia,
+                lesio: this.usuario.lesio,
+                registre: store.registre,
+            };
+
 
             console.log('Datos a enviar en la solicitud PUT:', formData);
 
             actualizarDatosUsuario(idUsuario, formData)
                 .then(message => {
-                    console.log(message);
+                    console.log("respnse", message);
 
-                    this.usuario.foto_perfil = store.foto_perfil;
+                    store.actualitzarDadesUsuari(message);
                     // Redireccionar a la página de detalles de sesión
                     this.$router.push(`/home`);
                 })
