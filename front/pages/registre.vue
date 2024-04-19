@@ -37,11 +37,11 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'altura'"
                     v-model="currentAnswer" type="text" placeholder="Altura (cm)" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'"
-                    v-model="currentAnswer" type="text" placeholder="Pes (kg)" @input="validateNumberInput">
+                    v-model="currentAnswer" type="text" placeholder="Pes (kg)" @input="validatePesInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
                     v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
-                    v-model="currentAnswer" type="date">
+                    v-model="currentAnswer" type="date"@input="validateDate">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
                     <div class="gender-options" @click="selectGenderOption">
                         <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta"
@@ -366,6 +366,34 @@ export default {
                 return true;
             }
         },
+        validatePesInput() {
+            // Validar que la entrada sea un número con máximo dos decimales
+            this.currentAnswer = this.currentAnswer.replace(/[^\d.]/g, ''); // Eliminar todos los caracteres que no sean dígitos ni puntos
+            const decimalCount = (this.currentAnswer.match(/\./g) || []).length; // Contar el número de puntos decimales
+
+            if (decimalCount > 1) {
+                // Si hay más de un punto decimal, eliminar todos los puntos después del segundo
+                const indexOfSecondDecimal = this.currentAnswer.indexOf('.', this.currentAnswer.indexOf('.') + 1);
+                this.currentAnswer = this.currentAnswer.slice(0, indexOfSecondDecimal);
+            }
+
+            // Limitar el número de decimales a dos
+            const decimalIndex = this.currentAnswer.indexOf('.');
+            if (decimalIndex !== -1) {
+                const integerPart = this.currentAnswer.slice(0, decimalIndex);
+                const decimalPart = this.currentAnswer.slice(decimalIndex + 1, decimalIndex + 3);
+                this.currentAnswer = `${integerPart}.${decimalPart}`;
+            }
+
+            // Verificar si el peso tiene más de dos decimales
+            if (decimalCount > 1 || (decimalIndex !== -1 && this.currentAnswer.length - decimalIndex > 3)) {
+                this.showErrorMessage = true;
+                this.errorMessage = "El peso debe tener máximo dos decimales.";
+            } else {
+                this.showErrorMessage = false;
+            }
+        },
+
 
         async registerUser() {
             console.log(this.userData);
