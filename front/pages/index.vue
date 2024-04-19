@@ -41,13 +41,13 @@ export default {
     },
     methods: {
         login() {
-            console.log('Inicio de sesión iniciado');
+            // console.log('Inicio de sesión iniciado');
 
             if (!this.email || !this.contrasenya) {
                 // Validar si los campos están vacíos
                 this.showError = true;
                 this.isValid = false;
-                console.log('Campos vacíos');
+                // console.log('Campos vacíos');
                 return;
             }
 
@@ -63,7 +63,7 @@ export default {
                 }),
             })
                 .then(response => {
-                    console.log('Respuesta recibida', response);
+                    // console.log('Respuesta recibida', response);
                     if (response.ok) {
                         return response.json();
                     } else {
@@ -80,22 +80,22 @@ export default {
                         store.email_usuari = data.email;
                         store.foto_perfil = data.foto_perfil;
 
-                        console.log('Usuario autenticado:', data);
+                        // console.log('Usuario autenticado:', data);
                         
                         this.$router.push('/home');
                     } else {
                         // El inicio de sesión falló
                         this.showError = true;
                         this.isValid = false;
-                        console.log('Usuario no autenticado');
+                        // console.log('Usuario no autenticado');
                     }
                 })
                 .catch(error => {
                     // Manejar errores de red u otros errores
-                    console.error('Error al iniciar sesión:', error);
+                    // console.error('Error al iniciar sesión:', error);
                     this.showError = true;
                     this.isValid = false;
-                    console.log('Error en la solicitud fetch');
+                    // console.log('Error en la solicitud fetch');
                 });
         },
         goToRegister() {
