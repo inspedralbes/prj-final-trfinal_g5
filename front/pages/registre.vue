@@ -71,6 +71,8 @@
 </template>
 
 <script>
+import { useUsuariPerfilStore } from '@/stores/index'
+
 export default {
     data() {
         return {
@@ -361,6 +363,10 @@ export default {
                 },
                 body: JSON.stringify(filteredUserData), // Enviar solo los datos llenos como cuerpo de la solicitud
             });
+
+            useUsuariPerfilStore().nom_usuari=filteredUserData.nom;
+            useUsuariPerfilStore().email_usuari=filteredUserData.email;
+            useUsuariPerfilStore().loguejat=true;
 
             this.$router.push('/home');
         }
