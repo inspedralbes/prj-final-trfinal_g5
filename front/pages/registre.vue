@@ -35,7 +35,7 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
                     v-model="currentAnswer" type="text" placeholder="Cognoms" @input="validateNameInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'altura'"
-                    v-model="currentAnswer" type="text" placeholder="Altura (cm)" @input="validateNumberInput">
+                    v-model="currentAnswer" type="text" placeholder="Altura (cm)" @input="validateAlturaInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'"
                     v-model="currentAnswer" type="text" placeholder="Pes (kg)" @input="validatePesInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
@@ -393,6 +393,10 @@ export default {
                 this.showErrorMessage = false;
             }
         },
+        validateAlturaInput() {
+    // Validar que la entrada sea un número entero
+    this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, ''); // Eliminar todos los caracteres que no sean dígitos
+},
 
 
         async registerUser() {
