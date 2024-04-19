@@ -42,15 +42,14 @@
                     v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date">
-                <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
-                    <div class="gender-options">
-                        <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta"
-                            :key="index" class="gender-option">
-                            <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
-                            <label :for="'option' + index">{{ option }}</label>
+                    <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
+                        <div class="gender-options" @click="selectGenderOption">
+                            <div v-for="(option, index) in registrationQuestions[currentQuestionIndex].respuesta" :key="index" class="gender-option">
+                                <input type="radio" :id="'option' + index" :value="option" v-model="currentAnswer">
+                                <label :for="'option' + index">{{ option }}</label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
                 <div v-if="showErrorMessage" class="error-message">
                     {{ errorMessage }}
@@ -261,6 +260,14 @@ export default {
             }
         },
 
+
+        selectGenderOption(event) {
+        // Obtener el valor seleccionado del género
+        const selectedGender = event.target.textContent.trim();
+
+        // Asignar el valor seleccionado al modelo de datos
+        this.currentAnswer = selectedGender;
+    },
 
 
 
@@ -566,17 +573,7 @@ input {
     display: none;
 }
 
-.gender-option label {
-    cursor: pointer;
-}
 
-.gender-option input:checked+label {
-    border: 2px solid rgb(43, 43, 43);
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-    background-color: #ccc;
-}
 
 
 .form-input {
