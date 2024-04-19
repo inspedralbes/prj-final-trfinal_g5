@@ -7,7 +7,7 @@
                 <img src="../public/logo_fithub.png" alt="FitHub Logo" class="logo-image" />
             </div>
             <div class="button-container">
-                <button class="button button--secondary" @click="startRegistration">Empezar Registro</button>
+                <button class="button button--secondary" @click="startRegistration">Començar Registre</button>
             </div>
         </div>
 
@@ -27,7 +27,7 @@
                 <input v-if="registrationQuestions[currentQuestionIndex].inputType === 'textarea'"
                     v-model="currentAnswer" placeholder="Escribe tu respuesta"></input>
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'email'"
-                    v-model="currentAnswer" type="email" placeholder="Correo electrónico" @input="validateEmailInput">
+                    v-model="currentAnswer" type="email" placeholder="Correu electronic" @input="validateEmailInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
                     v-model="currentAnswer" type="password" placeholder="Contraseña">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom'"
@@ -39,7 +39,7 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'"
                     v-model="currentAnswer" type="text" placeholder="Pes" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
-                    v-model="currentAnswer" type="tel" placeholder="Número de teléfono" @input="validateTelefonInput">
+                    v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
@@ -116,7 +116,7 @@ export default {
 
                 },
                 {
-                    question: "Quin es el teu cognoms?",
+                    question: "Quin es el teus cognoms?",
                     inputType: 'cognoms',
                     required: true,
 
@@ -166,7 +166,7 @@ export default {
             if (currentQuestion.required && this.currentAnswer === "") {
                 // Mostrar un mensaje de error indicando que la pregunta es requerida
                 this.showErrorMessage = true;
-                this.errorMessage = "Esta pregunta es requerida. Por favor, responde antes de continuar.";
+                this.errorMessage = "Aquesta pregunta és requerida. Si us plau, respon abans de continuar.";
                 return;
             }
 
@@ -220,7 +220,7 @@ export default {
             if (currentQuestion.required) {
                 // Mostrar un mensaje de error indicando que la pregunta es requerida
                 this.showErrorMessage = true;
-                this.errorMessage = "Esta pregunta es requerida. Por favor, responde antes de continuar.";
+                this.errorMessage = "Aquesta pregunta és requerida. Si us plau, respon abans de continuar";
                 return;
             }
             // Si hay una respuesta, guardarla en el objeto de datos del usuario
@@ -285,7 +285,7 @@ export default {
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
             if (!emailRegex.test(this.currentAnswer)) {
-                this.errorMessage = 'El formato del correo electrónico es incorrecto.';
+                this.errorMessage = 'El format del correu electronic es incorrecte.';
                 this.showErrorMessage = true; // Mostrar el mensaje de error
                 return;
             }
@@ -293,7 +293,7 @@ export default {
             const allowedDomains = ['gmail.com', 'hotmail.com', 'inspedralbes.cat'];
             const domain = this.currentAnswer.split('@')[1];
             if (!allowedDomains.includes(domain)) {
-                this.errorMessage = 'Solo se permiten correos electrónicos con dominio gmail.com o hotmail.com.';
+                this.errorMessage = 'Només es permeten correus electrònics amb domini gmail.com o hotmail.com. inspedralbes.cat';
                 this.showErrorMessage = true; // Mostrar el mensaje de error
                 return;
             }
@@ -303,7 +303,7 @@ export default {
         },
         validatePassword() {
             if (this.currentAnswer.length < 6) {
-                this.passwordErrorMessage = "La contraseña debe tener al menos 6 caracteres.";
+                this.passwordErrorMessage = "La contrasenya ha de tenir com a mínim 6 caràcters.";
                 return false;
             } else {
                 this.passwordErrorMessage = "";
@@ -317,7 +317,7 @@ export default {
             const minDate = new Date('1900-01-01');
 
             if (selectedDate > currentDate || selectedDate < minDate) {
-                this.dateErrorMessage = "La fecha seleccionada debe estar entre la fecha actual y 1900.";
+                this.dateErrorMessage = "La data seleccionada ha d'estar entre la data actual i el 1900.";
                 return false;
             } else {
                 this.dateErrorMessage = "";
