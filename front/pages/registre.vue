@@ -35,9 +35,9 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
                     v-model="currentAnswer" type="text" placeholder="Cognoms" @input="validateNameInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'altura'"
-                    v-model="currentAnswer" type="text" placeholder="Altura" @input="validateNumberInput">
+                    v-model="currentAnswer" type="text" placeholder="Altura (cm)" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'"
-                    v-model="currentAnswer" type="text" placeholder="Pes" @input="validateNumberInput">
+                    v-model="currentAnswer" type="text" placeholder="Pes (kg)" @input="validateNumberInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
                     v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
