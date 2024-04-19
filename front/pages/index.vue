@@ -79,7 +79,8 @@ export default {
                         store.nom_usuari = data.nom;
                         store.email_usuari = data.email;
                         store.foto_perfil = data.foto_perfil;
-
+                        store.registre = data.registre === "1" ? true : false;
+                        
                         // console.log('Usuario autenticado:', data);
                         
                         this.$router.push('/home');
@@ -90,6 +91,8 @@ export default {
                         // console.log('Usuario no autenticado');
                     }
                 })
+
+
                 .catch(error => {
                     // Manejar errores de red u otros errores
                     // console.error('Error al iniciar sesión:', error);
@@ -230,4 +233,4 @@ body {
     font-size: 0.8rem;
     margin-top: 0.5rem;
 }
-</style>~/stores/index
+</style>

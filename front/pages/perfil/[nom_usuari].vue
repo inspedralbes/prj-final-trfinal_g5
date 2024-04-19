@@ -1,4 +1,5 @@
 <template>
+
     <body>
         <div>
             <div class="flex-container">
@@ -51,7 +52,7 @@
                         </div>
                         <div class="input-container">
                             <label>Foto de Perfil:</label>
-                            <input type="text" v-model="usuario.fotoPerfil">
+                            <input type="text" v-model="usuario.foto_perfil">
                             <!-- <input type="file" @change="onFileChange"> -->
                         </div>
                         <button type="submit" class="large-button">Guardar</button>
@@ -64,7 +65,9 @@
 </template>
 
 <script>
-import { useUsuariPerfilStore } from '@/stores/index'
+import { useUsuariPerfilStore } from '@/stores/index'; // Asegúrate de ajustar la ruta correcta
+import { getDatosUsuario, actualizarDatosUsuario } from '@/stores/communicationManager';
+
 export default {
     data() {
         return {
@@ -77,9 +80,10 @@ export default {
                 altura: '',
                 pes: '',
                 genere: '',
-                fotoPerfil: null,
+                foto_perfil: '',
                 alergia_intolerancia: '',
                 lesio: '',
+                registre: '',
             }
         };
     },
@@ -91,22 +95,9 @@ export default {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
 
-            fetch(`http://localhost:8000/api/usuari/${idUsuario}`)
-                .then(response => response.json())
+            getDatosUsuario(idUsuario)
                 .then(data => {
-                    this.usuario = {
-                        nom: data.usuario.nom,
-                        cognoms: data.usuario.cognoms,
-                        email: data.usuario.email,
-                        telefon: data.usuario.telefon,
-                        data_naixement: data.usuario.data_naixement,
-                        altura: data.usuario.altura,
-                        pes: data.usuario.pes,
-                        genere: data.usuario.genere,
-                        fotoPerfil: data.usuario.foto_perfil, // Asegúrate de que coincida con la clave del objeto recibido
-                        alergia_intolerancia: data.usuario.alergia_intolerancia,
-                        lesio: data.usuario.lesio
-                    };
+                    this.usuario = data.usuario;
                     console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
@@ -115,11 +106,29 @@ export default {
         },
         onFileChange(event) {
             const file = event.target.files[0];
-            this.usuario.fotoPerfil = file;
+            this.usuario.foto_perfil = file;
         },
         guardarDatosUsuario() {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
+            
+            if (
+                this.usuario.nom &&
+                this.usuario.cognoms &&
+                this.usuario.email &&
+                this.usuario.telefon &&
+                this.usuario.data_naixement &&
+                this.usuario.altura &&
+                this.usuario.pes &&
+                this.usuario.genere &&
+                this.usuario.alergia_intolerancia &&
+                this.usuario.foto_perfil &&
+                this.usuario.lesio
+            ) {
+                store.registratExitosament();
+            }else{
+                store.registreIncomplet();
+            }
 
             const formData = {
                 nom: this.usuario.nom,
@@ -130,30 +139,26 @@ export default {
                 altura: this.usuario.altura,
                 pes: this.usuario.pes,
                 genere: this.usuario.genere,
-                foto_perfil: this.usuario.fotoPerfil,
+                foto_perfil: this.usuario.foto_perfil,
                 alergia_intolerancia: this.usuario.alergia_intolerancia,
                 lesio: this.usuario.lesio,
+                registre: store.registre,
             };
+
 
             console.log('Datos a enviar en la solicitud PUT:', formData);
 
-            fetch(`http://localhost:8000/api/editar-usuari/${idUsuario}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            }).then(response => {
-                if (response.ok) {
-                    console.log('Datos actualizados exitosamente');
+            actualizarDatosUsuario(idUsuario, formData)
+                .then(message => {
+                    console.log("respnse", message);
+
+                    store.actualitzarDadesUsuari(message);
                     // Redireccionar a la página de detalles de sesión
                     this.$router.push(`/home`);
-                } else {
-                    console.error('Error al actualizar la sesión:', response.statusText);
-                }
-            }).catch(error => {
-                console.error('Error de red:', error);
-            });
+                })
+                .catch(error => {
+                    console.error('Error al actualizar los datos del usuario:', error);
+                });
         }
     }
 };

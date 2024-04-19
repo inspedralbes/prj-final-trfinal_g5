@@ -1,10 +1,14 @@
 <template>
     <div class="header-container">
-        <nuxt-link :to="`/perfil/${nom_usuari}`">
-            <img v-if="foto_perfil !== ''" :src="foto_perfil" alt="Usuario" class="user-icon" />
+        <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
+            <img v-if="foto_perfil" :src="foto_perfil" alt="Usuario" class="user-icon" />
             <img v-else src="../public/usuario.png" alt="Usuario" class="user-icon" />
         </nuxt-link>
-        <h1 class="title">{{ usuari }}</h1>
+        <div v-if="!registre" :class="{ 'alert-container': true, 'oculto': cerrarAlerta }">
+            <div class="alert-message">Perfil incompleto</div>
+            <button @click="closeAlert" class="close-button">Cerrar</button>
+        </div>
+        <h1 v-if="nom_usuari" class="title">{{ nom_usuari }}</h1>
     </div>
 </template>
 
@@ -16,19 +20,30 @@ export default {
         return {
             usuari: '',
             saludo: '',
-            foto_perfil: '', // Cambié foto_usuari a foto_perfil para coincidir con el nombre en la data
+            foto_perfil: '',
+            cerrarAlerta: false
         };
     },
     computed: {
         nom_usuari() {
             return useUsuariPerfilStore().nom_usuari;
         },
+        foto_perfil(){
+            return useUsuariPerfilStore().foto_perfil;
+        },
+        registre(){
+            return useUsuariPerfilStore().registre;
+        }
+    },
+    methods: {
+        closeAlert() {
+            this.cerrarAlerta = true;
+        }
     },
     mounted() {
         // Recuperar el nombre de usuario y la foto de perfil del pinia
         const store = useUsuariPerfilStore();
-        this.usuari = store.nom_usuari;
-        this.foto_perfil = store.foto_perfil; // Actualizado a foto_perfil
+        
     },
 }
 </script>
@@ -47,6 +62,28 @@ export default {
     border-bottom-right-radius: 10px;
 }
 
+.alert-container {
+    background-color: #f44336; /* Color rojo para la alerta */
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.alert-message {
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+.close-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
 .user-icon {
     width: 40px;
     height: 40px;
@@ -56,5 +93,9 @@ export default {
 .title {
     font-weight: bold;
     font-size: 24px;
+}
+
+.oculto {
+    display: none;
 }
 </style>
