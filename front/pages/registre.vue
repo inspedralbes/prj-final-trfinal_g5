@@ -44,7 +44,6 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
                     v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
-
                     v-model="currentAnswer" type="date" @input="validateDate">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
                     <div class="gender-options">
@@ -192,6 +191,13 @@ export default {
                     return;
                 }
             }
+            if(currentQuestion.inputType === 'data_naixement') {
+                const isDateValid = this.validateDate();
+                if (!isDateValid) {
+                    // Mostrar mensaje de error si la fecha no es válida
+                    return;
+                }
+            }
             if (currentQuestion.inputType === 'telefon') {
                 this.validateTelefonInput(); // Validar el número de teléfono
                 if (this.showErrorMessage) {
@@ -202,8 +208,11 @@ export default {
 
             // Verificar si el correo electrónico no está vacío y es la pregunta actual
             if (this.currentAnswer !== "" && currentQuestion.inputType === 'email') {
-                this.checkingEmail = true;
-
+                this.validateEmailInput(); // Validar el correo electrónico
+                if (this.showErrorMessage) {
+                    // Mostrar mensaje de error si el correo electrónico no es válido
+                    return;
+                } else { 
                 // Realizar la verificación del correo electrónico
                 const response = await fetch('http://localhost:8000/api/comprovaremail', {
                     method: 'POST',
@@ -214,6 +223,7 @@ export default {
                         email: this.currentAnswer
                     }),
                 });
+
                 this.checkingEmail = false;
 
                 // Convertir la respuesta a formato JSON
@@ -226,217 +236,218 @@ export default {
                     return;
                 }
             }
+        }
 
             // Si la pregunta no es requerida, o si es requerida pero tiene respuesta, proceder a la siguiente pregunta
             // Guardar la respuesta actual en el objeto de datos del usuario
             this.userData[currentQuestion.inputType] = this.currentAnswer;
 
-            // Incrementar el índice de la pregunta
-            this.currentQuestionIndex++;
+        // Incrementar el índice de la pregunta
+        this.currentQuestionIndex++;
 
-            // Reiniciar la respuesta actual
-            this.currentAnswer = "";
-            this.showErrorMessage = false;
+        // Reiniciar la respuesta actual
+        this.currentAnswer = "";
+        this.showErrorMessage = false;
 
-            // Si es la última pregunta, registra al usuario
-            if (this.currentQuestionIndex === this.registrationQuestions.length) {
-                await this.registerUser();
-            }
+        // Si es la última pregunta, registra al usuario
+        if(this.currentQuestionIndex === this.registrationQuestions.length) {
+    await this.registerUser();
+}
         },
 
 
         async saltarPregunta() {
-            // Obtener la pregunta actual
-            const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
-            this.currentAnswer = "";
+    // Obtener la pregunta actual
+    const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
+    this.currentAnswer = "";
 
-            if (currentQuestion.required) {
-                // Mostrar un mensaje de error indicando que la pregunta es requerida
-                this.showErrorMessage = true;
-                this.errorMessage = "Aquesta pregunta és requerida. Si us plau, respon abans de continuar";
-                return;
-            }
-            // Si hay una respuesta, guardarla en el objeto de datos del usuario
-            if (this.currentAnswer.trim() !== "") {
-                this.userData[currentQuestion.inputType] = this.currentAnswer;
-            }
+    if (currentQuestion.required) {
+        // Mostrar un mensaje de error indicando que la pregunta es requerida
+        this.showErrorMessage = true;
+        this.errorMessage = "Aquesta pregunta és requerida. Si us plau, respon abans de continuar";
+        return;
+    }
+    // Si hay una respuesta, guardarla en el objeto de datos del usuario
+    if (this.currentAnswer.trim() !== "") {
+        this.userData[currentQuestion.inputType] = this.currentAnswer;
+    }
 
-            // Incrementar el índice de la pregunta
-            this.currentQuestionIndex++;
+    // Incrementar el índice de la pregunta
+    this.currentQuestionIndex++;
 
-            // Reiniciar la respuesta actual
-            this.currentAnswer = "";
-            this.showErrorMessage = false;
+    // Reiniciar la respuesta actual
+    this.currentAnswer = "";
+    this.showErrorMessage = false;
 
-            // Si es la última pregunta, registra al usuario
-            if (this.currentQuestionIndex === this.registrationQuestions.length) {
-                // Filtrar userData para eliminar campos vacíos
-
-
-                // Realizar el registro solo si hay datos válidos
-
-                await this.registerUser();
-            }
-        },
-
-        selectGenderOption(option) {
-            // Establecer el valor de la respuesta como la opción seleccionada
-            this.currentAnswer = option;
-        },
+    // Si es la última pregunta, registra al usuario
+    if (this.currentQuestionIndex === this.registrationQuestions.length) {
+        // Filtrar userData para eliminar campos vacíos
 
 
-        goToLogin() {
-            this.$router.push('/');
-        },
-        validateNumberInput() {
-            // Validar que la entrada sea un número o un solo punto decimal
-            this.currentAnswer = this.currentAnswer.replace(/[^0-9.]/g, '');
+        // Realizar el registro solo si hay datos válidos
 
-            // Asegurar que solo haya un punto decimal
-            const dotCount = this.currentAnswer.split('.').length - 1;
-            if (dotCount > 1) {
-                this.currentAnswer = this.currentAnswer.slice(0, -1);
-            }
-        },
-        validateTelefonInput() {
-            // Validar que la entrada sea un número y limitar la longitud a 9 dígitos
-            this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, '').slice(0, 9);
+        await this.registerUser();
+    }
+},
 
-            // Verificar si el número de teléfono tiene exactamente 9 dígitos
-            const phoneNumberLength = this.currentAnswer.length;
-            if (phoneNumberLength !== 9) {
-                // Si el número de teléfono no tiene 9 dígitos, mostrar un mensaje de error
-                this.showErrorMessage = true;
-                this.errorMessage = "El número de telèfon ha de tenir exactament 9 dígits.";
-                return;
-            } else {
-                // Si el número de teléfono tiene 9 dígitos, ocultar cualquier mensaje de error anterior
-                this.showErrorMessage = false;
-            }
+selectGenderOption(option) {
+    // Establecer el valor de la respuesta como la opción seleccionada
+    this.currentAnswer = option;
+},
 
-            // Reiniciar el mensaje de error si la validación es exitosa
-            this.showErrorMessage = false;
-        },
 
-        validateNameInput() {
-            // Eliminar caracteres no alfabéticos del nombre
-            this.currentAnswer = this.currentAnswer.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+goToLogin() {
+    this.$router.push('/');
+},
+validateNumberInput() {
+    // Validar que la entrada sea un número o un solo punto decimal
+    this.currentAnswer = this.currentAnswer.replace(/[^0-9.]/g, '');
 
-            // Convertir la primera letra de cada palabra a mayúscula
-            this.currentAnswer = this.currentAnswer.replace(/\b\w/g, match => match.toUpperCase());
-        },
-        validateEmailInput() {
-            // Validar el correo electrónico como se muestra en la respuesta anterior
-            // Si hay un error, establecer el mensaje de error
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Asegurar que solo haya un punto decimal
+    const dotCount = this.currentAnswer.split('.').length - 1;
+    if (dotCount > 1) {
+        this.currentAnswer = this.currentAnswer.slice(0, -1);
+    }
+},
+validateTelefonInput() {
+    // Validar que la entrada sea un número y limitar la longitud a 9 dígitos
+    this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, '').slice(0, 9);
 
-            if (!emailRegex.test(this.currentAnswer)) {
-                this.errorMessage = 'El format del correu electronic es incorrecte.';
-                this.showErrorMessage = true; // Mostrar el mensaje de error
-                return;
-            }
+    // Verificar si el número de teléfono tiene exactamente 9 dígitos
+    const phoneNumberLength = this.currentAnswer.length;
+    if (phoneNumberLength !== 9) {
+        // Si el número de teléfono no tiene 9 dígitos, mostrar un mensaje de error
+        this.showErrorMessage = true;
+        this.errorMessage = "El número de telèfon ha de tenir exactament 9 dígits.";
+        return;
+    } else {
+        // Si el número de teléfono tiene 9 dígitos, ocultar cualquier mensaje de error anterior
+        this.showErrorMessage = false;
+    }
 
-            const allowedDomains = ['gmail.com', 'hotmail.com', 'inspedralbes.cat'];
-            const domain = this.currentAnswer.split('@')[1];
-            if (!allowedDomains.includes(domain)) {
-                this.errorMessage = 'Només es permeten correus electrònics amb domini gmail.com o hotmail.com. inspedralbes.cat';
-                this.showErrorMessage = true; // Mostrar el mensaje de error
-                return;
-            }
+    // Reiniciar el mensaje de error si la validación es exitosa
+    this.showErrorMessage = false;
+},
 
-            // Si el correo electrónico es válido, asegúrate de que no haya otros mensajes de error
-            this.showErrorMessage = false;
-        },
-        validatePassword() {
-            if (this.currentAnswer.length < 6) {
-                this.passwordErrorMessage = "La contrasenya ha de tenir com a mínim 6 caràcters.";
-                return false;
-            } else {
-                this.passwordErrorMessage = "";
-                return true;
-            }
-        },
+validateNameInput() {
+    // Eliminar caracteres no alfabéticos del nombre
+    this.currentAnswer = this.currentAnswer.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
 
-        validateDate() {
-            const currentDate = new Date();
-            const selectedDate = new Date(this.currentAnswer);
-            const minDate = new Date('1900-01-01');
+    // Convertir la primera letra de cada palabra a mayúscula
+    this.currentAnswer = this.currentAnswer.replace(/\b\w/g, match => match.toUpperCase());
+},
+validateEmailInput() {
+    // Validar el correo electrónico como se muestra en la respuesta anterior
+    // Si hay un error, establecer el mensaje de error
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-            if (selectedDate > currentDate || selectedDate < minDate) {
-                this.dateErrorMessage = "La data seleccionada ha d'estar entre la data actual i el 1900.";
-                return false;
-            } else {
-                this.dateErrorMessage = "";
-                return true;
-            }
-        },
-        validatePesInput() {
-            // Validar que la entrada sea un número con máximo dos decimales
-            this.currentAnswer = this.currentAnswer.replace(/[^\d.]/g, ''); // Eliminar todos los caracteres que no sean dígitos ni puntos
-            const decimalCount = (this.currentAnswer.match(/\./g) || []).length; // Contar el número de puntos decimales
+    if (!emailRegex.test(this.currentAnswer)) {
+        this.errorMessage = 'El format del correu electronic es incorrecte.';
+        this.showErrorMessage = true; // Mostrar el mensaje de error
+        return;
+    }
 
-            if (decimalCount > 1) {
-                // Si hay más de un punto decimal, eliminar todos los puntos después del segundo
-                const indexOfSecondDecimal = this.currentAnswer.indexOf('.', this.currentAnswer.indexOf('.') + 1);
-                this.currentAnswer = this.currentAnswer.slice(0, indexOfSecondDecimal);
-            }
+    const allowedDomains = ['gmail.com', 'hotmail.com', 'inspedralbes.cat'];
+    const domain = this.currentAnswer.split('@')[1];
+    if (!allowedDomains.includes(domain)) {
+        this.errorMessage = 'Només es permeten correus electrònics amb domini gmail.com o hotmail.com. inspedralbes.cat';
+        this.showErrorMessage = true; // Mostrar el mensaje de error
+        return;
+    }
 
-            // Limitar el número de decimales a dos
-            const decimalIndex = this.currentAnswer.indexOf('.');
-            if (decimalIndex !== -1) {
-                const integerPart = this.currentAnswer.slice(0, decimalIndex);
-                const decimalPart = this.currentAnswer.slice(decimalIndex + 1, decimalIndex + 3);
-                this.currentAnswer = `${integerPart}.${decimalPart}`;
-            }
+    // Si el correo electrónico es válido, asegúrate de que no haya otros mensajes de error
+    this.showErrorMessage = false;
+},
+validatePassword() {
+    if (this.currentAnswer.length < 6) {
+        this.passwordErrorMessage = "La contrasenya ha de tenir com a mínim 6 caràcters.";
+        return false;
+    } else {
+        this.passwordErrorMessage = "";
+        return true;
+    }
+},
 
-            // Verificar si el peso tiene más de dos decimales
-            if (decimalCount > 1 || (decimalIndex !== -1 && this.currentAnswer.length - decimalIndex > 3)) {
-                this.showErrorMessage = true;
-                this.errorMessage = "El peso debe tener máximo dos decimales.";
-            } else {
-                this.showErrorMessage = false;
-            }
-        },
-        validateAlturaInput() {
-            // Validar que la entrada sea un número entero
-            this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, ''); // Eliminar todos los caracteres que no sean dígitos
-        },
+validateDate() {
+    const currentDate = new Date();
+    const selectedDate = new Date(this.currentAnswer);
+    const minDate = new Date('1900-01-01');
+
+    if (selectedDate > currentDate || selectedDate < minDate) {
+        this.dateErrorMessage = "La data seleccionada ha d'estar entre la data actual i el 1900.";
+        return false;
+    } else {
+        this.dateErrorMessage = "";
+        return true;
+    }
+},
+validatePesInput() {
+    // Validar que la entrada sea un número con máximo dos decimales
+    this.currentAnswer = this.currentAnswer.replace(/[^\d.]/g, ''); // Eliminar todos los caracteres que no sean dígitos ni puntos
+    const decimalCount = (this.currentAnswer.match(/\./g) || []).length; // Contar el número de puntos decimales
+
+    if (decimalCount > 1) {
+        // Si hay más de un punto decimal, eliminar todos los puntos después del segundo
+        const indexOfSecondDecimal = this.currentAnswer.indexOf('.', this.currentAnswer.indexOf('.') + 1);
+        this.currentAnswer = this.currentAnswer.slice(0, indexOfSecondDecimal);
+    }
+
+    // Limitar el número de decimales a dos
+    const decimalIndex = this.currentAnswer.indexOf('.');
+    if (decimalIndex !== -1) {
+        const integerPart = this.currentAnswer.slice(0, decimalIndex);
+        const decimalPart = this.currentAnswer.slice(decimalIndex + 1, decimalIndex + 3);
+        this.currentAnswer = `${integerPart}.${decimalPart}`;
+    }
+
+    // Verificar si el peso tiene más de dos decimales
+    if (decimalCount > 1 || (decimalIndex !== -1 && this.currentAnswer.length - decimalIndex > 3)) {
+        this.showErrorMessage = true;
+        this.errorMessage = "El peso debe tener máximo dos decimales.";
+    } else {
+        this.showErrorMessage = false;
+    }
+},
+validateAlturaInput() {
+    // Validar que la entrada sea un número entero
+    this.currentAnswer = this.currentAnswer.replace(/[^\d]/g, ''); // Eliminar todos los caracteres que no sean dígitos
+},
 
 
         async registerUser() {
-            console.log(this.userData);
-            // Filtrar los campos que no estén vacíos
-            const filteredUserData = Object.fromEntries(
-                Object.entries(this.userData).filter(([key, value]) => value !== "")
-            );
+    console.log(this.userData);
+    // Filtrar los campos que no estén vacíos
+    const filteredUserData = Object.fromEntries(
+        Object.entries(this.userData).filter(([key, value]) => value !== "")
+    );
 
-            const response = await fetch('http://127.0.0.1:8000/api/registre', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(filteredUserData), // Enviar solo los datos llenos como cuerpo de la solicitud
-            });
+    const response = await fetch('http://127.0.0.1:8000/api/registre', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filteredUserData), // Enviar solo los datos llenos como cuerpo de la solicitud
+    });
 
-            if (!response.ok) {
-                // Manejar el caso de error si la respuesta no fue exitosa
-                // Puedes mostrar un mensaje de error o manejar la situación de otra manera
-                return;
-            }
+    if (!response.ok) {
+        // Manejar el caso de error si la respuesta no fue exitosa
+        // Puedes mostrar un mensaje de error o manejar la situación de otra manera
+        return;
+    }
 
-            // Convertir la respuesta a formato JSON
-            const userDataResponse = await response.json();
+    // Convertir la respuesta a formato JSON
+    const userDataResponse = await response.json();
 
-            console.log(userDataResponse)
+    console.log(userDataResponse)
 
-            useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
-            useUsuariPerfilStore().email_usuari = filteredUserData.email;
-            useUsuariPerfilStore().loguejat = true;
-            useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
+    useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
+    useUsuariPerfilStore().email_usuari = filteredUserData.email;
+    useUsuariPerfilStore().loguejat = true;
+    useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
 
 
-            this.$router.push('/home');
-        }
+    this.$router.push('/home');
+}
     }
 
 };
