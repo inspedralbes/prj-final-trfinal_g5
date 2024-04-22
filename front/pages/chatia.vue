@@ -7,6 +7,8 @@
         <div class="cabecera">Assessorament</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
         <h2 class="mensaje-bienvenida">"Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?"</h2>
+        <nuxt-link to="/chatRutina" class="boton-chat-Rutina">Assessor de Rutina</nuxt-link>
+        <nuxt-link to="/chatDieta" class="boton-chat-Dieta">Assessor de Dieta</nuxt-link>
         <div class="chat">
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
             <div class="mensaje"
@@ -40,7 +42,7 @@
 
 
 <script>
-import { enviarMensajeOpenAIRutina } from '@/stores/communicationManager';
+import { enviarMensajeOpenAI } from '@/stores/communicationManager';
 import { useUsuariPerfilStore } from '@/stores/index';
 export default {
   data() {
@@ -63,6 +65,8 @@ export default {
 
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
+          document.querySelector('.boton-chat-Rutina').style.display = 'none';
+          document.querySelector('.boton-chat-Dieta').style.display = 'none';
         }
 
 
@@ -215,10 +219,39 @@ body {
 
 .contenido-mensaje-asistente {
   max-width: 100%;
-
-
 }
 
+.boton-chat-Rutina {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 10px 10px 0;
+  width: 50%;
+}
+
+.boton-chat-Dieta {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 10px 10px 0;
+  width: 50%;
+}
 
 .animacion-carga {
   width: 20px;
