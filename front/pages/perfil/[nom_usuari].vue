@@ -97,21 +97,9 @@ export default {
                 lesio: '',
                 registre: '',
             },
+            datosOriginales: {}, // Mantén una copia de los datos originales
             errorMessage: '',
         };
-    },
-    computed: {
-        maxDate() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth() + 1;
-            const day = today.getDate();
-            return `${year}-${month < 10 ? '0' + month : month}-${day}`;
-        },
-        minDate() {
-            const minYear = 1900;
-            return `${minYear}-01-01`;
-        },
     },
     mounted() {
         this.obtenerDatosUsuario();
@@ -124,6 +112,7 @@ export default {
             getDatosUsuario(idUsuario)
                 .then(data => {
                     this.usuario = data.usuario;
+                    this.datosOriginales = { ...data.usuario }; // Guarda una copia de los datos originales
                     console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
@@ -131,21 +120,22 @@ export default {
                 });
         },
         guardarDatosUsuario() {
-            // Filtrar los campos que no están vacíos
-            const usuarioFiltrado = {};
+            // Filtrar los campos modificados
+            const usuarioModificado = {};
             for (const key in this.usuario) {
-                if (this.usuario[key] !== '' && this.usuario[key] !== null && this.usuario[key] !== undefined) {
-                    usuarioFiltrado[key] = this.usuario[key];
+                // Verificar si el valor ha sido modificado
+                if (this.usuario[key] !== this.datosOriginales[key]) {
+                    usuarioModificado[key] = this.usuario[key];
                 }
             }
 
-            // Realizar la solicitud PUT al servidor con los datos filtrados
+            // Realizar la solicitud PUT al servidor con los datos modificados
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
-            console.log('Datos del usuario a enviar:', usuarioFiltrado);
+            console.log('Datos del usuario a enviar:', usuarioModificado);
             fetch('http://localhost:8000/api/editar-usuari/' + idUsuario, {
                 method: 'PUT',
-                body: JSON.stringify(usuarioFiltrado),
+                body: JSON.stringify(usuarioModificado),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -153,6 +143,8 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Datos del usuario actualizados:', data);
+                    // Actualizar los datos originales con los datos modificados
+                    this.datosOriginales = { ...this.datosOriginales, ...usuarioModificado };
                 })
                 .catch(error => {
                     console.error('Error al actualizar los datos del usuario:', error);
@@ -242,14 +234,20 @@ export default {
             }
         },
         validateInput(event, property) {
-            // Expresión regular para permitir solo letras, números y espacios
-            const regex = /^[A-Za-z0-9\s]*$/;
-            // Verificar si la entrada del usuario coincide con la expresión regular
-            if (!regex.test(event.target.value)) {
-                // Si no coincide, eliminar los caracteres no válidos
-                this.usuario[property] = event.target.value.replace(/[^A-Za-z0-9\s]/g, '');
+            // Para alergias y lesiones, no se aplicarán restricciones
+            if (property === 'alergia_intolerancia' || property === 'lesio') {
+                this.usuario[property] = event.target.value;
+            } else {
+                // Expresión regular para permitir solo letras, números y espacios
+                const regex = /^[A-Za-z0-9\s]*$/;
+                // Verificar si la entrada del usuario coincide con la expresión regular
+                if (!regex.test(event.target.value)) {
+                    // Si no coincide, eliminar los caracteres no válidos
+                    this.usuario[property] = event.target.value.replace(/[^A-Za-z0-9\s]/g, '');
+                }
             }
         }
+
 
     },
 };

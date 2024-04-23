@@ -182,8 +182,8 @@ class UserController extends Controller
             'altura' => 'sometimes|numeric',
             'telefon' => 'sometimes|integer|digits:9',
             'foto_perfil' => 'sometimes|image|mimes:jpeg,png,jpg',
-            'alergia_intolerancia' => 'sometimes|string',
-            'lesio' => 'sometimes|string',
+            'alergia_intolerancia' => 'sometimes',
+            'lesio' => 'sometimes',
             'registre' => 'sometimes|boolean',
         ]);
         if($validator->fails()){
