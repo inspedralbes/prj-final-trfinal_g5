@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('dificultat');
             $table->string('imatge');
             $table->string('descripció');
-            $table->boolean('desitjat')->default(true);
             $table->unsignedBigInteger('idCategoria');
             $table->foreign('idCategoria')->references('idCategoria')->on('categoriasm');
 
