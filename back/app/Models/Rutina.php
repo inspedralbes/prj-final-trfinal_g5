@@ -12,7 +12,8 @@ class Rutina extends Model
     protected $table = 'rutinas';
 
     protected $fillable = [
-        'nom',
+        'nomExecercici',
+        'dia',
         'series',
         'repeticions',
         'ejercicio_id',
@@ -22,5 +23,10 @@ class Rutina extends Model
         return $this->hasMany(Ejercicio::class,'ejercicio_id');
     }
     public $timestamps = false;
+
+    public function ejercicios()
+    {
+        return $this->belongsTo(Ejercicio::class , 'ejercicio_id');
+    }
 
 }
