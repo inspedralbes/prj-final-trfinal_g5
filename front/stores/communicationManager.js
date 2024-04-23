@@ -5,7 +5,6 @@ const apiKey = '1234567890';
 
 //ejemplo de peticion fetch get
 
-
 export function getDatosUsuario(idUsuario) {
     return new Promise((resolve, reject) => {
         fetch(`${url}/usuari/${idUsuario}`)
@@ -25,9 +24,21 @@ export function getDatosUsuario(idUsuario) {
     });
 }
 
+export async function getDatosEjercicio() {
+    try {
+        const response = await fetch(`${url}/exercicis`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del ejercicio: ' + response.statusText);
+        }
+        
+        const data = await response.json();
+        return data; // Devuelve los datos del ejercicio en JSON
+    } catch (error) {
+        throw new Error('Error de red al obtener los datos del ejercicio: ' + error.message);
+    }
+}
 
 //ejemplo de peticion fetch post
-
 
 export async function iniciarSesion(email, contrasenya) {
     try {
@@ -109,11 +120,12 @@ export async function enviarMensajeOpenAIRutina(message) {
                 {
                     role: 'user',
                     content: message
-                }
+                },
             ]
+            
         };
 
-
+        console.log(payload)
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
