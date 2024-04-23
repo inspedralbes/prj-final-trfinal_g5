@@ -1,21 +1,4 @@
-<?php
-
-namespace Database\Seeders;
-
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-
-class EjerciciosTableSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $data = [
-            [
+ [
                 "id" => 1,
                 "nom_exercici" => "Curl de Martell Inclinat",
                 "dificultat" => "principiant",
@@ -655,9 +638,3 @@ class EjerciciosTableSeeder extends Seeder
                 "imatge" => "imatge_extension_triceps_mancuerna.jpg",
                 "descripció" => "Flexiona i estén el braç amb la mancuerna per treballar els tríceps."
             ]
-        ];
-
-        // Insertar los datos en la base de datos
-        DB::table('ejercicios')->insert($data);
-    }
-}
