@@ -4,7 +4,7 @@
         <div>
             <div class="flex-container">
                 <capçalera />
-                <form @submit.prevent="guardarDatosUsuario">
+                <form @submit.prevent="guardarDatosUsuario" enctype="multipart/form-data">
                     <div class="user-info-container">
                         <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                         <div class="input-container">
@@ -51,19 +51,21 @@
                         </div>
                         <div class="input-container">
                             <label>Alergia/Intolerancia:</label>
+                            <label>Opcional</label>
                             <textarea placeholder="Introdueix la teva alergia o intolerencia"
                                 v-model="usuario.alergia_intolerancia"
                                 @input="validateInput($event, 'alergia_intolerancia')" maxlength="255"></textarea>
                         </div>
                         <div class="input-container">
                             <label>Lesió:</label>
+                            <label>Opcional</label>
                             <textarea placeholder="Introdueix la teva lesió" v-model="usuario.lesio"
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
 
                         <div class="input-container">
                             <label>Foto de Perfil:</label>
-                            <input type="file" @change="onFileChange">
+                            <input type="file" name="foto_perfil" @change="onFileChange">
                         </div>
                         <button type="submit" class="large-button">Guardar</button>
                     </div>
@@ -92,7 +94,13 @@ export default {
                 altura: '',
                 pes: '',
                 genere: '',
-                foto_perfil: '',
+                foto_perfil: {
+                    name: '',
+                    size: '',
+                    type: '',
+                    lastModified: '',
+                    lastModifiedDate: '',
+                },
                 alergia_intolerancia: '',
                 lesio: '',
                 registre: '',
@@ -113,7 +121,7 @@ export default {
                 .then(data => {
                     this.usuario = data.usuario;
                     this.datosOriginales = { ...data.usuario }; // Guarda una copia de los datos originales
-                    console.log('Datos del usuario obtenidos:', data);
+                    // console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
                     console.error('Error al obtener los datos del usuario:', error);
@@ -152,7 +160,33 @@ export default {
         },
 
         onFileChange(event) {
-            this.usuario.foto_perfil = event.target.files[0];
+            const file = event.target.files[0]; // Obtener el archivo del evento
+
+            // Verificar si se seleccionó un archivo
+            // Verificar si se seleccionó un archivo
+            if (file) {
+                // Crear un objeto que contenga toda la información de la foto de perfil
+                this.usuario.foto_perfil = {
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    lastModified: file.lastModified,
+                    lastModifiedDate: file.lastModifiedDate,
+                    file: {
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        lastModified: file.lastModified,
+                        lastModifiedDate: file.lastModifiedDate
+                    }
+                };
+
+                // Mostrar en la consola la foto de perfil seleccionada
+                console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
+            } else {
+                console.error('No se seleccionó ningún archivo.');
+            }
+
         },
         // Función para capitalizar la primera letra de una cadena
         capitalizeFirstLetter(string) {

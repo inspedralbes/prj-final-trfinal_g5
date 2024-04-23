@@ -173,7 +173,8 @@ class UserController extends Controller
 
     public function editarUsuari(Request $request, $id)
     {   
-        $validator=Validator::make($request->all(),[
+        // Validación de los datos recibidos en la solicitud
+        $validator = Validator::make($request->all(), [
             'nom' => 'sometimes|string|max:255',
             'cognoms' => 'sometimes|string|max:255',
             'data_naixement' => 'sometimes|date',
@@ -181,73 +182,65 @@ class UserController extends Controller
             'pes' => 'sometimes|numeric',
             'altura' => 'sometimes|numeric',
             'telefon' => 'sometimes|integer|digits:9',
-            'foto_perfil' => 'sometimes|image|mimes:jpeg,png,jpg',
-            'alergia_intolerancia' => 'sometimes',
-            'lesio' => 'sometimes',
+            'foto_perfil' => 'sometimes|mimetypes:image/jpeg,image/png,image/jpg',
+            'alergia_intolerancia' => 'sometimes|max:255',
+            'lesio' => 'sometimes|max:255',
             'registre' => 'sometimes|boolean',
         ]);
-        if($validator->fails()){
+    
+        // Si la validación falla, devuelve una respuesta con el error
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 0,
                 'message' => 'Error en la validación: ' . $validator->errors()->first()
             ]);
         }
+    
+        // Busca el usuario por su ID
         $usuari = Usuaris::find($id);
-        if(!$usuari){
+    
+        // Si el usuario no existe, devuelve un error
+        if (!$usuari) {
             return response()->json([
                 'status' => 0,
                 'message' => 'Usuario no encontrado'
             ]);
         }
-
-
-        if ($request->has('nom')) {
-            $usuari->nom = $request->nom;
-        }
-        if ($request->has('cognoms')) {
-            $usuari->cognoms = $request->cognoms;
-        }
-        if ($request->has('data_naixement')) {
-            $usuari->data_naixement = $request->data_naixement;
-        }
-        if ($request->has('genere')) {
-            $usuari->genere = $request->genere;
-        }
-        if ($request->has('pes')) {
-            $usuari->pes = $request->pes;
-        }
-        if ($request->has('altura')) {
-            $usuari->altura = $request->altura;
-        }
-        if ($request->has('telefon')) {
-            $usuari->telefon = $request->telefon;
-        }
+    
+        // Actualiza los campos del usuario con los datos recibidos en la solicitud
+        $usuari->fill($request->all());
+    
+        // Procesa la foto de perfil si se ha proporcionado
         if ($request->hasFile('foto_perfil')) {
             $foto_perfil = $request->file('foto_perfil');
-            $originalFileName = $img->getClientOriginalName();
             
-            // Define la ruta donde deseas almacenar la imagen y utiliza el nombre original del archivo
-            $imgPath = '../Back/public/storage/img/' . $originalFileName;
+            // Accede al tipo de archivo dentro del objeto anidado
+            $tipoArchivo = $foto_perfil->getClientMimeType();
             
-            // Mueve la imagen a la ubicación deseada con el nombre original
-            $foto_perfil->move(public_path('../public/storage/img/'), $originalFileName);
-        
-            // Asigna la ruta completa al atributo 'img' del modelo
-            $usuari->foto_perfil = $imgPath;
+            // Verifica el tipo de archivo
+            if ($tipoArchivo === 'image/jpeg' || $tipoArchivo === 'image/png' || $tipoArchivo === 'image/jpg') {
+                // El archivo es una imagen, puedes proceder con el almacenamiento
+                $filename = $foto_perfil->getClientOriginalName(); // Obtiene el nombre original del archivo
+                $path = $foto_perfil->storeAs('img', $filename, 'public'); // Almacena el archivo en la carpeta "public/storage/img"
+    
+                // Asigna la ruta de la imagen al atributo 'foto_perfil' del modelo
+                $usuari->foto_perfil = $path;
+            } else {
+                // El archivo no es una imagen válida, devuelve un error
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'El archivo proporcionado no es una imagen válida. Por favor, asegúrate de que sea un archivo JPEG, PNG o JPG.'
+                ]);
+            }
         }
-        if ($request->has('alergia_intolerancia')) {
-            $usuari->alergia_intolerancia = $request->alergia_intolerancia;
-        }
-        if ($request->has('lesio')) {
-            $usuari->lesio = $request->lesio;
-        }
-        if ($request->has('registre')) {
-            $usuari->registre = $request->registre;
-        }
+    
+        // Guarda los cambios en la base de datos
         $usuari->save();
+    
+        // Devuelve una respuesta con el mensaje de éxito
         return response()->json([
             'status' => 1,
             'message' => 'Usuario actualizado correctamente'
         ]);
     }
-}
+}    
