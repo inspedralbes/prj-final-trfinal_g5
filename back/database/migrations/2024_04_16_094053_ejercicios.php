@@ -15,13 +15,12 @@ return new class extends Migration
     {
         Schema::create('ejercicios', function (Blueprint $table) {
             $table->id();
-            $table->string('nom')->unique();
+            $table->string('nom_exercici')->unique();
             $table->string('dificultat');
             $table->string('imatge');
             $table->string('descripció');
-            $table->unsignedBigInteger('idCategoria');
-            $table->foreign('idCategoria')->references('idCategoria')->on('categoriasm');
-
+            // $table->foreign('idCategoria')->references('idCategoria')->on('categoriasm');
+            $table->foreignId('idCategoria')->constrained('categoriasm')->onDelete('cascade');
         });
     }
 
