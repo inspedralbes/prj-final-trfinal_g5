@@ -8,6 +8,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Mail\RegistroCorreo;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class UserController extends Controller
 {
@@ -30,7 +33,6 @@ class UserController extends Controller
                 'lesio' => 'string',
                 'registre' => 'string',
             ]);
-
 
             $usuari = new Usuaris();
             $usuari->email = $request->email;
@@ -112,31 +114,6 @@ class UserController extends Controller
         }
     }
     
-    public function deslojegat(Request $request){
-        try {
-            $request->user()->tokens()->delete();
-    
-            return response()->json([
-                'status' => 1,
-                'message' => 'Usuari desloguejat correctament'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Error al desloguejar usuari'
-            ]);
-        }
-    }
-
-    public function mostrarUsuarios()
-    {
-        $usuarios = Usuaris::all();
-
-        return response()->json([
-            'status' => 1,
-            'usuarios' => $usuarios
-        ]);
-    }
 
     public function mostrarUsuario(Request $request, string $id)
     {
@@ -194,27 +171,83 @@ class UserController extends Controller
         }
     }
 
-    public function editarUsuari(Request $request, string $id)
-    {    
-        $usuario = Usuaris::findOrFail($id);
-
-       
-        $usuario->update([
-            'email' => $request->email,
-            'nom' => $request->nom,
-            'cognoms' => $request->cognoms,
-            'data_naixement' => $request->data_naixement,
-            'genere' => $request->genere,
-            'pes' => $request->pes,
-            'altura' => $request->altura,
-            'telefon' => $request->telefon,
-            'foto_perfil' => $request->foto_perfil,
-            'alergia_intolerancia' => $request->alergia_intolerancia,
-            'lesio' => $request->lesio,
-            'registre' => $request->registre,
+    public function editarUsuari(Request $request, $id)
+    {   
+        $validator=Validator::make($request->all(),[
+            'nom' => 'sometimes|string|max:255',
+            'cognoms' => 'sometimes|string|max:255',
+            'data_naixement' => 'sometimes|date',
+            'genere' => 'sometimes|string',
+            'pes' => 'sometimes|numeric',
+            'altura' => 'sometimes|numeric',
+            'telefon' => 'sometimes|integer|digits:9',
+            'foto_perfil' => 'sometimes|image|mimes:jpeg,png,jpg',
+            'alergia_intolerancia' => 'sometimes|string',
+            'lesio' => 'sometimes|string',
+            'registre' => 'sometimes|boolean',
         ]);
+        if($validator->fails()){
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error en la validación: ' . $validator->errors()->first()
+            ]);
+        }
+        $usuari = Usuaris::find($id);
+        if(!$usuari){
+            return response()->json([
+                'status' => 0,
+                'message' => 'Usuario no encontrado'
+            ]);
+        }
 
-    
-        return response()->json($usuario, 200);
+
+        if ($request->has('nom')) {
+            $usuari->nom = $request->nom;
+        }
+        if ($request->has('cognoms')) {
+            $usuari->cognoms = $request->cognoms;
+        }
+        if ($request->has('data_naixement')) {
+            $usuari->data_naixement = $request->data_naixement;
+        }
+        if ($request->has('genere')) {
+            $usuari->genere = $request->genere;
+        }
+        if ($request->has('pes')) {
+            $usuari->pes = $request->pes;
+        }
+        if ($request->has('altura')) {
+            $usuari->altura = $request->altura;
+        }
+        if ($request->has('telefon')) {
+            $usuari->telefon = $request->telefon;
+        }
+        if ($request->hasFile('foto_perfil')) {
+            $foto_perfil = $request->file('foto_perfil');
+            $originalFileName = $img->getClientOriginalName();
+            
+            // Define la ruta donde deseas almacenar la imagen y utiliza el nombre original del archivo
+            $imgPath = '../Back/public/storage/img/' . $originalFileName;
+            
+            // Mueve la imagen a la ubicación deseada con el nombre original
+            $foto_perfil->move(public_path('../public/storage/img/'), $originalFileName);
+        
+            // Asigna la ruta completa al atributo 'img' del modelo
+            $usuari->foto_perfil = $imgPath;
+        }
+        if ($request->has('alergia_intolerancia')) {
+            $usuari->alergia_intolerancia = $request->alergia_intolerancia;
+        }
+        if ($request->has('lesio')) {
+            $usuari->lesio = $request->lesio;
+        }
+        if ($request->has('registre')) {
+            $usuari->registre = $request->registre;
+        }
+        $usuari->save();
+        return response()->json([
+            'status' => 1,
+            'message' => 'Usuario actualizado correctamente'
+        ]);
     }
 }

@@ -6,33 +6,40 @@
                 <capçalera />
                 <form @submit.prevent="guardarDatosUsuario">
                     <div class="user-info-container">
+                        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                         <div class="input-container">
                             <label>Nom:</label>
-                            <input type="text" v-model="usuario.nom">
+                            <input type="text" placeholder="Nom" v-model="usuario.nom"
+                                @input="capitalizeOnInput($event, 'nom')" maxlength="25">
                         </div>
                         <div class="input-container">
                             <label>Cognoms:</label>
-                            <input type="text" v-model="usuario.cognoms">
+                            <input type="text" placeholder="Cognoms" v-model="usuario.cognoms"
+                                @input="capitalizeOnInput($event, 'cognoms')" maxlength="80">
                         </div>
                         <div class="input-container">
                             <label>Correu electrònic:</label>
-                            <input type="email" v-model="usuario.email">
+                            <input type="email" placeholder="Correu electronic" v-model="usuario.email" disabled>
                         </div>
                         <div class="input-container">
                             <label>Telefon:</label>
-                            <input type="tel" v-model="usuario.telefon">
+                            <input type="tel" placeholder="ex: 123456789" v-model="usuario.telefon"
+                                @input="validatePhoneNumber" maxlength="9">
                         </div>
                         <div class="input-container">
                             <label>Data naixement:</label>
-                            <input type="date" v-model="usuario.data_naixement">
+                            <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
+
                         </div>
                         <div class="input-container">
-                            <label>Altura (cm):</label>
-                            <input type="number" v-model="usuario.altura">
+                            <label>Altura:</label>
+                            <input type="text" placeholder="Altura (cm)" v-model="usuario.altura"
+                                @input="validateAltura" maxlength="4">
                         </div>
                         <div class="input-container">
-                            <label>Pes (kg):</label>
-                            <input type="decimal" v-model="usuario.pes">
+                            <label>Pes:</label>
+                            <input type="text" placeholder="Pes (kg)" v-model="usuario.pes" @input="validatePeso"
+                                maxlength="6">
                         </div>
                         <div class="input-container">
                             <label>Gènere:</label>
@@ -43,21 +50,26 @@
                             </select>
                         </div>
                         <div class="input-container">
-                            <label>Aleriga/Intolerancia:</label>
-                            <input type="text" v-model="usuario.alergia_intolerancia">
+                            <label>Alergia/Intolerancia:</label>
+                            <textarea placeholder="Introdueix la teva alergia o intolerencia"
+                                v-model="usuario.alergia_intolerancia"
+                                @input="validateInput($event, 'alergia_intolerancia')" maxlength="255"></textarea>
                         </div>
                         <div class="input-container">
                             <label>Lesió:</label>
-                            <input type="text" v-model="usuario.lesio">
+                            <textarea placeholder="Introdueix la teva lesió" v-model="usuario.lesio"
+                                @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
+
                         <div class="input-container">
                             <label>Foto de Perfil:</label>
-                            <input type="text" v-model="usuario.foto_perfil">
-                            <!-- <input type="file" @change="onFileChange"> -->
+                            <input type="file" @change="onFileChange">
                         </div>
                         <button type="submit" class="large-button">Guardar</button>
                     </div>
                 </form>
+
+
             </div>
             <navBar />
         </div>
@@ -65,8 +77,8 @@
 </template>
 
 <script>
-import { useUsuariPerfilStore } from '@/stores/index'; // Asegúrate de ajustar la ruta correcta
-import { getDatosUsuario, actualizarDatosUsuario } from '@/stores/communicationManager';
+import { useUsuariPerfilStore } from '@/stores/index';
+import { getDatosUsuario } from '@/stores/communicationManager';
 
 export default {
     data() {
@@ -84,8 +96,22 @@ export default {
                 alergia_intolerancia: '',
                 lesio: '',
                 registre: '',
-            }
+            },
+            errorMessage: '',
         };
+    },
+    computed: {
+        maxDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+            return `${year}-${month < 10 ? '0' + month : month}-${day}`;
+        },
+        minDate() {
+            const minYear = 1900;
+            return `${minYear}-01-01`;
+        },
     },
     mounted() {
         this.obtenerDatosUsuario();
@@ -104,66 +130,130 @@ export default {
                     console.error('Error al obtener los datos del usuario:', error);
                 });
         },
-        onFileChange(event) {
-            const file = event.target.files[0];
-            this.usuario.foto_perfil = file;
-        },
         guardarDatosUsuario() {
-            const store = useUsuariPerfilStore();
-            const idUsuario = store.id_usuari;
-            
-            if (
-                this.usuario.nom &&
-                this.usuario.cognoms &&
-                this.usuario.email &&
-                this.usuario.telefon &&
-                this.usuario.data_naixement &&
-                this.usuario.altura &&
-                this.usuario.pes &&
-                this.usuario.genere &&
-                this.usuario.alergia_intolerancia &&
-                this.usuario.foto_perfil &&
-                this.usuario.lesio
-            ) {
-                store.registratExitosament();
-            }else{
-                store.registreIncomplet();
+            // Filtrar los campos que no están vacíos
+            const usuarioFiltrado = {};
+            for (const key in this.usuario) {
+                if (this.usuario[key] !== '' && this.usuario[key] !== null && this.usuario[key] !== undefined) {
+                    usuarioFiltrado[key] = this.usuario[key];
+                }
             }
 
-            const formData = {
-                nom: this.usuario.nom,
-                cognoms: this.usuario.cognoms,
-                email: this.usuario.email,
-                telefon: this.usuario.telefon,
-                data_naixement: this.usuario.data_naixement,
-                altura: this.usuario.altura,
-                pes: this.usuario.pes,
-                genere: this.usuario.genere,
-                foto_perfil: this.usuario.foto_perfil,
-                alergia_intolerancia: this.usuario.alergia_intolerancia,
-                lesio: this.usuario.lesio,
-                registre: store.registre,
-            };
-
-
-            console.log('Datos a enviar en la solicitud PUT:', formData);
-
-            actualizarDatosUsuario(idUsuario, formData)
-                .then(message => {
-                    console.log("respnse", message);
-
-                    store.actualitzarDadesUsuari(message);
-                    // Redireccionar a la página de detalles de sesión
-                    this.$router.push(`/home`);
+            // Realizar la solicitud PUT al servidor con los datos filtrados
+            const store = useUsuariPerfilStore();
+            const idUsuario = store.id_usuari;
+            console.log('Datos del usuario a enviar:', usuarioFiltrado);
+            fetch('http://localhost:8000/api/editar-usuari/' + idUsuario, {
+                method: 'PUT',
+                body: JSON.stringify(usuarioFiltrado),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Datos del usuario actualizados:', data);
                 })
                 .catch(error => {
                     console.error('Error al actualizar los datos del usuario:', error);
                 });
+        },
+
+        onFileChange(event) {
+            this.usuario.foto_perfil = event.target.files[0];
+        },
+        // Función para capitalizar la primera letra de una cadena
+        capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+        // Función para capitalizar la primera letra del nombre o apellido mientras se escribe
+        capitalizeOnInput(event, property) {
+            if (this.usuario[property] && this.usuario[property].length > 0) {
+                const inputValue = event.target.value;
+                const lastCharIndex = inputValue.length - 1;
+
+                // Verificar si el último carácter es un espacio
+                if (lastCharIndex > 0 && inputValue[lastCharIndex - 1] === ' ') {
+                    // Convertir el último carácter ingresado en mayúscula
+                    this.usuario[property] = inputValue.slice(0, lastCharIndex) + inputValue[lastCharIndex].toUpperCase();
+                }
+                // Si no hay espacio, solo se capitaliza la primera letra
+                else if (inputValue[0] === inputValue[0].toLowerCase()) {
+                    // Convertir la primera letra en mayúscula
+                    this.usuario[property] = this.capitalizeFirstLetter(inputValue);
+                }
+            }
+        },
+        validatePhoneNumber() {
+            if (this.usuario.telefon.length !== 9) {
+                this.errorMessage = 'El número de teléfono debe tener 9 caracteres.';
+            } else {
+                this.errorMessage = ''; // Limpiar el mensaje de error si la validación es exitosa
+            }
+        },
+        validateFecha() {
+            const birthDate = new Date(this.usuario.data_naixement);
+            const minDate = new Date('1900-01-01');
+            const maxDate = new Date();
+
+            if (birthDate < minDate || birthDate > maxDate) {
+                // Actualizar el mensaje de error
+                this.errorMessage = 'La fecha de nacimiento debe estar entre 1900 y la fecha actual.';
+                return false; // Retorna false si la fecha de nacimiento no es válida
+            }
+
+            // Limpiar el mensaje de error si la validación es exitosa
+            this.errorMessage = '';
+            return true; // Retorna true si la fecha de nacimiento es válida
+        },
+        validateAltura(event) {
+            // Expresión regular para permitir solo números
+            const regex = /^[0-9]*$/;
+            // Verificar si la entrada del usuario coincide con la expresión regular
+            if (!regex.test(event.target.value)) {
+                // Si no coincide, eliminar los caracteres no válidos
+                this.usuario.altura = event.target.value.replace(/[^0-9]/g, '');
+            }
+        },
+        validatePeso(event) {
+            // Expresión regular para permitir solo números y un único punto como separador decimal
+            const regex = /^[0-9]+(\.[0-9]{0,2})?$/;
+            // Verificar si la entrada del usuario coincide con la expresión regular
+            if (!regex.test(event.target.value)) {
+                // Si no coincide, eliminar los caracteres no válidos
+                this.usuario.pes = event.target.value.replace(/[^0-9.]/g, '');
+
+                // Si hay más de un punto, eliminar todos los puntos adicionales
+                const periods = this.usuario.pes.match(/\./g);
+                if (periods && periods.length > 1) {
+                    this.usuario.pes = this.usuario.pes.replace(/\./g, (match, offset) => {
+                        return offset === this.usuario.pes.lastIndexOf('.') ? '.' : '';
+                    });
+                }
+
+                // Si hay más de dos decimales, recortarlos
+                const decimalIndex = this.usuario.pes.indexOf('.');
+                if (decimalIndex !== -1) {
+                    const decimalPart = this.usuario.pes.substring(decimalIndex + 1);
+                    if (decimalPart.length > 2) {
+                        this.usuario.pes = this.usuario.pes.substring(0, decimalIndex + 3);
+                    }
+                }
+            }
+        },
+        validateInput(event, property) {
+            // Expresión regular para permitir solo letras, números y espacios
+            const regex = /^[A-Za-z0-9\s]*$/;
+            // Verificar si la entrada del usuario coincide con la expresión regular
+            if (!regex.test(event.target.value)) {
+                // Si no coincide, eliminar los caracteres no válidos
+                this.usuario[property] = event.target.value.replace(/[^A-Za-z0-9\s]/g, '');
+            }
         }
-    }
+
+    },
 };
 </script>
-
 <style scoped>
 /* Estilos de los divs en el componente */
 html,
