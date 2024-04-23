@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CategoriasTable extends Seeder
 {
@@ -16,67 +17,68 @@ class CategoriasTable extends Seeder
     {
         $data = [
             [
-                "idCategoria" => 1,
-                "nombreCategoria" => "Bíceps",
-                "imagenCategoria" => "imagen_biceps.jpg"
+                "id" => 1,
+                "nomCategoria" => "Bíceps",
+                "imatgeCategoria" => "imagen_biceps.jpg"
             ],
             [
-                "idCategoria" => 2,
-                "nombreCategoria" => "Abdominales",
-                "imagenCategoria" => "imagen_abdominales.jpg"
+                "id" => 2,
+                "nomCategoria" => "Abdominales",
+                "imatgeCategoria" => "imagen_abdominales.jpg"
             ],
             [
-                "idCategoria" => 3,
-                "nombreCategoria" => "Abductores",
-                "imagenCategoria" => "imagen_abductores.jpg"
+                "id" => 3,
+                "nomCategoria" => "Abductores",
+                "imatgeCategoria" => "imagen_abductores.jpg"
             ],
             [
-                "idCategoria" => 4,
-                "nombreCategoria" => "Pectoral",
-                "imagenCategoria" => "imagen_pectoral.jpg"
+                "id" => 4,
+                "nomCategoria" => "Pectoral",
+                "imatgeCategoria" => "imagen_pectoral.jpg"
             ],
             [
-                "idCategoria" => 5,
-                "nombreCategoria" => "Glúteos",
-                "imagenCategoria" => "imagen_gluteos.jpg"
+                "id" => 5,
+                "nomCategoria" => "Glúteos",
+                "imatgeCategoria" => "imagen_gluteos.jpg"
             ],
             [
-                "idCategoria" => 6,
-                "nombreCategoria" => "Isquiotibiales",
-                "imagenCategoria" => "imagen_isquiotibiales.jpg"
+                "id" => 6,
+                "nomCategoria" => "Isquiotibiales",
+                "imatgeCategoria" => "imagen_isquiotibiales.jpg"
             ],
             [
-                "idCategoria" => 7,
-                "nombreCategoria" => "Dorsales",
-                "imagenCategoria" => "imagen_dorsales.jpg"
+                "id" => 7,
+                "nomCategoria" => "Dorsales",
+                "imatgeCategoria" => "imagen_dorsales.jpg"
             ],
             [
-                "idCategoria" => 8,
-                "nombreCategoria" => "Espalda Baja",
-                "imagenCategoria" => "imagen_espalda_baja.jpg"
+                "id" => 8,
+                "nomCategoria" => "Espalda Baja",
+                "imatgeCategoria" => "imagen_espalda_baja.jpg"
             ],
             [
-                "idCategoria" => 9,
-                "nombreCategoria" => "Espalda Media",
-                "imagenCategoria" => "imagen_espalda_media.jpg"
+                "id" => 9,
+                "nomCategoria" => "Espalda Media",
+                "imatgeCategoria" => "imagen_espalda_media.jpg"
             ],
             [
-                "idCategoria" => 10,
-                "nombreCategoria" => "Cuádriceps",
-                "imagenCategoria" => "imagen_cuadriceps.jpg"
+                "id" => 10,
+                "nomCategoria" => "Cuádriceps",
+                "imatgeCategoria" => "imagen_cuadriceps.jpg"
             ],
             [
-                "idCategoria" => 11,
-                "nombreCategoria" => "Trapecios",
-                "imagenCategoria" => "imagen_trapecios.jpg"
+                "id" => 11,
+                "nomCategoria" => "Trapecios",
+                "imatgeCategoria" => "imagen_trapecios.jpg"
             ],
             [
-                "idCategoria" => 12,
-                "nombreCategoria" => "Tríceps",
-                "imagenCategoria" => "imagen_triceps.jpg"
+                "id" => 12,
+                "nomCategoria" => "Tríceps",
+                "imatgeCategoria" => "imagen_triceps.jpg"
             ]
         ];
-        DB::table('categorias')->insert($data);
+        
+        DB::table('categoriasm')->insert($data);
 
     }
 }

@@ -22,7 +22,7 @@ class Ejercicio extends Model
     ];
     public function categoria()
     {
-        return $this->hasMany(CategoriaM::class, 'idCategoria');
+        return $this->belongsTo(CategoriaM::class, 'idCategoria');
     }
     
     public $timestamps = false;

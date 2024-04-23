@@ -21,9 +21,6 @@ return new class extends Migration
             $table->string('dia')->nullable();
             $table->string('series')->nullable();
             $table->string('repeticions')->nullable();
-            $table->unsignedBigInteger('ejercicio_id');
-          
-
         });
     }
 
