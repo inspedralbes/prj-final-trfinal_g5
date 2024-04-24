@@ -73,10 +73,11 @@ export default {
         this.isLoading = true;
         this.isSending = true;
 
+        const ejercicios = await getDatosEjercicio();
+        const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios);
 
-        const generatedText = await enviarMensajeOpenAIRutina(this.message);
-
-
+        console.log(generatedText);
+        
         this.chatMessages.push({
           role: 'assistant',
           content: generatedText,
