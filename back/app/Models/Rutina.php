@@ -13,7 +13,7 @@ class Rutina extends Model
 
     protected $fillable = [
         'dia',
-        'nom_excercici',
+        'nom_exercici',
         'series',
         'repeticions',
         'id_exercici',

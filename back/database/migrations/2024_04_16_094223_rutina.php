@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('rutinas', function (Blueprint $table) {
             $table->id();
             $table->string('dia')->nullable();
-            $table->string('nom_excercici');
+            $table->string('nom_exercici');
             $table->string('series')->nullable();
             $table->string('repeticions')->nullable();
             $table->foreignid('id_exercici')->constrained('ejercicios')->onDelete('cascade');

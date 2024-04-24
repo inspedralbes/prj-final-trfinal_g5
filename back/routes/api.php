@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EjercicioController;
+use App\Http\Controllers\RutinaController;
 
 
 Route::get('/usuari', [UserController::class, 'mostrarUsuarios']);

@@ -25,38 +25,28 @@ class RutinaController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'dia' => 'required|string',
-            'exercicis' => 'required|array', // Verifica si la estructura de los ejercicios es correcta
-        ]);
-        
-        // Recupera los datos de la solicitud
-        $datosRutina = $request->input('exercicis');
+        try {
+            $rutinas = $request->json()->all(); // Obtener todas las rutinas del JSON
 
-        // Itera sobre los datos y guárdalos en la base de datos
-        foreach ($datosRutina as $rutina) {
-            $dia = $rutina['dia'];
-            $exercicis = $rutina['exercicis'];
+            foreach ($rutinas as $rutina) {
+                $dia = $rutina['dia'];
 
-            foreach ($exercicis as $exercicio) {
-                $nom_exercici = $exercicio['nom_exercici'];
-                $series = $exercicio['series'];
-                $repeticions = $exercicio['repeticions'];
-                $id_exercici = $exercicio['id_exercici'];
-
-                // Crea una nueva instancia del modelo Rutina y guárdala en la base de datos
-                $nuevaRutina = new Rutina();
-                $nuevaRutina->dia = $dia;
-                $nuevaRutina->nom_exercici = $nom_exercici;
-                $nuevaRutina->series = $series;
-                $nuevaRutina->repeticions = $repeticions;
-                $nuevaRutina->id_exercici = $id_exercici;
-                $nuevaRutina->save();
+                foreach ($rutina['exercicis'] as $exercici) {
+                    // Crear una nueva rutina para cada ejercicio
+                    Rutina::create([
+                        'dia' => $dia,
+                        'nom_exercici' => $exercici['nom_exercici'],
+                        'series' => $exercici['series'],
+                        'repeticions' => $exercici['repeticions'],
+                        'id_exercici' => $exercici['id_exercici']
+                    ]);
+                }
             }
-        }
 
-        // Respuesta de éxito
-        return response()->json(['message' => 'Rutina guardada correctamente'], 200);
+            return response()->json(['message' => 'Rutinas guardadas correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al guardar las rutinas: ' . $e->getMessage()], 500);
+        }
     }
 
     /**
