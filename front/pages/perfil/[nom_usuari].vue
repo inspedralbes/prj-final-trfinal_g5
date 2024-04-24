@@ -155,12 +155,15 @@ export default {
                     if (usuarioModificado.nom) {
                         useUsuariPerfilStore().nom_usuari = usuarioModificado.nom;
                     }
+                    
                     // Actualizar los datos originales con los datos modificados
                     this.datosOriginales = { ...this.datosOriginales, ...usuarioModificado };
                 })
                 .catch(error => {
                     console.error('Error al actualizar los datos del usuario:', error);
                 });
+                this.$router.push('/home');
+
         },
 
 
