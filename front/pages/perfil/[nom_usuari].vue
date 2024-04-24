@@ -1,63 +1,71 @@
 <template>
 
     <body>
-        <div>
+        <div id="main">
             <div class="flex-container">
-                <capçalera />
+                <HeaderPerfil />
+                
                 <form @submit.prevent="guardarDatosUsuario">
                     <div class="user-info-container">
                         <div class="input-container">
-                            <label>Nom:</label>
+                            <label>Nom:</label><br>
                             <input type="text" v-model="usuario.nom">
                         </div>
                         <div class="input-container">
-                            <label>Cognoms:</label>
+                            <label>Cognoms:</label><br>
                             <input type="text" v-model="usuario.cognoms">
                         </div>
                         <div class="input-container">
-                            <label>Correu electrònic:</label>
+                            <label>Correu electrònic:</label><br>
                             <input type="email" v-model="usuario.email">
                         </div>
                         <div class="input-container">
-                            <label>Telefon:</label>
+                            <label>Telefon:</label><br>
                             <input type="tel" v-model="usuario.telefon">
                         </div>
+                        
                         <div class="input-container">
-                            <label>Data naixement:</label>
+                            <label>Data naixement:</label><br>
                             <input type="date" v-model="usuario.data_naixement">
                         </div>
+
                         <div class="input-container">
-                            <label>Altura (cm):</label>
-                            <input type="number" v-model="usuario.altura">
-                        </div>
-                        <div class="input-container">
-                            <label>Pes (kg):</label>
-                            <input type="decimal" v-model="usuario.pes">
-                        </div>
-                        <div class="input-container">
-                            <label>Gènere:</label>
+                            <label>Gènere:</label><br>
                             <select v-model="usuario.genere">
                                 <option value="Home">Home</option>
                                 <option value="Dona">Dona</option>
                                 <option value="Altres">Altres</option>
                             </select>
                         </div>
+                        
                         <div class="input-container">
-                            <label>Aleriga/Intolerancia:</label>
+                            <label>Altura (cm):</label><br>
+                            <input type="number" v-model="usuario.altura">
+                        </div>
+                        <div class="input-container">
+                            <label>Pes (kg):</label><br>
+                            <input type="decimal" v-model="usuario.pes">
+                        </div>
+                        
+                        <div class="input-container">
+                            <label>Aleriga/Intolerancia:</label><br>
                             <input type="text" v-model="usuario.alergia_intolerancia">
                         </div>
                         <div class="input-container">
-                            <label>Lesió:</label>
+                            <label>Lesió:</label><br>
                             <input type="text" v-model="usuario.lesio">
                         </div>
                         <div class="input-container">
-                            <label>Foto de Perfil:</label>
+                            <label>Foto de Perfil:</label><br>
                             <input type="text" v-model="usuario.foto_perfil">
                             <!-- <input type="file" @change="onFileChange"> -->
                         </div>
-                        <button type="submit" class="large-button">Guardar</button>
                     </div>
+
+                    <button type="submit" class="large-button">Guardar</button>
+
                 </form>
+
             </div>
             <navBar />
         </div>
@@ -178,31 +186,35 @@ body {
     font-family: Arial, sans-serif;
 }
 
+#main {
+    position: relative;
+}
+
 .flex-container {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     min-height: 100vh;
-    background-color: #FFF;
+    background: linear-gradient(to top right, #FFA500, #f44336);
 }
+
 
 .user-info-container {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    padding: 0 20px;
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+     
 }
 
-.input-container {
-    display: flex;
-    margin-bottom: 10px;
+input {
+    background-color: transparent;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    width: 160px;
+    
 }
 
-.input-container label {
-    flex: 1;
-    text-align: right;
-    margin-right: 10px;
-}
 
 .user-info-container label {
     font-weight: bold;
@@ -213,13 +225,14 @@ body {
     flex: 1;
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: none;   
+    border-bottom: 2px solid #ccc;
+    
 }
 
 .large-button {
-    width: 100%;
-    max-width: 400px;
-    height: 60px;
+    width: 40%;
+    height: 50px;
     margin-top: 20px;
     font-size: 18px;
     font-weight: bold;
@@ -227,17 +240,22 @@ body {
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: #000000;
-    border-radius: 10px;
+    background-color: #333;
+    border-radius: 50px;
+    margin: auto;
 }
 
-navBar {
-    width: 100%;
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
+form{
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: auto;
+    background-color: #f3f3f3;
+    padding: 20px;
+    padding-top: 40px;
+    border-radius: 20px;   
+    margin-top: 0;
 }
+
+
+
 </style>
