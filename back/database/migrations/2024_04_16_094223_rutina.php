@@ -16,11 +16,11 @@ return new class extends Migration
        
         Schema::create('rutinas', function (Blueprint $table) {
             $table->id();
-            $table->foreignid('ejercicio_id')->constrained('ejercicios')->onDelete('cascade');
-            $table->string('nomExecercici');
             $table->string('dia')->nullable();
+            $table->string('nom_excercici');
             $table->string('series')->nullable();
             $table->string('repeticions')->nullable();
+            $table->foreignid('id_exercici')->constrained('ejercicios')->onDelete('cascade');
         });
     }
 

@@ -1,6 +1,6 @@
 const url = 'http://localhost:8000/api';// const url = 'http://.daw.inspedralbes.cat/'; //producción
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '0123456789';
+const apiKey = '1234567890';
 
 
 //ejemplo de peticion fetch get
@@ -66,6 +66,28 @@ export async function iniciarSesion(email, contrasenya) {
     }
 }
 
+export async function enviarRutinaAlServidor(rutina) {
+    try {
+        const response = await fetch(`${url}/guardar-rutina`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(rutina),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al enviar la rutina al servidor');
+        }
+
+        const data = await response.json();
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al enviar la rutina al servidor: ' + error.message);
+    }
+}
+
+
 
 //ejemplo de peticion fetch put
 
@@ -119,7 +141,7 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios) {
                     " Si et demanen alguna cosa que no sigui una rutina digues el següent: En aquest apartat només puc donar consells de nutrició i generar rutines. "+
                     " Pots donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació."+
                     " Nomes pots respondre amb format JSON i seguint aquesta estructura:"+
-                    " {dia: 'pit', exercicis: [{'nom_excercici':'','series':'','repeticions':'','id_excercici':'',idCategoria:''},...]},{dia: 'esquena', exercicis: [{},]},{[{},...]},..."+
+                    " {dia: 'pit', exercicis: [{'nom_excercici':'','series':'','repeticions':'','id_excercici':''},...]},{dia: 'esquena', exercicis: [{},]},{[{},...]},..."+
                     "Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis."+
                     "Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret."+
                     "Si en el missatge conte dies fes la rutina dels dies que et demanen; si no fes una rutina de 5 dies.",

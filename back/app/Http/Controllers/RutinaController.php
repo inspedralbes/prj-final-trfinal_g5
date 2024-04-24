@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Rutina;
 
 class RutinaController extends Controller
 {
@@ -25,12 +26,37 @@ class RutinaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nomExecercici' => 'required',
-            'dia' => 'required',
-            'series' => 'required',
-            'repeticions' => 'required',
-            'ejercicio_id' => 'required',
+            'dia' => 'required|string',
+            'exercicis' => 'required|array', // Verifica si la estructura de los ejercicios es correcta
         ]);
+        
+        // Recupera los datos de la solicitud
+        $datosRutina = $request->input('exercicis');
+
+        // Itera sobre los datos y guárdalos en la base de datos
+        foreach ($datosRutina as $rutina) {
+            $dia = $rutina['dia'];
+            $exercicis = $rutina['exercicis'];
+
+            foreach ($exercicis as $exercicio) {
+                $nom_exercici = $exercicio['nom_exercici'];
+                $series = $exercicio['series'];
+                $repeticions = $exercicio['repeticions'];
+                $id_exercici = $exercicio['id_exercici'];
+
+                // Crea una nueva instancia del modelo Rutina y guárdala en la base de datos
+                $nuevaRutina = new Rutina();
+                $nuevaRutina->dia = $dia;
+                $nuevaRutina->nom_exercici = $nom_exercici;
+                $nuevaRutina->series = $series;
+                $nuevaRutina->repeticions = $repeticions;
+                $nuevaRutina->id_exercici = $id_exercici;
+                $nuevaRutina->save();
+            }
+        }
+
+        // Respuesta de éxito
+        return response()->json(['message' => 'Rutina guardada correctamente'], 200);
     }
 
     /**

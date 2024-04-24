@@ -77,6 +77,8 @@ export default {
         const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios);
 
         console.log(generatedText);
+
+        await enviarRutinaAlServidor(JSON.parse(generatedText));
         
         this.chatMessages.push({
           role: 'assistant',

@@ -12,11 +12,11 @@ class Rutina extends Model
     protected $table = 'rutinas';
 
     protected $fillable = [
-        'nomExecercici',
         'dia',
+        'nom_excercici',
         'series',
         'repeticions',
-        'ejercicio_id',
+        'id_exercici',
     ];
     public function ejercicio()
     {

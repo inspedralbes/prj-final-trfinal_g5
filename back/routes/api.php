@@ -12,6 +12,8 @@ Route::put('/editar-usuari/{id}', [UserController::class, 'editarUsuari']);
 
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
 
+Route::post('/guardar-rutina', [RutinaController::class, 'store']);
+
 Route::post('/registre', [UserController::class, 'registre']);
 Route::post('/loguejat', [UserController::class, 'loguejat']);
 Route::post('/deslojegat', [UserController::class, 'deslojegat']);
