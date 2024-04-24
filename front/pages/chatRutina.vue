@@ -58,17 +58,14 @@ export default {
           return;
         }
 
-
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
-
 
         this.chatMessages.push({
           role: 'user',
           content: this.message,
         });
-
 
         this.isLoading = true;
         this.isSending = true;
@@ -78,13 +75,14 @@ export default {
 
         console.log(generatedText);
 
-        await enviarRutinaAlServidor(JSON.parse(generatedText));
-        
+        const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
+
+        await enviarRutinaAlServidor(rutinaJSON); // Enviar el JSON al backend
+
         this.chatMessages.push({
           role: 'assistant',
           content: generatedText,
         });
-
 
         this.message = '';
       } catch (error) {
