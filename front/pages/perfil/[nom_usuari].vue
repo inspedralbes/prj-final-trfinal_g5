@@ -151,6 +151,10 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Datos del usuario actualizados:', data);
+                    // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
+                    if (usuarioModificado.nom) {
+                        useUsuariPerfilStore().nom_usuari = usuarioModificado.nom;
+                    }
                     // Actualizar los datos originales con los datos modificados
                     this.datosOriginales = { ...this.datosOriginales, ...usuarioModificado };
                 })
@@ -159,35 +163,21 @@ export default {
                 });
         },
 
+
         onFileChange(event) {
             const file = event.target.files[0]; // Obtener el archivo del evento
 
-            // Verificar si se seleccionó un archivo
-            // Verificar si se seleccionó un archivo
             if (file) {
-                // Crear un objeto que contenga toda la información de la foto de perfil
-                this.usuario.foto_perfil = {
-                    name: file.name,
-                    type: file.type,
-                    size: file.size,
-                    lastModified: file.lastModified,
-                    lastModifiedDate: file.lastModifiedDate,
-                    file: {
-                        name: file.name,
-                        size: file.size,
-                        type: file.type,
-                        lastModified: file.lastModified,
-                        lastModifiedDate: file.lastModifiedDate
-                    }
-                };
+                // Asignar directamente el archivo seleccionado a this.usuario.foto_perfil
+                this.usuario.foto_perfil = file;
 
                 // Mostrar en la consola la foto de perfil seleccionada
                 console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
             } else {
                 console.error('No se seleccionó ningún archivo.');
             }
-
         },
+
         // Función para capitalizar la primera letra de una cadena
         capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);

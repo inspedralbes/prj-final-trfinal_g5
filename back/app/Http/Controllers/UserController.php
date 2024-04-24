@@ -213,27 +213,10 @@ class UserController extends Controller
         // Procesa la foto de perfil si se ha proporcionado
         if ($request->hasFile('foto_perfil')) {
             $foto_perfil = $request->file('foto_perfil');
-            
-            // Accede al tipo de archivo dentro del objeto anidado
-            $tipoArchivo = $foto_perfil->getClientMimeType();
-            
-            // Verifica el tipo de archivo
-            if ($tipoArchivo === 'image/jpeg' || $tipoArchivo === 'image/png' || $tipoArchivo === 'image/jpg') {
-                // El archivo es una imagen, puedes proceder con el almacenamiento
-                $filename = $foto_perfil->getClientOriginalName(); // Obtiene el nombre original del archivo
-                $path = $foto_perfil->storeAs('img', $filename, 'public'); // Almacena el archivo en la carpeta "public/storage/img"
-    
-                // Asigna la ruta de la imagen al atributo 'foto_perfil' del modelo
-                $usuari->foto_perfil = $path;
-            } else {
-                // El archivo no es una imagen válida, devuelve un error
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'El archivo proporcionado no es una imagen válida. Por favor, asegúrate de que sea un archivo JPEG, PNG o JPG.'
-                ]);
-            }
+            $filename = $foto_perfil->getClientOriginalName();
+            $path = $foto_perfil->storeAs('public/images', $filename);
+            $request->merge(['foto_perfil' => $path]);
         }
-    
         // Guarda los cambios en la base de datos
         $usuari->save();
     

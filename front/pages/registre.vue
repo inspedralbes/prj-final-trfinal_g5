@@ -435,20 +435,22 @@ export default {
                 // Manejar el caso de error si la respuesta no fue exitosa
                 // Puedes mostrar un mensaje de error o manejar la situación de otra manera
                 return;
+            } else {
+                // Convertir la respuesta a formato JSON
+                const userDataResponse = await response.json();
+
+                console.log(userDataResponse)
+
+                useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
+                useUsuariPerfilStore().email_usuari = filteredUserData.email;
+                useUsuariPerfilStore().loguejat = true;
+                useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
+
+
+                this.$router.push('/home');
             }
 
-            // Convertir la respuesta a formato JSON
-            const userDataResponse = await response.json();
 
-            console.log(userDataResponse)
-
-            useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
-            useUsuariPerfilStore().email_usuari = filteredUserData.email;
-            useUsuariPerfilStore().loguejat = true;
-            useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
-
-
-            this.$router.push('/home');
         }
     }
 
