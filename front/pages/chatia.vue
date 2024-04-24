@@ -5,22 +5,24 @@
         <div class="cabecera">Assessorament</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
         <h2 class="mensaje-bienvenida">"Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?"</h2>
-        <div class="chat">
-          <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-              <div class="info-usuario" v-if="message.role === 'user'">
-                <img src="" alt="Avatar usuario" class="avatar-usuario" />
-                <p class="nombre-usuario">{{ usuario }}</p>
-              </div>
-              <div class="contenido-mensaje">
-                <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                  class="avatar-asistente" />
-                <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+        <div class="chat-container">
+          <div class="chat">
+            <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+              <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+                <div class="info-usuario" v-if="message.role === 'user'">
+                  <img src="" alt="Avatar usuario" class="avatar-usuario" />
+                  <p class="nombre-usuario">{{ usuario }}</p>
+                </div>
+                <div class="contenido-mensaje">
+                  <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                    class="avatar-asistente" />
+                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+                </div>
               </div>
             </div>
+            <!-- Mostrar animación de carga si isLoading es true -->
+            <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
-          <!-- Mostrar animación de carga si isLoading es true -->
-          <div v-if="isLoading || isSending" class="animacion-carga"></div>
         </div>
         <!-- Movido el textarea y el botón al final del contenedor -->
         <div class="controles-inferiores">
@@ -35,10 +37,13 @@
 </template>
 
 <script>
+import { useUsuariPerfilStore } from '@/stores/index'
+
 export default {
   data() {
     return {
       usuario: '',
+      foto_perfil: '',
       message: '',
       chatMessages: [],
       isLoading: false,
@@ -106,7 +111,8 @@ body {
 body {
   font-family: Arial, sans-serif;
   /* Establecer la fuente predeterminada */
-  background-color: #f8a60e;
+  background: linear-gradient(to top right, #FFA500, #f45c36);
+
   /* Color de fondo */
   height: 100vh;
 }
@@ -122,17 +128,31 @@ body {
 .cabecera {
   background-color: #333;
   color: rgb(255, 255, 255);
-  padding: 20px 0;
+  padding: 10px 0;
   font-size: 24px;
   text-align: center;
   font-weight: bold;
-  width: 100%;
+  border-radius: 70px;
+  width: 95%;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .mensaje-bienvenida {
-  font-size: 18px;
-  text-align: center;
-  margin-top: 20px;
+    font-size: 1em;
+    font-weight: 600;
+    text-align: center;
+    padding: 15px;
+    background-color: #33333356;
+    font-style: italic; /* Add this line to make the text italic */
+    margin-top: 0;
+ 
+}
+
+.chat-container {
+  overflow-y: auto; /* Hace que el contenido sea desplazable verticalmente si es necesario */
+  flex: 1; /* Permite que el área del chat ocupe el espacio disponible */
 }
 
 .chat {
@@ -140,13 +160,14 @@ body {
   flex-direction: column;
   margin-top: 20px;
   padding: 0 20px;
-  width: 100%;
+  width: 90%;
 }
 
 .mensaje-usuario {
   background-color: #FFDAB9;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 25px;
+  border-top-right-radius: 0;
   align-self: flex-end;
   margin-bottom: 8px;
 }
@@ -156,8 +177,9 @@ body {
   align-items: flex-start;
   margin-bottom: 8px;
   padding: 10px;
-  border-radius: 10px;
-  background-color: #FFDAB9;
+  border-radius: 25px;
+  border-bottom-left-radius: 0;
+  background-color: #c7ab92;
   margin-right: 10%;
 }
 
@@ -171,8 +193,8 @@ body {
 
 .contenido-mensaje-asistente {
   max-width: 100%;
-  
 }
+
 .animacion-carga {
   width: 20px;
   height: 20px;
@@ -199,7 +221,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #33333356;
 }
 
 .entrada-mensaje {
