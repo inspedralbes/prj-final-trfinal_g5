@@ -19,62 +19,63 @@ class CategoriasTable extends Seeder
             [
                 "id" => 1,
                 "nomCategoria" => "Bíceps",
-                "imatgeCategoria" => "imagen_biceps.jpg"
+                "imatgeCategoria" => "imatge_biceps.jpg"
             ],
             [
                 "id" => 2,
-                "nomCategoria" => "Abdominales",
-                "imatgeCategoria" => "imagen_abdominales.jpg"
+                "nomCategoria" => "Abdominals",
+                "imatgeCategoria" => "imatge_abdominales.jpg"
             ],
             [
                 "id" => 3,
-                "nomCategoria" => "Abductores",
-                "imatgeCategoria" => "imagen_abductores.jpg"
+                "nomCategoria" => "Abductors",
+                "imatgeCategoria" => "imatge_abductores.jpg"
             ],
             [
                 "id" => 4,
-                "nomCategoria" => "Pectoral",
-                "imatgeCategoria" => "imagen_pectoral.jpg"
+                "nomCategoria" => "Pit",
+                "imatgeCategoria" => "imatge_pectoral.jpg"
             ],
+           
             [
                 "id" => 5,
-                "nomCategoria" => "Glúteos",
-                "imatgeCategoria" => "imagen_gluteos.jpg"
+                "nomCategoria" => "Glutis",
+                "imatgeCategoria" => "imatge_gluteos.jpg"
             ],
             [
                 "id" => 6,
-                "nomCategoria" => "Isquiotibiales",
-                "imatgeCategoria" => "imagen_isquiotibiales.jpg"
+                "nomCategoria" => "Isquiotibials",
+                "imatgeCategoria" => "imatge_isquiotibials.jpg"
             ],
             [
                 "id" => 7,
-                "nomCategoria" => "Dorsales",
-                "imatgeCategoria" => "imagen_dorsales.jpg"
+                "nomCategoria" => "Dorsals",
+                "imatgeCategoria" => "imatge_dorsals.jpg"
             ],
             [
                 "id" => 8,
-                "nomCategoria" => "Espalda Baja",
-                "imatgeCategoria" => "imagen_espalda_baja.jpg"
+                "nomCategoria" => "Esquena Baixa",
+                "imatgeCategoria" => "imatge_esquena_baixa.jpg"
             ],
             [
                 "id" => 9,
-                "nomCategoria" => "Espalda Media",
-                "imatgeCategoria" => "imagen_espalda_media.jpg"
+                "nomCategoria" => "Esquena Mitjana",
+                "imatgeCategoria" => "imatge_esquena_media.jpg"
             ],
             [
                 "id" => 10,
-                "nomCategoria" => "Cuádriceps",
-                "imatgeCategoria" => "imagen_cuadriceps.jpg"
+                "nomCategoria" => "Quàdriceps",
+                "imatgeCategoria" => "imatge_cuadriceps.jpg"
             ],
             [
                 "id" => 11,
-                "nomCategoria" => "Trapecios",
-                "imatgeCategoria" => "imagen_trapecios.jpg"
+                "nomCategoria" => "Trapezis",
+                "imatgeCategoria" => "imatge_trapecios.jpg"
             ],
             [
                 "id" => 12,
                 "nomCategoria" => "Tríceps",
-                "imatgeCategoria" => "imagen_triceps.jpg"
+                "imatgeCategoria" => "imatge_triceps.jpg"
             ]
         ];
         
