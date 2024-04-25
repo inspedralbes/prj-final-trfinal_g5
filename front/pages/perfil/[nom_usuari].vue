@@ -140,10 +140,26 @@ export default {
             // Por ejemplo:
             if (this.usuario.foto_perfil instanceof File) {
                 this.guardarFotoPerfil();
-            } else {
+            }
+
+            // Si hay otros campos modificados además de la foto de perfil
+            if (this.hayOtrosCamposModificados()) {
                 this.guardarDatosUsuarioSinFotoPerfil();
             }
         },
+
+        hayOtrosCamposModificados() {
+            // Verifica si hay otros campos modificados además de la foto de perfil
+            // Por ejemplo, puedes comprobar si hay algún campo diferente a foto_perfil que esté presente en el objeto usuario y sea diferente de su valor original
+            // Aquí estoy asumiendo que this.datosOriginales contiene los datos originales del usuario
+            for (const key in this.usuario) {
+                if (key !== 'foto_perfil' && this.usuario[key] !== this.datosOriginales[key]) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
         guardarFotoPerfil() {
             // Lógica para guardar la foto de perfil
             const reader = new FileReader();
@@ -163,14 +179,34 @@ export default {
             // Leer la imagen de perfil como base64
             reader.readAsDataURL(this.usuario.foto_perfil);
         },
+
         guardarDatosUsuarioSinFotoPerfil() {
-            // Lógica para guardar los datos del usuario que no son la foto de perfil
-            this.enviarDatos(this.usuario);
+            // Crear un objeto para almacenar solo los campos modificados
+            const camposModificados = {};
+
+            // Comparar los campos modificados con los datos originales
+            for (const key in this.usuario) {
+                // Verificar si el campo actual es diferente al valor original
+                if (this.usuario[key] !== this.datosOriginales[key]) {
+                    camposModificados[key] = this.usuario[key]; // Agregar el campo modificado al objeto camposModificados
+                }
+            }
+
+            // Verificar si hay campos modificados que enviar
+            if (Object.keys(camposModificados).length > 0) {
+                // Realizar la solicitud PUT al servidor con los campos modificados
+                this.enviarDatos(camposModificados);
+            } else {
+                // No hay campos modificados además de la foto de perfil, no es necesario enviar la solicitud
+                this.isSaving = false; // Restablecer la variable de estado a false
+            }
         },
+
+
         enviarDatos(data) {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
-
+            console.log('Datos a enviar:', data);
             fetch('http://localhost:8000/api/editar-usuari/' + idUsuario, {
                 method: 'PUT',
                 body: JSON.stringify(data),
