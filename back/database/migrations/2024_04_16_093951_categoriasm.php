@@ -14,10 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('categoriasm', function (Blueprint $table) {
-            $table->bigIncrements('idCategoria');
+            $table->id();
             $table->string('nomCategoria');
             $table->string('imatgeCategoria');
-
         });
     }
 
