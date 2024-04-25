@@ -10,13 +10,16 @@ use Illuminate\Validation\ValidationException;
 use App\Mail\RegistroCorreo;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class UserController extends Controller
+
 {
+    
     public function registre(Request $request)
     {
-        \Log::info($request->all());
         try {
             $validator = $request->validate([
                 'email' => 'required|string|email|max:255|unique:usuaris',
@@ -170,60 +173,85 @@ class UserController extends Controller
             ]);
         }
     }
-
     public function editarUsuari(Request $request, $id)
-    {   
-        // Validación de los datos recibidos en la solicitud
-        $validator = Validator::make($request->all(), [
-            'nom' => 'sometimes|string|max:255',
-            'cognoms' => 'sometimes|string|max:255',
-            'data_naixement' => 'sometimes|date',
-            'genere' => 'sometimes|string',
-            'pes' => 'sometimes|numeric',
-            'altura' => 'sometimes|numeric',
-            'telefon' => 'sometimes|integer|digits:9',
-            'foto_perfil' => 'sometimes|mimetypes:image/jpeg,image/png,image/jpg',
-            'alergia_intolerancia' => 'sometimes|max:255',
-            'lesio' => 'sometimes|max:255',
-            'registre' => 'sometimes|boolean',
-        ]);
-    
-        // Si la validación falla, devuelve una respuesta con el error
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Error en la validación: ' . $validator->errors()->first()
-            ]);
-        }
-    
-        // Busca el usuario por su ID
-        $usuari = Usuaris::find($id);
-    
-        // Si el usuario no existe, devuelve un error
-        if (!$usuari) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Usuario no encontrado'
-            ]);
-        }
-    
-        // Actualiza los campos del usuario con los datos recibidos en la solicitud
-        $usuari->fill($request->all());
-    
-        // Procesa la foto de perfil si se ha proporcionado
-        if ($request->hasFile('foto_perfil')) {
-            $foto_perfil = $request->file('foto_perfil');
-            $filename = $foto_perfil->getClientOriginalName();
-            $path = $foto_perfil->storeAs('public/images', $filename);
-            $request->merge(['foto_perfil' => $path]);
-        }
-        // Guarda los cambios en la base de datos
-        $usuari->save();
-    
-        // Devuelve una respuesta con el mensaje de éxito
+{   
+
+    // Validación de los datos recibidos en la solicitud
+    $validator = Validator::make($request->all(), [
+        'nom' => 'sometimes|string|max:255',
+        'cognoms' => 'sometimes|string|max:255',
+        'data_naixement' => 'sometimes|date',
+        'genere' => 'sometimes|string',
+        'pes' => 'sometimes|numeric',
+        'altura' => 'sometimes|numeric',
+        'telefon' => 'sometimes|integer|digits:9',
+        'alergia_intolerancia' => 'sometimes|max:255',
+        'lesio' => 'sometimes|max:255',
+        'registre' => 'sometimes|boolean',
+    ]);
+
+    // Si la validación falla, devuelve una respuesta con el error
+    if ($validator->fails()) {
         return response()->json([
-            'status' => 1,
-            'message' => 'Usuario actualizado correctamente'
+            'status' => 0,
+            'message' => 'Error en la validación: ' . $validator->errors()->first()
         ]);
     }
+
+    // Busca el usuario por su ID
+    $usuari = Usuaris::find($id);
+
+    // Si el usuario no existe, devuelve un error
+    if (!$usuari) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'Usuario no encontrado'
+        ]);
+    }
+
+    // Actualiza los campos del usuario con los datos recibidos en la solicitud
+    $usuari->fill($request->except('foto_perfil'));
+
+    // Manejar la imagen de perfil
+    if ($request->has('foto_perfil_base64')) {
+        // Obtener el archivo base64 de la solicitud
+        $base64Image = $request->foto_perfil_base64;
+
+        // Decodificar la cadena base64 en una imagen
+        $imageData = base64_decode($base64Image);
+
+        // Obtener el último archivo en la carpeta de imágenes de perfil
+        $files = Storage::files('public/imagenes_perfil');
+        $lastFile = end($files);
+
+        // Extraer el número del nombre del archivo
+        preg_match('/perfil_(\d+)\.jpg/', $lastFile, $matches);
+        $lastProfileImageNumber = isset($matches[1]) ? intval($matches[1]) : 0;
+
+        // Incrementar el último número de imagen de perfil utilizado en uno
+        $nextProfileImageNumber = $lastProfileImageNumber + 1;
+
+        // Usar el número actualizado en el nombre de la imagen
+        $imageName = 'perfil_' . $nextProfileImageNumber . '.jpg'; // Puedes cambiar la extensión según el tipo de imagen
+        Storage::put('public/imagenes_perfil/' . $imageName, $imageData);
+
+        // Actualizar el campo de la imagen de perfil en la base de datos
+        $usuari->foto_perfil = $imageName;
+    }
+
+    // Guarda los cambios en la base de datos
+    $usuari->save();
+
+    // Devuelve una respuesta con el mensaje de éxito
+    return response()->json([
+        'status' => 1,
+        'message' => 'Usuario actualizado correctamente',
+        'foto_perfil' => $usuari->foto_perfil,
+    ]);
+}
+
+
+
+    
+
 }    

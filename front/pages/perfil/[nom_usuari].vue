@@ -65,7 +65,7 @@
 
                         <div class="input-container">
                             <label>Foto de Perfil:</label>
-                            <input type="file" name="foto_perfil" @change="onFileChange">
+                            <input type="file" name="foto_perfil" @change="onFileChange" accept="image/*">
                         </div>
                         <button type="submit" class="large-button">Guardar</button>
                     </div>
@@ -107,6 +107,8 @@ export default {
             },
             datosOriginales: {}, // Mantén una copia de los datos originales
             errorMessage: '',
+            isSaving: false // Variable de estado para controlar el proceso de guardado
+
         };
     },
     mounted() {
@@ -128,22 +130,50 @@ export default {
                 });
         },
         guardarDatosUsuario() {
-            // Filtrar los campos modificados
-            const usuarioModificado = {};
-            for (const key in this.usuario) {
-                // Verificar si el valor ha sido modificado
-                if (this.usuario[key] !== this.datosOriginales[key]) {
-                    usuarioModificado[key] = this.usuario[key];
-                }
-            }
+            // Verificar si ya se está guardando para evitar múltiples envíos
+            if (this.isSaving) return;
 
-            // Realizar la solicitud PUT al servidor con los datos modificados
+            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
+
+            // Lógica para guardar los datos del usuario
+            // Puedes llamar a funciones separadas para manejar la lógica de guardado de la imagen y los otros campos
+            // Por ejemplo:
+            if (this.usuario.foto_perfil instanceof File) {
+                this.guardarFotoPerfil();
+            } else {
+                this.guardarDatosUsuarioSinFotoPerfil();
+            }
+        },
+        guardarFotoPerfil() {
+            // Lógica para guardar la foto de perfil
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64Image = reader.result.split(',')[1]; // Extraer solo el contenido base64
+
+                // Construir el objeto de datos a enviar
+                const data = {
+                    usuario: this.usuario,
+                    foto_perfil_base64: base64Image // Agregar la imagen base64 a los datos del usuario
+                };
+
+                // Realizar la solicitud PUT al servidor con los datos del usuario y la imagen en base64
+                this.enviarDatos(data);
+            };
+
+            // Leer la imagen de perfil como base64
+            reader.readAsDataURL(this.usuario.foto_perfil);
+        },
+        guardarDatosUsuarioSinFotoPerfil() {
+            // Lógica para guardar los datos del usuario que no son la foto de perfil
+            this.enviarDatos(this.usuario);
+        },
+        enviarDatos(data) {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
-            console.log('Datos del usuario a enviar:', usuarioModificado);
+
             fetch('http://localhost:8000/api/editar-usuari/' + idUsuario, {
                 method: 'PUT',
-                body: JSON.stringify(usuarioModificado),
+                body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -152,19 +182,28 @@ export default {
                 .then(data => {
                     console.log('Datos del usuario actualizados:', data);
                     // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
-                    if (usuarioModificado.nom) {
-                        useUsuariPerfilStore().nom_usuari = usuarioModificado.nom;
+                    if (this.usuario.nom) {
+                        useUsuariPerfilStore().nom_usuari = this.usuario.nom;
                     }
-                    
+                    if (this.usuario.foto_perfil) {
+                        useUsuariPerfilStore().foto_perfil = this.usuario.foto_perfil;
+                    }
+
                     // Actualizar los datos originales con los datos modificados
-                    this.datosOriginales = { ...this.datosOriginales, ...usuarioModificado };
+                    this.datosOriginales = { ...this.datosOriginales, ...this.usuario };
+
+                    // Restablecer la variable de estado a false después de completar el guardado
+                    this.isSaving = false;
                 })
                 .catch(error => {
                     console.error('Error al actualizar los datos del usuario:', error);
+                    // Restablecer la variable de estado a false si hay un error en el guardado
+                    this.isSaving = false;
                 });
-                this.$router.push('/home');
-
         },
+
+
+
 
 
         onFileChange(event) {
