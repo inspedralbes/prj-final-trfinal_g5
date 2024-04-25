@@ -24,11 +24,10 @@ return new class extends Migration
             $table->integer('altura')->nullable();
             $table->decimal('pes', 10, 2)->nullable();
             $table->string('telefon')->nullable(); 
-            $table->string('foto_perfil')->nullable();
+            $table->string('foto_perfil')->default('usuario.png');
             $table->string('alergia_intolerancia')->nullable();
             $table->string ('lesio')->nullable();
-            $table->boolean('registre')->default(false
-        );
+            $table->boolean('registre')->default(false);
             $table->unsignedBigInteger('idRutina')->nullable();
             $table->unsignedBigInteger('idDieta')->nullable();
             $table->foreign('idRutina')->references('id')->on('rutinas');

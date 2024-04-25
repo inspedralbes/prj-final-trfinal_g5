@@ -1,8 +1,7 @@
 <template>
     <div class="header-container">
         <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
-            <img v-if="foto_perfil" :src="foto_perfil" alt="Usuario" class="user-icon" />
-            <img v-else src="../public/usuario.png" alt="Usuario" class="user-icon" />
+            <img v-if="foto_perfil" :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" />
         </nuxt-link>
         <div v-if="!registre" :class="{ 'alert-container': true, 'oculto': cerrarAlerta }">
             <div class="alert-message">Perfil incompleto</div>

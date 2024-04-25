@@ -445,6 +445,7 @@ export default {
                 useUsuariPerfilStore().email_usuari = filteredUserData.email;
                 useUsuariPerfilStore().loguejat = true;
                 useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
+                useUsuariPerfilStore().foto_perfil = "usuario.png";
 
 
                 this.$router.push('/home');

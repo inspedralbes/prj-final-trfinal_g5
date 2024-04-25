@@ -186,7 +186,7 @@ export default {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
                     }
                     if (this.usuario.foto_perfil) {
-                        useUsuariPerfilStore().foto_perfil = this.usuario.foto_perfil;
+                        useUsuariPerfilStore().foto_perfil = data.foto_perfil;
                     }
 
                     // Actualizar los datos originales con los datos modificados
