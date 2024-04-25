@@ -12,6 +12,7 @@ class Rutina extends Model
     protected $table = 'rutinas';
 
     protected $fillable = [
+        'id_usuari',
         'dia',
         'nom_exercici',
         'series',
@@ -27,6 +28,11 @@ class Rutina extends Model
     public function ejercicios()
     {
         return $this->belongsTo(Ejercicio::class , 'ejercicio_id');
+    }
+
+    public function usuaris()
+    {
+        return $this->belongsTo(Usuaris::class, 'id');
     }
 
 }

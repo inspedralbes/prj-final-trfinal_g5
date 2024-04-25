@@ -1,6 +1,6 @@
 const url = 'http://localhost:8000/api';// const url = 'http://.daw.inspedralbes.cat/'; //producción
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '1234567890';
+const apiKey = '0123456789';
 
 
 //ejemplo de peticion fetch get
@@ -22,6 +22,21 @@ export function getDatosUsuario(idUsuario) {
                 reject('Error de red al obtener los datos del usuario: ' + error.message);
             });
     });
+}
+
+export async function getDatosUsuario2(idUsuario) {
+    try {
+        const response = await fetch(`${url}/usuari/${idUsuario}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del usuario: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        return data; // Devuelve los datos del usuario en JSON
+    }
+    catch (error) {
+        throw new Error('Error de red al obtener los datos del usuario: ' + error.message);
+    }  
 }
 
 export async function getDatosEjercicio() {
@@ -130,7 +145,7 @@ export async function actualizarDatosUsuario(idUsuario, formData) {
 //fetch para la api de openai
 
 
-export async function enviarMensajeOpenAIRutina(message, ejercicios) {
+export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuario) {
     try {
         const payload = {
             model: 'gpt-3.5-turbo',
@@ -141,14 +156,19 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios) {
                     " Si et demanen alguna cosa que no sigui una rutina digues el següent: En aquest apartat només puc donar consells de nutrició i generar rutines. "+
                     " Pots donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació."+
                     " Nomes pots respondre amb format JSON i seguint aquesta estructura:"+
-                    " {dia: 'pit', exercicis: [{'nom_excercici':'','series':'','repeticions':'','id_excercici':''},...]},{dia: 'esquena', exercicis: [{},]},{[{},...]},..."+
-                    "Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis."+
-                    "Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret."+
-                    "Si en el missatge conte dies fes la rutina dels dies que et demanen; si no fes una rutina de 5 dies.",
+                    " { id_usuari:'', dias:[{dia: '1', exercicis: [{'nom_exercici':'','series':'','repeticions':'','id_exercici':''},...]},...]}"+
+                    " Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis."+
+                    " Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret."+
+                    " Si en el missatge conte dies fes la rutina dels dies que et demanen; si no fes una rutina de 5 dies." +
+                    " Agafa les dades del usuari per fer rutines mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari.",
                 },
                 {
                     role: 'system',
                     content: JSON.stringify(ejercicios)
+                },
+                {
+                    role: 'system',
+                    content: JSON.stringify(daotsUsuario)
                 },
                 {
                     role: 'user',

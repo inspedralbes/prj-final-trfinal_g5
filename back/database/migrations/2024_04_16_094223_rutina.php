@@ -16,6 +16,7 @@ return new class extends Migration
        
         Schema::create('rutinas', function (Blueprint $table) {
             $table->id();
+            $table->string('id_usuari');
             $table->string('dia')->nullable();
             $table->string('nom_exercici');
             $table->string('series')->nullable();

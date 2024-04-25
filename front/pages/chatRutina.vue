@@ -41,6 +41,7 @@
 
 <script>
 import { enviarMensajeOpenAIRutina } from '@/stores/communicationManager';
+import { useUsuariPerfilStore } from '@/stores/index';
 export default {
   data() {
     return {
@@ -70,8 +71,13 @@ export default {
         this.isLoading = true;
         this.isSending = true;
 
+        const store = useUsuariPerfilStore();
+        const idUsuario = store.id_usuari;
+
+        
+        const daotsUsuario = await getDatosUsuario2(idUsuario);
         const ejercicios = await getDatosEjercicio();
-        const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios);
+        const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);
 
         console.log(generatedText);
 
