@@ -1,6 +1,6 @@
 const url = 'http://localhost:8000/api';// const url = 'http://.daw.inspedralbes.cat/'; //producción
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '0123456789';
+const apiKey = '0123456798';
 
 
 //ejemplo de peticion fetch get
@@ -96,6 +96,7 @@ export async function enviarRutinaAlServidor(rutina) {
         }
 
         const data = await response.json();
+        console.log('datos guardados correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al enviar la rutina al servidor: ' + error.message);

@@ -74,7 +74,7 @@ export default {
         const store = useUsuariPerfilStore();
         const idUsuario = store.id_usuari;
 
-        
+
         const daotsUsuario = await getDatosUsuario2(idUsuario);
         const ejercicios = await getDatosEjercicio();
         const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);
@@ -85,10 +85,25 @@ export default {
 
         await enviarRutinaAlServidor(rutinaJSON); // Enviar el JSON al backend
 
+        // Construir el mensaje con la lista de días y ejercicios
+        let mensajeRutina = '\nAquí tens la teva rutina:\n'; // Comienza el mensaje con la introducción
+
+        rutinaJSON.dias.forEach((dia) => {
+          // Iterar sobre cada día de la rutina
+          mensajeRutina += `\nDía: ${dia.dia}\n`; // Agregar el número del día al mensaje
+
+          dia.exercicis.forEach((exercicio) => {
+            // Iterar sobre cada ejercicio del día
+            mensajeRutina += `\n- ${exercicio.nom_exercici}( series de ${exercicio.series} amb  ${exercicio.repeticions} repeticions) \n`; 
+          });
+        });
+
+
         this.chatMessages.push({
           role: 'assistant',
-          content: generatedText,
+          content: mensajeRutina,
         });
+
 
         this.message = '';
       } catch (error) {
@@ -202,7 +217,6 @@ body {
   background-color: #FFDAB9;
   margin-right: 10%;
 }
-
 
 .avatar-usuario {
   width: 30px;
