@@ -1,19 +1,25 @@
 <template>
+
+
   <body>
     <div>
       <div class="contenedor">
         <div class="cabecera">Assessorament</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
         <h2 class="mensaje-bienvenida">"Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?"</h2>
+        <nuxt-link to="/chatRutina" class="boton-chat-Rutina">Assessor de Rutina</nuxt-link>
+        <nuxt-link to="/chatDieta" class="boton-chat-Dieta">Assessor de Dieta</nuxt-link>
         <div class="chat">
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+            <div class="mensaje"
+              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
               <div class="info-usuario" v-if="message.role === 'user'">
-                <img src="" alt="Avatar usuario" class="avatar-usuario" />
-                <p class="nombre-usuario">{{ usuario }}</p>
+                <img v-if="foto_perfil" :src="foto_perfil" alt="Avatar usuario" class="avatar-usuario" />
+                <img v-else src="../public/usuario.png" alt="Avatar usuario" class="avatar-usuario" />
+                <p class="nombre-usuario"><strong>{{ nom_usuari }}</strong></p>
               </div>
               <div class="contenido-mensaje">
-                <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
                   class="avatar-asistente" />
                 <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
               </div>
@@ -34,11 +40,15 @@
   </body>
 </template>
 
+
 <script>
+import { enviarMensajeOpenAI } from '@/stores/communicationManager';
+import { useUsuariPerfilStore } from '@/stores/index';
 export default {
   data() {
     return {
-      usuario: '',
+      nom_usuari: '',
+      foto_perfil: '',
       message: '',
       chatMessages: [],
       isLoading: false,
@@ -52,20 +62,32 @@ export default {
           return;
         }
 
+
+        if (this.chatMessages.length === 0) {
+          document.querySelector('.mensaje-bienvenida').style.display = 'none';
+          document.querySelector('.boton-chat-Rutina').style.display = 'none';
+          document.querySelector('.boton-chat-Dieta').style.display = 'none';
+        }
+
+
         this.chatMessages.push({
           role: 'user',
           content: this.message,
         });
 
+
         this.isLoading = true;
         this.isSending = true;
-        
+
+
         const response = await enviarMensajeOpenAI(this.message);
+
 
         this.chatMessages.push({
           role: 'assistant',
           content: response,
         });
+
 
         this.message = ''; // Limpiar el campo de texto
       } catch (error) {
@@ -92,8 +114,17 @@ export default {
     // Recuperar el nombre de usuario del almacenamiento local
     this.usuario = localStorage.getItem('username');
   },
+  computed: {
+    nom_usuari() {
+      return useUsuariPerfilStore().nom_usuari;
+    },
+    foto_perfil() {
+      return useUsuariPerfilStore().foto_perfil;
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 html,
@@ -103,6 +134,7 @@ body {
   height: 100%;
 }
 
+
 body {
   font-family: Arial, sans-serif;
   /* Establecer la fuente predeterminada */
@@ -111,6 +143,7 @@ body {
   height: 100vh;
 }
 
+
 .contenedor {
   display: flex;
   flex-direction: column;
@@ -118,6 +151,7 @@ body {
   align-items: center;
   height: 100vh;
 }
+
 
 .cabecera {
   background-color: #333;
@@ -129,11 +163,13 @@ body {
   width: 100%;
 }
 
+
 .mensaje-bienvenida {
   font-size: 18px;
   text-align: center;
   margin-top: 20px;
 }
+
 
 .chat {
   display: flex;
@@ -143,6 +179,7 @@ body {
   width: 100%;
 }
 
+
 .mensaje-usuario {
   background-color: #FFDAB9;
   padding: 10px;
@@ -150,6 +187,7 @@ body {
   align-self: flex-end;
   margin-bottom: 8px;
 }
+
 
 .mensaje-asistente {
   display: flex;
@@ -161,6 +199,15 @@ body {
   margin-right: 10%;
 }
 
+
+.avatar-usuario {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+
 .avatar-asistente {
   width: 30px;
   height: 30px;
@@ -169,10 +216,43 @@ body {
   background-color: #FFA500;
 }
 
+
 .contenido-mensaje-asistente {
   max-width: 100%;
-  
 }
+
+.boton-chat-Rutina {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 10px 10px 0;
+  width: 50%;
+}
+
+.boton-chat-Dieta {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 10px 10px 0;
+  width: 50%;
+}
+
 .animacion-carga {
   width: 20px;
   height: 20px;
@@ -184,15 +264,18 @@ body {
   margin-bottom: 8px;
 }
 
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
 
+
   100% {
     transform: rotate(360deg);
   }
 }
+
 
 .controles-inferiores {
   width: 100%;
@@ -201,6 +284,7 @@ body {
   align-items: center;
   margin-bottom: 20px;
 }
+
 
 .entrada-mensaje {
   width: calc(100% - 20px);
@@ -211,6 +295,7 @@ body {
   border: none;
   border-radius: 8px;
 }
+
 
 .boton-enviar {
   background-color: #000;
@@ -227,9 +312,11 @@ body {
   width: calc(100% - 20px);
 }
 
+
 .boton-enviar:hover {
   background-color: #333;
 }
+
 
 navBar {
   position: fixed;
@@ -240,4 +327,5 @@ navBar {
   /* Ocupa todo el ancho de la pantalla */
   z-index: 999;
   /* Asegura que esté por encima del contenido */
-}</style>
+}
+</style>

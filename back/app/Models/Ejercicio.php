@@ -17,13 +17,12 @@ class Ejercicio extends Model
         'dificultat',
         'imatge',
         'descripció',
-        'desitjat',
         'idCategoria',
 
     ];
     public function categoria()
     {
-        return $this->hasMany(CategoriaM::class, 'idCategoria');
+        return $this->belongsTo(CategoriaM::class, 'idCategoria');
     }
     
     public $timestamps = false;
