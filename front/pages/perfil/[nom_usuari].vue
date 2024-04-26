@@ -26,7 +26,7 @@
                             <input type="tel" placeholder="ex: 123456789" v-model="usuario.telefon"
                                 @input="validatePhoneNumber" maxlength="9">
                         </div>
-                        
+
                         <div class="input-container">
                             <label>Data naixement:</label>
                             <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
@@ -51,7 +51,7 @@
                                 <option value="Altres">Altres</option>
                             </select>
                         </div>
-                        
+
                         <div class="input-container">
                             <label>Altura (cm):</label><br>
                             <input type="number" v-model="usuario.altura">
@@ -60,7 +60,7 @@
                             <label>Pes (kg):</label><br>
                             <input type="decimal" v-model="usuario.pes">
                         </div>
-                        
+
                         <div class="input-container">
                             <label>Alergia/Intolerancia:</label>
                             <textarea placeholder="Introdueix la teva alergia o intolerencia (opcional)"
@@ -219,14 +219,7 @@ export default {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
             console.log('Datos a enviar:', data);
-            fetch('http://localhost:8000/api/editar-usuari/' + idUsuario, {
-                method: 'PUT',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
+            actualizarDatosUsuario(idUsuario, data) // Llama a la función actualizarDatosUsuario con los datos y el idUsuario
                 .then(data => {
                     console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
@@ -250,10 +243,6 @@ export default {
                     this.isSaving = false;
                 });
         },
-
-
-
-
 
         onFileChange(event) {
             const file = event.target.files[0]; // Obtener el archivo del evento
@@ -426,9 +415,9 @@ textarea{
     flex: 1;
     padding: 5px;
     border-radius: 5px;
-    border: none;   
+    border: none;
     border-bottom: 2px solid #ccc;
-    
+
 }
 
 .large-button {
@@ -446,19 +435,16 @@ textarea{
     margin: auto;
 }
 
-form{
+form {
     display: grid;
     grid-template-columns: 1fr;
     margin: auto;
     background-color: #f3f3f3;
     padding: 20px;
     padding-top: 40px;
-    border-radius: 20px;   
+    border-radius: 20px;
     margin-top: 0;
     width: 85%;
     margin-bottom: 20px;
 }
-
-
-
 </style>

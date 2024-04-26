@@ -108,27 +108,6 @@ export async function enviarRutinaAlServidor(rutina) {
 
 
 export async function actualizarDatosUsuario(idUsuario, formData) {
-    // return new Promise((resolve, reject) => {   
-    //     fetch(`http://localhost:8000/api/editar-usuari/${idUsuario}`, {   
-    //         method: 'PUT',   
-    //         headers: {   
-    //             'Content-Type': 'application/json'   
-    //         },   
-    //         body: JSON.stringify(formData)   
-    //     })   
-    //     .then(response => {   
-    //         if (response.ok) {   
-    //             resolve('Datos actualizados exitosamente', response.json());   
-    //         } else {   
-    //             reject('Error al actualizar los datos del usuario: ' + response.statusText);   
-    //         }   
-    //     })   
-    //     .catch(error => {   
-    //         reject('Error de red al actualizar los datos del usuario: ' + error.message);   
-    //     });   
-    // });
-
-
     let response = await fetch(`${url}/editar-usuari/${idUsuario}`, {
         method: 'PUT',
         headers: {
