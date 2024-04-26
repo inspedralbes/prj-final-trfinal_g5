@@ -1,21 +1,24 @@
 <template>
+
   <body>
     <div>
       <div class="contenedor">
         <div class="cabecera">Assessorament de Rutina</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
         <div class="mensaje-bienvenida">
-<img src="../public/img/icono_Arturo.jpg" alt="">
-        <h2 >Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
+          <img src="../public/img/icono_Arturo.jpg" alt="">
+          <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
         </div>
-       
-        
+
+
         <div class="chat-container">
           <div class="chat">
             <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-              <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+              <div class="mensaje"
+                :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
                 <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario" class="avatar-usuario" />
+                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                    class="avatar-usuario" />
                   <p class="nombre-usuario">{{ nom_usuari }}</p>
                 </div>
                 <div class="contenido-mensaje">
@@ -43,6 +46,7 @@
 
 <script>
 import { enviarMensajeOpenAIRutina } from '@/stores/communicationManager';
+import { useUsuariPerfilStore } from '@/stores/index';
 export default {
   data() {
     return {
@@ -60,20 +64,21 @@ export default {
           return;
         }
 
-
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
-
 
         this.chatMessages.push({
           role: 'user',
           content: this.message,
         });
 
-
         this.isLoading = true;
         this.isSending = true;
+
+        const store = useUsuariPerfilStore();
+        const idUsuario = store.id_usuari;
+
 
         const daotsUsuario = await getDatosUsuario2(idUsuario);
         const ejercicios = await getDatosEjercicio();
@@ -81,6 +86,9 @@ export default {
 
         console.log(generatedText);
 
+        const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
+
+        await enviarRutinaAlServidor(rutinaJSON); // Enviar el JSON al backend
 
         // Construir el mensaje con la lista de días y ejercicios
         let mensajeRutina = '\nAquí tens la teva rutina:\n'; // Comienza el mensaje con la introducción
@@ -91,7 +99,7 @@ export default {
 
           dia.exercicis.forEach((exercicio) => {
             // Iterar sobre cada ejercicio del día
-            mensajeRutina += `\n- ${exercicio.nom_exercici}( series de ${exercicio.series} amb  ${exercicio.repeticions} repeticions) \n`; 
+            mensajeRutina += `\n- ${exercicio.nom_exercici}( series de ${exercicio.series} amb  ${exercicio.repeticions} repeticions) \n`;
           });
         });
 
@@ -181,24 +189,25 @@ body {
 }
 
 .mensaje-bienvenida {
-    display: grid;
-    grid-template-columns: .2fr 1fr;
-    margin-top: 50%;
+  display: grid;
+  grid-template-columns: .2fr 1fr;
+  margin-top: 50%;
 
- 
+
 }
 
-.mensaje-bienvenida h2{
+.mensaje-bienvenida h2 {
   font-size: 1.5em;
-    font-weight: 600;
-    text-align: center;
-    padding: 15px;
-    
-    background-color: #33333327;
-    font-style: italic; /* Add this line to make the text italic */
-    width: 70%;
-    margin: auto;
-    border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+  padding: 15px;
+
+  background-color: #33333327;
+  font-style: italic;
+  /* Add this line to make the text italic */
+  width: 70%;
+  margin: auto;
+  border-radius: 10px;
 }
 
 .mensaje-bienvenida img {
@@ -209,8 +218,10 @@ body {
 }
 
 .chat-container {
-  overflow-y: auto; /* Hace que el contenido sea desplazable verticalmente si es necesario */
-  flex: 1; /* Permite que el área del chat ocupe el espacio disponible */
+  overflow-y: auto;
+  /* Hace que el contenido sea desplazable verticalmente si es necesario */
+  flex: 1;
+  /* Permite que el área del chat ocupe el espacio disponible */
   width: 90%;
 }
 
@@ -222,7 +233,7 @@ body {
   width: 90%;
 }
 
-.chat img{
+.chat img {
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -236,7 +247,7 @@ body {
   align-items: center;
 }
 
-.info-usuario p{
+.info-usuario p {
   font-style: italic;
 }
 
@@ -349,4 +360,5 @@ navBar {
   /* Ocupa todo el ancho de la pantalla */
   z-index: 999;
   /* Asegura que esté por encima del contenido */
-}</style>
+}
+</style>
