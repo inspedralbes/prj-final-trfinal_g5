@@ -15,8 +15,8 @@
             <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
               <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
                 <div class="info-usuario" v-if="message.role === 'user'">
-                  <img src="" alt="Avatar usuario" class="avatar-usuario" />
-                  <p class="nombre-usuario">{{ usuario }}</p>
+                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario" class="avatar-usuario" />
+                  <p class="nombre-usuario">{{ nom_usuari }}</p>
                 </div>
                 <div class="contenido-mensaje">
                   <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
@@ -176,6 +176,7 @@ body {
     font-weight: 600;
     text-align: center;
     padding: 15px;
+    
     background-color: #33333327;
     font-style: italic; /* Add this line to make the text italic */
     width: 70%;
@@ -184,8 +185,8 @@ body {
 }
 
 .mensaje-bienvenida img {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   margin-left: 45px;
 }
@@ -193,6 +194,7 @@ body {
 .chat-container {
   overflow-y: auto; /* Hace que el contenido sea desplazable verticalmente si es necesario */
   flex: 1; /* Permite que el área del chat ocupe el espacio disponible */
+  width: 90%;
 }
 
 .chat {
@@ -201,6 +203,24 @@ body {
   margin-top: 20px;
   padding: 0 20px;
   width: 90%;
+}
+
+.chat img{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+
+}
+
+.info-usuario {
+  display: grid;
+  grid-template-columns: .1fr 1fr;
+  align-items: center;
+}
+
+.info-usuario p{
+  font-style: italic;
 }
 
 .mensaje-usuario {
@@ -261,7 +281,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   background-color: #33333356;
 }
 

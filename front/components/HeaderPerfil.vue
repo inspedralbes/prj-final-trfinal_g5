@@ -1,12 +1,17 @@
 <template>
     <div class="header-container">
+        <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
+
         <div class="imgContainer">
-            <img :src="foto_perfil || '../public/usuario.png'" alt="Usuario" class="user-icon" :class="{ 'incomplete-profile': !registre }" />
+            <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" :class="{ 'incomplete-profile': !registre }" /> 
+            <h1>{{nom_usuari}}</h1>
+           
             <div v-if="!registre" class="alert-sign">
                 !
             </div>
-            <h1>El meu perfil</h1>
         </div>
+    </nuxt-link>
+
     </div>
 </template>
 

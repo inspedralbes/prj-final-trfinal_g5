@@ -66,6 +66,7 @@ body {
     min-height: 100%;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
+    position: relative;
 }
 
 

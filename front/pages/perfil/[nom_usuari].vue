@@ -3,7 +3,7 @@
     <body>
         <div id="main">
             <div class="flex-container">
-                <capçalera />
+                <HeaderPerfil />
                 <form @submit.prevent="guardarDatosUsuario" enctype="multipart/form-data">
                     <div class="user-info-container">
                         <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
@@ -39,7 +39,7 @@
                                 @input="validateAltura" maxlength="4">
                         </div>
                         <div class="input-container">
-                            <label>Pes:</label>
+                            <label>Pes:</label> <br>
                             <input type="text" placeholder="Pes (kg)" v-model="usuario.pes" @input="validatePeso"
                                 maxlength="6">
                         </div>
@@ -63,15 +63,13 @@
                         
                         <div class="input-container">
                             <label>Alergia/Intolerancia:</label>
-                            <label>Opcional</label>
-                            <textarea placeholder="Introdueix la teva alergia o intolerencia"
+                            <textarea placeholder="Introdueix la teva alergia o intolerencia (opcional)"
                                 v-model="usuario.alergia_intolerancia"
                                 @input="validateInput($event, 'alergia_intolerancia')" maxlength="255"></textarea>
                         </div>
                         <div class="input-container">
                             <label>Lesió:</label>
-                            <label>Opcional</label>
-                            <textarea placeholder="Introdueix la teva lesió" v-model="usuario.lesio"
+                            <textarea placeholder="Introdueix la teva lesió (opcional)" v-model="usuario.lesio"
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
 
@@ -401,7 +399,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
-     
+    margin: auto;
 }
 
 input {
@@ -410,6 +408,12 @@ input {
     margin-bottom: 2.5rem;
     width: 160px;
     
+}
+
+textarea{
+    background-color: #dddddd;
+    border-radius: 5px;
+
 }
 
 
@@ -451,6 +455,8 @@ form{
     padding-top: 40px;
     border-radius: 20px;   
     margin-top: 0;
+    width: 85%;
+    margin-bottom: 20px;
 }
 
 
