@@ -217,6 +217,7 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Datos del usuario actualizados:', data);
+                    this.$router.push('/home');
                     // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
                     if (this.usuario.nom) {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
