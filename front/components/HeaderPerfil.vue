@@ -1,14 +1,12 @@
 <template>
     <div class="header-container">
-        <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
-            <img v-if="foto_perfil" :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" />
-        </nuxt-link>
-        <div v-if="!registre" :class="{ 'alert-container': true, 'oculto': cerrarAlerta }">
-            <div class="alert-message">Perfil incompleto</div>
-            <button @click="closeAlert" class="close-button">Cerrar</button>
+        <div class="imgContainer">
+            <img :src="foto_perfil || '../public/usuario.png'" alt="Usuario" class="user-icon" :class="{ 'incomplete-profile': !registre }" />
+            <div v-if="!registre" class="alert-sign">
+                !
+            </div>
+            <h1>El meu perfil</h1>
         </div>
-    </nuxt-link>
-
     </div>
 </template>
 
@@ -49,11 +47,6 @@ export default {
 </script>
 
 <style scoped>
-
-nuxt-link{
-    text-decoration: none;
-    color: black;
-}
 .imgContainer {
     display: grid;
     grid-template-columns: .6fr 1fr;
@@ -99,11 +92,10 @@ nuxt-link{
 h1 {
     padding: 20px;
     font-size: 1.1rem;
-    font-weight: bolder;
 }
 
 .header-container {
-    background-color: #FFA500;
+    background-color: #f0f0f0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 70px;
     width: 95%;

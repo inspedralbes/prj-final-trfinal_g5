@@ -1,7 +1,7 @@
 <template>
 
     <body>
-        <div>
+        <div id="main">
             <div class="flex-container">
                 <capçalera />
                 <form @submit.prevent="guardarDatosUsuario" enctype="multipart/form-data">
@@ -26,11 +26,13 @@
                             <input type="tel" placeholder="ex: 123456789" v-model="usuario.telefon"
                                 @input="validatePhoneNumber" maxlength="9">
                         </div>
+                        
                         <div class="input-container">
                             <label>Data naixement:</label>
                             <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
 
                         </div>
+
                         <div class="input-container">
                             <label>Altura:</label>
                             <input type="text" placeholder="Altura (cm)" v-model="usuario.altura"
@@ -49,6 +51,16 @@
                                 <option value="Altres">Altres</option>
                             </select>
                         </div>
+                        
+                        <div class="input-container">
+                            <label>Altura (cm):</label><br>
+                            <input type="number" v-model="usuario.altura">
+                        </div>
+                        <div class="input-container">
+                            <label>Pes (kg):</label><br>
+                            <input type="decimal" v-model="usuario.pes">
+                        </div>
+                        
                         <div class="input-container">
                             <label>Alergia/Intolerancia:</label>
                             <label>Opcional</label>
@@ -67,8 +79,10 @@
                             <label>Foto de Perfil:</label>
                             <input type="file" name="foto_perfil" @change="onFileChange" accept="image/*">
                         </div>
-                        <button type="submit" class="large-button">Guardar</button>
                     </div>
+
+                    <button type="submit" class="large-button">Guardar</button>
+
                 </form>
 
 
@@ -369,31 +383,35 @@ body {
     font-family: Arial, sans-serif;
 }
 
+#main {
+    position: relative;
+}
+
 .flex-container {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     min-height: 100vh;
-    background-color: #FFF;
+    background: linear-gradient(to top right, #FFA500, #f44336);
 }
+
 
 .user-info-container {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    padding: 0 20px;
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+     
 }
 
-.input-container {
-    display: flex;
-    margin-bottom: 10px;
+input {
+    background-color: transparent;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    width: 160px;
+    
 }
 
-.input-container label {
-    flex: 1;
-    text-align: right;
-    margin-right: 10px;
-}
 
 .user-info-container label {
     font-weight: bold;
@@ -404,13 +422,14 @@ body {
     flex: 1;
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: none;   
+    border-bottom: 2px solid #ccc;
+    
 }
 
 .large-button {
-    width: 100%;
-    max-width: 400px;
-    height: 60px;
+    width: 40%;
+    height: 50px;
     margin-top: 20px;
     font-size: 18px;
     font-weight: bold;
@@ -418,17 +437,22 @@ body {
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: #000000;
-    border-radius: 10px;
+    background-color: #333;
+    border-radius: 50px;
+    margin: auto;
 }
 
-navBar {
-    width: 100%;
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
+form{
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: auto;
+    background-color: #f3f3f3;
+    padding: 20px;
+    padding-top: 40px;
+    border-radius: 20px;   
+    margin-top: 0;
 }
+
+
+
 </style>
