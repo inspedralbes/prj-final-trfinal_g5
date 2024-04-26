@@ -7,7 +7,6 @@ use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\RutinaController;
 
 
-Route::get('/usuari', [UserController::class, 'mostrarUsuarios']);
 Route::get('/usuari/{id}', [UserController::class, 'mostrarUsuario']);
 Route::put('/editar-usuari/{id}', [UserController::class, 'editarUsuari']);
 

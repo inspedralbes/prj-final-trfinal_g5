@@ -52,21 +52,15 @@ export default {
 </script>
 
 <style scoped>
-
-nuxt-link{
-    text-decoration: none;
-    color: black;
-}
 .imgContainer {
     display: grid;
     grid-template-columns: .6fr 1fr;
     margin: auto;
-    padding: 5px;
     
 }
 
 .imgContainer img {
-    width: 45%;
+    width: 38%;
     border-radius: 50%;
     margin-right: 75px;
 }
@@ -103,11 +97,10 @@ nuxt-link{
 h1 {
     padding: 20px;
     font-size: 1.1rem;
-    font-weight: bolder;
 }
 
 .header-container {
-    background-color: #FFA500;
+    background-color: #f0f0f0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 70px;
     width: 95%;

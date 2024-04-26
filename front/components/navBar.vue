@@ -21,6 +21,8 @@
   margin: auto;
   display: flex;
   justify-content: center; /* Centra los elementos horizontalmente */
+  position: sticky;
+  top: 0;
 }
 
 .navbar-container {

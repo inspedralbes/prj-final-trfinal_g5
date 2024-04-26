@@ -109,27 +109,6 @@ export async function enviarRutinaAlServidor(rutina) {
 
 
 export async function actualizarDatosUsuario(idUsuario, formData) {
-    // return new Promise((resolve, reject) => {   
-    //     fetch(`http://localhost:8000/api/editar-usuari/${idUsuario}`, {   
-    //         method: 'PUT',   
-    //         headers: {   
-    //             'Content-Type': 'application/json'   
-    //         },   
-    //         body: JSON.stringify(formData)   
-    //     })   
-    //     .then(response => {   
-    //         if (response.ok) {   
-    //             resolve('Datos actualizados exitosamente', response.json());   
-    //         } else {   
-    //             reject('Error al actualizar los datos del usuario: ' + response.statusText);   
-    //         }   
-    //     })   
-    //     .catch(error => {   
-    //         reject('Error de red al actualizar los datos del usuario: ' + error.message);   
-    //     });   
-    // });
-
-
     let response = await fetch(`${url}/editar-usuari/${idUsuario}`, {
         method: 'PUT',
         headers: {
@@ -153,16 +132,18 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
             messages: [
                 {
                     role: 'system',
-                    content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb el fitness ja que ets un expert en fitness només tens permès parlar de fer rutines."+
-                    " Si et demanen alguna cosa que no sigui una rutina digues el següent: En aquest apartat només puc donar consells de nutrició i generar rutines. "+
-                    " Pots donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació."+
-                    " Nomes pots respondre amb format JSON i seguint aquesta estructura:"+
-                    " { id_usuari:'', dias:[{dia: '1', exercicis: [{'nom_exercici':'','series':'','repeticions':'','id_exercici':''},...]},...]}"+
-                    " Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis."+
-                    " Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret."+
-                    " Si en el missatge conte dies fes la rutina dels dies que et demanen; si no fes una rutina de 5 dies." +
-                    " Agafa les dades del usuari per fer rutines mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari.",
-                },
+                    content: "Ets un expert en fitness i només pots parlar sobre rutines d'exercicis i donar consells i informació sobre aquest tema. Segueix aquestes pautes:" +
+                "- Si et saluden o diuen alguna cosa no rellevant, respon cordialment segons el comentari i respon: 'Si necessites una rutina, indica'm de quant dies la necessites y quien es el teu objectiu.'" +
+                "- Si et demanen alguna cosa que no sigui una rutina d'exercicis o informació sobre aquestes, respon: 'En aquest apartat només puc generar rutines i informació sobre aquestes. Qualsevol altra consulta ves a l'apartat d'assessorament.' " +
+                "- Si et demanen alguna cosa relacionada amb una dieta o nutricio, respon: 'En aquest apartat només puc generar rutines i informació sobre aquestes. Qualsevol consulta d'aquet tipus ves a l'apartat de dietes o assesorament.' " +
+                "- Pots proporcionar consells i arguments, però de forma resumida en unes 2 línies, a menys que se sol·liciti més informació.'" +
+                "- Només pots respondre amb format JSON seguint aquesta estructura:"+
+                "- { id_usuari:'', dias:[{dia: '1', exercicis: [{'nom_exercici':'','series':'','repeticions':'','id_exercici':''},...]},...]}"+
+                "- Segueix aquesta estructura de JSON per a la generació de rutines, basant-te en els teus coneixements per generar rutines coherents utilitzant el llistat d'exercicis proporcionat" +
+                "- No pots crear una rutina si no s'especifiquen el nombre de dies. En aquest cas, pregunta els dies primer." +
+                "- No cometis faltes ortogràfiques o gramaticals i mantén un to educat i respectuós en tot moment."+
+                "- Sempre parla en catala."},
+
                 {
                     role: 'system',
                     content: JSON.stringify(ejercicios)
