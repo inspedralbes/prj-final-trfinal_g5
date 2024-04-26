@@ -1,6 +1,6 @@
 const url = 'http://localhost:8000/api';// const url = 'http://.daw.inspedralbes.cat/'; //producción
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '0123456798';
+const apiKey = '1234567890';
 
 
 //ejemplo de peticion fetch get
