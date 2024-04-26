@@ -7,8 +7,6 @@
             <div class="alert-message">Perfil incompleto</div>
             <button @click="closeAlert" class="close-button">Cerrar</button>
         </div>
-    </nuxt-link>
-
     </div>
 </template>
 
