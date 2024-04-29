@@ -213,26 +213,21 @@ class UserController extends Controller
     
         // Manejar la imagen de perfil
         if ($request->has('foto_perfil_base64')) {
-            // Obtener el archivo base64 de la solicitud
-            $base64Image = $request->foto_perfil_base64;
+    // Obtener el archivo base64 de la solicitud
+    $base64Image = $request->foto_perfil_base64;
+
+    // Decodificar la cadena base64 en una imagen
+    $imageData = base64_decode($base64Image);
+
+    // Usar el nombre original del archivo
+    $originalFileName = 'perfil_' . uniqid() . '.jpg'; // Generar un nombre único para el archivo
     
-            // Decodificar la cadena base64 en una imagen
-            $imageData = base64_decode($base64Image);
-    
-            // Obtener la lista de archivos en la carpeta de imágenes de perfil
-            $files = Storage::files('public/imagenes_perfil');
-    
-            // Contar el número de archivos en la carpeta de imágenes de perfil
-            $numFiles = count($files);
-    
-            // Usar el número de archivos más 1 en el nombre del próximo archivo
-            $imageName = 'perfil_' . ($numFiles + 1) . '.jpg'; // Puedes cambiar la extensión según el tipo de imagen
-            Storage::put('public/imagenes_perfil/' . $imageName, $imageData);
-    
-            // Actualizar el campo de la imagen de perfil en la base de datos
-            $usuari->foto_perfil = $imageName;
-        }
-    
+    // Mover la imagen a la ubicación deseada con el nombre original
+    file_put_contents(public_path('storage/imagenes_perfil/' . $originalFileName), $imageData);
+
+    // Actualizar el campo de la imagen de perfil en la base de datos
+    $usuari->foto_perfil = $originalFileName;
+}    
         // Guarda los cambios en la base de datos
         $usuari->save();
     
