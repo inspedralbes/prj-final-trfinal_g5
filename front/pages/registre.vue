@@ -215,7 +215,7 @@ export default {
                     return;
                 } else {
                     // Realizar la verificación del correo electrónico
-                    const response = await fetch('http://localhost:8000/api/comprovaremail', {
+                    const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/comprovaremail', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -423,7 +423,7 @@ export default {
                 Object.entries(this.userData).filter(([key, value]) => value !== "")
             );
 
-            const response = await fetch('fithub.daw.inspedralbes.cat/api/registre', {
+            const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/registre', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

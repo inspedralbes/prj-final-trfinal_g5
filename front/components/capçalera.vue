@@ -3,7 +3,7 @@
         <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
 
         <div class="imgContainer">
-            <img :src="'fithub.daw.inspedralbes.cat/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" :class="{ 'incomplete-profile': !registre }" /> 
+            <img :src="'public/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" :class="{ 'incomplete-profile': !registre }" /> 
             <h1>{{nom_usuari}}</h1>
            
             <div v-if="!registre" class="alert-sign">
