@@ -54,6 +54,21 @@ export async function getDatosEjercicio() {
     }
 }
 
+export async function getDatosAliments() {
+    try {
+        const response = await fetch(`${url}/aliments`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del alimento: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        return data; // Devuelve los datos del alimento en JSON
+    } catch (error) {
+        throw new Error('Error de red al obtener los datos del alimento: ' + error.message);
+    }
+}
+
+
 //ejemplo de peticion fetch post
 
 export async function iniciarSesion(email, contrasenya) {
@@ -85,6 +100,28 @@ export async function iniciarSesion(email, contrasenya) {
 export async function enviarRutinaAlServidor(rutina) {
     try {
         const response = await fetch(`${url}/guardar-rutina`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(rutina),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al enviar la rutina al servidor');
+        }
+
+        const data = await response.json();
+        console.log('datos guardados correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al enviar la rutina al servidor: ' + error.message);
+    }
+}
+
+export async function enviarDietaAlServidor(rutina) {
+    try {
+        const response = await fetch(`${url}/guardar-dieta`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -136,7 +173,7 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
                     content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb el fitness ja que ets un expert en fitness només tens permès parlar de fer rutines."+
                     " Si et demanen alguna cosa que no sigui una rutina digues el següent: En aquest apartat només puc donar consells de nutrició i generar rutines. "+
                     " Pots donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació."+
-                    " Nomes pots respondre amb format JSON i seguint aquesta estructura:"+
+                    " Nomes pots respondre amb format JSON quan i seguint aquesta estructura:"+
                     " { id_usuari:'', dias:[{dia: '1', exercicis: [{'nom_exercici':'','series':'','repeticions':'','id_exercici':''},...]},...]}"+
                     " Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis."+
                     " Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret."+
@@ -191,12 +228,25 @@ export async function enviarMensajeOpenAI(message) {
             messages: [
                 {
                     role: 'system',
-                    content: 'Eres una persona que solo habla en catalan y tienes prohibido hablar de algo que no tenga relacion con fitness y nutricion ya que eres un experto en nutricion y fitnes pero tienes muy prohibido hacer rutinas y dietas. Si te piden una rutina o dieta di lo siguiente: En este apartado solo puedo dar consejos de nutricion y deportivos si quieres generar rutinas ves al apartado de Rutinas y si quieres una dieta en el apartado de Dietas. Si puedes dar consejos y argumentos pero hazlo de forma resumina en unas 2 lineas a menos que te indiquen que quieren mas informacion .'
+                    content: "Ets una persona que només parla en catalan i tens prohibit parlar d'alguna cosa que no tingui relacion amb fitnes i nutricion ja que ets un expert en nutricion i fitnes però tens molt prohibit fer rutines i dietes."+
+                    " Si et demanen una rutina o dieta vaig donar el següent: En aquest apartat només puc donar consells de nutricion i esportius si vols generar rutines veus a l'apartat de Rutines i si vols una dieta en l'apartat de Dietes."+
+                    " Si pots donar consells i arguments però fes-ho de forma resumina en unes 2 línies tret que t'indiquin que volen mes informacion." +
+                    " Agafa els aliments i tota l'informacio que troves en el json d'aliments per crear la dieta."+
+                    " Hauras de respondre sempre que facis la dieta amb un JSON, i l'estrucutra haura de ser aquesta: " +
+                    " Agafa les dades del usuari per fer rutines mes personalitzades sobretot tenin en compte el pes, altura, si te alguna alergia; i tambe agafa el id del usuari per posarlo a id_usuari.",
                 },
                 {
                     role: 'user',
                     content: message
-                }
+                },
+                {
+                    role: 'system',
+                    content: JSON.stringify(daotsUsuario)
+                },
+                {
+                    role: 'system',
+                    content: JSON.stringify(aliments)
+                },
             ]
         };
 

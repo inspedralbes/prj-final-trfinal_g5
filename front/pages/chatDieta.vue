@@ -43,6 +43,7 @@
 
 <script>
 import { enviarMensajeOpenAIDieta } from '@/stores/communicationManager';
+import { useUsuariPerfilStore } from '@/stores/index';
 export default {
   data() {
     return {
@@ -71,13 +72,21 @@ export default {
           content: this.message,
         });
 
+        const store = useUsuariPerfilStore();
+        const idUsuario = store.id_usuari;
 
         this.isLoading = true;
         this.isSending = true;
 
+        const daotsUsuario = await getDatosUsuario2(idUsuario);
+        const aliments = await getDatosAliments();
+        const generatedText = await enviarMensajeOpenAIDieta(this.message, daotsUsuario, aliments);
 
-        const generatedText = await enviarMensajeOpenAIDieta(this.message);
+        console.log(generatedText);
 
+        const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
+
+        await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
         this.chatMessages.push({
           role: 'assistant',
