@@ -17,7 +17,7 @@
               <div class="mensaje"
                 :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
                 <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'fithub.daw.inspedralbes.cat/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                  <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
                     class="avatar-usuario" />
                   <p class="nombre-usuario">{{ nom_usuari }}</p>
                 </div>
