@@ -84,7 +84,7 @@ export default {
         const ejercicios = await getDatosEjercicio();
         const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);
 
-        console.log(generatedText);
+        // console.log(generatedText);
 
         const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
@@ -112,7 +112,7 @@ export default {
 
         this.message = '';
       } catch (error) {
-        console.error('Error al enviar el mensaje:', error);
+        // console.error('Error al enviar el mensaje:', error);
         if (error.message.startsWith("HTTP error! status: 429")) {
           alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
         }

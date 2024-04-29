@@ -138,7 +138,7 @@ export default {
                     // console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
-                    console.error('Error al obtener los datos del usuario:', error);
+                    // console.error('Error al obtener los datos del usuario:', error);
                 });
         },
         guardarDatosUsuario() {
@@ -218,10 +218,10 @@ export default {
         enviarDatos(data) {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
-            console.log('Datos a enviar:', data);
+            // console.log('Datos a enviar:', data);
             actualizarDatosUsuario(idUsuario, data) // Llama a la función actualizarDatosUsuario con los datos y el idUsuario
                 .then(data => {
-                    console.log('Datos del usuario actualizados:', data);
+                    // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
                     // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
                     if (this.usuario.nom) {
@@ -238,7 +238,7 @@ export default {
                     this.isSaving = false;
                 })
                 .catch(error => {
-                    console.error('Error al actualizar los datos del usuario:', error);
+                    // console.error('Error al actualizar los datos del usuario:', error);
                     // Restablecer la variable de estado a false si hay un error en el guardado
                     this.isSaving = false;
                 });
@@ -252,9 +252,9 @@ export default {
                 this.usuario.foto_perfil = file;
 
                 // Mostrar en la consola la foto de perfil seleccionada
-                console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
+                // console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
             } else {
-                console.error('No se seleccionó ningún archivo.');
+                // console.error('No se seleccionó ningún archivo.');
             }
         },
 

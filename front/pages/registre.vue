@@ -417,7 +417,7 @@ export default {
 
 
         async registerUser() {
-            console.log(this.userData);
+            // console.log(this.userData);
             // Filtrar los campos que no estén vacíos
             const filteredUserData = Object.fromEntries(
                 Object.entries(this.userData).filter(([key, value]) => value !== "")
@@ -439,7 +439,7 @@ export default {
                 // Convertir la respuesta a formato JSON
                 const userDataResponse = await response.json();
 
-                console.log(userDataResponse)
+                // console.log(userDataResponse)
 
                 useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
                 useUsuariPerfilStore().email_usuari = filteredUserData.email;

@@ -65,7 +65,7 @@ export default {
                     this.isValid = false;
                 }
             } catch (error) {
-                console.error('Error al iniciar sesión:', error);
+                // console.error('Error al iniciar sesión:', error);
                 this.showError = true;
                 this.isValid = false;
             }
