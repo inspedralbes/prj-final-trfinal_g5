@@ -1,4 +1,5 @@
 <template>
+
     <body>
         <div class="login-container">
             <div class="logo-container">
@@ -25,8 +26,11 @@
         </div>
     </body>
 </template>
-  
+
 <script>
+import { iniciarSesion } from '@/stores/communicationManager';
+import { useUsuariPerfilStore } from '@/stores/index';
+
 export default {
     data() {
         return {
@@ -38,60 +42,32 @@ export default {
     },
     methods: {
         async login() {
-            console.log('Inicio de sesión iniciado');
-
-            if (!this.email || !this.contrasenya) {
-                // Validar si los campos están vacíos
-                this.showError = true;
-                this.isValid = false;
-                console.log('Campos vacíos');
-                return;
-            }
-
             try {
-                console.log('Enviando solicitud fetch');
-                const response = await fetch('http://localhost:8000/api/loguejat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: this.email,
-                        contrasenya: this.contrasenya,
-                    }),
-                });
-
-                console.log('Respuesta recibida', response);
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    if (data.status === 1) {
-
-
-                        // El inicio de sesión fue exitoso
-                        localStorage.setItem('username', data.nom);
-
-
-                        this.$router.push('/home');
-                    } else {
-                        // El inicio de sesión falló
-                        this.showError = true;
-                        this.isValid = false;
-                        console.log('Usuario no autenticado');
-                    }
-                } else {
-                    // Manejar errores de respuesta HTTP
+                if (!this.email || !this.contrasenya) {
                     this.showError = true;
                     this.isValid = false;
-                    console.log('Respuesta no exitosa', response.statusText);
+                    return;
+                }
+
+                const data = await iniciarSesion(this.email, this.contrasenya);
+
+                if (data.status === 1) {
+                    const store = useUsuariPerfilStore();
+                    store.iniciarSesionExitoso();
+                    store.id_usuari = data.id;
+                    store.nom_usuari = data.nom;
+                    store.email_usuari = data.email;
+                    store.foto_perfil = data.foto_perfil;
+                    store.registre = data.registre === "1" ? true : false;
+                    this.$router.push('/home');
+                } else {
+                    this.showError = true;
+                    this.isValid = false;
                 }
             } catch (error) {
-                // Manejar errores de red u otros errores
                 console.error('Error al iniciar sesión:', error);
                 this.showError = true;
                 this.isValid = false;
-                console.log('Error en la solicitud fetch');
             }
         },
         goToRegister() {
@@ -99,10 +75,9 @@ export default {
         }
     }
 };
-
 </script>
-  
-<style scoped >
+
+<style scoped>
 /* Estilos de la página de inicio de sesión */
 
 html,
@@ -227,4 +202,3 @@ body {
     margin-top: 0.5rem;
 }
 </style>
-  

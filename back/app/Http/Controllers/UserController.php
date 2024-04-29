@@ -7,12 +7,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Mail\RegistroCorreo;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class UserController extends Controller
+
 {
+    
     public function registre(Request $request)
     {
-        \Log::info($request->all());
         try {
             $validator = $request->validate([
                 'email' => 'required|string|email|max:255|unique:usuaris',
@@ -25,8 +32,10 @@ class UserController extends Controller
                 'altura' => 'numeric',
                 'telefon' => 'integer|digits:9',
                 'foto_perfil' => 'image|mimes:jpeg,png,jpg',
+                'alergia_intolerancia' => 'string',
+                'lesio' => 'string',
+                'registre' => 'string',
             ]);
-
 
             $usuari = new Usuaris();
             $usuari->email = $request->email;
@@ -48,12 +57,15 @@ class UserController extends Controller
                 $usuari->telefon = $request->telefon;
             }
 
-            $usuari->foto_perfil = $request->foto_perfil;
             $usuari->save();
+           \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
+
+            $idUsuario = $usuari->id;
 
             return response()->json([
                 'status' => 1,
-                'message' => 'Usuari creat correctament'
+                'message' => 'Usuari creat correctament',
+                'idUsuario' => $idUsuario,
             ]);
         } catch (ValidationException $e) {
             // Captura las excepciones de validación y obtén los mensajes de error
@@ -87,6 +99,9 @@ class UserController extends Controller
                     'status' => 1,
                     'nom' => $usuari->nom,
                     'email' => $usuari->email,
+                    'id' => $usuari->id,
+                    'foto_perfil' => $usuari->foto_perfil,
+                    'registre' => $usuari->registre,
                 ]);
             } else {
                 return response()->json([
@@ -102,40 +117,29 @@ class UserController extends Controller
         }
     }
     
-    public function deslojegat(Request $request){
-        try {
-            $request->user()->tokens()->delete();
-    
+
+    public function mostrarUsuario(Request $request, string $id)
+    {
+        $usuario = Usuaris::find($id);
+
+        if ($usuario) {
             return response()->json([
                 'status' => 1,
-                'message' => 'Usuari desloguejat correctament'
+                'usuario' => $usuario
             ]);
-        } catch (\Exception $e) {
+        } else {
             return response()->json([
                 'status' => 0,
-                'message' => 'Error al desloguejar usuari'
+                'message' => 'No se encontró ningún usuario'
             ]);
         }
-    }
 
-    public function mostrarUsuarios()
-{
-    $usuarios = Usuaris::all();
+        $id = $request->input('id');
+        $nombre = $request->input('nombre');
 
-    return response()->json([
-        'status' => 1,
-        'usuarios' => $usuarios
-    ]);
-}
-
-public function mostrarUsuario(Request $request)
-{
-    $id = $request->input('id');
-    $nombre = $request->input('nombre');
-
-    $usuario = Usuaris::where('id', $id)
-        ->orWhere('nom', 'LIKE', '%' . $nombre . '%')
-        ->first();
+        $usuario = Usuaris::where('id', $id)
+            ->orWhere('nom', 'LIKE', '%' . $nombre . '%')
+            ->first();
 
     if ($usuario) {
         return response()->json([
@@ -149,5 +153,98 @@ public function mostrarUsuario(Request $request)
         ]);
     }
 }
+    public function comprovarCorreuUsuari(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255',
+        ]);
 
-}
+        $usuari = Usuaris::where('email', $request->email)->first();
+
+        if ($usuari) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'El correu ja es troba registrar'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Correo no encontrado'
+            ]);
+        }
+    }
+    public function editarUsuari(Request $request, $id)
+    {   
+        // Validación de los datos recibidos en la solicitud
+        $validator = Validator::make($request->all(), [
+            'nom' => 'sometimes|string|max:255',
+            'cognoms' => 'sometimes|string|max:255',
+            'data_naixement' => 'sometimes|date',
+            'genere' => 'sometimes|string',
+            'pes' => 'sometimes|numeric',
+            'altura' => 'sometimes|numeric',
+            'telefon' => 'sometimes|integer|digits:9',
+            'alergia_intolerancia' => 'sometimes|max:255',
+            'lesio' => 'sometimes|max:255',
+            'registre' => 'sometimes|boolean',
+        ]);
+    
+        // Si la validación falla, devuelve una respuesta con el error
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error en la validación: ' . $validator->errors()->first()
+            ]);
+        }
+    
+        // Busca el usuario por su ID
+        $usuari = Usuaris::find($id);
+    
+        // Si el usuario no existe, devuelve un error
+        if (!$usuari) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Usuario no encontrado'
+            ]);
+        }
+    
+        // Actualiza los campos del usuario con los datos recibidos en la solicitud
+        $usuari->fill($request->except('foto_perfil'));
+    
+        // Manejar la imagen de perfil
+        if ($request->has('foto_perfil_base64')) {
+            // Obtener el archivo base64 de la solicitud
+            $base64Image = $request->foto_perfil_base64;
+    
+            // Decodificar la cadena base64 en una imagen
+            $imageData = base64_decode($base64Image);
+    
+            // Obtener la lista de archivos en la carpeta de imágenes de perfil
+            $files = Storage::files('public/imagenes_perfil');
+    
+            // Contar el número de archivos en la carpeta de imágenes de perfil
+            $numFiles = count($files);
+    
+            // Usar el número de archivos más 1 en el nombre del próximo archivo
+            $imageName = 'perfil_' . ($numFiles + 1) . '.jpg'; // Puedes cambiar la extensión según el tipo de imagen
+            Storage::put('public/imagenes_perfil/' . $imageName, $imageData);
+    
+            // Actualizar el campo de la imagen de perfil en la base de datos
+            $usuari->foto_perfil = $imageName;
+        }
+    
+        // Guarda los cambios en la base de datos
+        $usuari->save();
+    
+        // Devuelve una respuesta con el mensaje de éxito
+        return response()->json([
+            'status' => 1,
+            'message' => 'Usuario actualizado correctamente',
+            'foto_perfil' => $usuari->foto_perfil,
+        ]);
+    }
+    
+
+    
+
+}    

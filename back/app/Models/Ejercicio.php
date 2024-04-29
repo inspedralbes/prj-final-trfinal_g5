@@ -5,24 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ejercicios extends Model
+class Ejercicio extends Model
 {
     use HasFactory;
 
-    /**
-     * Los atributos que se pueden asignar masivamente.
-     *
-     * @var array
-     */
+    protected $table = 'ejercicios';
+
     protected $fillable = [
         'id',
-        'nombre', 
-        'dificultad',
+        'nom', 
+        'dificultat',
+        'imatge',
+        'descripció',
         'idCategoria',
-        'imagen',
-        'descripcion'
+
     ];
-    
+    public function categoria()
+    {
+        return $this->belongsTo(CategoriaM::class, 'idCategoria');
+    }
     
     public $timestamps = false;
 }

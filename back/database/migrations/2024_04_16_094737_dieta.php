@@ -6,11 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::create('dietas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuari_id')->constrained('usuaris')->onDelete('cascade');
             $table->string('nom');
             $table->text('descripcio')->nullable();
             $table->date('data_inici');
@@ -21,13 +25,16 @@ return new class extends Migration
             $table->decimal('proteines', 10, 2)->nullable();
             $table->decimal('carbohidrats', 10, 2)->nullable();
             $table->decimal('grases', 10, 2)->nullable();
-        });
-    }
 
+        });    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
         Schema::dropIfExists('dietas');
     }
 };
-
-

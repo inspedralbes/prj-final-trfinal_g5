@@ -48,6 +48,16 @@ body {
     font-family: Arial, sans-serif;
     /* Establecer la fuente predeterminada */
 }
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
+
 
 .flex-container {
     display: flex;
@@ -56,6 +66,7 @@ body {
     min-height: 100%;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
+    position: relative;
 }
 
 

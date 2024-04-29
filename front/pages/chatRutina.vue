@@ -1,31 +1,41 @@
 <template>
+
   <body>
     <div>
       <div class="contenedor">
-        <div class="cabecera">Assessor de Rutina</div>
+        <div class="cabecera">Assessorament de Rutina</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-        <h2 class="mensaje-bienvenida">Sóc Arturo, el teu assessor esportiu, ¿en què puc ajudar-te?</h2>
-        <div class="chat">
-          <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-              <div class="info-usuario" v-if="message.role === 'user'">
-                <img src="" alt="Avatar usuario" class="avatar-usuario" />
-                <p class="nombre-usuario">{{ usuario }}</p>
-              </div>
-              <div class="contenido-mensaje">
-                <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                  class="avatar-asistente" />
-                <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+        <div class="mensaje-bienvenida">
+          <img src="../public/img/icono_Arturo.jpg" alt="">
+          <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
+        </div>
+
+
+        <div class="chat-container">
+          <div class="chat">
+            <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+              <div class="mensaje"
+                :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+                <div class="info-usuario" v-if="message.role === 'user'">
+                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                    class="avatar-usuario" />
+                  <p class="nombre-usuario">{{ nom_usuari }}</p>
+                </div>
+                <div class="contenido-mensaje">
+                  <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                    class="avatar-asistente" />
+                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+                </div>
               </div>
             </div>
+            <!-- Mostrar animación de carga si isLoading es true -->
+            <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
-          <!-- Mostrar animación de carga si isLoading es true -->
-          <div v-if="isLoading || isSending" class="animacion-carga"></div>
         </div>
         <!-- Movido el textarea y el botón al final del contenedor -->
         <div class="controles-inferiores">
           <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-            placeholder="Mensaje Arturo"></textarea>
+            placeholder="Escriu la teva consulta"></textarea>
           <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
         </div>
       </div>
@@ -35,6 +45,8 @@
 </template>
 
 <script>
+import { enviarMensajeOpenAIRutina } from '@/stores/communicationManager';
+import { useUsuariPerfilStore } from '@/stores/index';
 export default {
   data() {
     return {
@@ -52,6 +64,10 @@ export default {
           return;
         }
 
+        if (this.chatMessages.length === 0) {
+          document.querySelector('.mensaje-bienvenida').style.display = 'none';
+        }
+
         this.chatMessages.push({
           role: 'user',
           content: this.message,
@@ -60,56 +76,43 @@ export default {
         this.isLoading = true;
         this.isSending = true;
 
-        // URL de la API de OpenAI
-        const apiUrl = 'https://api.openai.com/v1/chat/completions';
+        const store = useUsuariPerfilStore();
+        const idUsuario = store.id_usuari;
 
-    // Tu clave API de OpenAI (mantenla segura y no la expongas en el frontend)
-    const apiKey = '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';
 
-    // Preparar el payload de la solicitud
-    const payload = {
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb el fitness ja que ets un expert en fitness només tens permès parlar de fer rutines. Si et demanen alguna cosa que no sigui una rutina digues el següent: En aquest apartat només puc donar consells de nutrició i generar rutines. Pots donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació.",
-        },
-        {
-          role: "user",
-          content: this.message,
-        },
-      ],
-    };
+        const daotsUsuario = await getDatosUsuario2(idUsuario);
+        const ejercicios = await getDatosEjercicio();
+        const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);
 
-        // Hacer la solicitud POST
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
+        console.log(generatedText);
+
+        const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
+
+        await enviarRutinaAlServidor(rutinaJSON); // Enviar el JSON al backend
+
+        // Construir el mensaje con la lista de días y ejercicios
+        let mensajeRutina = '\nAquí tens la teva rutina:\n'; // Comienza el mensaje con la introducción
+
+        rutinaJSON.dias.forEach((dia) => {
+          // Iterar sobre cada día de la rutina
+          mensajeRutina += `\nDía: ${dia.dia}\n`; // Agregar el número del día al mensaje
+
+          dia.exercicis.forEach((exercicio) => {
+            // Iterar sobre cada ejercicio del día
+            mensajeRutina += `\n- ${exercicio.nom_exercici}( series de ${exercicio.series} amb  ${exercicio.repeticions} repeticions) \n`;
+          });
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
-        const data = await response.json();
-
-        // Asumimos que la respuesta incluye el texto generado
-        const generatedText = data.choices[0].message.content;
-
-        // Agregar la respuesta al chat
         this.chatMessages.push({
           role: 'assistant',
-          content: generatedText,
+          content: mensajeRutina,
         });
 
-        this.message = ''; // Limpiar el input después de enviar
+
+        this.message = '';
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);
-        // Manejo específico para diferentes tipos de errores, como límites de tasa
         if (error.message.startsWith("HTTP error! status: 429")) {
           alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
         }
@@ -135,6 +138,14 @@ export default {
     // Recuperar el nombre de usuario del almacenamiento local
     this.usuario = localStorage.getItem('username');
   },
+  computed: {
+    nom_usuari() {
+      return useUsuariPerfilStore().nom_usuari;
+    },
+    foto_perfil() {
+      return useUsuariPerfilStore().foto_perfil;
+    },
+  },
 };
 </script>
 
@@ -149,7 +160,8 @@ body {
 body {
   font-family: Arial, sans-serif;
   /* Establecer la fuente predeterminada */
-  background-color: #f8a60e;
+  background: linear-gradient(to top right, #FFA500, #f45c36);
+
   /* Color de fondo */
   height: 100vh;
 }
@@ -165,17 +177,52 @@ body {
 .cabecera {
   background-color: #333;
   color: rgb(255, 255, 255);
-  padding: 20px 0;
+  padding: 10px 0;
   font-size: 24px;
   text-align: center;
   font-weight: bold;
-  width: 100%;
+  border-radius: 70px;
+  width: 95%;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .mensaje-bienvenida {
-  font-size: 18px;
+  display: grid;
+  grid-template-columns: .2fr 1fr;
+  margin-top: 50%;
+
+
+}
+
+.mensaje-bienvenida h2 {
+  font-size: 1.5em;
+  font-weight: 600;
   text-align: center;
-  margin-top: 20px;
+  padding: 15px;
+
+  background-color: #33333327;
+  font-style: italic;
+  /* Add this line to make the text italic */
+  width: 70%;
+  margin: auto;
+  border-radius: 10px;
+}
+
+.mensaje-bienvenida img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  margin-left: 45px;
+}
+
+.chat-container {
+  overflow-y: auto;
+  /* Hace que el contenido sea desplazable verticalmente si es necesario */
+  flex: 1;
+  /* Permite que el área del chat ocupe el espacio disponible */
+  width: 90%;
 }
 
 .chat {
@@ -183,13 +230,32 @@ body {
   flex-direction: column;
   margin-top: 20px;
   padding: 0 20px;
-  width: 100%;
+  width: 90%;
+}
+
+.chat img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+
+}
+
+.info-usuario {
+  display: grid;
+  grid-template-columns: .1fr 1fr;
+  align-items: center;
+}
+
+.info-usuario p {
+  font-style: italic;
 }
 
 .mensaje-usuario {
   background-color: #FFDAB9;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 25px;
+  border-top-right-radius: 0;
   align-self: flex-end;
   margin-bottom: 8px;
 }
@@ -199,9 +265,18 @@ body {
   align-items: flex-start;
   margin-bottom: 8px;
   padding: 10px;
-  border-radius: 10px;
-  background-color: #FFDAB9;
+  border-radius: 25px;
+  border-bottom-left-radius: 0;
+  background-color: #c7ab92;
   margin-right: 10%;
+}
+
+
+.avatar-usuario {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 .avatar-asistente {
@@ -214,8 +289,8 @@ body {
 
 .contenido-mensaje-asistente {
   max-width: 100%;
-  
 }
+
 .animacion-carga {
   width: 20px;
   height: 20px;
@@ -242,7 +317,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #33333356;
 }
 
 .entrada-mensaje {
@@ -283,4 +360,5 @@ navBar {
   /* Ocupa todo el ancho de la pantalla */
   z-index: 999;
   /* Asegura que esté por encima del contenido */
-}</style>
+}
+</style>
