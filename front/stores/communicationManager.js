@@ -1,4 +1,5 @@
-const url = 'http://localhost:8000/api';// const url = 'http://.daw.inspedralbes.cat/'; //producción
+// const url = 'http://localhost:8000/api';
+const url = 'fithub.daw.inspedralbes.cat/back/';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
 const apiKey = '1234567890';
 
