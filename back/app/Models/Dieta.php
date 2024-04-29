@@ -12,18 +12,20 @@ class Dieta extends Model
     protected $table = 'dietas';
 
     protected $fillable = [
-        'nom',
-        'descripcio',
+        'nom_plat',
         'data_inici',
         'data_fi',
-        'aliments_permesos',
-        'aliments_restringits',
-        'calories_diaries',
+        'calories',
         'proteines',
         'carbohidrats',
         'grases',
         
     ];
     public $timestamps = false;
+
+    public function aliments()
+    {
+        return $this->belongsTo(Aliments::class , 'nom_plat');
+    }
 }
 
