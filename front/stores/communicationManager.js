@@ -232,7 +232,8 @@ export async function enviarMensajeOpenAI(message) {
                     " Si et demanen una rutina o dieta vaig donar el següent: En aquest apartat només puc donar consells de nutricion i esportius si vols generar rutines veus a l'apartat de Rutines i si vols una dieta en l'apartat de Dietes."+
                     " Si pots donar consells i arguments però fes-ho de forma resumina en unes 2 línies tret que t'indiquin que volen mes informacion." +
                     " Agafa els aliments i tota l'informacio que troves en el json d'aliments per crear la dieta."+
-                    " Hauras de respondre sempre que facis la dieta amb un JSON, i l'estrucutra haura de ser aquesta: " +
+                    " Hauras de respondre sempre que facis la dieta amb un JSON, i l'estrucutra haura de ser aquesta: "+
+                    " {{nom_plat:'',apat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',greixos:'',caloreis:'',},{nom_plat:''...},...}" +
                     " Agafa les dades del usuari per fer rutines mes personalitzades sobretot tenin en compte el pes, altura, si te alguna alergia; i tambe agafa el id del usuari per posarlo a id_usuari.",
                 },
                 {
