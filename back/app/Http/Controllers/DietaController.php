@@ -9,4 +9,10 @@ use Illuminate\Support\Facades\Validator;
 
 class DietaController extends Controller
 {
+
+    public function getDietas(Request $request)
+    {
+        $dietas = Dieta::all();
+        return response()->json($dietas);
+    }
 }
