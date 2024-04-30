@@ -23,7 +23,7 @@ return new class extends Migration
             // $table->integer('unitat');
             $table->decimal('calories',10 ,2);
             $table->decimal('proteines',10 ,2);
-            $table->decimal('hidrats',10 ,2);
+            $table->decimal('carbohidrats',10 ,2);
             $table->decimal('greixos',10 ,2);
             $table->timestamps();
         });

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AlimentsTable extends Seeder
 {
@@ -683,10 +684,81 @@ class AlimentsTable extends Seeder
                 'carbohidrats' => 19.2,
                 'greixos' => 5.3,
                 'calories' => 190
-            ]
-              ];
+            ],
+            [
+                'nom_plat' => 'Entrecot a la planxa amb patates braves',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Entrecot', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Patata', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Salsa brava', 'quantitat' => 1, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 25.8,
+                'carbohidrats' => 17.4,
+                'greixos' => 28.5,
+                'calories' => 390
+            ],
+            [
+                'nom_plat' => 'Arros amb pollastre',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Arròs', 'quantitat' => 1, 'unitat' => 'tassa'],
+                    ['nom_ingredient' => 'Pollastre', 'quantitat' => 200, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Ceba', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Pastanaga', 'quantitat' => 1, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 22.6,
+                'carbohidrats' => 31.8,
+                'greixos' => 8.2,
+                'calories' => 320
+            ],
+            [
+                'nom_plat' => 'Amanida de tonyina i enciam',
+                'apat' => 'sopar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Tonyina', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Enciam', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Tomàquet', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Oli oliva', 'quantitat' => 1, 'unitat' => 'cullerada']
+                ]),
+                'proteines' => 30.2,
+                'carbohidrats' => 3.5,
+                'greixos' => 7.8,
+                'calories' => 215
+            ],
+            [
+                'nom_plat' => 'Peix a la planxa amb espàrrecs',
+                'apat' => 'sopar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Filet de peix blanc', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Espàrrecs', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Oli oliva', 'quantitat' => 1, 'unitat' => 'cullerada'],
+                    ['nom_ingredient' => 'Llimona', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Sal', 'quantitat' => 1, 'unitat' => 'pessic']
+                ]),
+                'proteines' => 25.9,
+                'carbohidrats' => 3.7,
+                'greixos' => 7.8,
+                'calories' => 220
+            ],
+            [
+                'nom_plat' => 'Pollastre a la planxa amb verdures al vapor',
+                'apat' => 'sopar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Pechuga de pollastre', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Bròquil', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Pastanaga', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Oli oliva', 'quantitat' => 1, 'unitat' => 'cullerada'],
+                    ['nom_ingredient' => 'Sal', 'quantitat' => 1, 'unitat' => 'pessic']
+                ]),
+                'proteines' => 27.4,
+                'carbohidrats' => 5.2,
+                'greixos' => 6.5,
+                'calories' => 240
+            ],
+        ];
         
-              DB::table('aliments')->insert($data);
+    DB::table('aliments')->insert($data);
           
     }
 }

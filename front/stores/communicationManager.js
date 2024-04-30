@@ -233,7 +233,9 @@ export async function enviarMensajeOpenAI(message) {
                     " Si pots donar consells i arguments però fes-ho de forma resumina en unes 2 línies tret que t'indiquin que volen mes informacion." +
                     " Agafa els aliments i tota l'informacio que troves en el json d'aliments per crear la dieta."+
                     " Hauras de respondre sempre que facis la dieta amb un JSON, i l'estrucutra haura de ser aquesta: "+
-                    " {{nom_plat:'',apat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',greixos:'',caloreis:'',},{nom_plat:''...},...}" +
+                    " {{nom_plat:'',apat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',caloreis:'',},{nom_plat:''...},...}" +
+                    " Fes 5 apats diaris a no ser que t'especifiquin que volen mes. Posa un minim de 3 plats per apat, pero que tingui que veure amb lo que demanen" +
+                    " Si et demanen definicio o perdre pes o definir, agafa plats que siguin per aixo, si volen volum, guanyar massa muscular o guanyar pes agafa els plats necessaris per allo. Si no especifiquen dieta neutral" +
                     " Agafa les dades del usuari per fer rutines mes personalitzades sobretot tenin en compte el pes, altura, si te alguna alergia; i tambe agafa el id del usuari per posarlo a id_usuari.",
                 },
                 {

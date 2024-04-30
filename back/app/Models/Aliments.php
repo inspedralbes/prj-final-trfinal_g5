@@ -20,7 +20,7 @@ class Aliments extends Model
         // 'unitat',
         'calories',
         'proteines',
-        'hidrats',
+        'carbohidrats',
         'greixos',
     ];
 }
