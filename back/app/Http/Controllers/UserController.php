@@ -179,11 +179,11 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'nom' => 'sometimes|string|max:255',
             'cognoms' => 'sometimes|string|max:255',
-            'data_naixement' => 'sometimes|date',
-            'genere' => 'sometimes|string',
-            'pes' => 'sometimes|numeric',
-            'altura' => 'sometimes|numeric',
-            'telefon' => 'sometimes|integer|digits:9',
+            'data_naixement' => 'sometimes',
+            'genere' => 'sometimes',
+            'pes' => 'sometimes',
+            'altura' => 'sometimes',
+            'telefon' => 'sometimes|digits:9',
             'alergia_intolerancia' => 'sometimes|max:255',
             'lesio' => 'sometimes|max:255',
             'registre' => 'sometimes|boolean',
@@ -235,6 +235,11 @@ class UserController extends Controller
         return response()->json([
             'status' => 1,
             'message' => 'Usuario actualizado correctamente',
+            'telefon' => $usuari->telefon,
+            'data_naixement' => $usuari->data_naixement,
+            'genere' => $usuari->genere,
+            'pes' => $usuari->pes,
+            'altura' => $usuari->altura,
             'foto_perfil' => $usuari->foto_perfil,
         ]);
     }
