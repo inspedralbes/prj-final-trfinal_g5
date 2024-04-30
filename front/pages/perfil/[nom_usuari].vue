@@ -32,13 +32,6 @@
                             <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
 
                         </div>
-
-                       
-                        <div class="input-container">
-                            <label>Pes:</label> <br>
-                            <input type="text" placeholder="Pes (kg)" v-model="usuario.pes" @input="validatePeso"
-                                maxlength="6">
-                        </div>
                         <div class="input-container">
                             <label>Gènere:</label>
                             <select v-model="usuario.genere">
