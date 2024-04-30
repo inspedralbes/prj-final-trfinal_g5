@@ -33,11 +33,7 @@
 
                         </div>
 
-                        <div class="input-container">
-                            <label>Altura:</label>
-                            <input type="text" placeholder="Altura (cm)" v-model="usuario.altura"
-                                @input="validateAltura" maxlength="4">
-                        </div>
+                       
                         <div class="input-container">
                             <label>Pes:</label> <br>
                             <input type="text" placeholder="Pes (kg)" v-model="usuario.pes" @input="validatePeso"
