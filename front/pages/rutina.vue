@@ -1,13 +1,20 @@
 <template>
-
     <body>
         <div class="flex-container">
             <capçalera />
             <div class="main-content">
                 <div class="exercise-list">
                     <h1>Rutina</h1>
-                    <button class="dieta-button" @click="incrementSelectedDay">-></button>
-
+                    <button class="dia-button" @click="incrementSelectedDay">-></button>
+                    <button class="dia-button" @click="decrementSelectedDay"><-</button>
+                    <div class="day-selector">
+                        <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
+                            <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
+                        </select>
+                    </div>
+                
+                    <h2>{{ 'Día ' + selectedDay }}</h2> <!-- Nuevo título con el día seleccionado -->
+                    
                     <div v-for="exercise in exercises" :key="exercise.id">
                         <h2>{{ exercise.nom_exercici }}</h2>
                         <div class="exercise-item">
@@ -37,7 +44,14 @@ export default {
             usuario: '',
             idUsuari: '',
             selectedDay: '1',
-            exercises: []
+            exercises: [],
+            dies: []
+        }
+    },
+    computed: {
+        availableDays() {
+            // Obtener una lista de días disponibles en la rutina actual
+            return [...new Set(this.exercises.map(exercise => exercise.dia))];
         }
     },
     mounted() {
@@ -46,6 +60,7 @@ export default {
         this.idUsuari = useUsuariPerfilStore().id_usuari;
         console.log(this.idUsuari);
         this.obtenirRutina(this.idUsuari);
+        this.obtenirDies(this.idUsuari);
     },
     methods: {
         redirectTo(page) {
@@ -62,6 +77,17 @@ export default {
                     console.error(error);
                 });
         },
+        obtenirDies(idUsuari) {
+            getRutina(idUsuari)
+                .then((response) => {
+                    //console.log(response);
+                    this.dies = [...new Set(response.map(exercise => exercise.dia))];
+                    console.log(this.dies);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
         incrementSelectedDay() {
             // Sumar 1 al día seleccionado
             if (this.selectedDay < '5') {
@@ -73,13 +99,22 @@ export default {
                 this.obtenirRutina(this.idUsuari);
             }
 
-        }
+        },
+
+        decrementSelectedDay() {
+            // Restar 1 al día seleccionado
+            if (this.selectedDay > '1') {
+                this.selectedDay = String(parseInt(this.selectedDay) - 1);
+                // Volver a obtener la rutina para mostrar los ejercicios del nuevo día seleccionado
+                this.obtenirRutina(this.idUsuari);
+            } else{
+                this.selectedDay = '5';
+                this.obtenirRutina(this.idUsuari);
+            }
+        }   
     }
 }
 </script>
-
-
-
 
 <style scoped>
 /* Estilos de los divs en el componente */
@@ -178,11 +213,36 @@ body {
     background-color: #666;
 }
 
+.dia-button{
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-position: center;
+    font-size: 30px;
+    color: #000;
+    background-color: #666;
+
+}
+
 navBar {
     position: fixed;
     bottom: 0;
     width: 100%;
     z-index: 1;
+}
+
+.day-selector select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
 }
 
 /* Media query para pantallas más pequeñas */
