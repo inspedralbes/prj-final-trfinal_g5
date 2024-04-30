@@ -1,6 +1,6 @@
 const url = 'http://localhost:8000/api';// const url = 'http://.daw.inspedralbes.cat/'; //producción
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '1234567890';
+const apiKey = '123456789';
 
 
 //ejemplo de peticion fetch get
@@ -48,6 +48,19 @@ export async function getDatosEjercicio() {
         
         const data = await response.json();
         return data; // Devuelve los datos del ejercicio en JSON
+    } catch (error) {
+        throw new Error('Error de red al obtener los datos del ejercicio: ' + error.message);
+    }
+}
+
+export async function getRutina(idUsuario) {
+    try{
+        const response = await fetch(`${url}/rutina/${idUsuario}`);
+        if(!response.ok){
+            throw new Error('Error al obtener los datos del ejercicio: ' + response.statusText);
+        }
+        const data = await response.json();
+        return data;
     } catch (error) {
         throw new Error('Error de red al obtener los datos del ejercicio: ' + error.message);
     }

@@ -1,16 +1,22 @@
 <template>
+
     <body>
         <div class="flex-container">
             <capçalera />
             <div class="main-content">
                 <div class="exercise-list">
-                    <h1>Dia de pecho</h1>
-                    <div v-for="exercise in selectedDayExercises" :key="exercise.id" class="exercise-item">
-                        <img :src="exercise.image" :alt="exercise.name" class="exercise-image" />
-                        <div class="exercise-details">
-                            <h2 class="exercise-name">{{ exercise.name }}</h2>
-                            <p class="exercise-info">Series: {{ exercise.series }}</p>
-                            <p class="exercise-info">Repeticiones: {{ exercise.reps }}</p>
+                    <h1>Rutina</h1>
+                    <button class="dieta-button" @click="incrementSelectedDay">-></button>
+
+                    <div v-for="exercise in exercises" :key="exercise.id">
+                        <h2>{{ exercise.nom_exercici }}</h2>
+                        <div class="exercise-item">
+                            <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
+                            <div class="exercise-details">
+                                <p class="exercise-info">Día: {{ exercise.dia }}</p>
+                                <p class="exercise-info">Series: {{ exercise.series }}</p>
+                                <p class="exercise-info">Repeticiones: {{ exercise.repeticions }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -22,48 +28,58 @@
 </template>
 
 <script>
+import { useUsuariPerfilStore } from '@/stores/index';
+import { getRutina } from '@/stores/communicationManager';
+
 export default {
     data() {
         return {
             usuario: '',
-            selectedDay: 'pecho', // Aquí puedes establecer el día inicial seleccionado
-            exercises: {
-                pecho: [
-                    { id: 1, name: 'Press de banca', series: 4, reps: 10, image: '/rutina/press_banca.jpg' },
-                    { id: 1, name: 'Press inclinado', series: 4, reps: 10, image: '/rutina/press_inclinado.jpg' },
-                    { id: 1, name: 'Peck Deck', series: 4, reps: 10, image: '/rutina/peck_deck.jpg' },
-                    { id: 2, name: 'Fondos en paralelas', series: 3, reps: 12, image: '/rutina/fondos_paralelas.jpg' },
-                    { id: 1, name: 'Hex press', series: 4, reps: 12, image: '/rutina/hex_press.jpg' },
-                    { id: 2, name: 'Pull-over', series: 3, reps: 15, image: '/rutina/pull_over.jpg' },
-                    // Añade más ejercicios de pecho si es necesario
-                ],
-                espalda: [
-                    { id: 1, name: 'Dominadas', series: 4, reps: 8, rest: '90s', image: '../public/dominadas.jpg' },
-                    { id: 2, name: 'Remo con barra', series: 3, reps: 10, rest: '60s', image: '../public/remo_barra.jpg' },
-                    // Añade más ejercicios de espalda si es necesario
-                ],
-                // Añade más días y ejercicios según sea necesario
-            }
+            idUsuari: '',
+            selectedDay: '1',
+            exercises: []
         }
     },
     mounted() {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
         this.usuario = localStorage.getItem('username');
-
-
-    },
-    computed: {
-        selectedDayExercises() {
-            return this.exercises[this.selectedDay] || [];
-        }
+        this.idUsuari = useUsuariPerfilStore().id_usuari;
+        console.log(this.idUsuari);
+        this.obtenirRutina(this.idUsuari);
     },
     methods: {
         redirectTo(page) {
             this.$router.push(page);
+        },
+        obtenirRutina(idUsuari) {
+            getRutina(idUsuari)
+                .then((response) => {
+                    console.log(response);
+                    // Filtrar los ejercicios para mostrar solo los del día seleccionado
+                    this.exercises = response.filter(exercise => exercise.dia === this.selectedDay);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+        incrementSelectedDay() {
+            // Sumar 1 al día seleccionado
+            if (this.selectedDay < '5') {
+                this.selectedDay = String(parseInt(this.selectedDay) + 1);
+                // Volver a obtener la rutina para mostrar los ejercicios del nuevo día seleccionado
+                this.obtenirRutina(this.idUsuari);
+            } else{
+                this.selectedDay = '1';
+                this.obtenirRutina(this.idUsuari);
+            }
+
         }
     }
 }
 </script>
+
+
+
 
 <style scoped>
 /* Estilos de los divs en el componente */
@@ -104,11 +120,12 @@ body {
 }
 
 .exercise-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 20px;
     padding: 20px;
+    margin: auto;
+    text-align: center;
 }
 
 .exercise-item {
@@ -121,6 +138,7 @@ body {
     width: calc(50% - 20px);
     /* Ajuste para dos columnas */
     box-sizing: border-box;
+    margin: auto;
 }
 
 .exercise-image {
@@ -132,12 +150,6 @@ body {
 
 .exercise-details {
     text-align: center;
-}
-
-.exercise-name {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
 }
 
 .exercise-info {
@@ -181,4 +193,3 @@ navBar {
     }
 }
 </style>
-
