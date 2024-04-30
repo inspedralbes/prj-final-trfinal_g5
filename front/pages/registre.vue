@@ -17,10 +17,6 @@
             <div v-if="currentQuestionIndex === registrationQuestions.length" class="loading">
                 <img src="../public/dumbbell_white.png" alt="" class="loading-image">
             </div>
-            <div v-if="checkingEmail" class="loading">
-                <img src="../public/dumbbell_white.png" alt="" class="loading-image">
-            </div>
-
             <div v-if="currentQuestionIndex < registrationQuestions.length" class="question-container fade-in">
                 <div v-if="currentQuestionIndex <= registrationQuestions.length" class="question-counter">
                     {{ currentQuestionIndex + 1 }} / {{ totalQuestions }}
@@ -66,7 +62,7 @@
                     class="error-message">{{ dateErrorMessage }}</div>
 
                 <div class="buttons fade-in">
-                    <button @click="seguentPregunta">Seguent</button>
+                    <button @click="seguentPregunta" :disabled="checkingEmail">Següent</button>
                     <button v-if="!registrationQuestions[currentQuestionIndex].required"
                         @click="saltarPregunta">Saltar</button>
                 </div>
@@ -214,7 +210,7 @@ export default {
                     // Mostrar mensaje de error si el correo electrónico no es válido
                     return;
                 } else {
-                    // Realizar la verificación del correo electrónico
+                    this.checkingEmail = true;                    
                     const response = await fetch('http://localhost:8000/api/comprovaremail', {
                         method: 'POST',
                         headers: {
