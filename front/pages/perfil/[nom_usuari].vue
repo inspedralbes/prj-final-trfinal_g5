@@ -43,11 +43,11 @@
 
                         <div class="input-container">
                             <label>Altura:</label><br>
-                            <input type="number" v-model="usuario.altura"placeholder="Altura (cm)">
+                            <input type="number" v-model="usuario.altura"placeholder="Altura (cm)"maxlength="4">
                         </div>
                         <div class="input-container">
                             <label>Pes:</label><br>
-                            <input type="decimal" v-model="usuario.pes" placeholder="Pes (kg)">
+                            <input type="decimal" v-model="usuario.pes" placeholder="Pes (kg)"maxlength="6">
                         </div>
 
                         <div class="input-container">
