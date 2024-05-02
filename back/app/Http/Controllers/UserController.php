@@ -188,7 +188,7 @@ class UserController extends Controller
             'genere' => 'sometimes',
             'pes' => 'sometimes',
             'altura' => 'sometimes',
-            'telefon' => 'sometimes|digits:9',
+            'telefon' => 'sometimes|max:9|min:0',
             'alergia_intolerancia' => 'sometimes|max:255',
             'lesio' => 'sometimes|max:255',
             'registre' => 'sometimes|boolean',

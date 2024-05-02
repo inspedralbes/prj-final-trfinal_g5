@@ -207,11 +207,15 @@ export default {
         enviarDatos(data) {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
-            console.log('Datos a enviar:', data);
             actualizarDatosUsuario(idUsuario, data) // Llama a la función actualizarDatosUsuario con los datos y el idUsuario
                 .then(data => {
                     console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
+
+
+                    const nullFields = Object.values(data).some(value => value === null);
+                    useUsuariPerfilStore().registre = !nullFields;
+
                     // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
                     if (this.usuario.nom) {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
