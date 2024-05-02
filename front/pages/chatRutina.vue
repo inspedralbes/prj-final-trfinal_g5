@@ -22,7 +22,7 @@
                   <p class="nombre-usuario">{{ nom_usuari }}</p>
                 </div>
                 <div class="contenido-mensaje">
-                  <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                  <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
                     class="avatar-asistente" />
                   <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
                 </div>
@@ -59,18 +59,18 @@ export default {
   },
   methods: {
     async enviarMensaje() {
-      try {
+    try {
         if (!this.message.trim()) {
-          return;
+            return;
         }
 
         if (this.chatMessages.length === 0) {
-          document.querySelector('.mensaje-bienvenida').style.display = 'none';
+            document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
 
         this.chatMessages.push({
-          role: 'user',
-          content: this.message,
+            role: 'user',
+            content: this.message,
         });
 
         this.isLoading = true;
@@ -79,48 +79,62 @@ export default {
         const store = useUsuariPerfilStore();
         const idUsuario = store.id_usuari;
 
-
         const daotsUsuario = await getDatosUsuario2(idUsuario);
         const ejercicios = await getDatosEjercicio();
         const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);
 
-        console.log(generatedText);
+        console.log(generatedText); // Imprime la respuesta en la consola para depurar
 
-        const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
+        let responseContent;
+        try {
+            // Intenta analizar la respuesta como JSON
+            responseContent = JSON.parse(generatedText);
+        } catch (error) {
+            // Si la respuesta no es un JSON válido, trata la respuesta como texto sin procesar
+            responseContent = generatedText;
+        }
 
-        await enviarRutinaAlServidor(rutinaJSON); // Enviar el JSON al backend
+        if (typeof responseContent === 'object') {
+            // Si la respuesta es un objeto (JSON válido), procesa la rutina y envíala al servidor
+            await enviarRutinaAlServidor(responseContent);
 
-        // Construir el mensaje con la lista de días y ejercicios
-        let mensajeRutina = '\nAquí tens la teva rutina:\n'; // Comienza el mensaje con la introducción
+            // Construir el mensaje con la lista de días y ejercicios
+            let mensajeRutina = '\nAquí tens la teva rutina:\n'; // Comienza el mensaje con la introducción
 
-        rutinaJSON.dias.forEach((dia) => {
-          // Iterar sobre cada día de la rutina
-          mensajeRutina += `\nDía: ${dia.dia}\n`; // Agregar el número del día al mensaje
+            responseContent.dias.forEach((dia) => {
+                // Iterar sobre cada día de la rutina
+                mensajeRutina += `\nDía: ${dia.dia}\n`; // Agregar el número del día al mensaje
 
-          dia.exercicis.forEach((exercicio) => {
-            // Iterar sobre cada ejercicio del día
-            mensajeRutina += `\n- ${exercicio.nom_exercici}( series de ${exercicio.series} amb  ${exercicio.repeticions} repeticions) \n`;
-          });
-        });
+                dia.exercicis.forEach((exercicio) => {
+                    // Iterar sobre cada ejercicio del día
+                    mensajeRutina += `\n- ${exercicio.nom_exercici}( series de ${exercicio.series} amb  ${exercicio.repeticions} repeticions) \n`;
+                });
+            });
 
-
-        this.chatMessages.push({
-          role: 'assistant',
-          content: mensajeRutina,
-        });
-
+            this.chatMessages.push({
+                role: 'assistant',
+                content: mensajeRutina,
+            });
+        } else {
+            // Si la respuesta no es un objeto (texto sin procesar), agrega el mensaje tal cual
+            this.chatMessages.push({
+                role: 'assistant',
+                content: responseContent,
+            });
+        }
 
         this.message = '';
-      } catch (error) {
+    } catch (error) {
         console.error('Error al enviar el mensaje:', error);
         if (error.message.startsWith("HTTP error! status: 429")) {
-          alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
+            alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
         }
-      } finally {
+    } finally {
         this.isLoading = false;
         this.isSending = false;
-      }
-    },
+    }
+}
+,
     async enviarMensajeOnEnter(event) {
       if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault(); // Evitar el salto de línea
