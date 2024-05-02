@@ -210,7 +210,7 @@ export default {
                     // Mostrar mensaje de error si el correo electrónico no es válido
                     return;
                 } else {
-                    this.checkingEmail = true;                    
+                    this.checkingEmail = true;
                     const response = await fetch('http://localhost:8000/api/comprovaremail', {
                         method: 'POST',
                         headers: {
@@ -435,20 +435,26 @@ export default {
                 // Convertir la respuesta a formato JSON
                 const userDataResponse = await response.json();
 
-                console.log(userDataResponse)
+                console.log(userDataResponse);
 
+                // Verificar si alguno de los campos devueltos es null
+                const nullFields = Object.values(userDataResponse).some(value => value === null);
+
+                // Actualizar el estado 'registre' en la tienda Pinia
+                useUsuariPerfilStore().registre = !nullFields;
+
+                // Actualizar otros estados de la tienda Pinia si es necesario
                 useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
                 useUsuariPerfilStore().email_usuari = filteredUserData.email;
                 useUsuariPerfilStore().loguejat = true;
                 useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
                 useUsuariPerfilStore().foto_perfil = "usuario.png";
 
-
+                // Redirigir a la página de inicio después del registro
                 this.$router.push('/home');
             }
-
-
         }
+
     }
 
 };
