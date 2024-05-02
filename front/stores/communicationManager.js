@@ -1,7 +1,7 @@
 const url = 'http://localhost:8000/api';
 //const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '1234567890';
+const apiKey = '0123456789';
 
 
 //ejemplo de peticion fetch get
@@ -221,7 +221,7 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
 
 
 
-export async function enviarMensajeOpenAI(message) {
+export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) {
     try {
         const payload = {
             model: 'gpt-3.5-turbo',
@@ -229,14 +229,15 @@ export async function enviarMensajeOpenAI(message) {
                 {
                     role: 'system',
                     content: "Ets una persona que només parla en catalan i tens prohibit parlar d'alguna cosa que no tingui relacion amb fitnes i nutricion ja que ets un expert en nutricion i fitnes però tens molt prohibit fer rutines i dietes."+
-                    " Si et demanen una rutina o dieta vaig donar el següent: En aquest apartat només puc donar consells de nutricion i esportius si vols generar rutines veus a l'apartat de Rutines i si vols una dieta en l'apartat de Dietes."+
-                    " Si pots donar consells i arguments però fes-ho de forma resumina en unes 2 línies tret que t'indiquin que volen mes informacion." +
+                    " Si et demanen una rutin digues el següent: En aquest apartat només puc donar consells de nutricion i esportius si vols generar rutines veus a l'apartat de Rutines i si vols una dieta en l'apartat de Dietes."+
+                    // " Si pots donar consells i arguments però fes-ho de forma resumina en unes 2 línies tret que t'indiquin que volen mes informacion." +
                     " Agafa els aliments i tota l'informacio que troves en el json d'aliments per crear la dieta."+
-                    " Hauras de respondre sempre que facis la dieta amb un JSON, i l'estrucutra haura de ser aquesta: "+
-                    " {{nom_plat:'',apat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',caloreis:'',},{nom_plat:''...},...}" +
-                    " Fes 5 apats diaris a no ser que t'especifiquin que volen mes. Posa un minim de 3 plats per apat, pero que tingui que veure amb lo que demanen" +
-                    " Si et demanen definicio o perdre pes o definir, agafa plats que siguin per aixo, si volen volum, guanyar massa muscular o guanyar pes agafa els plats necessaris per allo. Si no especifiquen dieta neutral" +
-                    " Agafa les dades del usuari per fer rutines mes personalitzades sobretot tenin en compte el pes, altura, si te alguna alergia; i tambe agafa el id del usuari per posarlo a id_usuari.",
+                    " Nomes pots respondre amb format JSON i seguint aquesta estructura:"+
+                    " {id_usuari:{nom_plat:'Macedònia de fruites',apat:'esmorzar',ingredients:[nom_ingredient:'Maduixes',quantitat:'50',unitat:'grams'],proteines:'2.50',carbohidrats:'27.90',greixos:'0.70',caloreis:'127.00',},{nom_plat:'',apat:'segon_esmorzar',...},{nom_plat:'',...},...}" +
+                    " Fes 5 apats diaris. I per cada apat posa un minim de 3 plats per apat" +
+                    " Si et demanen definicio o perdre pes o definir, agafa plats que siguin per aixo; si volen volum, guanyar massa muscular o guanyar pes agafa els plats necessaris per allo. Si no especifiquen dieta neutral" +
+                    " Agafa les dades del usuari per fer dietes mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari." +
+                    " QUIERO 5 COMDIAS DIARIAS DE MI BASE DE DATOS Y CADA COMIDA QUIERO QUE PONGAS 3 PLATOS DE MI BASE DE DATOS Y EL ID DE USUARIO SOLO LO QUIERO 1 VEZ Y EL QUE COJES DEL DATOS USUARIO",
                 },
                 {
                     role: 'user',
@@ -244,7 +245,7 @@ export async function enviarMensajeOpenAI(message) {
                 },
                 {
                     role: 'system',
-                    content: JSON.stringify(daotsUsuario)
+                    content: JSON.stringify(datosUsuario)
                 },
                 {
                     role: 'system',
@@ -280,7 +281,7 @@ export async function enviarMensajeOpenAI(message) {
 }
 
 
-export async function enviarMensajeOpenAIDieta(message) {
+export async function enviarMensajeOpenAI(message) {
     try {
         const payload = {
             model: 'gpt-3.5-turbo',

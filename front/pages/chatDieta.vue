@@ -78,15 +78,15 @@ export default {
         this.isLoading = true;
         this.isSending = true;
 
-        const daotsUsuario = await getDatosUsuario2(idUsuario);
+        const datosUsuario = await getDatosUsuario2(idUsuario);
         const aliments = await getDatosAliments();
-        const generatedText = await enviarMensajeOpenAIDieta(this.message, daotsUsuario, aliments);
+        const generatedText = await enviarMensajeOpenAIDieta(this.message, datosUsuario, aliments);
 
         console.log(generatedText);
 
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
-        await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
+        //await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
         this.chatMessages.push({
           role: 'assistant',
