@@ -68,9 +68,15 @@ class RutinaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getRutina($id_usuari)
     {
-        //
+        $rutina = Rutina::where('id_usuari', $id_usuari)->get();
+
+        if (!$rutina) {
+            return response()->json(['error' => 'Rutina not found'], 404);
+        }
+
+        return response()->json($rutina, 200);
     }
 
     /**
