@@ -33,7 +33,7 @@
 
                         </div>
                         <div class="input-container">
-                            <label>Gènere:</label>
+                            <label>Gènere:</label><br>
                             <select v-model="usuario.genere">
                                 <option value="Home">Home</option>
                                 <option value="Dona">Dona</option>
@@ -60,11 +60,6 @@
                             <label>Lesió:</label>
                             <textarea placeholder="Introdueix la teva lesió (opcional)" v-model="usuario.lesio"
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
-                        </div>
-
-                        <div class="input-container">
-                            <label>Foto de Perfil:</label>
-                            <input type="file" name="foto_perfil" @change="onFileChange" accept="image/*">
                         </div>
                     </div>
 
@@ -426,6 +421,7 @@ textarea{
     background-color: #333;
     border-radius: 50px;
     margin: auto;
+    margin-top: 20px;
 }
 
 form {

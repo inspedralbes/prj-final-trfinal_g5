@@ -10,6 +10,9 @@
             <div v-if="!registre" class="alert-sign">
                 !
             </div>
+            <div class="editar-sign">
+               <img src="../public/editar.png">
+                </div>
         </div>
     </div>
 </template>
@@ -160,7 +163,16 @@ export default {
     font-size: 1.2rem;
     font-weight: bolder;
 }
-
+.editar-sign {
+    width: 30px;
+    height: 30px;
+    background-color: #e3e3e3;
+    border-radius: 50%;
+}
+.editar-sign img {
+   width: 20px;
+   height: 20px;
+}
 h1 {
     padding: 20px;
     font-size: 1.1rem;
