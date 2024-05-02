@@ -19,7 +19,7 @@
                   <p class="nombre-usuario">{{ nom_usuari }}</p>
                 </div>
                 <div class="contenido-mensaje">
-                  <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                  <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
                     class="avatar-asistente" />
                   <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
                 </div>
@@ -86,7 +86,7 @@ export default {
 
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
-        //await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
+        await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
         this.chatMessages.push({
           role: 'assistant',

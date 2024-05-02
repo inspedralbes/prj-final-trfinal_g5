@@ -1,7 +1,7 @@
 const url = 'http://localhost:8000/api';
 //const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '0123456789';
+const apiKey = '1234567890';
 
 
 //ejemplo de peticion fetch get
@@ -230,14 +230,16 @@ export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) 
                     role: 'system',
                     content: "Ets una persona que només parla en catalan i tens prohibit parlar d'alguna cosa que no tingui relacion amb fitnes i nutricion ja que ets un expert en nutricion i fitnes però tens molt prohibit fer rutines i dietes."+
                     " Si et demanen una rutin digues el següent: En aquest apartat només puc donar consells de nutricion i esportius si vols generar rutines veus a l'apartat de Rutines i si vols una dieta en l'apartat de Dietes."+
-                    // " Si pots donar consells i arguments però fes-ho de forma resumina en unes 2 línies tret que t'indiquin que volen mes informacion." +
-                    " Agafa els aliments i tota l'informacio que troves en el json d'aliments per crear la dieta."+
-                    " Nomes pots respondre amb format JSON i seguint aquesta estructura:"+
-                    " {id_usuari:{nom_plat:'Macedònia de fruites',apat:'esmorzar',ingredients:[nom_ingredient:'Maduixes',quantitat:'50',unitat:'grams'],proteines:'2.50',carbohidrats:'27.90',greixos:'0.70',caloreis:'127.00',},{nom_plat:'',apat:'segon_esmorzar',...},{nom_plat:'',...},...}" +
-                    " Fes 5 apats diaris. I per cada apat posa un minim de 3 plats per apat" +
-                    " Si et demanen definicio o perdre pes o definir, agafa plats que siguin per aixo; si volen volum, guanyar massa muscular o guanyar pes agafa els plats necessaris per allo. Si no especifiquen dieta neutral" +
-                    " Agafa les dades del usuari per fer dietes mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari." +
-                    " QUIERO 5 COMDIAS DIARIAS DE MI BASE DE DATOS Y CADA COMIDA QUIERO QUE PONGAS 3 PLATOS DE MI BASE DE DATOS Y EL ID DE USUARIO SOLO LO QUIERO 1 VEZ Y EL QUE COJES DEL DATOS USUARIO",
+                    " Si pots donar consells i arguments però fes-ho de forma resumina en unes 2 línies tret que t'indiquin que volen mes informacion." +
+                    " Coge los alimentos y toda la información que encuentras en el json de alimentos para crear la dieta."+
+                    " Solo puedes responder con formato JSON y siguiendo esta estructura:"+
+                    " {id_usuari:'',plats:[nom_plat:'Macedònia de fruites',apat:'esmorzar',ingredients:[nom_ingredient:'Maduixes',quantitat:'50',unitat:'grams'],proteines:'2.50',carbohidrats:'27.90',greixos:'0.70',caloreis:'127.00',],[nom_plat:'',apat:'segon_esmorzar',...],[nom_plat:'',...],...}" +
+                    " Si te piden definicion o perder peso o definir, coge platos que sean por ello; si quieren volumen, ganar demasiado muscular o ganar peso coge los platos necesarios para ello. Si no especifican dieta neutral" +
+                    " Coge los datos del usuario para hacer dietas más personalizadas y también coge el id del usuario para ponerlo a id_usuario." +
+                    " QUIERO 5 COMDIAS DIARIAS Y DE CADA COMIDA QUIERO QUE ME PONGAS 3. TAMBIEN EL ID DE USUARIO QUE SOLO LO QUIERO 1 VEZ Y QUE LO COJAS DE LOS DATOS USUARIO" +
+                    " ME PUEDES HACER MAS COMIDAS QUE NO SOLO SEAN 'ESMORZAR', PONME MAS COMIDAS COMO 'SEGON ESMORZAR', 'DINAR', 'BERENAR' y 'SOPAR'." + 
+                    " PONME 3 PLATOS POR CADA COMIDA ASII: 3 PLATOS DE 'esmorzar', 3 DE 'segon esmorzar', 3 DE 'dinar', 3 DE 'berenar' I 3 DE 'sopar'; Y QUE SEAN DIFERENTES Y QUE NO SE REPITAN EN LA DIETA." +
+                    " NO ME PONGAS TANTOS PLATOS DE ESMORZAR, PON MAXIMO 3 MAS DE OTRAS COMIDAS",
                 },
                 {
                     role: 'user',

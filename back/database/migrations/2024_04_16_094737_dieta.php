@@ -15,13 +15,15 @@ return new class extends Migration
     {
         Schema::create('dietas', function (Blueprint $table) {
             $table->id();
-            $table->string('nom_plat')->constrained('aliments')->onDelete('cascade');;
-            $table->text('descripcio')->nullable();
+            $table->foreignId('id_usuari');
+            $table->string('nom_plat')->constrained('aliments')->onDelete('cascade');
             $table->date('data_inici');
             $table->date('data_fi')->nullable();
-            $table->text('aliments_permesos')->nullable();
-            $table->text('aliments_restringits')->nullable();
-            $table->integer('calories_diaries')->nullable();
+            // $table->text('aliments_permesos')->nullable();
+            // $table->text('aliments_restringits')->nullable();
+            $table->string('apat')->nullable();
+            $table->json('ingredients')->nullable();
+            $table->integer('calories')->nullable();
             $table->decimal('proteines', 10, 2)->nullable();
             $table->decimal('carbohidrats', 10, 2)->nullable();
             $table->decimal('grases', 10, 2)->nullable();
