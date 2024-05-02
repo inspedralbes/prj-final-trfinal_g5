@@ -42,12 +42,12 @@
                         </div>
 
                         <div class="input-container">
-                            <label>Altura (cm):</label><br>
-                            <input type="number" v-model="usuario.altura">
+                            <label>Altura:</label><br>
+                            <input type="number" v-model="usuario.altura"placeholder="Altura (cm)">
                         </div>
                         <div class="input-container">
-                            <label>Pes (kg):</label><br>
-                            <input type="decimal" v-model="usuario.pes">
+                            <label>Pes:</label><br>
+                            <input type="decimal" v-model="usuario.pes" placeholder="Pes (kg)">
                         </div>
 
                         <div class="input-container">

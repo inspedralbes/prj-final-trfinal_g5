@@ -66,6 +66,11 @@ class UserController extends Controller
                 'status' => 1,
                 'message' => 'Usuari creat correctament',
                 'idUsuario' => $idUsuario,
+                'telefon' => $usuari->telefon,
+                'data_naixement' => $usuari->data_naixement,
+                'genere' => $usuari->genere,
+                'pes' => $usuari->pes,
+                'altura' => $usuari->altura,
             ]);
         } catch (ValidationException $e) {
             // Captura las excepciones de validación y obtén los mensajes de error
