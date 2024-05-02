@@ -11,8 +11,8 @@
                 !
             </div>
             <div class="editar-sign">
-               <img src="../public/editar.png">
-                </div>
+                <img src="../public/editar.png">
+            </div>
         </div>
     </div>
 </template>
@@ -50,6 +50,12 @@ export default {
             const file = event.target.files[0]; // Obtener el archivo del evento
 
             if (file) {
+                // Verificar si el archivo es una imagen
+                if (!file.type.startsWith('image/')) {
+                    console.error('El archivo seleccionado no es una imagen.');
+                    return; // Salir del método si el archivo no es una imagen
+                }
+
                 // Asignar directamente el archivo seleccionado a this.usuario.foto_perfil
                 this.usuario.foto_perfil = file;
 
@@ -62,6 +68,7 @@ export default {
                 console.error('No se seleccionó ningún archivo.');
             }
         },
+
         guardarDatosUsuario() {
             // Verificar si ya se está guardando para evitar múltiples envíos
             if (this.isSaving) return;
@@ -163,16 +170,19 @@ export default {
     font-size: 1.2rem;
     font-weight: bolder;
 }
+
 .editar-sign {
     width: 30px;
     height: 30px;
     background-color: #e3e3e3;
     border-radius: 50%;
 }
+
 .editar-sign img {
-   width: 20px;
-   height: 20px;
+    width: 20px;
+    height: 20px;
 }
+
 h1 {
     padding: 20px;
     font-size: 1.1rem;
