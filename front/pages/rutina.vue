@@ -1,28 +1,39 @@
 <template>
+
     <body>
         <div class="flex-container">
             <capçalera />
             <div class="main-content">
                 <div class="exercise-list">
-                    <h1>Rutina</h1>
-                    <button class="dia-button" @click="incrementSelectedDay">-></button>
-                    <button class="dia-button" @click="decrementSelectedDay"><-</button>
-                    <div class="day-selector">
-                        <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
-                            <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
-                        </select>
-                    </div>
-                
-                    <h2>{{ 'Día ' + selectedDay }}</h2> <!-- Nuevo título con el día seleccionado -->
                     
+                    <h1>Rutina</h1>
+
+                    <div class="botons-superior">
+                        <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
+
+                                <div class="day-selector">
+                                    
+                                    <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
+                                        <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
+                                    </select>
+                                </div>
+                                    <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
+                                
+
+                    </div>
+
+
+
                     <div v-for="exercise in exercises" :key="exercise.id">
-                        <h2>{{ exercise.nom_exercici }}</h2>
                         <div class="exercise-item">
                             <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
+
+                            <h2>{{ exercise.nom_exercici }}</h2>
+
                             <div class="exercise-details">
-                                <p class="exercise-info">Día: {{ exercise.dia }}</p>
-                                <p class="exercise-info">Series: {{ exercise.series }}</p>
-                                <p class="exercise-info">Repeticiones: {{ exercise.repeticions }}</p>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" /> Día: {{ exercise.dia }} <br> <br>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br> <br>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones: {{ exercise.repeticions }}
                             </div>
                         </div>
                     </div>
@@ -37,6 +48,9 @@
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
 import { getRutina } from '@/stores/communicationManager';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faCircle, faAddressBook } from '@fortawesome/free-solid-svg-icons'
+
 
 export default {
     data() {
@@ -94,7 +108,7 @@ export default {
                 this.selectedDay = String(parseInt(this.selectedDay) + 1);
                 // Volver a obtener la rutina para mostrar los ejercicios del nuevo día seleccionado
                 this.obtenirRutina(this.idUsuari);
-            } else{
+            } else {
                 this.selectedDay = '1';
                 this.obtenirRutina(this.idUsuari);
             }
@@ -107,11 +121,11 @@ export default {
                 this.selectedDay = String(parseInt(this.selectedDay) - 1);
                 // Volver a obtener la rutina para mostrar los ejercicios del nuevo día seleccionado
                 this.obtenirRutina(this.idUsuari);
-            } else{
+            } else {
                 this.selectedDay = '5';
                 this.obtenirRutina(this.idUsuari);
             }
-        }   
+        }
     }
 }
 </script>
@@ -134,6 +148,13 @@ body {
     /* Altura del navBar */
 }
 
+.arrow{
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    color: #000;
+}
+
 .flex-container {
     display: flex;
     flex-direction: column;
@@ -152,6 +173,7 @@ body {
     /* Altura del header */
     padding-bottom: 50px;
     /* Altura del navBar */
+    
 }
 
 .exercise-list {
@@ -161,6 +183,8 @@ body {
     padding: 20px;
     margin: auto;
     text-align: center;
+    border-radius: 15px;
+    width: 80%;
 }
 
 .exercise-item {
@@ -170,15 +194,14 @@ body {
     background-color: #e6e6e6;
     border-radius: 10px;
     padding: 20px;
-    width: calc(50% - 20px);
-    /* Ajuste para dos columnas */
+    width: 60%;
     box-sizing: border-box;
     margin: auto;
 }
 
 .exercise-image {
-    width: 130px;
-    height: 130px;
+    width: 100%;
+    height: 70%;
     object-fit: cover;
     border-radius: 10px;
 }
@@ -190,6 +213,14 @@ body {
 .exercise-info {
     font-size: 16px;
     margin-bottom: 5px;
+}
+
+.botons-superior {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: auto;
+    border-radius: 15px;
 }
 
 .dieta-button {
@@ -213,7 +244,7 @@ body {
     background-color: #666;
 }
 
-.dia-button{
+.dia-button {
     width: 50px;
     height: 50px;
     margin-top: 10px;
@@ -229,6 +260,7 @@ body {
     font-size: 30px;
     color: #000;
     background-color: #666;
+    margin: auto;
 
 }
 
@@ -237,6 +269,13 @@ navBar {
     bottom: 0;
     width: 100%;
     z-index: 1;
+}
+
+.day-selector {
+    display: flex;
+    align-items: center;
+    margin: auto;
+
 }
 
 .day-selector select {
@@ -248,7 +287,7 @@ navBar {
 /* Media query para pantallas más pequeñas */
 @media screen and (max-width: 790px) {
     .exercise-item {
-        width: calc(50% - 20px);
+        width: 70%;
         /* Ajuste para dos columnas en pantallas más pequeñas */
     }
 }
