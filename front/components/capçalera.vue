@@ -129,7 +129,11 @@ h1 {
     font-weight: bold;
     font-size: 24px;
 }
-
+a:-webkit-any-link {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
 .oculto {
     display: none;
 }
