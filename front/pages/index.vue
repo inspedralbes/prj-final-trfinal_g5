@@ -58,12 +58,13 @@ export default {
                     store.nom_usuari = data.nom;
                     store.email_usuari = data.email;
                     store.foto_perfil = data.foto_perfil;
-                    store.registre = data.registre === "1" ? true : false;
+                    store.registre = Boolean(Number(data.registre));
                     this.$router.push('/home');
                 } else {
                     this.showError = true;
                     this.isValid = false;
                 }
+
             } catch (error) {
                 console.error('Error al iniciar sesión:', error);
                 this.showError = true;
