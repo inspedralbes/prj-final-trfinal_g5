@@ -42,11 +42,11 @@
 
                         <div class="input-container">
                             <label>Altura:</label><br>
-                            <input type="number" v-model="usuario.altura"placeholder="Altura (cm)"maxlength="4">
+                            <input type="number" v-model="usuario.altura" placeholder="Altura (cm)" maxlength="4">
                         </div>
                         <div class="input-container">
                             <label>Pes:</label><br>
-                            <input type="decimal" v-model="usuario.pes" placeholder="Pes (kg)"maxlength="6">
+                            <input type="decimal" v-model="usuario.pes" placeholder="Pes (kg)" maxlength="6">
                         </div>
 
                         <div class="input-container">
@@ -61,7 +61,7 @@
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
                     </div>
-                    
+
                     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                     <button type="submit" class="large-button">Guardar</button>
 
@@ -129,6 +129,12 @@ export default {
             // Verificar si ya se está guardando para evitar múltiples envíos
             if (this.isSaving) return;
 
+            // Verificar si hay errores de validación
+            if (this.errorMessage) {
+                // Mostrar un mensaje de error y no continuar con el guardado
+                return;
+            }
+
             this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
 
             // Lógica para guardar los datos del usuario
@@ -143,6 +149,7 @@ export default {
                 this.guardarDatosUsuarioSinFotoPerfil();
             }
         },
+
 
         hayOtrosCamposModificados() {
             // Verifica si hay otros campos modificados además de la foto de perfil
@@ -384,10 +391,10 @@ input {
     padding: 2rem;
     margin-bottom: 2.5rem;
     width: 160px;
-    
+
 }
 
-textarea{
+textarea {
     background-color: #dddddd;
     border-radius: 5px;
 
@@ -436,6 +443,7 @@ form {
     width: 85%;
     margin-bottom: 20px;
 }
+
 .error-message {
     color: red;
     text-align: center;
