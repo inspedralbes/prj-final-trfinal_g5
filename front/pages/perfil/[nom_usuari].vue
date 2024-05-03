@@ -174,7 +174,7 @@ export default {
             const idUsuario = store.id_usuari;
             actualizarDatosUsuario(idUsuario, data) // Llama a la función actualizarDatosUsuario con los datos y el idUsuario
                 .then(data => {
-                    console.log('Datos del usuario actualizados:', data);
+                    // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
 
 
