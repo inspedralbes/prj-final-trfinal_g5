@@ -114,7 +114,7 @@ export default {
                     // console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
-                    console.error('Error al obtener los datos del usuario:', error);
+                    // console.error('Error al obtener los datos del usuario:', error);
                 });
         },
         guardarDatosUsuario() {
@@ -193,7 +193,7 @@ export default {
                     this.isSaving = false;
                 })
                 .catch(error => {
-                    console.error('Error al actualizar los datos del usuario:', error);
+                    // console.error('Error al actualizar los datos del usuario:', error);
                     // Restablecer la variable de estado a false si hay un error en el guardado
                     this.isSaving = false;
                 });

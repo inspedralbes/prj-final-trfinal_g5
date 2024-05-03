@@ -52,7 +52,7 @@ export default {
             if (file) {
                 // Verificar si el archivo es una imagen
                 if (!file.type.startsWith('image/')) {
-                    console.error('El archivo seleccionado no es una imagen.');
+                    // console.error('El archivo seleccionado no es una imagen.');
                     return; // Salir del método si el archivo no es una imagen
                 }
 
@@ -60,12 +60,12 @@ export default {
                 this.usuario.foto_perfil = file;
 
                 // Mostrar en la consola la foto de perfil seleccionada
-                console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
+                // console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
 
                 // Llamar al método para guardar automáticamente los datos del usuario
                 this.guardarDatosUsuario();
             } else {
-                console.error('No se seleccionó ningún archivo.');
+                // console.error('No se seleccionó ningún archivo.');
             }
         },
 
@@ -106,7 +106,7 @@ export default {
             const idUsuario = store.id_usuari;
             actualizarDatosUsuario(idUsuario, data) // Llama a la función actualizarDatosUsuario con los datos y el idUsuario
                 .then(data => {
-                    console.log('Datos del usuario actualizados:', data);
+                    // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
                     if (this.usuario.foto_perfil) {
                         useUsuariPerfilStore().foto_perfil = data.foto_perfil;
@@ -119,7 +119,7 @@ export default {
                     this.isSaving = false;
                 })
                 .catch(error => {
-                    console.error('Error al actualizar los datos del usuario:', error);
+                    // console.error('Error al actualizar los datos del usuario:', error);
                     // Restablecer la variable de estado a false si hay un error en el guardado
                     this.isSaving = false;
                 });
