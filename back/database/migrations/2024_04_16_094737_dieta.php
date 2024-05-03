@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('dietas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_usuari');
+            $table->string('id_usuari');
             $table->string('nom_plat')->constrained('aliments')->onDelete('cascade');
             $table->date('data_inici');
             $table->date('data_fi')->nullable();
