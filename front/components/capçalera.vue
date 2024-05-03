@@ -95,7 +95,7 @@ nuxt-link{
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    color: #fbff00;
+    color: white;
     font-size: 1.2rem;
     font-weight: bolder;
 }
@@ -129,7 +129,11 @@ h1 {
     font-weight: bold;
     font-size: 24px;
 }
-
+a:-webkit-any-link {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
 .oculto {
     display: none;
 }

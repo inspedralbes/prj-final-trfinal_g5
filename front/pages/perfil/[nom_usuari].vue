@@ -4,9 +4,8 @@
         <div id="main">
             <div class="flex-container">
                 <HeaderPerfil />
-                <form @submit.prevent="guardarDatosUsuario" enctype="multipart/form-data">
+                <form @submit.prevent="guardarDatosUsuario">
                     <div class="user-info-container">
-                        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                         <div class="input-container">
                             <label>Nom:</label>
                             <input type="text" placeholder="Nom" v-model="usuario.nom"
@@ -30,10 +29,9 @@
                         <div class="input-container">
                             <label>Data naixement:</label>
                             <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
-
                         </div>
                         <div class="input-container">
-                            <label>Gènere:</label>
+                            <label>Gènere:</label><br>
                             <select v-model="usuario.genere">
                                 <option value="Home">Home</option>
                                 <option value="Dona">Dona</option>
@@ -43,11 +41,11 @@
 
                         <div class="input-container">
                             <label>Altura:</label><br>
-                            <input type="number" v-model="usuario.altura"placeholder="Altura (cm)">
+                            <input type="number" v-model="usuario.altura" placeholder="Altura (cm)" maxlength="4">
                         </div>
                         <div class="input-container">
                             <label>Pes:</label><br>
-                            <input type="decimal" v-model="usuario.pes" placeholder="Pes (kg)">
+                            <input type="decimal" v-model="usuario.pes" placeholder="Pes (kg)" maxlength="6">
                         </div>
 
                         <div class="input-container">
@@ -61,13 +59,9 @@
                             <textarea placeholder="Introdueix la teva lesió (opcional)" v-model="usuario.lesio"
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
-
-                        <div class="input-container">
-                            <label>Foto de Perfil:</label>
-                            <input type="file" name="foto_perfil" @change="onFileChange" accept="image/*">
-                        </div>
                     </div>
 
+                    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                     <button type="submit" class="large-button">Guardar</button>
 
                 </form>
@@ -95,13 +89,6 @@ export default {
                 altura: '',
                 pes: '',
                 genere: '',
-                foto_perfil: {
-                    name: '',
-                    size: '',
-                    type: '',
-                    lastModified: '',
-                    lastModifiedDate: '',
-                },
                 alergia_intolerancia: '',
                 lesio: '',
                 registre: '',
@@ -127,21 +114,20 @@ export default {
                     // console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
-                    console.error('Error al obtener los datos del usuario:', error);
+                    // console.error('Error al obtener los datos del usuario:', error);
                 });
         },
         guardarDatosUsuario() {
             // Verificar si ya se está guardando para evitar múltiples envíos
             if (this.isSaving) return;
 
-            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
-
-            // Lógica para guardar los datos del usuario
-            // Puedes llamar a funciones separadas para manejar la lógica de guardado de la imagen y los otros campos
-            // Por ejemplo:
-            if (this.usuario.foto_perfil instanceof File) {
-                this.guardarFotoPerfil();
+            // Verificar si hay errores de validación
+            if (this.errorMessage) {
+                // Mostrar un mensaje de error y no continuar con el guardado
+                return;
             }
+
+            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
 
             // Si hay otros campos modificados además de la foto de perfil
             if (this.hayOtrosCamposModificados()) {
@@ -159,26 +145,6 @@ export default {
                 }
             }
             return false;
-        },
-
-        guardarFotoPerfil() {
-            // Lógica para guardar la foto de perfil
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64Image = reader.result.split(',')[1]; // Extraer solo el contenido base64
-
-                // Construir el objeto de datos a enviar
-                const data = {
-                    usuario: this.usuario,
-                    foto_perfil_base64: base64Image // Agregar la imagen base64 a los datos del usuario
-                };
-
-                // Realizar la solicitud PUT al servidor con los datos del usuario y la imagen en base64
-                this.enviarDatos(data);
-            };
-
-            // Leer la imagen de perfil como base64
-            reader.readAsDataURL(this.usuario.foto_perfil);
         },
 
         guardarDatosUsuarioSinFotoPerfil() {
@@ -203,13 +169,12 @@ export default {
             }
         },
 
-
         enviarDatos(data) {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
             actualizarDatosUsuario(idUsuario, data) // Llama a la función actualizarDatosUsuario con los datos y el idUsuario
                 .then(data => {
-                    console.log('Datos del usuario actualizados:', data);
+                    // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
 
 
@@ -220,9 +185,6 @@ export default {
                     if (this.usuario.nom) {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
                     }
-                    if (this.usuario.foto_perfil) {
-                        useUsuariPerfilStore().foto_perfil = data.foto_perfil;
-                    }
 
                     // Actualizar los datos originales con los datos modificados
                     this.datosOriginales = { ...this.datosOriginales, ...this.usuario };
@@ -231,24 +193,10 @@ export default {
                     this.isSaving = false;
                 })
                 .catch(error => {
-                    console.error('Error al actualizar los datos del usuario:', error);
+                    // console.error('Error al actualizar los datos del usuario:', error);
                     // Restablecer la variable de estado a false si hay un error en el guardado
                     this.isSaving = false;
                 });
-        },
-
-        onFileChange(event) {
-            const file = event.target.files[0]; // Obtener el archivo del evento
-
-            if (file) {
-                // Asignar directamente el archivo seleccionado a this.usuario.foto_perfil
-                this.usuario.foto_perfil = file;
-
-                // Mostrar en la consola la foto de perfil seleccionada
-                console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
-            } else {
-                console.error('No se seleccionó ningún archivo.');
-            }
         },
 
         // Función para capitalizar la primera letra de una cadena
@@ -274,27 +222,35 @@ export default {
             }
         },
         validatePhoneNumber() {
-            if (this.usuario.telefon.length !== 9) {
+            // Verifica si el número de teléfono está vacío o tiene 9 caracteres
+            if (this.usuario.telefon && this.usuario.telefon.length !== 9) {
                 this.errorMessage = 'El número de teléfono debe tener 9 caracteres.';
             } else {
                 this.errorMessage = ''; // Limpiar el mensaje de error si la validación es exitosa
             }
         },
+
         validateFecha() {
+            // Verifica si la fecha de nacimiento está presente
+            if (!this.usuario.data_naixement) {
+                // Si la fecha de nacimiento está vacía, no se realiza ninguna validación adicional y se limpia el mensaje de error
+                this.errorMessage = '';
+                return;
+            }
+
+            // Si la fecha de nacimiento no está vacía, realiza la validación adicional
             const birthDate = new Date(this.usuario.data_naixement);
             const minDate = new Date('1900-01-01');
             const maxDate = new Date();
 
             if (birthDate < minDate || birthDate > maxDate) {
-                // Actualizar el mensaje de error
+                // Actualiza el mensaje de error si la fecha de nacimiento está fuera del rango deseado
                 this.errorMessage = 'La fecha de nacimiento debe estar entre 1900 y la fecha actual.';
-                return false; // Retorna false si la fecha de nacimiento no es válida
+            } else {
+                this.errorMessage = ''; // Limpia el mensaje de error si la validación es exitosa
             }
-
-            // Limpiar el mensaje de error si la validación es exitosa
-            this.errorMessage = '';
-            return true; // Retorna true si la fecha de nacimiento es válida
         },
+
         validateAltura(event) {
             // Expresión regular para permitir solo números
             const regex = /^[0-9]*$/;
@@ -389,10 +345,10 @@ input {
     padding: 2rem;
     margin-bottom: 2.5rem;
     width: 160px;
-    
+
 }
 
-textarea{
+textarea {
     background-color: #dddddd;
     border-radius: 5px;
 
@@ -426,6 +382,7 @@ textarea{
     background-color: #333;
     border-radius: 50px;
     margin: auto;
+    margin-top: 20px;
 }
 
 form {
@@ -439,5 +396,11 @@ form {
     margin-top: 0;
     width: 85%;
     margin-bottom: 20px;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
 }
 </style>
