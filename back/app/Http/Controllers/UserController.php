@@ -17,78 +17,83 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 
 {
-    
     public function registre(Request $request)
-    {
-        try {
-            $validator = $request->validate([
-                'email' => 'required|string|email|max:255|unique:usuaris',
-                'contrasenya' => 'required|string|min:6',
-                'nom' => 'required|string|max:255',
-                'cognoms' => 'required|string|max:255',
-                'data_naixement' => 'date',
-                'genere' => 'string',
-                'pes' => 'numeric',
-                'altura' => 'numeric',
-                'telefon' => 'integer|digits:9',
-                'foto_perfil' => 'image|mimes:jpeg,png,jpg',
-                'alergia_intolerancia' => 'string',
-                'lesio' => 'string',
-                'registre' => 'string',
-            ]);
+{
+    try {
+        $validator = $request->validate([
+            'email' => 'required|string|email|max:255|unique:usuaris',
+            'contrasenya' => 'required|string|min:6',
+            'nom' => 'required|string|max:255',
+            'cognoms' => 'required|string|max:255',
+            'data_naixement' => 'date',
+            'genere' => 'string',
+            'pes' => 'numeric',
+            'altura' => 'numeric',
+            'telefon' => 'integer|digits:9',
+        ]);
 
-            $usuari = new Usuaris();
-            $usuari->email = $request->email;
-            $usuari->contrasenya = Hash::make($request->contrasenya);
-            $usuari->nom = $request->nom;
-            $usuari->cognoms = $request->cognoms;
+        $usuari = new Usuaris();
+        $usuari->email = $request->email;
+        $usuari->contrasenya = Hash::make($request->contrasenya);
+        $usuari->nom = $request->nom;
+        $usuari->cognoms = $request->cognoms;
+
+        if ($request->has('data_naixement')) {
             $usuari->data_naixement = $request->data_naixement;
-            $usuari->genere = $request->genere;
-
-            if ($request->has('pes')) {
-                $usuari->pes = $request->pes;
-            }
-
-            if ($request->has('altura')) {
-                $usuari->altura = $request->altura;
-            }
-
-            if ($request->has('telefon')) {
-                $usuari->telefon = $request->telefon;
-            }
-
-            $usuari->save();
-           \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
-
-            $idUsuario = $usuari->id;
-
-            return response()->json([
-                'status' => 1,
-                'message' => 'Usuari creat correctament',
-                'idUsuario' => $idUsuario,
-                'telefon' => $usuari->telefon,
-                'data_naixement' => $usuari->data_naixement,
-                'genere' => $usuari->genere,
-                'pes' => $usuari->pes,
-                'altura' => $usuari->altura,
-            ]);
-        } catch (ValidationException $e) {
-            // Captura las excepciones de validación y obtén los mensajes de error
-            $errors = $e->errors();
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Error en el registro: ' . implode(', ', Arr::flatten($errors))
-            ]);
-        } catch (\Exception $e) {
-            // Captura otras excepciones y proporciona un mensaje de error general
-            return response()->json([
-                'status' => 0,
-                'message' => 'Error en el registro: ' . $e->getMessage()
-            ]);
         }
+        if ($request->has('genere')) {
+            $usuari->genere = $request->genere;
+        }
+
+        if ($request->has('pes')) {
+            $usuari->pes = $request->pes;
+        }
+
+        if ($request->has('altura')) {
+            $usuari->altura = $request->altura;
+        }
+
+        if ($request->has('telefon')) {
+            $usuari->telefon = $request->telefon;
+        }
+        
+        // Verificar si todos los campos necesarios están presentes y no están vacíos
+        if ($request->filled(['email', 'contrasenya', 'nom', 'cognoms', 'data_naixement', 'genere','pes','altura','telefon'])) {
+            $usuari->registre = true;
+        }
+
+        $usuari->save();
+        // \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
+
+        $idUsuario = $usuari->id;
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Usuari creat correctament',
+            'idUsuario' => $idUsuario,
+            'telefon' => $usuari->telefon,
+            'data_naixement' => $usuari->data_naixement,
+            'genere' => $usuari->genere,
+            'pes' => $usuari->pes,
+            'altura' => $usuari->altura,
+        ]);
+    } catch (ValidationException $e) {
+        // Captura las excepciones de validación y obtén los mensajes de error
+        $errors = $e->errors();
+
+        return response()->json([
+            'status' => 0,
+            'message' => 'Error en el registro: ' . implode(', ', Arr::flatten($errors))
+        ]);
+    } catch (\Exception $e) {
+        // Captura otras excepciones y proporciona un mensaje de error general
+        return response()->json([
+            'status' => 0,
+            'message' => 'Error en el registro: ' . $e->getMessage()
+        ]);
     }
-    
+}
+
     public function loguejat(Request $request){
         $request->validate([
             'email' => 'required|string|email|max:255',
