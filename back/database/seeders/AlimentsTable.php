@@ -255,6 +255,166 @@ class AlimentsTable extends Seeder
                 'carbohidrats' => 28.9,
                 'greixos' => 9.3,
                 'calories' => 315
+            ],
+            [
+                'nom_plat' => 'Salmó al forn amb quinoa i espàrrecs',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Filet de salmó', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Quinoa', 'quantitat' => 80, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Espàrrecs', 'quantitat' => 6, 'unitat' => 'unitats']
+                ]),
+                'proteines' => 30.2,
+                'carbohidrats' => 21.4,
+                'greixos' => 13.8,
+                'calories' => 320
+            ],
+            [
+                'nom_plat' => 'Amanida de pollastre amb enciam i alvocat',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Pit de pollastre', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Enciam', 'quantitat' => 1, 'unitat' => 'tassa'],
+                    ['nom_ingredient' => 'Alvocat', 'quantitat' => 1/4, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 26.3,
+                'carbohidrats' => 9.7,
+                'greixos' => 18.5,
+                'calories' => 280
+            ],
+            [
+                'nom_plat' => 'Pasta integral amb tonyina i verdures',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Pasta integral', 'quantitat' => 80, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Tonyina en conserva', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Bròquil', 'quantitat' => 1/2, 'unitat' => 'tassa']
+                ]),
+                'proteines' => 22.8,
+                'carbohidrats' => 33.6,
+                'greixos' => 6.2,
+                'calories' => 290
+            ],
+            [
+                'nom_plat' => 'Carn de vedella rostida amb patata i espinacs',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Carn de vedella', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Patata', 'quantitat' => 1/2, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Espinacs', 'quantitat' => 1/2, 'unitat' => 'tassa']
+                ]),
+                'proteines' => 26.4,
+                'carbohidrats' => 15.9,
+                'greixos' => 9.3,
+                'calories' => 290
+            ],
+            [
+                'nom_plat' => 'Tacos de pollastre amb fajita integral i verdura',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Pit de pollastre', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Fajita integral', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Ceba', 'quantitat' => 1/4, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Pebrer', 'quantitat' => 1/4, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 25.1,
+                'carbohidrats' => 25.3,
+                'greixos' => 8.2,
+                'calories' => 270
+            ],
+            [
+                'nom_plat' => 'Truita de patates amb tomàquet i cogombre',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Ous', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Patata', 'quantitat' => 1/2, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Tomàquet', 'quantitat' => 1/2, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Cogombre', 'quantitat' => 1/4, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 13.6,
+                'carbohidrats' => 22.4,
+                'greixos' => 11.5,
+                'calories' => 230
+            ],
+            [
+                'nom_plat' => 'Hamburguesa de llenties amb amanida de col',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Llenties', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Pa de hamburguesa integral', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Col', 'quantitat' => 1/2, 'unitat' => 'tassa']
+                ]),
+                'proteines' => 18.9,
+                'carbohidrats' => 37.2,
+                'greixos' => 6.4,
+                'calories' => 270
+            ],
+            [
+                'nom_plat' => 'Fideus de sègol amb gambes i verdures',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Fideus de sègol', 'quantitat' => 80, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Gambes', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Pebrer vermell', 'quantitat' => 1/4, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 20.6,
+                'carbohidrats' => 31.7,
+                'greixos' => 4.8,
+                'calories' => 250
+            ],
+            [
+                'nom_plat' => 'Cuscús amb pollastre i fruita seca',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Cuscús', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Pit de pollastre', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Pinyons', 'quantitat' => 10, 'unitat' => 'grams']
+                ]),
+                'proteines' => 19.7,
+                'carbohidrats' => 32.1,
+                'greixos' => 6.9,
+                'calories' => 270
+            ],
+            [
+                'nom_plat' => 'Truita de verdures amb patates al vapor',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Ous', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Patata', 'quantitat' => 1/2, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Espàrrecs', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Ceba', 'quantitat' => 1/4, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 13.1,
+                'carbohidrats' => 19.2,
+                'greixos' => 5.3,
+                'calories' => 190
+            ],
+            [
+                'nom_plat' => 'Entrecot a la planxa amb patates braves',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Entrecot', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Patata', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Salsa brava', 'quantitat' => 1, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 25.8,
+                'carbohidrats' => 17.4,
+                'greixos' => 28.5,
+                'calories' => 390
+            ],
+            [
+                'nom_plat' => 'Arros amb pollastre',
+                'apat' => 'dinar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Arròs', 'quantitat' => 1, 'unitat' => 'tassa'],
+                    ['nom_ingredient' => 'Pollastre', 'quantitat' => 200, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Ceba', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Pastanaga', 'quantitat' => 1, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 22.6,
+                'carbohidrats' => 31.8,
+                'greixos' => 8.2,
+                'calories' => 320
             ],   
             [
                 'nom_plat' => 'Batut de proteines amb plàtan',
@@ -551,166 +711,6 @@ class AlimentsTable extends Seeder
                 'carbohidrats' => 31.9,
                 'greixos' => 5.4,
                 'calories' => 215
-            ],
-            [
-                'nom_plat' => 'Salmó al forn amb quinoa i espàrrecs',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Filet de salmó', 'quantitat' => 150, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Quinoa', 'quantitat' => 80, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Espàrrecs', 'quantitat' => 6, 'unitat' => 'unitats']
-                ]),
-                'proteines' => 30.2,
-                'carbohidrats' => 21.4,
-                'greixos' => 13.8,
-                'calories' => 320
-            ],
-            [
-                'nom_plat' => 'Amanida de pollastre amb enciam i alvocat',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Pit de pollastre', 'quantitat' => 100, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Enciam', 'quantitat' => 1, 'unitat' => 'tassa'],
-                    ['nom_ingredient' => 'Alvocat', 'quantitat' => 1/4, 'unitat' => 'unitat']
-                ]),
-                'proteines' => 26.3,
-                'carbohidrats' => 9.7,
-                'greixos' => 18.5,
-                'calories' => 280
-            ],
-            [
-                'nom_plat' => 'Pasta integral amb tonyina i verdures',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Pasta integral', 'quantitat' => 80, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Tonyina en conserva', 'quantitat' => 50, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Bròquil', 'quantitat' => 1/2, 'unitat' => 'tassa']
-                ]),
-                'proteines' => 22.8,
-                'carbohidrats' => 33.6,
-                'greixos' => 6.2,
-                'calories' => 290
-            ],
-            [
-                'nom_plat' => 'Carn de vedella rostida amb patata i espinacs',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Carn de vedella', 'quantitat' => 150, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Patata', 'quantitat' => 1/2, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Espinacs', 'quantitat' => 1/2, 'unitat' => 'tassa']
-                ]),
-                'proteines' => 26.4,
-                'carbohidrats' => 15.9,
-                'greixos' => 9.3,
-                'calories' => 290
-            ],
-            [
-                'nom_plat' => 'Tacos de pollastre amb fajita integral i verdura',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Pit de pollastre', 'quantitat' => 100, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Fajita integral', 'quantitat' => 1, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Ceba', 'quantitat' => 1/4, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Pebrer', 'quantitat' => 1/4, 'unitat' => 'unitat']
-                ]),
-                'proteines' => 25.1,
-                'carbohidrats' => 25.3,
-                'greixos' => 8.2,
-                'calories' => 270
-            ],
-            [
-                'nom_plat' => 'Truita de patates amb tomàquet i cogombre',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Ous', 'quantitat' => 2, 'unitat' => 'unitats'],
-                    ['nom_ingredient' => 'Patata', 'quantitat' => 1/2, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Tomàquet', 'quantitat' => 1/2, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Cogombre', 'quantitat' => 1/4, 'unitat' => 'unitat']
-                ]),
-                'proteines' => 13.6,
-                'carbohidrats' => 22.4,
-                'greixos' => 11.5,
-                'calories' => 230
-            ],
-            [
-                'nom_plat' => 'Hamburguesa de llenties amb amanida de col',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Llenties', 'quantitat' => 100, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Pa de hamburguesa integral', 'quantitat' => 1, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Col', 'quantitat' => 1/2, 'unitat' => 'tassa']
-                ]),
-                'proteines' => 18.9,
-                'carbohidrats' => 37.2,
-                'greixos' => 6.4,
-                'calories' => 270
-            ],
-            [
-                'nom_plat' => 'Fideus de sègol amb gambes i verdures',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Fideus de sègol', 'quantitat' => 80, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Gambes', 'quantitat' => 100, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Pebrer vermell', 'quantitat' => 1/4, 'unitat' => 'unitat']
-                ]),
-                'proteines' => 20.6,
-                'carbohidrats' => 31.7,
-                'greixos' => 4.8,
-                'calories' => 250
-            ],
-            [
-                'nom_plat' => 'Cuscús amb pollastre i fruita seca',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Cuscús', 'quantitat' => 100, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Pit de pollastre', 'quantitat' => 100, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Pinyons', 'quantitat' => 10, 'unitat' => 'grams']
-                ]),
-                'proteines' => 19.7,
-                'carbohidrats' => 32.1,
-                'greixos' => 6.9,
-                'calories' => 270
-            ],
-            [
-                'nom_plat' => 'Truita de verdures amb patates al vapor',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Ous', 'quantitat' => 2, 'unitat' => 'unitats'],
-                    ['nom_ingredient' => 'Patata', 'quantitat' => 1/2, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Espàrrecs', 'quantitat' => 2, 'unitat' => 'unitats'],
-                    ['nom_ingredient' => 'Ceba', 'quantitat' => 1/4, 'unitat' => 'unitat']
-                ]),
-                'proteines' => 13.1,
-                'carbohidrats' => 19.2,
-                'greixos' => 5.3,
-                'calories' => 190
-            ],
-            [
-                'nom_plat' => 'Entrecot a la planxa amb patates braves',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Entrecot', 'quantitat' => 1, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Patata', 'quantitat' => 2, 'unitat' => 'unitats'],
-                    ['nom_ingredient' => 'Salsa brava', 'quantitat' => 1, 'unitat' => 'unitat']
-                ]),
-                'proteines' => 25.8,
-                'carbohidrats' => 17.4,
-                'greixos' => 28.5,
-                'calories' => 390
-            ],
-            [
-                'nom_plat' => 'Arros amb pollastre',
-                'apat' => 'dinar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Arròs', 'quantitat' => 1, 'unitat' => 'tassa'],
-                    ['nom_ingredient' => 'Pollastre', 'quantitat' => 200, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Ceba', 'quantitat' => 1, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Pastanaga', 'quantitat' => 1, 'unitat' => 'unitat']
-                ]),
-                'proteines' => 22.6,
-                'carbohidrats' => 31.8,
-                'greixos' => 8.2,
-                'calories' => 320
             ],
             [
                 'nom_plat' => 'Amanida de tonyina i enciam',
