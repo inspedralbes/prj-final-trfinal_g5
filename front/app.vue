@@ -1,4 +1,5 @@
 <template>
+  <title>Fithub</title>
   <div>
   <NuxtPage />
   </div>
