@@ -4,7 +4,7 @@
         <div id="main">
             <div class="flex-container">
                 <HeaderPerfil />
-                <form @submit.prevent="guardarDatosUsuario" enctype="multipart/form-data">
+                <form @submit.prevent="guardarDatosUsuario">
                     <div class="user-info-container">
                         <div class="input-container">
                             <label>Nom:</label>
@@ -29,7 +29,6 @@
                         <div class="input-container">
                             <label>Data naixement:</label>
                             <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
-
                         </div>
                         <div class="input-container">
                             <label>Gènere:</label><br>
@@ -90,13 +89,6 @@ export default {
                 altura: '',
                 pes: '',
                 genere: '',
-                foto_perfil: {
-                    name: '',
-                    size: '',
-                    type: '',
-                    lastModified: '',
-                    lastModifiedDate: '',
-                },
                 alergia_intolerancia: '',
                 lesio: '',
                 registre: '',
@@ -137,19 +129,11 @@ export default {
 
             this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
 
-            // Lógica para guardar los datos del usuario
-            // Puedes llamar a funciones separadas para manejar la lógica de guardado de la imagen y los otros campos
-            // Por ejemplo:
-            if (this.usuario.foto_perfil instanceof File) {
-                this.guardarFotoPerfil();
-            }
-
             // Si hay otros campos modificados además de la foto de perfil
             if (this.hayOtrosCamposModificados()) {
                 this.guardarDatosUsuarioSinFotoPerfil();
             }
         },
-
 
         hayOtrosCamposModificados() {
             // Verifica si hay otros campos modificados además de la foto de perfil
@@ -161,26 +145,6 @@ export default {
                 }
             }
             return false;
-        },
-
-        guardarFotoPerfil() {
-            // Lógica para guardar la foto de perfil
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64Image = reader.result.split(',')[1]; // Extraer solo el contenido base64
-
-                // Construir el objeto de datos a enviar
-                const data = {
-                    usuario: this.usuario,
-                    foto_perfil_base64: base64Image // Agregar la imagen base64 a los datos del usuario
-                };
-
-                // Realizar la solicitud PUT al servidor con los datos del usuario y la imagen en base64
-                this.enviarDatos(data);
-            };
-
-            // Leer la imagen de perfil como base64
-            reader.readAsDataURL(this.usuario.foto_perfil);
         },
 
         guardarDatosUsuarioSinFotoPerfil() {
@@ -205,7 +169,6 @@ export default {
             }
         },
 
-
         enviarDatos(data) {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
@@ -222,9 +185,6 @@ export default {
                     if (this.usuario.nom) {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
                     }
-                    if (this.usuario.foto_perfil) {
-                        useUsuariPerfilStore().foto_perfil = data.foto_perfil;
-                    }
 
                     // Actualizar los datos originales con los datos modificados
                     this.datosOriginales = { ...this.datosOriginales, ...this.usuario };
@@ -237,20 +197,6 @@ export default {
                     // Restablecer la variable de estado a false si hay un error en el guardado
                     this.isSaving = false;
                 });
-        },
-
-        onFileChange(event) {
-            const file = event.target.files[0]; // Obtener el archivo del evento
-
-            if (file) {
-                // Asignar directamente el archivo seleccionado a this.usuario.foto_perfil
-                this.usuario.foto_perfil = file;
-
-                // Mostrar en la consola la foto de perfil seleccionada
-                console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
-            } else {
-                console.error('No se seleccionó ningún archivo.');
-            }
         },
 
         // Función para capitalizar la primera letra de una cadena
