@@ -231,20 +231,26 @@ export default {
         },
 
         validateFecha() {
+            // Verifica si la fecha de nacimiento está presente
+            if (!this.usuario.data_naixement) {
+                // Si la fecha de nacimiento está vacía, no se realiza ninguna validación adicional y se limpia el mensaje de error
+                this.errorMessage = '';
+                return;
+            }
+
+            // Si la fecha de nacimiento no está vacía, realiza la validación adicional
             const birthDate = new Date(this.usuario.data_naixement);
             const minDate = new Date('1900-01-01');
             const maxDate = new Date();
 
             if (birthDate < minDate || birthDate > maxDate) {
-                // Actualizar el mensaje de error
+                // Actualiza el mensaje de error si la fecha de nacimiento está fuera del rango deseado
                 this.errorMessage = 'La fecha de nacimiento debe estar entre 1900 y la fecha actual.';
-                return false; // Retorna false si la fecha de nacimiento no es válida
+            } else {
+                this.errorMessage = ''; // Limpia el mensaje de error si la validación es exitosa
             }
-
-            // Limpiar el mensaje de error si la validación es exitosa
-            this.errorMessage = '';
-            return true; // Retorna true si la fecha de nacimiento es válida
         },
+
         validateAltura(event) {
             // Expresión regular para permitir solo números
             const regex = /^[0-9]*$/;
