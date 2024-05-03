@@ -469,7 +469,6 @@ body {
     padding: 0;
     height: 100%;
     background-color: #FFA500;
-    font-family: Arial, sans-serif;
 
 }
 

@@ -306,7 +306,7 @@ export default {
 };
 </script>
 <style scoped>
-/* Estilos de los divs en el componente */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
 html,
 body {
     margin: 0;
@@ -316,7 +316,7 @@ body {
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'M PLUS Rounded 1c', Arial, sans-serif;
 }
 
 #main {
@@ -328,7 +328,6 @@ body {
     flex-direction: column;
     align-items: stretch;
     min-height: 100vh;
-    background: linear-gradient(to top right, #FFA500, #f44336);
 }
 
 
@@ -370,26 +369,25 @@ textarea {
 }
 
 .large-button {
-    width: 40%;
+    width: 100%;
     height: 50px;
-    margin-top: 20px;
     font-size: 18px;
     font-weight: bold;
     color: #FFF;
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: #333;
+    background-color: #FFA500;
     border-radius: 50px;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 60px;
+
 }
 
 form {
     display: grid;
     grid-template-columns: 1fr;
     margin: auto;
-    background-color: #f3f3f3;
     padding: 20px;
     padding-top: 40px;
     border-radius: 20px;

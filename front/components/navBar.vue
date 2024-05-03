@@ -16,13 +16,16 @@
 .navbar {
   background-color: #333;
   color: white;
-  width: 100%;
-  padding: 10px 0; /* Modificado para ajustar el espacio vertical */
+  width: 90%;
+  padding: 10px; /* Modificado para ajustar el espacio vertical */
   margin: auto;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center; /* Centra los elementos horizontalmente */
   position: sticky;
   top: 0;
+  border-radius: 30px;
+  z-index: 1000;
 }
 
 .navbar-container {
@@ -39,13 +42,14 @@
 .navbar-links {
   display: flex;
   justify-content: center; /* Centra los enlaces horizontalmente */
+  margin: auto;
 }
 
 .navbar-link {
   color: white;
   text-decoration: none;
   margin: 0 15px; /* Añade espacio entre los enlaces */
-  
+  text-align: center;
 }
 
 .navbar-link:hover {
@@ -53,7 +57,7 @@
 }
 
 img{
-  height: 50px;
-  width: 50px;
+  width: 60%;
+  text-align: center;
 }
 </style>

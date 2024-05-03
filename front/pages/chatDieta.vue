@@ -133,7 +133,6 @@ body {
 }
 
 body {
-  font-family: Arial, sans-serif;
   /* Establecer la fuente predeterminada */
   background: linear-gradient(to top right, #FFA500, #f45c36);
 

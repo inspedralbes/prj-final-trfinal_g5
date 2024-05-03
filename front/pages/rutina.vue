@@ -142,7 +142,6 @@ body {
 }
 
 body {
-    font-family: Arial, sans-serif;
     /* Establecer la fuente predeterminada */
     padding-bottom: 50px;
     /* Altura del navBar */
