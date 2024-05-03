@@ -6,7 +6,6 @@
                 <HeaderPerfil />
                 <form @submit.prevent="guardarDatosUsuario" enctype="multipart/form-data">
                     <div class="user-info-container">
-                        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                         <div class="input-container">
                             <label>Nom:</label>
                             <input type="text" placeholder="Nom" v-model="usuario.nom"
@@ -62,7 +61,8 @@
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
                     </div>
-
+                    
+                    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                     <button type="submit" class="large-button">Guardar</button>
 
                 </form>
@@ -435,5 +435,10 @@ form {
     margin-top: 0;
     width: 85%;
     margin-bottom: 20px;
+}
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
 }
 </style>
