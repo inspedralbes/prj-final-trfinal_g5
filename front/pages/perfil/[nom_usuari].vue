@@ -224,6 +224,8 @@ export default {
         validatePhoneNumber() {
             // Verifica si el número de teléfono está vacío o tiene 9 caracteres
             if (this.usuario.telefon && this.usuario.telefon.length !== 9) {
+                this.usuario.telefon = this.usuario.telefon.replace(/\D/g, '');
+
                 this.errorMessage = 'El número de teléfono debe tener 9 caracteres.';
             } else {
                 this.errorMessage = ''; // Limpiar el mensaje de error si la validación es exitosa
