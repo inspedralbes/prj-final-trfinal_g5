@@ -4,14 +4,16 @@
             <!-- Input oculto para seleccionar una imagen -->
             <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
             <!-- Mostrar la imagen de perfil actual -->
-            <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon"
-                :class="{ 'incomplete-profile': !registre }" @click="openFileInput" />
+            <div class="user-info">
+                <div class="editar-sign">
+                    <img src="../public/editar.png">
+                </div>
+                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon"
+                    :class="{ 'incomplete-profile': !registre }" @click="openFileInput" />
+            </div>
             <h1>{{ nom_usuari }}</h1>
             <div v-if="!registre" class="alert-sign">
                 !
-            </div>
-            <div class="editar-sign">
-                <img src="../public/editar.png">
             </div>
         </div>
     </div>
@@ -133,17 +135,22 @@ export default {
     display: grid;
     grid-template-columns: .6fr 1fr;
     margin: auto;
-
 }
 
 .imgContainer img {
+    margin-top: 5px;
     width: 38%;
     border-radius: 50%;
     margin-right: 75px;
 }
 
+.user-info {
+    position: relative;
+    margin-left: 20px;
+}
+
 .user-icon {
-    width: 55%;
+    width: 65%;
     border-radius: 50%;
     text-align: center;
     margin: auto;
@@ -166,19 +173,28 @@ export default {
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    color: #fbff00;
+    color: white;
     font-size: 1.2rem;
     font-weight: bolder;
 }
 
 .editar-sign {
+    position: absolute;
+    top: 3%;
+    left: 30%;
+    transform: translateX(5%);
     width: 30px;
     height: 30px;
     background-color: #e3e3e3;
     border-radius: 50%;
+    display: flex;
+    
+    
 }
 
 .editar-sign img {
+    margin-left: 4px;
+    margin-top: 4px;
     width: 20px;
     height: 20px;
 }
@@ -197,7 +213,6 @@ h1 {
     margin-top: 20px;
     position: relative;
     margin-bottom: 20px;
-
 }
 
 .close-button {

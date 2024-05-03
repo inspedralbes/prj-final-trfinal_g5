@@ -95,7 +95,7 @@ nuxt-link{
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    color: #fbff00;
+    color: white;
     font-size: 1.2rem;
     font-weight: bolder;
 }
