@@ -1,7 +1,7 @@
 const url = 'http://localhost:8000/api';
 //const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '1234567890';
+const apiKey = '0123456789';
 
 
 //ejemplo de peticion fetch get
@@ -233,12 +233,12 @@ export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) 
                     " Si puedes dar consejos y argumentos pero hacerlo de forma resumida en 2 líneas, que no te digan que quieren más información." +
                     " Coje los alimentos y toda la información que encuentres en el json de alimentos para crear la dieta. " +
                     " Sólo puedes responder con formato JSON y siguiendo esta estructura: "+
-                    " {id_usuari:'',plats:[nom_plat:'',apat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',caloreis:'',],[nom_plat:'',apat:'',...],[nom_plat:'',...],...}" +
+                    " {id_usuari:'',apats:[apat:'',plats:[{nom_plat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',caloreis:''},],apat:'',plats:[nom_plat:'',...],apat:'',plats:[nom_plat:'',...]]}" +
                     // " Si te piden definicion o adelgazar o definir, toma platos que sean para ello; si quieren volumen, ganar mucho músculo o ganar peso toma los platos necesarios para ello. Si no te especifican una dieta neutra" +
                     " Coge los datos del usuario para hacer dietas más personalizadas y también coge el id del usuario para ponerlo en id_usuari."+
                     " Crea dietas de 5 comidas al día y que sean equilibradas y saludables. Si te especifican algo más concreto hazlo de forma más concreta." +
-                    " Intenta que las 5 comidas sean siempre: 'esmorzar', 'segon esmorzar', 'dinar', 'berenar' y 'sopar'. Si te piden algo más concreto hazlo de forma más concreta.",
-                    // " Para cada comida diaria ponle 3 platos para cada una de las 5 comidas. Si te piden algo más concreto hazlo de forma más concreta.",
+                    " Haz que las 5 comdias diarias sean: desayuno, segundo desayuno, comida, merienda y cena. " +
+                    " Para cada comida diaria ponle 3 platos para cada una de las 5 comidas. Si te piden algo más concreto hazlo de forma más concreta.",
                     
                 },
                 {

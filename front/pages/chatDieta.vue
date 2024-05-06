@@ -1,21 +1,24 @@
 <template>
+
   <body>
     <div>
       <div class="contenedor">
         <div class="cabecera">Assessorament Dieta</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
         <div class="mensaje-bienvenida">
-<img src="../public/img/icono_Arturo.jpg" alt="">
-        <h2 >Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
+          <img src="../public/img/icono_Arturo.jpg" alt="">
+          <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
         </div>
-       
-        
+
+
         <div class="chat-container">
           <div class="chat">
             <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-              <div class="mensaje" :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+              <div class="mensaje"
+                :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
                 <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario" class="avatar-usuario" />
+                  <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil"
+                    alt="Avatar usuario" class="avatar-usuario" />
                   <p class="nombre-usuario">{{ nom_usuari }}</p>
                 </div>
                 <div class="contenido-mensaje">
@@ -88,9 +91,27 @@ export default {
 
         await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
+        // Construir el mensaje con la lista de apats y platos
+        let mensajeDieta = '\nAquí tens la teva dieta:\n'; // Comienza el mensaje con la introducción
+
+        dietaJSON.apats.forEach((apat) => {
+          // Iterar sobre cada apat de la dieta
+          mensajeDieta += `\n${apat.apat}:\n`; // Agregar el nombre del apat al mensaje
+
+          apat.plats.forEach((plat) => {
+            // Iterar sobre cada plat del apat
+            mensajeDieta += `\n- ${plat.nom_plat} (proteines: ${plat.proteines}, carbohidrats: ${plat.carbohidrats}, greixos: ${plat.greixos}, calories: ${plat.calories})\n`;
+            mensajeDieta += `\tIngredients:\n`;
+            plat.ingredients.forEach((ingredient) => {
+              // Iterar sobre cada ingrediente del plat
+              mensajeDieta += `\t- ${ingredient.nom_ingredient}: ${ingredient.quantitat} ${ingredient.unitat}\n`;
+            });
+          });
+        });
+
         this.chatMessages.push({
           role: 'assistant',
-          content: generatedText,
+          content: mensajeDieta,
         });
 
 
@@ -173,24 +194,25 @@ body {
 }
 
 .mensaje-bienvenida {
-    display: grid;
-    grid-template-columns: .2fr 1fr;
-    margin-top: 50%;
+  display: grid;
+  grid-template-columns: .2fr 1fr;
+  margin-top: 50%;
 
- 
+
 }
 
-.mensaje-bienvenida h2{
+.mensaje-bienvenida h2 {
   font-size: 1.5em;
-    font-weight: 600;
-    text-align: center;
-    padding: 15px;
-    
-    background-color: #33333327;
-    font-style: italic; /* Add this line to make the text italic */
-    width: 70%;
-    margin: auto;
-    border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+  padding: 15px;
+
+  background-color: #33333327;
+  font-style: italic;
+  /* Add this line to make the text italic */
+  width: 70%;
+  margin: auto;
+  border-radius: 10px;
 }
 
 .mensaje-bienvenida img {
@@ -201,8 +223,10 @@ body {
 }
 
 .chat-container {
-  overflow-y: auto; /* Hace que el contenido sea desplazable verticalmente si es necesario */
-  flex: 1; /* Permite que el área del chat ocupe el espacio disponible */
+  overflow-y: auto;
+  /* Hace que el contenido sea desplazable verticalmente si es necesario */
+  flex: 1;
+  /* Permite que el área del chat ocupe el espacio disponible */
   width: 90%;
 }
 
@@ -214,7 +238,7 @@ body {
   width: 90%;
 }
 
-.chat img{
+.chat img {
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -228,7 +252,7 @@ body {
   align-items: center;
 }
 
-.info-usuario p{
+.info-usuario p {
   font-style: italic;
 }
 
@@ -333,4 +357,5 @@ navBar {
   /* Ocupa todo el ancho de la pantalla */
   z-index: 999;
   /* Asegura que esté por encima del contenido */
-}</style>
+}
+</style>
