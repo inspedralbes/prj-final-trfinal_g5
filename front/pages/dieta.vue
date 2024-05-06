@@ -3,7 +3,9 @@
         <div class="flex-container">
             <capçalera />
             <h1>Dieta</h1>
-            <!-- <p>Desde {{ dietas.data_inici }} fins {{ dietas.data_fi }}</p> -->
+            <div v-if="dietas.length > 0">
+                <p>Desde {{ dietas[0].platos[0].data_inici }} hasta {{ dietas[0].platos[0].data_fi }}</p>
+            </div>
             <div v-for="(comida, index) in dietas" :key="index">
                 <h2>{{ comida.apat }}</h2>
                 <div v-for="(plato, index) in comida.platos" :key="index" class="meal-item">
@@ -12,7 +14,7 @@
                     <p>Proteínes: {{ plato.proteines }}</p>
                     <p>Carbohidratos: {{ plato.carbohidrats }}</p>
                     <p>Grasas: {{ plato.grases }}</p>
-                    <p>Ingredientes:</p>
+                    <p>Ingredients:</p>
                     <ul>
                         <li v-for="(ingredient, index) in plato.ingredients" :key="index">
                             {{ ingredient.quantitat }} {{ ingredient.unitat }} de {{ ingredient.nom_ingredient }}
@@ -25,6 +27,7 @@
         <navBar />
     </body>
 </template>
+
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
