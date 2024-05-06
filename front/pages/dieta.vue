@@ -1,17 +1,28 @@
 <template>
     <body>
-        <div>
-            <div v-for="(apat, index) in dietas" :key="index">
-                <h2 class="meal-type">{{ apat.apat }}</h2>
-                <div class="meal-container">
-                    <div v-for="(comida, comidaIndex) in apat.comidas" :key="comidaIndex" class="meal-item">
-                        <h3 class="meal-name">{{ comida.nom_plat }}</h3>
-                        <p class="calories">Calorías: {{ comida.calories }}</p>
-                        <!-- Aquí puedes mostrar otros detalles de la comida si lo deseas -->
-                    </div>
+        <div class="flex-container">
+            <capçalera />
+            <h1>Dieta</h1>
+            <!-- <p>Desde {{ dietas.data_inici }} fins {{ dietas.data_fi }}</p> -->
+            <div v-for="(comida, index) in dietas" :key="index">
+                <h2>{{ comida.apat }}</h2>
+                <div v-for="(plato, index) in comida.platos" :key="index" class="meal-item">
+                    <h3 class="meal-name">{{ plato.nom_plat }}</h3>
+                    <p class="calories">Calorías: {{ plato.calories }}</p>
+                    <p>Proteínes: {{ plato.proteines }}</p>
+                    <p>Carbohidratos: {{ plato.carbohidrats }}</p>
+                    <p>Grasas: {{ plato.grases }}</p>
+                    <p>Ingredientes:</p>
+                    <ul>
+                        <li v-for="(ingredient, index) in plato.ingredients" :key="index">
+                            {{ ingredient.quantitat }} {{ ingredient.unitat }} de {{ ingredient.nom_ingredient }}
+                        </li>
+                    </ul>
                 </div>
             </div>
+            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
         </div>
+        <navBar />
     </body>
 </template>
 
@@ -26,19 +37,41 @@ export default {
         };
     },
     methods: {
-        
-        async obtenirDieta(idUsuari) {
-            // Obtener la dieta del usuario actual
-            const dieta = await getDieta(idUsuari);
-            this.dietas = dieta;
+        obtenirDieta(idUsuari) {
+            getDieta(idUsuari)
+                .then(response => {
+                    console.log('Dieta:', response);
+                    // Organizar los platos por tipo de comida
+                    const comidas = {};
+                    response.forEach(plato => {
+                        if (!comidas.hasOwnProperty(plato.apat)) {
+                            comidas[plato.apat] = [];
+                        }
+                        comidas[plato.apat].push(plato);
+                    });
+                    // Convertir el objeto en un array
+                    this.dietas = Object.keys(comidas).map(apat => ({
+                        apat: apat,
+                        platos: comidas[apat].map(plato => ({
+                            ...plato,
+                            ingredients: JSON.parse(plato.ingredients)
+                        }))
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error al obtener la dieta:', error);
+                });
         },
         redirectTo(page) {
             this.$router.push(page);
         }
+    },
+    mounted() {
+        this.idUsuari = useUsuariPerfilStore().id_usuari;
+        this.obtenirDieta(this.idUsuari);
     }
 }
 </script>
-
 
 <style scoped>
 /* Estilos de los divs en el componente */
@@ -51,8 +84,6 @@ body {
     /* Evita el desplazamiento horizontal */
 }
 
-
-
 .flex-container {
     display: flex;
     flex-direction: column;
@@ -60,20 +91,6 @@ body {
     min-height: 100%;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
-}
-
-.meal-container {
-    width: 80%;
-    max-width: 600px;
-    margin-top: 20px;
-    overflow-y: auto;
-    /* Agrega barra de desplazamiento vertical si el contenido es más largo que la pantalla */
-}
-
-.meal-type {
-    font-size: 28px;
-    font-weight: bold;
-    margin-top: 20px;
 }
 
 .meal-item {

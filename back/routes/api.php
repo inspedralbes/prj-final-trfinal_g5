@@ -19,7 +19,7 @@ Route::post('/guardar-rutina', [RutinaController::class, 'store']);
 
 Route::get('/aliments', [AlimentsController::class, 'index']);
 
-Route::get('/dietas/{id}', [DietaController::class, 'getDietas']);
+Route::get('/dieta/{id}', [DietaController::class, 'getDietas']);
 Route::post('/guardar-dieta', [DietaController::class, 'store']);
 
 Route::post('/registre', [UserController::class, 'registre']);
