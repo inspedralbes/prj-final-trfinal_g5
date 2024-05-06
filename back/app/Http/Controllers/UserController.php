@@ -31,10 +31,7 @@ class UserController extends Controller
                 'pes' => 'numeric',
                 'altura' => 'numeric',
                 'telefon' => 'integer|digits:9',
-                'foto_perfil' => 'image|mimes:jpeg,png,jpg',
-                'alergia_intolerancia' => 'string',
-                'lesio' => 'string',
-                'registre' => 'string',
+                'registre' => 'boolean',
             ]);
 
             $usuari = new Usuaris();
@@ -44,6 +41,7 @@ class UserController extends Controller
             $usuari->cognoms = $request->cognoms;
             $usuari->data_naixement = $request->data_naixement;
             $usuari->genere = $request->genere;
+            
 
             if ($request->has('pes')) {
                 $usuari->pes = $request->pes;
@@ -56,6 +54,7 @@ class UserController extends Controller
             if ($request->has('telefon')) {
                 $usuari->telefon = $request->telefon;
             }
+            $usuari->registre = $request->registre;
 
             $usuari->save();
            \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
