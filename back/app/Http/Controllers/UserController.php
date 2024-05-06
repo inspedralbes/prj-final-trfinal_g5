@@ -221,23 +221,36 @@ class UserController extends Controller
         // Actualiza los campos del usuario con los datos recibidos en la solicitud
         $usuari->fill($request->except('foto_perfil'));
     
+        // Verificar si todos los campos están llenos
+        $camposLlenos = !empty($usuari->nom) &&
+                       !empty($usuari->cognoms) &&
+                       !empty($usuari->data_naixement) &&
+                       !empty($usuari->genere) &&
+                       !empty($usuari->pes) &&
+                       !empty($usuari->altura) &&
+                       !empty($usuari->telefon);
+    
+        // Establecer el campo 'registre' en true o false según si todos los campos están llenos
+        $usuari->registre = $camposLlenos;
+    
         // Manejar la imagen de perfil
         if ($request->has('foto_perfil_base64')) {
-    // Obtener el archivo base64 de la solicitud
-    $base64Image = $request->foto_perfil_base64;
-
-    // Decodificar la cadena base64 en una imagen
-    $imageData = base64_decode($base64Image);
-
-    // Usar el nombre original del archivo
-    $originalFileName = 'perfil_' . uniqid() . '.jpg'; // Generar un nombre único para el archivo
+            // Obtener el archivo base64 de la solicitud
+            $base64Image = $request->foto_perfil_base64;
     
-    // Mover la imagen a la ubicación deseada con el nombre original
-    file_put_contents(public_path('storage/imagenes_perfil/' . $originalFileName), $imageData);
-
-    // Actualizar el campo de la imagen de perfil en la base de datos
-    $usuari->foto_perfil = $originalFileName;
-}    
+            // Decodificar la cadena base64 en una imagen
+            $imageData = base64_decode($base64Image);
+    
+            // Usar el nombre original del archivo
+            $originalFileName = 'perfil_' . uniqid() . '.jpg'; // Generar un nombre único para el archivo
+            
+            // Mover la imagen a la ubicación deseada con el nombre original
+            file_put_contents(public_path('storage/imagenes_perfil/' . $originalFileName), $imageData);
+    
+            // Actualizar el campo de la imagen de perfil en la base de datos
+            $usuari->foto_perfil = $originalFileName;
+        }    
+    
         // Guarda los cambios en la base de datos
         $usuari->save();
     
@@ -245,16 +258,9 @@ class UserController extends Controller
         return response()->json([
             'status' => 1,
             'message' => 'Usuario actualizado correctamente',
-            'telefon' => $usuari->telefon,
-            'data_naixement' => $usuari->data_naixement,
-            'genere' => $usuari->genere,
-            'pes' => $usuari->pes,
-            'altura' => $usuari->altura,
             'foto_perfil' => $usuari->foto_perfil,
         ]);
     }
-    
-
     
 
 }    
