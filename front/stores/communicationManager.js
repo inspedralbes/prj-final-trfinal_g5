@@ -1,7 +1,7 @@
 const url = 'http://localhost:8000/api';
 //const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '0123456789';
+const apiKey = '1234567890';
 
 
 //ejemplo de peticion fetch get
