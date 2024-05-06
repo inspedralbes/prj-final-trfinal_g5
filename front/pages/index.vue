@@ -88,7 +88,6 @@ body {
 }
 
 body {
-    font-family: Arial, sans-serif;
     /* Establecer la fuente predeterminada */
     background-color: #f0f0f0;
     /* Color de fondo */

@@ -8,12 +8,16 @@
                 <div class="editar-sign">
                     <img src="../public/editar.png">
                 </div>
-                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon"
-                    :class="{ 'incomplete-profile': !registre }" @click="openFileInput" />
+                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
+                    class="user-icon" :class="{ 'incomplete-profile': !registre }" @click="openFileInput" />
+                <h1>{{ nom_usuari }}</h1>
+
             </div>
-            <h1>{{ nom_usuari }}</h1>
             <div v-if="!registre" class="alert-sign">
                 !
+            </div>
+            <div id="myProfile">
+                <h1>El meu perfil</h1>
             </div>
         </div>
     </div>
@@ -139,7 +143,7 @@ export default {
 
 .imgContainer img {
     margin-top: 5px;
-    width: 38%;
+    width: 65%;
     border-radius: 50%;
     margin-right: 75px;
 }
@@ -147,27 +151,29 @@ export default {
 .user-info {
     position: relative;
     margin-left: 20px;
+    display: grid;
+    grid-template-columns: 1.5fr .2fr;
 }
 
 .user-icon {
-    width: 65%;
+    width: 80%;
     border-radius: 50%;
     text-align: center;
     margin: auto;
 }
 
 .incomplete-profile {
-    border: 4px solid #f44336;
+    border: 4px solid #FFA500;
 }
 
 .alert-sign {
     position: absolute;
-    bottom: 3%;
-    left: 13%;
+    bottom: 10%;
+    left: 15%;
     transform: translateX(5%);
-    width: 30px;
-    height: 30px;
-    background-color: #f44336;
+    width: 25px;
+    height: 25px;
+    background-color: #FFA500;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -188,8 +194,8 @@ export default {
     background-color: #e3e3e3;
     border-radius: 50%;
     display: flex;
-    
-    
+
+
 }
 
 .editar-sign img {
@@ -205,12 +211,11 @@ h1 {
 }
 
 .header-container {
-    background-color: #f0f0f0;
+    background-color: #fafafa;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 70px;
-    width: 95%;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 0;
+    padding-top: 20px;
     position: relative;
     margin-bottom: 20px;
 }
@@ -229,5 +234,10 @@ h1 {
 
 .oculto {
     display: none;
+}
+
+#myProfile{
+    text-align: right;
+    margin-right: 20px;
 }
 </style>

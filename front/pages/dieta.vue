@@ -85,10 +85,7 @@ body {
     /* Evita el desplazamiento horizontal */
 }
 
-body {
-    font-family: Arial, sans-serif;
-    /* Establecer la fuente predeterminada */
-}
+
 
 .flex-container {
     display: flex;
