@@ -3,10 +3,11 @@
     <body>
         <div class="flex-container">
             <capçalera />
+            <h1>Rutina</h1>
+
             <div class="main-content">
                 <div class="exercise-list">
                     
-                    <h1>Rutina</h1>
 
                     <div class="botons-superior">
                         <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
@@ -161,6 +162,13 @@ body {
     min-height: 100%;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
+}
+
+.flex-container h1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 36px;
+    font-weight: bold;
 }
 
 
