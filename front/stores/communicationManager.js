@@ -68,6 +68,18 @@ export async function getDatosAliments() {
     }
 }
 
+export async function getRutina(idUsuario) {
+    try{
+        const response = await fetch(`${url}/rutina/${idUsuario}`);
+        if(!response.ok){
+            throw new Error('Error al obtener los datos del ejercicio: ' + response.statusText);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw new Error('Error de red al obtener los datos del ejercicio: ' + error.message);
+    }
+}
 
 //ejemplo de peticion fetch post
 

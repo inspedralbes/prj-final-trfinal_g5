@@ -1,16 +1,41 @@
 <template>
+
     <body>
         <div class="flex-container">
             <capçalera />
+            <h1>Rutina</h1>
+
             <div class="main-content">
                 <div class="exercise-list">
-                    <h1>Dia de pecho</h1>
-                    <div v-for="exercise in selectedDayExercises" :key="exercise.id" class="exercise-item">
-                        <img :src="exercise.image" :alt="exercise.name" class="exercise-image" />
-                        <div class="exercise-details">
-                            <h2 class="exercise-name">{{ exercise.name }}</h2>
-                            <p class="exercise-info">Series: {{ exercise.series }}</p>
-                            <p class="exercise-info">Repeticiones: {{ exercise.reps }}</p>
+                    
+
+                    <div class="botons-superior">
+                        <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
+
+                                <div class="day-selector">
+                                    
+                                    <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
+                                        <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
+                                    </select>
+                                </div>
+                                    <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
+                                
+
+                    </div>
+
+
+
+                    <div v-for="exercise in exercises" :key="exercise.id">
+                        <div class="exercise-item">
+                            <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
+
+                            <h2>{{ exercise.nom_exercici }}</h2>
+
+                            <div class="exercise-details">
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" /> Día: {{ exercise.dia }} <br> <br>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br> <br>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones: {{ exercise.repeticions }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -22,44 +47,85 @@
 </template>
 
 <script>
+import { useUsuariPerfilStore } from '@/stores/index';
+import { getRutina } from '@/stores/communicationManager';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faCircle, faAddressBook } from '@fortawesome/free-solid-svg-icons'
+
+
 export default {
     data() {
         return {
             usuario: '',
-            selectedDay: 'pecho', // Aquí puedes establecer el día inicial seleccionado
-            exercises: {
-                pecho: [
-                    { id: 1, name: 'Press de banca', series: 4, reps: 10, image: '/rutina/press_banca.jpg' },
-                    { id: 1, name: 'Press inclinado', series: 4, reps: 10, image: '/rutina/press_inclinado.jpg' },
-                    { id: 1, name: 'Peck Deck', series: 4, reps: 10, image: '/rutina/peck_deck.jpg' },
-                    { id: 2, name: 'Fondos en paralelas', series: 3, reps: 12, image: '/rutina/fondos_paralelas.jpg' },
-                    { id: 1, name: 'Hex press', series: 4, reps: 12, image: '/rutina/hex_press.jpg' },
-                    { id: 2, name: 'Pull-over', series: 3, reps: 15, image: '/rutina/pull_over.jpg' },
-                    // Añade más ejercicios de pecho si es necesario
-                ],
-                espalda: [
-                    { id: 1, name: 'Dominadas', series: 4, reps: 8, rest: '90s', image: '../public/dominadas.jpg' },
-                    { id: 2, name: 'Remo con barra', series: 3, reps: 10, rest: '60s', image: '../public/remo_barra.jpg' },
-                    // Añade más ejercicios de espalda si es necesario
-                ],
-                // Añade más días y ejercicios según sea necesario
-            }
+            idUsuari: '',
+            selectedDay: '1',
+            exercises: [],
+            dies: []
+        }
+    },
+    computed: {
+        availableDays() {
+            // Obtener una lista de días disponibles en la rutina actual
+            return [...new Set(this.exercises.map(exercise => exercise.dia))];
         }
     },
     mounted() {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
         this.usuario = localStorage.getItem('username');
-
-
-    },
-    computed: {
-        selectedDayExercises() {
-            return this.exercises[this.selectedDay] || [];
-        }
+        this.idUsuari = useUsuariPerfilStore().id_usuari;
+        console.log(this.idUsuari);
+        this.obtenirRutina(this.idUsuari);
+        this.obtenirDies(this.idUsuari);
     },
     methods: {
         redirectTo(page) {
             this.$router.push(page);
+        },
+        obtenirRutina(idUsuari) {
+            getRutina(idUsuari)
+                .then((response) => {
+                    console.log(response);
+                    // Filtrar los ejercicios para mostrar solo los del día seleccionado
+                    this.exercises = response.filter(exercise => exercise.dia === this.selectedDay);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+        obtenirDies(idUsuari) {
+            getRutina(idUsuari)
+                .then((response) => {
+                    //console.log(response);
+                    this.dies = [...new Set(response.map(exercise => exercise.dia))];
+                    console.log(this.dies);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+        incrementSelectedDay() {
+            // Sumar 1 al día seleccionado
+            if (this.selectedDay < '5') {
+                this.selectedDay = String(parseInt(this.selectedDay) + 1);
+                // Volver a obtener la rutina para mostrar los ejercicios del nuevo día seleccionado
+                this.obtenirRutina(this.idUsuari);
+            } else {
+                this.selectedDay = '1';
+                this.obtenirRutina(this.idUsuari);
+            }
+
+        },
+
+        decrementSelectedDay() {
+            // Restar 1 al día seleccionado
+            if (this.selectedDay > '1') {
+                this.selectedDay = String(parseInt(this.selectedDay) - 1);
+                // Volver a obtener la rutina para mostrar los ejercicios del nuevo día seleccionado
+                this.obtenirRutina(this.idUsuari);
+            } else {
+                this.selectedDay = '5';
+                this.obtenirRutina(this.idUsuari);
+            }
         }
     }
 }
@@ -77,10 +143,16 @@ body {
 }
 
 body {
-    font-family: Arial, sans-serif;
     /* Establecer la fuente predeterminada */
     padding-bottom: 50px;
     /* Altura del navBar */
+}
+
+.arrow{
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    color: #000;
 }
 
 .flex-container {
@@ -92,6 +164,13 @@ body {
     background-color: #FFF;
 }
 
+.flex-container h1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 36px;
+    font-weight: bold;
+}
+
 
 .main-content {
     flex-grow: 1;
@@ -101,14 +180,18 @@ body {
     /* Altura del header */
     padding-bottom: 50px;
     /* Altura del navBar */
+    
 }
 
 .exercise-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 20px;
     padding: 20px;
+    margin: auto;
+    text-align: center;
+    border-radius: 15px;
+    width: 80%;
 }
 
 .exercise-item {
@@ -118,14 +201,14 @@ body {
     background-color: #e6e6e6;
     border-radius: 10px;
     padding: 20px;
-    width: calc(50% - 20px);
-    /* Ajuste para dos columnas */
+    width: 60%;
     box-sizing: border-box;
+    margin: auto;
 }
 
 .exercise-image {
-    width: 130px;
-    height: 130px;
+    width: 100%;
+    height: 70%;
     object-fit: cover;
     border-radius: 10px;
 }
@@ -134,15 +217,17 @@ body {
     text-align: center;
 }
 
-.exercise-name {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
 .exercise-info {
     font-size: 16px;
     margin-bottom: 5px;
+}
+
+.botons-superior {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: auto;
+    border-radius: 15px;
 }
 
 .dieta-button {
@@ -166,6 +251,26 @@ body {
     background-color: #666;
 }
 
+.dia-button {
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-position: center;
+    font-size: 30px;
+    color: #000;
+    background-color: #666;
+    margin: auto;
+
+}
+
 navBar {
     position: fixed;
     bottom: 0;
@@ -173,12 +278,24 @@ navBar {
     z-index: 1;
 }
 
+.day-selector {
+    display: flex;
+    align-items: center;
+    margin: auto;
+
+}
+
+.day-selector select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
 /* Media query para pantallas más pequeñas */
 @media screen and (max-width: 790px) {
     .exercise-item {
-        width: calc(50% - 20px);
+        width: 70%;
         /* Ajuste para dos columnas en pantallas más pequeñas */
     }
 }
 </style>
-
