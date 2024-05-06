@@ -11,18 +11,16 @@ use Carbon\Carbon;
 
 class DietaController extends Controller
 {
-
-    public function getDietas(Request $request)
+    public function getDietas(Request $request, $id)
     {
-        $dietas = Dieta::all();
+        $dietas = Dieta::where('id_usuari', $id)->get();
         return response()->json($dietas);
     }
-
-    public function getDieta(Request $request, $id)
-    {
-        $dieta = Dieta::find($id);
-        return response()->json($dieta);
-    }
+    // public function getDieta(Request $request, $id)
+    // {
+    //     $dieta = Dieta::find($id);
+    //     return response()->json($dieta);
+    // }
 
     public function store(Request $request)
     {

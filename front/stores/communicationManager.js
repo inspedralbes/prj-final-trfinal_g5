@@ -1,7 +1,7 @@
 const url = 'http://localhost:8000/api';
 //const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '1234567890';
+const apiKey = 'sk-api-key';
 
 
 //ejemplo de peticion fetch get
@@ -78,6 +78,19 @@ export async function getRutina(idUsuario) {
         return data;
     } catch (error) {
         throw new Error('Error de red al obtener los datos del ejercicio: ' + error.message);
+    }
+}
+
+export async function getDieta(idUsuario) {
+    try{
+        const response = await fetch(`${url}/dieta/${idUsuario}`);
+        if(!response.ok){
+            throw new Error('Error al obtener los datos de la dieta: ' + response.statusText);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw new Error('Error de red al obtener los datos de la dieta: ' + error.message);
     }
 }
 

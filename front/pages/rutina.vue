@@ -71,7 +71,6 @@ export default {
     },
     mounted() {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
-        this.usuario = localStorage.getItem('username');
         this.idUsuari = useUsuariPerfilStore().id_usuari;
         console.log(this.idUsuari);
         this.obtenirRutina(this.idUsuari);
