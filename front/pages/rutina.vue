@@ -5,23 +5,29 @@
             <capçalera />
             <h1>Rutina</h1>
 
-            <div class="main-content">
+            <div id="crearRutina" v-if="exercises.length === 0">
+                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+
+            </div>
+
+            <div v-else class="main-content">
                 <div class="exercise-list">
-                    
+
 
                     <div class="botons-superior">
                         <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
 
-                                <div class="day-selector">
-                                    
-                                    <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
-                                        <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
-                                    </select>
-                                </div>
-                                    <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
-                                
+                        <div class="day-selector">
+
+                            <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
+                                <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
+                            </select>
+                        </div>
+                        <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
+
 
                     </div>
+
 
 
 
@@ -32,15 +38,19 @@
                             <h2>{{ exercise.nom_exercici }}</h2>
 
                             <div class="exercise-details">
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" /> Día: {{ exercise.dia }} <br> <br>
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br> <br>
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones: {{ exercise.repeticions }}
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" />
+                                Día: {{ exercise.dia }} <br> <br>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-fitness-center" />Series:
+                                {{ exercise.series }} <br> <br>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones:
+                                {{ exercise.repeticions }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
+
         </div>
         <navBar />
     </body>
@@ -148,7 +158,7 @@ body {
     /* Altura del navBar */
 }
 
-.arrow{
+.arrow {
     width: 50px;
     height: 50px;
     margin: auto;
@@ -180,7 +190,7 @@ body {
     /* Altura del header */
     padding-bottom: 50px;
     /* Altura del navBar */
-    
+
 }
 
 .exercise-list {
@@ -231,24 +241,23 @@ body {
 }
 
 .dieta-button {
-    width: 160%;
-    /* Ancho del 80% del contenedor padre */
-    max-width: 400px;
-    height: 100px;
-    margin-top: 50px;
+    position: relative;
+    width: 60%;
+    height: 60px;
     margin-bottom: 50px;
-    /* Espacio entre los botones */
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: bold;
+    color: #fff;
     cursor: pointer;
     border: none;
     outline: none;
     background-size: cover;
     border-radius: 10px;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     background-position: center;
-    font-size: 30px;
-    color: #000;
-    background-color: #666;
+    color: #474747;
+
 }
 
 .dia-button {
@@ -289,6 +298,14 @@ navBar {
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
+}
+
+#crearRutina {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 /* Media query para pantallas más pequeñas */
