@@ -1,19 +1,43 @@
-# transversals
-Esquema mínim de carpetes pels projectes transversals
+# Projecte Transversal: FitHub
 
-És obligatori seguir aquesta estructura tot i que la podeu ampliar.
+## Descripció
+Aquest projecte té com a objectiu desenvolupar un projecte final que tracta d'una aplicacio de gimnas que amb un chatIA et fa les rutines i dietes i assesorament de gimnas
 
-## Atenció
-Un cop comenceu heu de canviar aquesta explicació amb la corresponent al vostre projecte (utilitzant markdown)
+## Esquema Carpetes
+Aquest es el nostre esquema de carpetes:
+- .github
+- back
+- doc
+- front
+- seguiment
+- vendor
+- docker-compose.yml
+- README.md
 
-## Docker & Docker compose
-El projecte s'ha de poder desplegar en mode desenvolupament simplement fent docker compose up
+## Integrants
+- Aitor Barreiro
+- Alex Delgado
+- Eric Rodrigez
+- Miquel Barceló
 
-# Aquest fitxer ha de contenir com a mínim:
- * Nom dels integrants
- * Nom del projecte
- * Petita descripció
- * Adreça del gestor de tasques (taiga, jira, trello...)
- * Adreça del prototip gràfic del projecte (Penpot, figma, moqups...)
- * URL de producció (quan la tingueu)
- * Estat: (explicació d'en quin punt està)
+## Gestor de Tasques
+Utilitzem Taiga com a gestor de tasques. Podeu accedir-hi a través del següent enllaç: [Taiga](https://tree.taiga.io/project/a21aledelfel-tr_final_grupo_5/timeline)
+
+## Prototip Gràfic
+Per a la visualització del prototip gràfic del projecte, podeu accedir a penpot: [Penpot](https://design.penpot.app/#/view/93d0ad32-dfe5-8194-8003-d196a1776455?page-id=93d0ad32-dfe5-8194-8003-d196a1776456&section=interactions&frame-id=c57b177c-d2d1-8023-8003-d1c548b8c65b&index=0&share-id=93d0ad32-dfe5-8194-8003-d1ca957c9e03)
+
+## URL de Producció
+Actualment, el projecte es troba en fase de desenvolupament i no disposa d'una URL de producció disponible.
+
+## Estat
+El projecte es troba en una fase de desenvolupament. S'ha configurat l'entorn Docker per a desplegar-lo fàcilment en mode de desenvolupament.
+
+### Docker & Docker Compose
+Per desplegar el projecte en mode desenvolupament, executeu lo següent comanda de Docker Compose:
+
+```bash
+docker login
+```
+
+```bash
+docker-compose up
