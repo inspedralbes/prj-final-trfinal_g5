@@ -41,8 +41,10 @@
 
                         <div class="input-container">
                             <label>Altura:</label><br>
-                            <input type="number" v-model="usuario.altura" placeholder="Altura (cm)"maxlength="4">
+                            <input type="text" v-model="usuario.altura" placeholder="Altura (cm)"
+                                @input="validateAltura"maxlength="4">
                         </div>
+
                         <div class="input-container">
                             <label>Pes:</label><br>
                             <input type="decimal" v-model="usuario.pes" placeholder="Pes (kg)" maxlength="6">
@@ -221,6 +223,17 @@ export default {
                 }
             }
         },
+        validateAltura(event) {
+            // Expresión regular para validar un solo dígito del 1 al 9
+            const regex = /^[1-9]$/;
+
+            // Verificar si la entrada del usuario coincide con la expresión regular
+            if (!regex.test(event.target.value)) {
+                // Si no coincide, eliminar los caracteres no válidos
+                this.usuario.altura = event.target.value.replace(/[^1-9]/g, '');
+            }
+        },
+
         validatePhoneNumber() {
             // Verifica si el número de teléfono está vacío o tiene 9 caracteres
             if (this.usuario.telefon && this.usuario.telefon.length !== 9) {
