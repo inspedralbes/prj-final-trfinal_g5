@@ -178,10 +178,9 @@ export default {
                 .then(data => {
                     // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
+                    console.log('Datos del usuario actualizados:', data);
+                    useUsuariPerfilStore().registre = Boolean(Number(data.registre));
 
-
-                    const nullFields = Object.values(data).some(value => value === null);
-                    useUsuariPerfilStore().registre = !nullFields;
 
                     // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
                     if (this.usuario.nom) {

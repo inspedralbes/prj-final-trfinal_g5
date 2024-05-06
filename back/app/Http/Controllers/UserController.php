@@ -259,6 +259,7 @@ class UserController extends Controller
             'status' => 1,
             'message' => 'Usuario actualizado correctamente',
             'foto_perfil' => $usuari->foto_perfil,
+            'registre' => $usuari->registre
         ]);
     }
     
