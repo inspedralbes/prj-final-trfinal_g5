@@ -27,6 +27,7 @@ Route::post('/loguejat', [UserController::class, 'loguejat']);
 Route::post('/deslojegat', [UserController::class, 'deslojegat']);
 
 Route::post('/comprovaremail', [UserController::class, 'comprovarCorreuUsuari']);
+Route::post('/comprovarnomusuari', [UserController::class, 'comprovarNomUsuari']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

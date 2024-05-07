@@ -73,11 +73,6 @@ class UserController extends Controller
             'status' => 1,
             'message' => 'Usuari creat correctament',
             'idUsuario' => $idUsuario,
-            'telefon' => $usuari->telefon,
-            'data_naixement' => $usuari->data_naixement,
-            'genere' => $usuari->genere,
-            'pes' => $usuari->pes,
-            'altura' => $usuari->altura,
         ]);
     } catch (ValidationException $e) {
         // Captura las excepciones de validación y obtén los mensajes de error
@@ -182,6 +177,27 @@ class UserController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Correo no encontrado'
+            ]);
+        }
+    }
+    public function comprovarNomUsuari(Request $request)
+    {
+        $request->validate([
+            'nom_usuari' => 'required|string|max:255',
+        ]);
+        
+
+        $usuari = Usuaris::where('nom_usuari', $request->nom_usuari)->first();
+
+        if ($usuari) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'El nom d\'usuari ja es troba registrar'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Nom d\'usuari no trobat'
             ]);
         }
     }
