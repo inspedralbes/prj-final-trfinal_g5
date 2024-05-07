@@ -1,30 +1,24 @@
 <template>
     <div class="header-container">
         <div class="imgContainer">
-            <!-- Input oculto para seleccionar una imagen -->
-            <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
-            <!-- Mostrar la imagen de perfil actual -->
             <div class="user-info">
                 <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
-
-                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
-                    class="user-icon" :class="{ 'incomplete-profile': !registre }"  />
+                    <div class="user-icon-container">
+                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
+                            class="user-icon" :class="{ 'incomplete-profile': !registre }" />
+                    </div>
                 </nuxt-link>
-
-                    <h1 id="nomUsuri">{{ nom_usuari }}</h1>
-
+                <h1 id="nomUsuri">{{ nom_usuari }}</h1>
             </div>
             <div v-if="!registre" class="alert-sign">
                 !
             </div>
-            
         </div>
     </div>
 </template>
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
-import { actualizarDatosUsuario } from '@/stores/communicationManager';
 
 export default {
     data() {
@@ -46,90 +40,6 @@ export default {
             return useUsuariPerfilStore().registre;
         }
     },
-    methods: {
-        openFileInput() {
-            // Al hacer clic en la imagen, activar el input de archivo
-            this.$refs.fileInput.click();
-        },
-        handleFileChange(event) {
-            const file = event.target.files[0]; // Obtener el archivo del evento
-
-            if (file) {
-                // Verificar si el archivo es una imagen
-                if (!file.type.startsWith('image/')) {
-                    // console.error('El archivo seleccionado no es una imagen.');
-                    return; // Salir del método si el archivo no es una imagen
-                }
-
-                // Asignar directamente el archivo seleccionado a this.usuario.foto_perfil
-                this.usuario.foto_perfil = file;
-
-                // Mostrar en la consola la foto de perfil seleccionada
-                // console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
-
-                // Llamar al método para guardar automáticamente los datos del usuario
-                this.guardarDatosUsuario();
-            } else {
-                // console.error('No se seleccionó ningún archivo.');
-            }
-        },
-
-        guardarDatosUsuario() {
-            // Verificar si ya se está guardando para evitar múltiples envíos
-            if (this.isSaving) return;
-
-            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
-
-            // Lógica para guardar los datos del usuario
-            // Puedes llamar a funciones separadas para manejar la lógica de guardado de la imagen y los otros campos
-            // Por ejemplo:
-            if (this.usuario.foto_perfil instanceof File) {
-                this.guardarFotoPerfil();
-            }
-        },
-        guardarFotoPerfil() {
-            // Lógica para guardar la foto de perfil
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64Image = reader.result.split(',')[1]; // Extraer solo el contenido base64
-
-                // Construir el objeto de datos a enviar
-                const data = {
-                    usuario: this.usuario,
-                    foto_perfil_base64: base64Image // Agregar la imagen base64 a los datos del usuario
-                };
-
-                // Realizar la solicitud PUT al servidor con los datos del usuario y la imagen en base64
-                this.enviarDatos(data);
-            };
-
-            // Leer la imagen de perfil como base64
-            reader.readAsDataURL(this.usuario.foto_perfil);
-        },
-        enviarDatos(data) {
-            const store = useUsuariPerfilStore();
-            const idUsuario = store.id_usuari;
-            actualizarDatosUsuario(idUsuario, data) // Llama a la función actualizarDatosUsuario con los datos y el idUsuario
-                .then(data => {
-                    // console.log('Datos del usuario actualizados:', data);
-                    this.$router.push('/home');
-                    if (this.usuario.foto_perfil) {
-                        useUsuariPerfilStore().foto_perfil = data.foto_perfil;
-                    }
-
-                    // Actualizar los datos originales con los datos modificados
-                    this.datosOriginales = { ...this.datosOriginales, ...this.usuario };
-
-                    // Restablecer la variable de estado a false después de completar el guardado
-                    this.isSaving = false;
-                })
-                .catch(error => {
-                    // console.error('Error al actualizar los datos del usuario:', error);
-                    // Restablecer la variable de estado a false si hay un error en el guardado
-                    this.isSaving = false;
-                });
-        }
-    }
 }
 </script>
 
@@ -140,13 +50,6 @@ export default {
     margin: auto;
 }
 
-.imgContainer img {
-    margin-top: 15px;
-    width: 65%;
-    border-radius: 50%;
-    margin-right: 75px;
-}
-
 .user-info {
     position: relative;
     margin-left: 20px;
@@ -154,16 +57,24 @@ export default {
     grid-template-columns: 1.5fr .2fr;
 }
 
-.user-icon {
-    width: 80%;
-    border-radius: 50%;
-    text-align: center;
-    margin: auto;
+.user-icon-container {
+    margin-top: 20px;
+    width: 50px; /* Ajustar el tamaño según sea necesario */
+    height: 50px; /* Ajustar el tamaño según sea necesario */
+    border-radius: 50%; /* Hacer el contenedor redondo */
+    overflow: hidden; /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
+    border: 4px solid #FFA500;
+
+
 }
 
-.incomplete-profile {
-    border: 4px solid #FFA500;
+.user-icon {
+    width: 100%; /* Ajustar la imagen al 100% del ancho del contenedor */
+    height: 100%; /* Ajustar la imagen al 100% de la altura del contenedor */
+    object-fit: cover; /* Escalar la imagen para que llene el contenedor sin distorsionarse */
 }
+
+
 
 .alert-sign {
     position: absolute;
@@ -183,27 +94,6 @@ export default {
     font-weight: bolder;
 }
 
-.editar-sign {
-    position: absolute;
-    top: 3%;
-    left: 30%;
-    transform: translateX(5%);
-    width: 30px;
-    height: 30px;
-    background-color: #e3e3e3;
-    border-radius: 50%;
-    display: flex;
-
-
-}
-
-.editar-sign img {
-    margin-left: 4px;
-    margin-top: 4px;
-    width: 20px;
-    height: 20px;
-}
-
 h1 {
     padding: 20px;
     font-size: 1.1rem;
@@ -216,23 +106,11 @@ h1 {
     margin-top: 0;
     position: relative;
     margin-bottom: 20px;
-}
-
-.close-button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
+    width: 100%;
 }
 
 .title {
     font-weight: bold;
     font-size: 24px;
 }
-
-.oculto {
-    display: none;
-}
-
-
 </style>
