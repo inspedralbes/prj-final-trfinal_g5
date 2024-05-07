@@ -8,10 +8,11 @@
                 <div class="editar-sign">
                     <img src="../public/editar.png">
                 </div>
-                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
-                    class="user-icon" :class="{ 'incomplete-profile': !registre }" @click="openFileInput" />
+                <div class="user-icon-container">
+                    <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
+                        class="user-icon" :class="{ 'incomplete-profile': !registre }" @click="openFileInput" />
+                </div>
                 <h1>{{ nom_usuari }}</h1>
-
             </div>
             <div v-if="!registre" class="alert-sign">
                 !
@@ -65,9 +66,6 @@ export default {
                 // Asignar directamente el archivo seleccionado a this.usuario.foto_perfil
                 this.usuario.foto_perfil = file;
 
-                // Mostrar en la consola la foto de perfil seleccionada
-                // console.log('Foto de Perfil seleccionada:', this.usuario.foto_perfil);
-
                 // Llamar al método para guardar automáticamente los datos del usuario
                 this.guardarDatosUsuario();
             } else {
@@ -82,8 +80,6 @@ export default {
             this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
 
             // Lógica para guardar los datos del usuario
-            // Puedes llamar a funciones separadas para manejar la lógica de guardado de la imagen y los otros campos
-            // Por ejemplo:
             if (this.usuario.foto_perfil instanceof File) {
                 this.guardarFotoPerfil();
             }
@@ -112,21 +108,13 @@ export default {
             const idUsuario = store.id_usuari;
             actualizarDatosUsuario(idUsuario, data) // Llama a la función actualizarDatosUsuario con los datos y el idUsuario
                 .then(data => {
-                    // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
                     if (this.usuario.foto_perfil) {
                         useUsuariPerfilStore().foto_perfil = data.foto_perfil;
                     }
-
-                    // Actualizar los datos originales con los datos modificados
-                    this.datosOriginales = { ...this.datosOriginales, ...this.usuario };
-
-                    // Restablecer la variable de estado a false después de completar el guardado
                     this.isSaving = false;
                 })
                 .catch(error => {
-                    // console.error('Error al actualizar los datos del usuario:', error);
-                    // Restablecer la variable de estado a false si hay un error en el guardado
                     this.isSaving = false;
                 });
         }
@@ -141,13 +129,6 @@ export default {
     margin: auto;
 }
 
-.imgContainer img {
-    margin-top: 5px;
-    width: 65%;
-    border-radius: 50%;
-    margin-right: 75px;
-}
-
 .user-info {
     position: relative;
     margin-left: 20px;
@@ -155,11 +136,19 @@ export default {
     grid-template-columns: 1.5fr .2fr;
 }
 
+.user-icon-container {
+    width: 50px; /* Ajustar el tamaño según sea necesario */
+    height: 50px; /* Ajustar el tamaño según sea necesario */
+    border-radius: 50%; /* Hacer que el contenedor sea redondo */
+    overflow: hidden; /* Recortar la imagen que sobresale del contenedor */
+    margin-top: 20px;
+}
+
 .user-icon {
-    width: 80%;
-    border-radius: 50%;
-    text-align: center;
-    margin: auto;
+    width: 100%; /* La imagen llena el contenedor */
+    height: 100%; /* La imagen llena el contenedor */
+    object-fit: cover; /* Escalar la imagen para que se ajuste dentro del contenedor */
+    object-position: center; /* Centrar la imagen dentro del contenedor */
 }
 
 .incomplete-profile {
@@ -194,8 +183,6 @@ export default {
     background-color: #e3e3e3;
     border-radius: 50%;
     display: flex;
-
-
 }
 
 .editar-sign img {
@@ -218,22 +205,7 @@ h1 {
     padding-top: 20px;
     position: relative;
     margin-bottom: 20px;
-}
-
-.close-button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
-}
-
-.title {
-    font-weight: bold;
-    font-size: 24px;
-}
-
-.oculto {
-    display: none;
+    width: 100%;
 }
 
 #myProfile{
