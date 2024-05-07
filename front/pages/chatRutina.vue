@@ -65,6 +65,10 @@ export default {
     };
   },
   methods: {
+    async enviarMensajePreseleccionado(mensajePreseleccionado) {
+      this.message = mensajePreseleccionado;
+      await this.enviarMensaje();
+    },
     async enviarMensaje() {
       try {
         if (!this.message.trim()) {
