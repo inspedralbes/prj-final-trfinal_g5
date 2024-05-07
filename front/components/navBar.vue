@@ -26,12 +26,14 @@
   top: 0;
   border-radius: 30px;
   z-index: 1000;
+
 }
 
 .navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
 }
 
 .navbar-brand {

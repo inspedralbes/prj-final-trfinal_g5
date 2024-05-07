@@ -43,10 +43,10 @@
                 </div>
                 <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
             </div>
-            
+            <navBar />
+
 
         </div>
-        <navBar />
     </body>
 </template>
 
@@ -141,16 +141,9 @@ html,
 body {
     margin: 0;
     padding: 0;
-    height: 100%;
-    overflow-x: hidden;
     /* Evita el desplazamiento horizontal */
 }
 
-body {
-    /* Establecer la fuente predeterminada */
-    padding-bottom: 50px;
-    /* Altura del navBar */
-}
 
 .arrow {
     width: 50px;
@@ -163,7 +156,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100%;
+    height: 100vh;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
 }
@@ -238,6 +231,7 @@ body {
     position: relative;
     width: 60%;
     height: 60px;
+    margin-top: 20px;
     margin-bottom: 50px;
     font-size: 1.5em;
     font-weight: bold;

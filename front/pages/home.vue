@@ -15,8 +15,9 @@
 
         </button>
       </div>
+      <navBar />
+
     </div>
-    <navBar />
   </body>
 </template>
 
@@ -55,7 +56,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 95vh;
+  height: 100vh;
   /* Mínimo 100% de la altura de la ventana */
   background-color: #FFF;
   position: relative;
