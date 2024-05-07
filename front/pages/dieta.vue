@@ -1,28 +1,43 @@
 <template>
+
     <body>
         <div class="flex-container">
             <capçalera />
             <h1>Dieta</h1>
-            <div v-if="dietas.length > 0">
-                <p>Desde {{ dietas[0].platos[0].data_inici }} hasta {{ dietas[0].platos[0].data_fi }}</p>
+
+            <!-- Mostrar mensaje para crear dieta si la base de datos está vacía -->
+            <div v-if="dietas.length === 0 && !loading">
+                <p>No hay datos de dieta disponibles. Pulsa el botón para generar una dieta.</p>
             </div>
-            <div v-for="(comida, index) in dietas" :key="index">
-                <h2>{{ comida.apat }}</h2>
-                <div v-for="(plato, index) in comida.platos" :key="index" class="meal-item">
-                    <h3 class="meal-name">{{ plato.nom_plat }}</h3>
-                    <p class="calories">Calorías: {{ plato.calories }}</p>
-                    <p>Proteínes: {{ plato.proteines }}</p>
-                    <p>Carbohidratos: {{ plato.carbohidrats }}</p>
-                    <p>Grasas: {{ plato.grases }}</p>
-                    <p>Ingredients:</p>
-                    <ul>
-                        <li v-for="(ingredient, index) in plato.ingredients" :key="index">
-                            {{ ingredient.quantitat }} {{ ingredient.unitat }} de {{ ingredient.nom_ingredient }}
-                        </li>
-                    </ul>
+
+            <!-- Mostrar spinner de carga mientras se cargan los datos -->
+            <div v-if="loading" class="loading">
+                <img src="@/public/dumbbell_white.png" alt="Loading..." class="loading-image" />
+            </div>
+
+            <dir v-else>
+                <div v-if="dietas.length > 0">
+                    <p>Desde {{ dietas[0].platos[0].data_inici }} hasta {{ dietas[0].platos[0].data_fi }}</p>
                 </div>
-            </div>
-            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+                <div v-for="(comida, index) in dietas" :key="index">
+                    <h2>{{ comida.apat }}</h2>
+                    <div v-for="(plato, index) in comida.platos" :key="index" class="meal-item">
+                        <h3 class="meal-name">{{ plato.nom_plat }}</h3>
+                        <p class="calories">Calories: {{ plato.calories }}</p>
+                        <p>Proteïnes: {{ plato.proteines }}</p>
+                        <p>Carbohidrats: {{ plato.carbohidrats }}</p>
+                        <p>Graixos: {{ plato.grases }}</p>
+                        <p>Ingredients:</p>
+                        <ul>
+                            <li v-for="(ingredient, index) in plato.ingredients" :key="index">
+                                {{ ingredient.quantitat }} {{ ingredient.unitat }} de {{ ingredient.nom_ingredient }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </dir>
+
+            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Dieta</button>
         </div>
         <navBar />
     </body>
@@ -36,7 +51,8 @@ import { getDieta } from '@/stores/communicationManager';
 export default {
     data() {
         return {
-            dietas: []
+            dietas: [],
+            loading: true // Variable para controlar la carga de datos
         };
     },
     methods: {
@@ -63,6 +79,9 @@ export default {
                 })
                 .catch(error => {
                     console.error('Error al obtener la dieta:', error);
+                })
+                .finally(() => {
+                    this.loading = false; // Marcar la carga de datos como completa
                 });
         },
         redirectTo(page) {
@@ -133,6 +152,34 @@ body {
     font-size: 16px;
     color: #666;
 }
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-image {
+    width: 100px;
+    /* Tamaño deseado para la imagen */
+    height: auto;
+    /* Mantener la proporción de aspecto */
+    animation: spin 2s linear infinite;
+    /* Animación de rotación */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 
 navBar {
     width: 100%;

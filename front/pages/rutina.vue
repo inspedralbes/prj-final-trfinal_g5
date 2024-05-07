@@ -7,19 +7,19 @@
 
             <div class="main-content">
                 <div class="exercise-list">
-                    
+
 
                     <div class="botons-superior">
                         <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
 
-                                <div class="day-selector">
-                                    
-                                    <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
-                                        <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
-                                    </select>
-                                </div>
-                                    <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
-                                
+                        <div class="day-selector">
+
+                            <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
+                                <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
+                            </select>
+                        </div>
+                        <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
+
 
                     </div>
 
@@ -32,9 +32,12 @@
                             <h2>{{ exercise.nom_exercici }}</h2>
 
                             <div class="exercise-details">
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" /> Día: {{ exercise.dia }} <br> <br>
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br> <br>
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones: {{ exercise.repeticions }}
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" />
+                                Día: {{ exercise.dia }} <br> <br>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-fitness-center" />Series:
+                                {{ exercise.series }} <br> <br>
+                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones:
+                                {{ exercise.repeticions }}
                             </div>
                         </div>
                     </div>
@@ -147,7 +150,7 @@ body {
     /* Altura del navBar */
 }
 
-.arrow{
+.arrow {
     width: 50px;
     height: 50px;
     margin: auto;
@@ -179,7 +182,7 @@ body {
     /* Altura del header */
     padding-bottom: 50px;
     /* Altura del navBar */
-    
+
 }
 
 .exercise-list {
