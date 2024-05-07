@@ -4,8 +4,9 @@
         <div class="flex-container">
             <capçalera />
             <h1>Rutina</h1>
-            <p>Hola bones pots dir a la nostra IA Arturo, que et crei una rutina si vols</p>
             <div id="crearRutina" v-if="exercises.length === 0">
+                <p>Hola bones pots dir a la nostra IA Arturo, que et crei una rutina si vols</p>
+
                 <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
 
             </div>
