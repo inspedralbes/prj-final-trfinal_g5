@@ -6,7 +6,7 @@
             <h1>Rutina</h1>
 
             <div id="crearRutina" v-if="exercises.length === 0">
-                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
 
             </div>
 
@@ -302,6 +302,7 @@ navBar {
 }
 
 #crearRutina {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
