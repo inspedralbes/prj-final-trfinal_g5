@@ -3,9 +3,9 @@
         <div class="imgContainer">
             <div class="user-info">
                 <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
-                    <div class="user-icon-container">
+                    <div :class="{ 'user-icon-container': true, 'incomplete-profile': !registre }">
                         <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
-                            class="user-icon" :class="{ 'incomplete-profile': !registre }" />
+                            class="user-icon" />
                     </div>
                 </nuxt-link>
                 <h1 id="nomUsuri">{{ nom_usuari }}</h1>
@@ -63,9 +63,17 @@ export default {
     height: 50px; /* Ajustar el tamaño según sea necesario */
     border-radius: 50%; /* Hacer el contenedor redondo */
     overflow: hidden; /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
+
+
+}
+
+.incomplete-profile{
+    margin-top: 20px;
+    width: 50px; /* Ajustar el tamaño según sea necesario */
+    height: 50px; /* Ajustar el tamaño según sea necesario */
+    border-radius: 50%; /* Hacer el contenedor redondo */
+    overflow: hidden; /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
     border: 4px solid #FFA500;
-
-
 }
 
 .user-icon {
