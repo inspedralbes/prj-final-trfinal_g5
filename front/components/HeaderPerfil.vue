@@ -8,10 +8,10 @@
                 <div class="editar-sign">
                     <img src="../public/editar.png">
                 </div>
-                <div class="user-icon-container">
-                    <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
-                        class="user-icon" :class="{ 'incomplete-profile': !registre }" @click="openFileInput" />
-                </div>
+                <div :class="{ 'user-icon-container': true, 'incomplete-profile': !registre }">
+                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
+                            class="user-icon"@click="openFileInput" />
+                    </div>
                 <h1>{{ nom_usuari }}</h1>
             </div>
             <div v-if="!registre" class="alert-sign">
@@ -152,6 +152,11 @@ export default {
 }
 
 .incomplete-profile {
+    margin-top: 20px;
+    width: 50px; /* Ajustar el tamaño según sea necesario */
+    height: 50px; /* Ajustar el tamaño según sea necesario */
+    border-radius: 50%; /* Hacer el contenedor redondo */
+    overflow: hidden; /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
     border: 4px solid #FFA500;
 }
 
