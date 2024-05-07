@@ -23,6 +23,7 @@ class UserController extends Controller
         $validator = $request->validate([
             'email' => 'required|string|email|max:255|unique:usuaris',
             'contrasenya' => 'required|string|min:6',
+            'nom_usuari' => 'required|string|max:255|unique:usuaris',
             'nom' => 'required|string|max:255',
             'cognoms' => 'required|string|max:255',
             'data_naixement' => 'date',
@@ -35,6 +36,7 @@ class UserController extends Controller
         $usuari = new Usuaris();
         $usuari->email = $request->email;
         $usuari->contrasenya = Hash::make($request->contrasenya);
+        $usuari->nom_usuari = $request->nom_usuari;
         $usuari->nom = $request->nom;
         $usuari->cognoms = $request->cognoms;
 
@@ -58,7 +60,7 @@ class UserController extends Controller
         }
         
         // Verificar si todos los campos necesarios están presentes y no están vacíos
-        if ($request->filled(['email', 'contrasenya', 'nom', 'cognoms', 'data_naixement', 'genere','pes','altura','telefon'])) {
+        if ($request->filled(['email', 'contrasenya','nom', 'nom_usuari', 'cognoms', 'data_naixement', 'genere','pes','altura','telefon'])) {
             $usuari->registre = true;
         }
 
