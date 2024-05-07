@@ -32,6 +32,12 @@
             <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
         </div>
+        <div class="botones-preseleccionados">
+          <button @click="enviarMensajePreseleccionado('vull dieta')">Vull Dieta</button>
+          <button @click="enviarMensajePreseleccionado('vull dieta de definicio')">Vull Dieta de Definició</button>
+          <button @click="enviarMensajePreseleccionado('vull dieta de volum')">Vull Dieta de Volum</button>
+          <button @click="enviarMensajePreseleccionado('vull dieta equilibrada')">Vull Dieta Equilibrada</button>
+        </div>
         <!-- Movido el textarea y el botón al final del contenedor -->
         <div class="controles-inferiores">
           <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
@@ -58,6 +64,10 @@ export default {
     };
   },
   methods: {
+    async enviarMensajePreseleccionado(mensajePreseleccionado) {
+      this.message = mensajePreseleccionado;
+      await this.enviarMensaje();
+    },
     async enviarMensaje() {
       try {
         if (!this.message.trim()) {

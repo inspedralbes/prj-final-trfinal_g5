@@ -4,8 +4,18 @@
         <div class="flex-container">
             <capçalera />
             <h1>Rutina</h1>
+            
+            <!-- Mostrar spinner de carga mientras se cargan los datos -->
+            <div v-if="loading" class="loading">
+                <img src="@/public/dumbbell_white.png" alt="Loading..." class="loading-image" />
+            </div>
+            
+            <!-- Mostrar mensaje si no hay datos en la rutina -->
+            <div v-if="exercises.length === 0 && !loading">
+                <p>No hi han dades de rutina disponibles. Clica el boto per crear una rutina.</p>
+            </div>
 
-            <div class="main-content">
+            <div v-else class="main-content">
                 <div class="exercise-list">
 
 
@@ -63,7 +73,8 @@ export default {
             idUsuari: '',
             selectedDay: '1',
             exercises: [],
-            dies: []
+            dies: [],
+            loading: true,
         }
     },
     computed: {
@@ -92,6 +103,9 @@ export default {
                 })
                 .catch((error) => {
                     console.error(error);
+                })
+                .finally(() => {
+                    this.loading = false; // Marcar la carga de datos como completa
                 });
         },
         obtenirDies(idUsuari) {
@@ -270,7 +284,33 @@ body {
     color: #000;
     background-color: #666;
     margin: auto;
+}
 
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-image {
+    width: 100px;
+    /* Tamaño deseado para la imagen */
+    height: auto;
+    /* Mantener la proporción de aspecto */
+    animation: spin 2s linear infinite;
+    /* Animación de rotación */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 navBar {

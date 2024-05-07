@@ -7,7 +7,7 @@
 
             <!-- Mostrar mensaje para crear dieta si la base de datos está vacía -->
             <div v-if="dietas.length === 0 && !loading">
-                <p>No hay datos de dieta disponibles. Pulsa el botón para generar una dieta.</p>
+                <p>No hi han dades de dieta dispoibles. Clica el boto per generar una dieta.</p>
             </div>
 
             <!-- Mostrar spinner de carga mientras se cargan los datos -->

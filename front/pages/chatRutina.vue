@@ -32,6 +32,12 @@
             <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
         </div>
+        <div class="botones-preseleccionados">
+          <button @click="enviarMensajePreseleccionado('vull rutina')">Vull Rutina</button>
+          <button @click="enviarMensajePreseleccionado('vull rutina de hipertrofia')">Vull Rutina de Hipertofia</button>
+          <button @click="enviarMensajePreseleccionado('vull rutina de calistenia')">Vull Rutina de Calistenia</button>
+          <button @click="enviarMensajePreseleccionado('vull rutina equilibrada')">Vull Rutina Equilibrada</button>
+        </div>
         <!-- Movido el textarea y el botón al final del contenedor -->
         <div class="controles-inferiores">
           <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
