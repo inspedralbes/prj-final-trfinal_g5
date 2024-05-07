@@ -15,7 +15,7 @@
             <div class="progress-bar" :style="{ width: progressPercentage + '%' }"></div>
 
             <div v-if="currentQuestionIndex === registrationQuestions.length" class="loading">
-                <img src="https://media1.tenor.com/m/u8M7kk5ZXmwAAAAC/banana-cat-crying.gif" alt="" class="loading-image">
+                <img src="../public/dumbbell_white.png" alt="" class="loading-image">
             </div>
             <div v-if="currentQuestionIndex < registrationQuestions.length" class="question-container fade-in">
                 <div v-if="currentQuestionIndex <= registrationQuestions.length" class="question-counter">

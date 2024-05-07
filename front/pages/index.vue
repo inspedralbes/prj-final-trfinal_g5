@@ -3,7 +3,7 @@
     <body>
         <div class="login-container">
             <div class="logo-container">
-                <img src="https://media.tenor.com/CnP64S7lszwAAAAi/meme-cat-cat-meme.gif" alt="FitHub Logo" class="logo-image" />
+                <img src="../public/logo_fithub.png" alt="FitHub Logo" class="logo-image" />
             </div>
 
             <form class="form-container" @submit.prevent="login">
