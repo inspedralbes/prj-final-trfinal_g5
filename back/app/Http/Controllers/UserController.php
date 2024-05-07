@@ -104,7 +104,7 @@ class UserController extends Controller
             if (Hash::check($request->contrasenya, $usuari->contrasenya)) {
                 return response()->json([
                     'status' => 1,
-                    'nom' => $usuari->nom,
+                    'nom_usuari' => $usuari->nom_usuari,
                     'email' => $usuari->email,
                     'id' => $usuari->id,
                     'foto_perfil' => $usuari->foto_perfil,
