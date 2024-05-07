@@ -18,9 +18,14 @@
             <div v-else class="main-content">
                 <div class="exercise-list">
 
-
-                    <div class="botons-superior">
-                        <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
+                    <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
+                        <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
+                    </select>
+                </div>
+                <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
+            </div>
+            <div id="crearRutina" v-if="exercises.length === 0">
+                <p>Hola bones pots dir a la nostra IA Arturo, que et crei una rutina si vols</p>
 
                         <div class="day-selector">
 
@@ -30,8 +35,9 @@
                         </div>
                         <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
 
-
-                    </div>
+            </div>
+            <div v-else class="main-content">
+                <div class="exercise-list">
 
 
 
@@ -52,10 +58,12 @@
                         </div>
                     </div>
                 </div>
+                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
             </div>
-            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+            <navBar />
+
+
         </div>
-        <navBar />
     </body>
 </template>
 
@@ -153,16 +161,9 @@ html,
 body {
     margin: 0;
     padding: 0;
-    height: 100%;
-    overflow-x: hidden;
     /* Evita el desplazamiento horizontal */
 }
 
-body {
-    /* Establecer la fuente predeterminada */
-    padding-bottom: 50px;
-    /* Altura del navBar */
-}
 
 .arrow {
     width: 50px;
@@ -175,7 +176,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100%;
+    height: 100vh;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
 }
@@ -196,7 +197,7 @@ body {
     /* Altura del header */
     padding-bottom: 50px;
     /* Altura del navBar */
-
+    text-align: center
 }
 
 .exercise-list {
@@ -243,28 +244,32 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
     margin: auto;
-    border-radius: 15px;
+    padding-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+
+
 }
 
 .dieta-button {
-    width: 160%;
-    /* Ancho del 80% del contenedor padre */
-    max-width: 400px;
-    height: 100px;
-    margin-top: 50px;
+    position: relative;
+    width: 60%;
+    height: 60px;
+    margin-top: 20px;
     margin-bottom: 50px;
-    /* Espacio entre los botones */
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: bold;
+    color: #fff;
     cursor: pointer;
     border: none;
     outline: none;
     background-size: cover;
     border-radius: 10px;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     background-position: center;
-    font-size: 30px;
-    color: #000;
-    background-color: #666;
+    color: #474747;
+
 }
 
 .dia-button {
@@ -331,6 +336,15 @@ navBar {
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
+}
+
+#crearRutina {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 /* Media query para pantallas más pequeñas */
