@@ -48,8 +48,9 @@
                         </div>
                     </div>
                 </div>
+                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
             </div>
-            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
+            
 
         </div>
         <navBar />
