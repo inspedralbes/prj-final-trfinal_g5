@@ -4,6 +4,17 @@
         <div class="flex-container">
             <capçalera />
             <h1>Rutina</h1>
+            <div v-if="exercises.length != 0" class="botons-superior">
+                <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
+
+                <div class="day-selector">
+
+                    <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
+                        <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
+                    </select>
+                </div>
+                <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
+            </div>
             <div id="crearRutina" v-if="exercises.length === 0">
                 <p>Hola bones pots dir a la nostra IA Arturo, que et crei una rutina si vols</p>
 
@@ -14,17 +25,7 @@
                 <div class="exercise-list">
 
 
-                    <div class="botons-superior">
-                        <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
 
-                        <div class="day-selector">
-
-                            <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
-                                <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
-                            </select>
-                        </div>
-                        <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
-                    </div>
                     <div v-for="exercise in exercises" :key="exercise.id">
                         <div class="exercise-item">
                             <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
@@ -225,7 +226,11 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
     margin: auto;
-    border-radius: 15px;
+    padding-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+
+
 }
 
 .dieta-button {
