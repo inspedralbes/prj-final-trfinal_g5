@@ -67,10 +67,10 @@
                     <button type="submit" class="large-button">Guardar</button>
 
                 </form>
+                <navBar />
 
 
             </div>
-            <navBar />
         </div>
     </body>
 </template>
