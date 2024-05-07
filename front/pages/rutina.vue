@@ -191,7 +191,7 @@ body {
     /* Altura del header */
     padding-bottom: 50px;
     /* Altura del navBar */
-
+    text-align: center
 }
 
 .exercise-list {
