@@ -4,10 +4,19 @@
         <div class="flex-container">
             <capçalera />
             <h1>Rutina</h1>
-            <div v-if="exercises.length != 0" class="botons-superior">
-                <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
+            
+            <!-- Mostrar spinner de carga mientras se cargan los datos -->
+            <div v-if="loading" class="loading">
+                <img src="@/public/dumbbell_white.png" alt="Loading..." class="loading-image" />
+            </div>
+            
+            <!-- Mostrar mensaje si no hay datos en la rutina -->
+            <div v-if="exercises.length === 0 && !loading">
+                <p>No hi han dades de rutina disponibles. Clica el boto per crear una rutina.</p>
+            </div>
 
-                <div class="day-selector">
+            <div v-else class="main-content">
+                <div class="exercise-list">
 
                     <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
                         <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
@@ -18,7 +27,13 @@
             <div id="crearRutina" v-if="exercises.length === 0">
                 <p>Hola bones pots dir a la nostra IA Arturo, que et crei una rutina si vols</p>
 
-                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
+                        <div class="day-selector">
+
+                            <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
+                                <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
+                            </select>
+                        </div>
+                        <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
 
             </div>
             <div v-else class="main-content">
@@ -66,7 +81,8 @@ export default {
             idUsuari: '',
             selectedDay: '1',
             exercises: [],
-            dies: []
+            dies: [],
+            loading: true,
         }
     },
     computed: {
@@ -77,7 +93,6 @@ export default {
     },
     mounted() {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
-        this.usuario = localStorage.getItem('username');
         this.idUsuari = useUsuariPerfilStore().id_usuari;
         console.log(this.idUsuari);
         this.obtenirRutina(this.idUsuari);
@@ -96,6 +111,9 @@ export default {
                 })
                 .catch((error) => {
                     console.error(error);
+                })
+                .finally(() => {
+                    this.loading = false; // Marcar la carga de datos como completa
                 });
         },
         obtenirDies(idUsuari) {
@@ -271,7 +289,33 @@ body {
     color: #000;
     background-color: #666;
     margin: auto;
+}
 
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-image {
+    width: 100px;
+    /* Tamaño deseado para la imagen */
+    height: auto;
+    /* Mantener la proporción de aspecto */
+    animation: spin 2s linear infinite;
+    /* Animación de rotación */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 navBar {
