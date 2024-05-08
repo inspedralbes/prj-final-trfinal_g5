@@ -114,16 +114,14 @@ export default {
                 .then(data => {
                     this.usuario = data.usuario;
                     this.datosOriginales = { ...data.usuario }; // Guarda una copia de los datos originales
-                    console.log('Datos del usuario obtenidos:', data);
+                    // console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
                     // console.error('Error al obtener los datos del usuario:', error);
                 });
         },
         guardarDatosUsuario() {
-            // Verificar si ya se está guardando para evitar múltiples envíos
-            if (this.isSaving) return;
-
+            this.errorMessage = ''; // Limpiar el mensaje de error antes de guardar los datos
             // Verificar si hay errores de validación
             if (this.errorMessage) {
                 // Mostrar un mensaje de error y no continuar con el guardado
@@ -132,12 +130,49 @@ export default {
 
             // Verificar si los campos obligatorios están vacíos
             if (!this.usuario.nom || !this.usuario.cognoms || !this.usuario.nom_usuari) {
-                this.errorMessage = "Els camps nom o cognoms o nom d'usuaris son requerits.";
+                this.errorMessage = "Els camps nom, cognoms i nom d'usuari són requerits.";
                 return;
             }
 
-            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
+            // Verificar si el nom_usuari ha sido modificado y existe
+            if (this.usuario.nom_usuari !== this.datosOriginales.nom_usuari) {
+                this.comprobarNomUsuari();
+            } else {
+                // Si el nom_usuari no ha sido modificado o es el mismo que el original, continuar con el guardado
+                this.continuarGuardado();
+            }
+        },
+        async comprobarNomUsuari() {
+            // console.log(this.usuario.nom_usuari)
+            try {
+                const response = await fetch('http://localhost:8000/api/comprovarnomusuari', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nom_usuari: this.usuario.nom_usuari,
+                    }),
+                });
+                const data = await response.json();
 
+                // Verificar si el nom_usuari existe
+                if (data.status === 1) {
+                    // El nom_usuari ya existe, mostrar mensaje de error
+                    this.errorMessage = 'El nom d\'usuari ja existeix. Si us plau, tria un altre.';
+                } else if (data.status === 0) {
+                    // El nom_usuari no existe, continuar con el guardado
+                    this.continuarGuardado();
+                }
+            } catch (error) {
+                console.error('Error al comprobar el nom d\'usuari:', error);
+                this.errorMessage = 'S\'ha produït un error al comprovar el nom d\'usuari.';
+                this.isSaving = false; // Restablecer la variable de estado a false si hay un error
+            }
+        },
+
+
+        continuarGuardado() {
             // Si hay otros campos modificados además de la foto de perfil
             if (this.hayOtrosCamposModificados()) {
                 this.guardarDatosUsuarioSinFotoPerfil();
@@ -186,7 +221,7 @@ export default {
                 .then(data => {
                     // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
-                    console.log('Datos del usuario actualizados:', data);
+                    // console.log('Datos del usuario actualizados:', data);
                     useUsuariPerfilStore().registre = Boolean(Number(data.registre));
 
 
