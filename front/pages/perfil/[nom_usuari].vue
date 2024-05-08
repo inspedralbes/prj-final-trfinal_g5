@@ -18,7 +18,7 @@
                         </div>
                         <div class="input-container">
                             <label>Nom usuari:</label>
-                            <input type="text" placeholder="Usuari" v-model="usuario.nom_usuari"maxlength="20">
+                            <input type="text" placeholder="Usuari" v-model="usuario.nom_usuari" maxlength="20">
                         </div>
                         <div class="input-container">
                             <label>Telefon:</label>
@@ -42,7 +42,7 @@
                         <div class="input-container">
                             <label>Altura:</label><br>
                             <input type="text" v-model="usuario.altura" placeholder="Altura (cm)"
-                                @input="validateAltura"maxlength="4">
+                                @input="validateAltura" maxlength="4">
                         </div>
 
                         <div class="input-container">
@@ -114,7 +114,7 @@ export default {
                 .then(data => {
                     this.usuario = data.usuario;
                     this.datosOriginales = { ...data.usuario }; // Guarda una copia de los datos originales
-                     console.log('Datos del usuario obtenidos:', data);
+                    console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
                     // console.error('Error al obtener los datos del usuario:', error);
@@ -130,6 +130,12 @@ export default {
                 return;
             }
 
+            // Verificar si los campos obligatorios están vacíos
+            if (!this.usuario.nom || !this.usuario.cognoms || !this.usuario.nom_usuari) {
+                this.errorMessage = "Els camps nom o cognoms o nom d'usuaris son requerits.";
+                return;
+            }
+
             this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
 
             // Si hay otros campos modificados además de la foto de perfil
@@ -137,6 +143,7 @@ export default {
                 this.guardarDatosUsuarioSinFotoPerfil();
             }
         },
+
 
         hayOtrosCamposModificados() {
             // Verifica si hay otros campos modificados además de la foto de perfil
@@ -187,7 +194,7 @@ export default {
                     if (this.usuario.nom) {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
                     }
-                    if(this.usuario.nom_usuari){
+                    if (this.usuario.nom_usuari) {
                         useUsuariPerfilStore().username = this.usuario.nom_usuari;
                     }
 
@@ -325,6 +332,7 @@ export default {
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
+
 html,
 body {
     margin: 0;
