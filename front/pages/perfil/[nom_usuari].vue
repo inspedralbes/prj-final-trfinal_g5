@@ -17,8 +17,8 @@
                                 @input="capitalizeOnInput($event, 'cognoms')" maxlength="80">
                         </div>
                         <div class="input-container">
-                            <label>Correu electrònic:</label>
-                            <input type="email" placeholder="Correu electronic" v-model="usuario.email" disabled>
+                            <label>Nom usuari:</label>
+                            <input type="text" placeholder="Usuari" v-model="usuario.nom_usuari"maxlength="20">
                         </div>
                         <div class="input-container">
                             <label>Telefon:</label>
@@ -85,6 +85,7 @@ export default {
             usuario: {
                 nom: '',
                 cognoms: '',
+                nom_usuari: '',
                 email: '',
                 telefon: '',
                 data_naixement: '',
@@ -113,7 +114,7 @@ export default {
                 .then(data => {
                     this.usuario = data.usuario;
                     this.datosOriginales = { ...data.usuario }; // Guarda una copia de los datos originales
-                    // console.log('Datos del usuario obtenidos:', data);
+                     console.log('Datos del usuario obtenidos:', data);
                 })
                 .catch(error => {
                     // console.error('Error al obtener los datos del usuario:', error);
@@ -185,6 +186,9 @@ export default {
                     // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
                     if (this.usuario.nom) {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
+                    }
+                    if(this.usuario.nom_usuari){
+                        useUsuariPerfilStore().username = this.usuario.nom_usuari;
                     }
 
                     // Actualizar los datos originales con los datos modificados

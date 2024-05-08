@@ -208,6 +208,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'nom' => 'sometimes|string|max:255',
             'cognoms' => 'sometimes|string|max:255',
+            'nom_usuari' => 'sometimes|string|max:255',
             'data_naixement' => 'sometimes',
             'genere' => 'sometimes',
             'pes' => 'sometimes',
@@ -243,6 +244,7 @@ class UserController extends Controller
         // Verificar si todos los campos están llenos
         $camposLlenos = !empty($usuari->nom) &&
                        !empty($usuari->cognoms) &&
+                        !empty($usuari->nom_usuari) &&
                        !empty($usuari->data_naixement) &&
                        !empty($usuari->genere) &&
                        !empty($usuari->pes) &&
