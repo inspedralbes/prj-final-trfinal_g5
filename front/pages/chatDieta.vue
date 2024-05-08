@@ -1,5 +1,4 @@
 <template>
-
   <body>
       <div class="contenedor">
         <capçalera />
@@ -9,7 +8,6 @@
           <img src="../public/img/icono_Arturo.jpg" alt="">
           <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
         </div>
-
 
         <div class="chat-container">
           <div class="chat">
@@ -45,7 +43,6 @@
           <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
         </div>
         <navBar />
-
       </div>
   </body>
 </template>
@@ -53,6 +50,58 @@
 <script>
 import { enviarMensajeOpenAIDieta } from '@/stores/communicationManager';
 import { useUsuariPerfilStore } from '@/stores/index';
+
+const arbrePreguntes = {
+  pregunta: "Quin tipus de dieta vols?",
+  opcions: {
+    Volum: {
+      pregunta: "Quantes menjades prefereixes al dia per a una dieta de volum?",
+      opcions: {
+        "4": {
+          pregunta: "Vols incloure un snack o un post-entrenament?",
+          opcions: {
+            "Snack": "Dieta de volum amb snack",
+            "Post-entrenament": "Dieta de volum amb post-entrenament"
+          }
+        },
+        "6": {
+          pregunta: "Vols incloure un snack o un post-entrenament?",
+          opcions: {
+            "Snack": "Dieta de volum amb snack",
+            "Post-entrenament": "Dieta de volum amb post-entrenament"
+          }
+        }
+      }
+    },
+    Definició: {
+      pregunta: "Quantes menjades prefereixes al dia per a una dieta de definició?",
+      opcions: {
+        "2": {
+          pregunta: "Vols incloure un snack o un post-entrenament?",
+          opcions: {
+            "Snack": "Dieta de definició amb snack",
+            "Post-entrenament": "Dieta de definició amb post-entrenament"
+          }
+        },
+        "4": {
+          pregunta: "Vols incloure un snack o un post-entrenament?",
+          opcions: {
+            "Snack": "Dieta de definició amb snack",
+            "Post-entrenament": "Dieta de definició amb post-entrenament"
+          }
+        }
+      }
+    },
+    Equilibrada: {
+      pregunta: "Quantes menjades prefereixes al dia per a una dieta equilibrada?",
+      opcions: {
+        "2": "Dieta equilibrada amb 2 menjades",
+        "4": "Dieta equilibrada amb 4 menjades"
+      }
+    }
+  }
+};
+
 export default {
   data() {
     return {
@@ -74,14 +123,12 @@ export default {
           return;
         }
 
-
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
         if(this.chatMessages.length === 0) {
           document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
-
 
         this.chatMessages.push({
           role: 'user',
@@ -126,7 +173,6 @@ export default {
           role: 'assistant',
           content: mensajeDieta,
         });
-
 
         this.message = '';
       } catch (error) {
