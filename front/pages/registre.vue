@@ -492,7 +492,8 @@ export default {
                 useUsuariPerfilStore().registre = !nullFields;
 
                 // Actualizar otros estados de la tienda Pinia si es necesario
-                useUsuariPerfilStore().nom_usuari = filteredUserData.nom_usuari;
+                useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
+                useUsuariPerfilStore().username = filteredUserData.nom_usuari;
                 useUsuariPerfilStore().email_usuari = filteredUserData.email;
                 useUsuariPerfilStore().loguejat = true;
                 useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;

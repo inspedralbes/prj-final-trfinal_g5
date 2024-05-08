@@ -55,7 +55,8 @@ export default {
                     const store = useUsuariPerfilStore();
                     store.iniciarSesionExitoso();
                     store.id_usuari = data.id;
-                    store.nom_usuari = data.nom_usuari;
+                    store.nom_usuari = data.nom;
+                    store.username= data.nom_usuari;
                     store.email_usuari = data.email;
                     store.foto_perfil = data.foto_perfil;
                     store.registre = Boolean(Number(data.registre));

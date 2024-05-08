@@ -105,6 +105,7 @@ class UserController extends Controller
                 return response()->json([
                     'status' => 1,
                     'nom_usuari' => $usuari->nom_usuari,
+                    'nom' => $usuari->nom,
                     'email' => $usuari->email,
                     'id' => $usuari->id,
                     'foto_perfil' => $usuari->foto_perfil,

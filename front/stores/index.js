@@ -7,6 +7,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
     const cognoms = ref("");
     const id_usuari = ref("");
     const email_usuari = ref("");
+    const username = ref("");
     const foto_perfil = ref("");
     const altura = ref("");
     const pes = ref("");
@@ -35,6 +36,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         cognoms.value = dades.cognoms;
         id_usuari.value = dades.id;
         email_usuari.value = dades.email;
+        username.value = dades.username;
         foto_perfil.value = dades.foto_perfil;
         altura.value = dades.altura;
         pes.value = dades.pes;
@@ -54,6 +56,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         email_usuari,
         id_usuari,
         foto_perfil,
+        username,
         registre,
         registreIncomplet,
         registratExitosament,
