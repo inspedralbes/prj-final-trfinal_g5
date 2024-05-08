@@ -1,64 +1,116 @@
 <template>
 
     <body>
-            <capçalera />
-            <div>
-    <!-- Barra de búsqueda -->
-    <input type="text" v-model="busqueda" placeholder="Buscar...">
-    
-    <!-- Botón de añadir -->
-    <button @click="agregarItem">+</button>
-    
-    <!-- Lista de elementos -->
-    <div v-for="(item, index) in items" :key="index" class="item">
-      <img :src="item.imagen" alt="Imagen">
-      <div>
-        <h3>{{ item.nombre }}</h3>
-        <p>{{ item.texto }}</p>
-      </div>
-      <div class="hora">{{ item.hora }}</div>
-    </div>
-  </div>
-
-            <navBar />
+        <capçalera />
+        <div>
 
 
+            <!-- Barra de búsqueda -->
+            <input type="text" v-model="busqueda" placeholder="Buscar...">
+            <button @click="buscar">Buscar</button>
+
+            <!-- Botón de añadir -->
+            <button @click="toggleMenu">+</button>
+
+            <!-- Menú desplegable -->
+            <div v-if="mostrarMenu" class="menu-desplegable">
+                <button @click="redireccionarSolicitudes">Solicitudes</button>
+                <button @click="redireccionarAñadirAmigo">Añadir amigos</button>
+            </div>
+
+            <!-- Lista de elementos filtrada -->
+            <div v-for="(item, index) in itemsFiltrados" :key="index" class="item">
+                <img :src="item.imagen" alt="Imagen">
+                <div>
+                    <h3>{{ item.nombre }}</h3>
+                    <p>{{ item.texto }}</p>
+                </div>
+                <div class="hora">{{ item.hora }}</div>
+                <!-- Botón para redirigir a la conversación con esta persona -->
+                <button @click="redireccionarConversacion(item.nombre)">Ir a la conversación</button>
+            </div>
+        </div>
+        <navBar />
     </body>
+
 </template>
+
 <script>
 export default {
-  data() {
-    return {
-      busqueda: '',
-      items: [
-        { imagen: 'ruta/a/imagen1.jpg', nombre: 'Nombre 1', texto: 'Texto 1', hora: '10:00' },
-        { imagen: 'ruta/a/imagen2.jpg', nombre: 'Nombre 2', texto: 'Texto 2', hora: '11:00' },
-        // Agrega más elementos según sea necesario
-      ]
-    };
-  },
-  methods: {
-    agregarItem() {
-      // Lógica para agregar un nuevo elemento
+    data() {
+        return {
+            busqueda: '',
+            items: [
+                { imagen: 'icono_grupo.png', nombre: 'Fithub', texto: 'IPOP 10 NOIS', hora: '10:00 am' },
+                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 2', texto: 'Texto 2', hora: '11:00' },
+                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 3', texto: 'Texto 3', hora: '12:00' },
+                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 4', texto: 'Texto 4', hora: '13:00' },
+                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 5', texto: 'Texto 5', hora: '14:00' },
+                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 6', texto: 'Texto 6', hora: '15:00' }
+                // Agrega más elementos según sea necesario
+            ],
+            mostrarMenu: false
+        };
+    },
+    computed: {
+        itemsFiltrados() {
+            return this.items.filter(item => {
+                return item.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) ||
+                    item.texto.toLowerCase().includes(this.busqueda.toLowerCase()) ||
+                    item.hora.toLowerCase().includes(this.busqueda.toLowerCase());
+            });
+        }
+    },
+    methods: {
+        toggleMenu() {
+            this.mostrarMenu = !this.mostrarMenu;
+        },
+        redireccionarSolicitudes() {
+            // Redirige a la página de Solicitudes
+            this.$router.push('/solicitudes');
+        },
+        redireccionarAñadirAmigo() {
+            // Redirige a la página de Añadir amigo
+            this.$router.push('/añadir-amigo');
+        },
+        redireccionarConversacion(nombrePersona) {
+            // Redirige a la página de conversación con el nombre de la persona
+            this.$router.push(`/conversacion/${nombrePersona}`);
+        }
     }
-  }
 };
 </script>
 
-<!-- En tu estilo (CSS) -->
 <style scoped>
-/* Estilos para los elementos */
+/* Estilos para el menú desplegable */
+.menu-desplegable {
+    position: absolute;
+    top: 40px;
+    /* Ajusta la posición según sea necesario */
+    right: 10px;
+    /* Ajusta la posición según sea necesario */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    z-index: 999;
+    /* Asegura que esté por encima de otros elementos */
+}
+
+/* Otros estilos */
 .item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
+
 .item img {
-  width: 100px;
-  height: 100px;
-  margin-right: 10px;
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
 }
+
 .hora {
-  margin-left: auto;
+    margin-left: auto;
 }
 </style>
