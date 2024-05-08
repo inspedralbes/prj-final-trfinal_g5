@@ -17,7 +17,7 @@
               <div class="mensaje"
                 :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
                 <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
                     class="avatar-usuario" />
                   <p class="nombre-usuario">{{ nom_usuari }}</p>
                 </div>
@@ -32,14 +32,21 @@
             <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
         </div>
+        <div class="botones-preseleccionados">
+          <button @click="enviarMensajePreseleccionado('vull rutina')">Vull Rutina</button>
+          <button @click="enviarMensajePreseleccionado('vull rutina de hipertrofia')">Vull Rutina de Hipertofia</button>
+          <button @click="enviarMensajePreseleccionado('vull rutina de calistenia')">Vull Rutina de Calistenia</button>
+          <button @click="enviarMensajePreseleccionado('vull rutina equilibrada')">Vull Rutina Equilibrada</button>
+        </div>
         <!-- Movido el textarea y el botón al final del contenedor -->
         <div class="controles-inferiores">
           <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
             placeholder="Escriu la teva consulta"></textarea>
           <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
         </div>
+        <navBar />
+
       </div>
-      <navBar />
     </div>
   </body>
 </template>
@@ -58,6 +65,10 @@ export default {
     };
   },
   methods: {
+    async enviarMensajePreseleccionado(mensajePreseleccionado) {
+      this.message = mensajePreseleccionado;
+      await this.enviarMensaje();
+    },
     async enviarMensaje() {
     try {
         if (!this.message.trim()) {
@@ -172,7 +183,6 @@ body {
 }
 
 body {
-  font-family: Arial, sans-serif;
   /* Establecer la fuente predeterminada */
   background: linear-gradient(to top right, #FFA500, #f45c36);
 

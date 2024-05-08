@@ -20,7 +20,7 @@
               <div class="mensaje"
                 :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
                 <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'fithub.daw.inspedralbes.cat/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
                     class="avatar-usuario" />
                   <p class="nombre-usuario">{{ nom_usuari }}</p>
                 </div>
@@ -41,8 +41,9 @@
             placeholder="Escriu la teva consulta"></textarea>
           <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
         </div>
+        <navBar />
+
       </div>
-      <navBar />
     </div>
   </body>
 </template>
@@ -139,7 +140,6 @@ body {
 }
 
 body {
-  font-family: Arial, sans-serif;
   /* Establecer la fuente predeterminada */
   background: linear-gradient(to top right, #FFA500, #f45c36);
 

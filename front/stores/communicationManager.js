@@ -1,7 +1,9 @@
 const url = 'http://localhost:8000/api';
 //const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
+
 const apiKey = '123456';
+
 
 
 //ejemplo de peticion fetch get
@@ -68,6 +70,31 @@ export async function getDatosAliments() {
     }
 }
 
+export async function getRutina(idUsuario) {
+    try{
+        const response = await fetch(`${url}/rutina/${idUsuario}`);
+        if(!response.ok){
+            throw new Error('Error al obtener los datos del ejercicio: ' + response.statusText);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw new Error('Error de red al obtener los datos del ejercicio: ' + error.message);
+    }
+}
+
+export async function getDieta(idUsuario) {
+    try{
+        const response = await fetch(`${url}/dieta/${idUsuario}`);
+        if(!response.ok){
+            throw new Error('Error al obtener los datos de la dieta: ' + response.statusText);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw new Error('Error de red al obtener los datos de la dieta: ' + error.message);
+    }
+}
 
 //ejemplo de peticion fetch post
 
@@ -246,16 +273,20 @@ export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) 
             messages: [
                 {
                     role: 'system',
-                    content: "Ets una persona que només parla en catalan i tens prohibit parlar d'alguna cosa que no tingui relacion amb fitnes i nutricion ja que ets un expert en nutricion i fitnes però tens molt prohibit fer rutines i dietes." +
-                        " Si et demanen una rutin digues el següent: En aquest apartat només puc donar consells de nutricion i esportius si vols generar rutines veus a l'apartat de Rutines i si vols una dieta en l'apartat de Dietes." +
-                        // " Si pots donar consells i arguments però fes-ho de forma resumina en unes 2 línies tret que t'indiquin que volen mes informacion." +
-                        " Agafa els aliments i tota l'informacio que troves en el json d'aliments per crear la dieta." +
-                        " Nomes pots respondre amb format JSON i seguint aquesta estructura:" +
-                        " {id_usuari:{nom_plat:'Macedònia de fruites',apat:'esmorzar',ingredients:[nom_ingredient:'Maduixes',quantitat:'50',unitat:'grams'],proteines:'2.50',carbohidrats:'27.90',greixos:'0.70',caloreis:'127.00',},{nom_plat:'',apat:'segon_esmorzar',...},{nom_plat:'',...},...}" +
-                        " Fes 5 apats diaris. I per cada apat posa un minim de 3 plats per apat" +
-                        " Si et demanen definicio o perdre pes o definir, agafa plats que siguin per aixo; si volen volum, guanyar massa muscular o guanyar pes agafa els plats necessaris per allo. Si no especifiquen dieta neutral" +
-                        " Agafa les dades del usuari per fer dietes mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari." +
-                        " QUIERO 5 COMDIAS DIARIAS DE MI BASE DE DATOS Y CADA COMIDA QUIERO QUE PONGAS 3 PLATOS DE MI BASE DE DATOS Y EL ID DE USUARIO SOLO LO QUIERO 1 VEZ Y EL QUE COJES DEL DATOS USUARIO",
+
+                    content: " Eres una persona que solo habla catalán y tienes prohibido hablar de nada que no esté relacionado con el fitness y la nutrición porque eres un experto en nutrición y fitness pero tienes muy prohibido hacer rutinas y dietas. "+
+                    " Si te piden una rutina di lo siguiente: En esta sección solo puedo dar consejos de nutrición y deporte si quieres generar rutinas ve a la sección de Rutinas y si quieres una dieta en la sección de Dietas. "+
+                    " Si puedes dar consejos y argumentos pero hacerlo de forma resumida en 2 líneas, que no te digan que quieren más información." +
+                    " Coje los alimentos y toda la información que encuentres en el json de alimentos para crear la dieta. " +
+                    " Sólo puedes responder con formato JSON y siguiendo esta estructura: "+
+                    " {id_usuari:'',apats:[apat:'',plats:[{nom_plat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',caloreis:''},],apat:'',plats:[nom_plat:'',...],apat:'',plats:[nom_plat:'',...]]}" +
+                    // " Si te piden definicion o adelgazar o definir, toma platos que sean para ello; si quieren volumen, ganar mucho músculo o ganar peso toma los platos necesarios para ello. Si no te especifican una dieta neutra" +
+                    " Coge los datos del usuario para hacer dietas más personalizadas y también coge el id del usuario para ponerlo en id_usuari."+
+                    " Crea dietas de 5 comidas al día y que sean equilibradas y saludables. Si te especifican algo más concreto hazlo de forma más concreta." +
+                    " Haz que las 5 comdias diarias sean: desayuno, segundo desayuno, comida, merienda y cena. " +
+                    " Para cada comida diaria ponle 3 platos para cada una de las 5 comidas. Si te piden algo más concreto hazlo de forma más concreta.",
+                    
+
                 },
                 {
                     role: 'user',

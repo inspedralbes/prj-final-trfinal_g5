@@ -1,30 +1,32 @@
 <template>
     <div class="header-container">
-        <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
-
         <div class="imgContainer">
-            <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" :class="{ 'incomplete-profile': !registre }" /> 
-            <h1>{{nom_usuari}}</h1>
-           
+            <div class="user-info">
+                <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
+                    <div :class="{ 'user-icon-container': true, 'incomplete-profile': !registre }">
+                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
+                            class="user-icon" />
+                    </div>
+                </nuxt-link>
+                <h1 id="nomUsuri">{{ nom_usuari }}</h1>
+            </div>
             <div v-if="!registre" class="alert-sign">
                 !
             </div>
         </div>
-    </nuxt-link>
-
     </div>
 </template>
 
 <script>
-import { useUsuariPerfilStore } from '@/stores/index'
+import { useUsuariPerfilStore } from '@/stores/index';
 
 export default {
     data() {
         return {
-            usuari: '',
-            saludo: '',
-            foto_perfil: '',
-            cerrarAlerta: false
+            usuario: {
+                foto_perfil: null
+            },
+            isSaving: false
         };
     },
     computed: {
@@ -38,64 +40,64 @@ export default {
             return useUsuariPerfilStore().registre;
         }
     },
-    methods: {
-        closeAlert() {
-            this.cerrarAlerta = true;
-        }
-    },
-    mounted() {
-        // Recuperar el nombre de usuario y la foto de perfil del pinia
-        const store = useUsuariPerfilStore();
-
-    },
 }
 </script>
 
 <style scoped>
-
-nuxt-link{
-    text-decoration: none;
-    color: black;
-}
 .imgContainer {
     display: grid;
     grid-template-columns: .6fr 1fr;
     margin: auto;
-    padding: 5px;
-    
 }
 
-.imgContainer img {
-    width: 45%;
-    border-radius: 50%;
-    margin-right: 75px;
+.user-info {
+    position: relative;
+    margin-left: 20px;
+    display: grid;
+    grid-template-columns: 1.5fr .2fr;
+}
+
+.user-icon-container {
+    margin-top: 20px;
+    width: 50px; /* Ajustar el tamaño según sea necesario */
+    height: 50px; /* Ajustar el tamaño según sea necesario */
+    border-radius: 50%; /* Hacer el contenedor redondo */
+    overflow: hidden; /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
+
+
+}
+
+.incomplete-profile{
+    margin-top: 20px;
+    width: 50px; /* Ajustar el tamaño según sea necesario */
+    height: 50px; /* Ajustar el tamaño según sea necesario */
+    border-radius: 50%; /* Hacer el contenedor redondo */
+    overflow: hidden; /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
+    border: 4px solid #FFA500;
 }
 
 .user-icon {
-    width: 55%;
-    border-radius: 50%;
-    text-align: center;
-    margin: auto;
+    width: 100%; /* Ajustar la imagen al 100% del ancho del contenedor */
+    height: 100%; /* Ajustar la imagen al 100% de la altura del contenedor */
+    object-fit: cover; /* Escalar la imagen para que llene el contenedor sin distorsionarse */
 }
 
-.incomplete-profile {
-    border: 4px solid #f44336;
-}
+
 
 .alert-sign {
     position: absolute;
-    bottom: 3%;
-    left: 13%;
+    bottom: 10%;
+    left: 15%;
     transform: translateX(5%);
-    width: 30px;
-    height: 30px;
-    background-color: #f44336;
+    width: 25px;
+    height: 25px;
+    background-color: #FFA500;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    color: #fbff00;
+    color: white;
     font-size: 1.2rem;
     font-weight: bolder;
 }
@@ -103,34 +105,20 @@ nuxt-link{
 h1 {
     padding: 20px;
     font-size: 1.1rem;
-    font-weight: bolder;
 }
 
 .header-container {
-    background-color: #FFA500;
+    background-color: #fafafa;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 70px;
-    width: 95%;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 0;
     position: relative;
     margin-bottom: 20px;
-
-}
-
-.close-button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
+    width: 100%;
 }
 
 .title {
     font-weight: bold;
     font-size: 24px;
-}
-
-.oculto {
-    display: none;
 }
 </style>

@@ -12,7 +12,10 @@ class Dieta extends Model
     protected $table = 'dietas';
 
     protected $fillable = [
+        'id_usuari',
         'nom_plat',
+        'apat',
+        'ingredients',
         'data_inici',
         'data_fi',
         'calories',
