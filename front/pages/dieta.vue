@@ -37,7 +37,7 @@
                 </div>
             </dir>
 
-            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Dieta</button>
+            <button class="dieta-button" @click="redirectTo('/chatDieta')">Crear Dieta</button>
         </div>
         <navBar />
     </body>
