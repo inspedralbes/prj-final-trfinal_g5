@@ -1,8 +1,8 @@
 <template>
 
   <body>
-    <div>
       <div class="contenedor">
+        <capçalera />
         <div class="cabecera">Assessorament Dieta</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
         <div class="mensaje-bienvenida">
@@ -33,9 +33,9 @@
           </div>
         </div>
         <div class="botones-preseleccionados">
-          <button @click="enviarMensajePreseleccionado('vull dieta')">Vull Dieta</button>
+          <button @click="enviarMensajePreseleccionado('vull dieta')">Vull <br> Dieta</button>
           <button @click="enviarMensajePreseleccionado('vull dieta de definicio')">Vull Dieta de Definició</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta de volum')">Vull Dieta de Volum</button>
+          <button @click="enviarMensajePreseleccionado('vull dieta de volum')">Vull Dieta <br> de Volum</button>
           <button @click="enviarMensajePreseleccionado('vull dieta equilibrada')">Vull Dieta Equilibrada</button>
         </div>
         <!-- Movido el textarea y el botón al final del contenedor -->
@@ -47,7 +47,6 @@
         <navBar />
 
       </div>
-    </div>
   </body>
 </template>
 
@@ -78,6 +77,9 @@ export default {
 
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
+        }
+        if(this.chatMessages.length === 0) {
+          document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
 
 
@@ -170,7 +172,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
 }
 
 body {
@@ -205,8 +207,8 @@ body {
 
 .mensaje-bienvenida {
   display: grid;
-  grid-template-columns: .2fr 1fr;
-  margin-top: 50%;
+  grid-template-columns: .1fr 1fr;
+  margin-top: 15%;
 
 
 }
@@ -230,6 +232,35 @@ body {
   height: 55px;
   border-radius: 50%;
   margin-left: 45px;
+}
+
+.botones-preseleccionados{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  margin: auto;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  width: 90%;
+  
+}
+
+.botones-preseleccionados button{
+  background-color: #0000002f;
+  color: white;
+  border: 4px solid #1b1b1b23;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: auto;
 }
 
 .chat-container {
@@ -286,6 +317,14 @@ body {
   margin-right: 10%;
 }
 
+
+.avatar-usuario {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
 .avatar-asistente {
   width: 30px;
   height: 30px;
@@ -326,7 +365,6 @@ body {
   align-items: center;
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color: #33333356;
 }
 
 .entrada-mensaje {

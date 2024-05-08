@@ -1,8 +1,8 @@
 <template>
 
   <body>
-    <div>
       <div class="contenedor">
+        <capçalera />
         <div class="cabecera">Assessorament de Rutina</div>
         <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
         <div class="mensaje-bienvenida">
@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="botones-preseleccionados">
-          <button @click="enviarMensajePreseleccionado('vull rutina')">Vull Rutina</button>
+          <button @click="enviarMensajePreseleccionado('vull rutina')">Vull <br> Rutina</button>
           <button @click="enviarMensajePreseleccionado('vull rutina de hipertrofia')">Vull Rutina de Hipertofia</button>
           <button @click="enviarMensajePreseleccionado('vull rutina de calistenia')">Vull Rutina de Calistenia</button>
           <button @click="enviarMensajePreseleccionado('vull rutina equilibrada')">Vull Rutina Equilibrada</button>
@@ -47,7 +47,6 @@
         <navBar />
 
       </div>
-    </div>
   </body>
 </template>
 
@@ -77,6 +76,9 @@ export default {
 
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
+        }
+        if(this.chatMessages.length === 0) {
+          document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
 
         this.chatMessages.push({
@@ -165,7 +167,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
 }
 
 body {
@@ -200,8 +202,8 @@ body {
 
 .mensaje-bienvenida {
   display: grid;
-  grid-template-columns: .2fr 1fr;
-  margin-top: 50%;
+  grid-template-columns: .1fr 1fr;
+  margin-top: 15%;
 
 
 }
@@ -225,6 +227,35 @@ body {
   height: 55px;
   border-radius: 50%;
   margin-left: 45px;
+}
+
+.botones-preseleccionados{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  margin: auto;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  width: 90%;
+  
+}
+
+.botones-preseleccionados button{
+  background-color: #0000002f;
+  color: white;
+  border: 4px solid #1b1b1b23;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: auto;
 }
 
 .chat-container {
@@ -329,7 +360,6 @@ body {
   align-items: center;
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color: #33333356;
 }
 
 .entrada-mensaje {
