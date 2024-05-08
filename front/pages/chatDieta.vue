@@ -1,50 +1,49 @@
 <template>
-  <body>
-      <div class="contenedor">
-        <capçalera />
-        <div class="cabecera">Assessorament Dieta</div>
-        <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-        <div class="mensaje-bienvenida">
-          <img src="../public/img/icono_Arturo.jpg" alt="">
-          <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
-        </div>
+  <div class="contenedor">
+    <capçalera />
+    <div class="cabecera">Assessorament Dieta</div>
+    <div class="mensaje-bienvenida">
+      <img src="../public/img/icono_Arturo.jpg" alt="">
+      <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
+    </div>
 
-        <div class="chat-container">
-          <div class="chat">
-            <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-              <div class="mensaje"
-                :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-                <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil"
-                    alt="Avatar usuario" class="avatar-usuario" />
-                  <p class="nombre-usuario">{{ nom_usuari }}</p>
-                </div>
-                <div class="contenido-mensaje">
-                  <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                    class="avatar-asistente" />
-                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
-                </div>
-              </div>
+    <div class="chat-container">
+      <div class="chat">
+        <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+          <div class="mensaje"
+            :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+            <div class="info-usuario" v-if="message.role === 'user'">
+              <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil"
+                alt="Avatar usuario" class="avatar-usuario" />
+              <p class="nombre-usuario">{{ nom_usuari }}</p>
             </div>
-            <!-- Mostrar animación de carga si isLoading es true -->
-            <div v-if="isLoading || isSending" class="animacion-carga"></div>
+            <div class="contenido-mensaje">
+              <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                class="avatar-asistente" />
+              <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+            </div>
           </div>
         </div>
-        <div class="botones-preseleccionados">
-          <button @click="enviarMensajePreseleccionado('vull dieta')">Vull <br> Dieta</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta de definicio')">Vull Dieta de Definició</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta de volum')">Vull Dieta <br> de Volum</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta equilibrada')">Vull Dieta Equilibrada</button>
-        </div>
-        <!-- Movido el textarea y el botón al final del contenedor -->
-        <div class="controles-inferiores">
-          <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-            placeholder="Escriu la teva consulta"></textarea>
-          <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
-        </div>
-        <navBar />
+        <div v-if="isLoading || isSending" class="animacion-carga"></div>
       </div>
-  </body>
+    </div>
+    <div class="botones-preseleccionados" v-if="!isLoading && !isSending">
+      <div v-if="currentQuestion" class="pregunta">
+        <h3>{{ currentQuestion.pregunta }}</h3>
+        <div v-if="currentQuestion.opcions">
+          <div v-for="(option, key) in currentQuestion.opcions" :key="key">
+            <button @click="seleccionarOpcion(option, key)">{{ option }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="controles-inferiores">
+      <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
+        placeholder="Escriu la teva consulta"></textarea>
+      <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+    </div>
+    <navBar />
+  </div>
 </template>
 
 <script>
@@ -110,6 +109,8 @@ export default {
       chatMessages: [],
       isLoading: false,
       isSending: false,
+      currentQuestion: null,
+      selectedOptions: [],
     };
   },
   methods: {
@@ -147,23 +148,19 @@ export default {
 
         console.log(generatedText);
 
-        const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
+        const dietaJSON = JSON.parse(generatedText);
 
-        await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
+        await enviarDietaAlServidor(dietaJSON);
 
-        // Construir el mensaje con la lista de apats y platos
-        let mensajeDieta = '\nAquí tens la teva dieta:\n'; // Comienza el mensaje con la introducción
+        let mensajeDieta = '\nAquí tens la teva dieta:\n';
 
         dietaJSON.apats.forEach((apat) => {
-          // Iterar sobre cada apat de la dieta
-          mensajeDieta += `\n${apat.apat}:\n`; // Agregar el nombre del apat al mensaje
+          mensajeDieta += `\n${apat.apat}:\n`;
 
           apat.plats.forEach((plat) => {
-            // Iterar sobre cada plat del apat
             mensajeDieta += `\n- ${plat.nom_plat} (proteines: ${plat.proteines}, carbohidrats: ${plat.carbohidrats}, greixos: ${plat.greixos}, calories: ${plat.calories})\n`;
             mensajeDieta += `\tIngredients:\n`;
             plat.ingredients.forEach((ingredient) => {
-              // Iterar sobre cada ingrediente del plat
               mensajeDieta += `\t- ${ingredient.nom_ingredient}: ${ingredient.quantitat} ${ingredient.unitat}\n`;
             });
           });
@@ -187,8 +184,8 @@ export default {
     },
     async enviarMensajeOnEnter(event) {
       if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault(); // Evitar el salto de línea
-        await this.enviarMensaje(); // Llamar al método enviarMensaje al presionar Enter
+        event.preventDefault(); 
+        await this.enviarMensaje();
       }
     },
     getMessageClass(message) {
@@ -197,10 +194,23 @@ export default {
         'mensaje-asistente': message.role === 'assistant',
       };
     },
+    mostrarSiguientePregunta(pregunta) {
+      this.currentQuestion = pregunta;
+    },
+    seleccionarOpcion(option, key) {
+      this.selectedOptions.push(option);
+      if (typeof this.currentQuestion.opcions[key] === 'string') {
+        console.log('Información recibida:', this.selectedOptions);
+        this.selectedOptions = [];
+        this.currentQuestion = null;
+      } else {
+        this.mostrarSiguientePregunta(this.currentQuestion.opcions[key]);
+      }
+    },
   },
   mounted() {
-    // Recuperar el nombre de usuario del almacenamiento local
     this.usuario = localStorage.getItem('username');
+    this.mostrarSiguientePregunta(arbrePreguntes);
   },
   computed: {
     nom_usuari() {
@@ -212,6 +222,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 html,
