@@ -54,48 +54,46 @@ const arbrePreguntes = {
   pregunta: "Quin tipus de dieta vols?",
   opcions: {
     Volum: {
-      pregunta: "Quantes menjades prefereixes al dia per a una dieta de volum?",
+      pregunta: "Quants apats prefereixes fer al dia per a una dieta de volum?",
       opcions: {
-        "4": {
-          pregunta: "Vols incloure un snack o un post-entrenament?",
+        "4":"Dieta de volum de 4 apats esmorzar, dinar, berenar, sopar"
+        ,
+        "5": {
+          pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Snack": "Dieta de volum amb snack",
-            "Post-entrenament": "Dieta de volum amb post-entrenament"
+            "Segon esmorzar": "Dieta de volum de 5 apats esmorzar, segon esmorzar, dinar, berenar, sopar",
+            "Post-entrenament": "Dieta de volum de 5 apats esmorzar, dinar, berenar, Post-entrenament, sopar"
           }
         },
-        "6": {
-          pregunta: "Vols incloure un snack o un post-entrenament?",
-          opcions: {
-            "Snack": "Dieta de volum amb snack",
-            "Post-entrenament": "Dieta de volum amb post-entrenament"
-          }
-        }
+        "6":"Dieta de volum de 6 apats esmorzar, segon esmorzar , dinar, berenar, Post-entrenament, sopar"
       }
     },
     Definició: {
-      pregunta: "Quantes menjades prefereixes al dia per a una dieta de definició?",
+      pregunta: "Quants apats prefereixes fer al dia per a una dieta de definició?",
       opcions: {
-        "2": {
-          pregunta: "Vols incloure un snack o un post-entrenament?",
+        "4": "Dieta de definicío de 4 apats esmorzar, dinar, berenar, sopar",
+        "5": {
+          pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Snack": "Dieta de definició amb snack",
-            "Post-entrenament": "Dieta de definició amb post-entrenament"
+            "Segon esmorzar": "Dieta de definició amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
+            "Post-entrenament": "Dieta de definició amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
           }
         },
-        "4": {
-          pregunta: "Vols incloure un snack o un post-entrenament?",
-          opcions: {
-            "Snack": "Dieta de definició amb snack",
-            "Post-entrenament": "Dieta de definició amb post-entrenament"
-          }
-        }
+        "6": "Dieta de definició amb 6 apats: esmorzar, segon esmorzar, dinar, post-entrenament, sopar."
       }
     },
     Equilibrada: {
-      pregunta: "Quantes menjades prefereixes al dia per a una dieta equilibrada?",
+      pregunta: "Quants apats prefereixes al dia per a una dieta equilibrada?",
       opcions: {
-        "2": "Dieta equilibrada amb 2 menjades",
-        "4": "Dieta equilibrada amb 4 menjades"
+        "4": "Dieta equilibrada amb 4 apats",
+        "5": {
+          pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
+          opcions: {
+            "Segon esmorzar": "Dieta de equilibrada amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
+            "Post-entrenament": "Dieta de equilibrada amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+          }
+        },
+        "6": "Dieta equilibrada amb 6 apats"
       }
     }
   }
