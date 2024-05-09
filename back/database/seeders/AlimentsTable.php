@@ -17,6 +17,46 @@ class AlimentsTable extends Seeder
     {
         $data = [
             [
+                'nom_plat' => 'Muesli amb iogurt i fruita seca',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Muesli', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Iogurt', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Panses', 'quantitat' => 20, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Ametlles', 'quantitat' => 20, 'unitat' => 'grams']
+                ]),
+                'proteines' => 8.7,
+                'carbohidrats' => 45.3,
+                'greixos' => 12.6,
+                'calories' => 321
+            ],
+            [
+                'nom_plat' => 'Torrades integrals amb ou ferrat i tomàquet',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Pa integral', 'quantitat' => 2, 'unitat' => 'trossos'],
+                    ['nom_ingredient' => 'Ous', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Tomàquet', 'quantitat' => 1, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 14.6,
+                'carbohidrats' => 24.3,
+                'greixos' => 11.8,
+                'calories' => 237
+            ],
+            [
+                'nom_plat' => 'Iogurt desnatat amb maduixes i llavors de chia',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Iogurt desnatat', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Maduixes', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Llavors de chia', 'quantitat' => 10, 'unitat' => 'grams']
+                ]),
+                'proteines' => 7.8,
+                'carbohidrats' => 12.3,
+                'greixos' => 2.9,
+                'calories' => 105
+            ],
+            [
                 'nom_plat' => 'Avena amb fruites i nous',
                 'apat' => 'esmorzar',
                 'ingredients' => json_encode([
@@ -58,20 +98,6 @@ class AlimentsTable extends Seeder
                 'calories' => 251
             ],
             [
-                'nom_plat' => 'Batut de proteines amb espinacs i fruita',
-                'apat' => 'esmorzar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Proteïna en pols', 'quantitat' => 1, 'unitat' => 'serving'],
-                    ['nom_ingredient' => 'Espinacs', 'quantitat' => 50, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Maduixes', 'quantitat' => 100, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Llet d\'ametlles', 'quantitat' => 200, 'unitat' => 'ml']
-                ]),
-                'proteines' => 29.3,
-                'carbohidrats' => 29.8,
-                'greixos' => 10.1,
-                'calories' => 327
-            ],
-            [
                 'nom_plat' => 'Ous ferrats amb esparrecs',
                 'apat' => 'esmorzar',
                 'ingredients' => json_encode([
@@ -84,20 +110,7 @@ class AlimentsTable extends Seeder
                 'calories' => 204
             ],
             [
-                'nom_plat' => 'Batut de plàtan i ametlles',
-                'apat' => 'esmorzar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Plàtan', 'quantitat' => 1, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Ametlles', 'quantitat' => 20, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Llet', 'quantitat' => 200, 'unitat' => 'ml']
-                ]),
-                'proteines' => 7.3,
-                'carbohidrats' => 30.1,
-                'greixos' => 9.5,
-                'calories' => 235
-            ],
-            [
-                'nom_plat' => 'Sandvitx de salmó fumat',
+                'nom_plat' => 'Sanditx de salmó fumat',
                 'apat' => 'esmorzar',
                 'ingredients' => json_encode([
                     ['nom_ingredient' => 'Pa integral', 'quantitat' => 2, 'unitat' => 'trossos'],
@@ -150,6 +163,136 @@ class AlimentsTable extends Seeder
                 'greixos' => 11.5,
                 'calories' => 176
             ],
+            [
+                'nom_plat' => 'Batut de proteïnes amb plàtan i mantega de cacauet',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Proteïna en pols', 'quantitat' => 1, 'unitat' => 'serving'],
+                    ['nom_ingredient' => 'Plàtan', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Mantega de cacauet', 'quantitat' => 20, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Llet', 'quantitat' => 200, 'unitat' => 'ml']
+                ]),
+                'proteines' => 25.3,
+                'carbohidrats' => 34.7,
+                'greixos' => 11.5,
+                'calories' => 336
+            ],
+            
+            [
+                'nom_plat' => 'Truita de patates amb alvocat',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Ous', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Patata', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Alvocat', 'quantitat' => 1, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 13.4,
+                'carbohidrats' => 20.8,
+                'greixos' => 22.1,
+                'calories' => 312
+            ],
+            
+            [
+                'nom_plat' => 'Torrades amb alvocat, ou i salmó fumat',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Torrades', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Alvocat', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Ou dur', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Salmó fumat', 'quantitat' => 50, 'unitat' => 'grams']
+                ]),
+                'proteines' => 16.7,
+                'carbohidrats' => 24.3,
+                'greixos' => 17.8,
+                'calories' => 304
+            ],
+            
+            [
+                'nom_plat' => 'Cereals integrals amb iogurt grec, mel i fruits secs',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Cereals integrals', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Iogurt grec', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Mel', 'quantitat' => 10, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Fruits secs variats', 'quantitat' => 30, 'unitat' => 'grams']
+                ]),
+                'proteines' => 10.8,
+                'carbohidrats' => 43.2,
+                'greixos' => 14.3,
+                'calories' => 332
+            ],
+            [
+                'nom_plat' => 'Crepes amb avena, plàtan i mel',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Crepes', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Mel', 'quantitat' => 20, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Plàtan', 'quantitat' => 1, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 10.5,
+                'carbohidrats' => 49.2,
+                'greixos' => 6.9,
+                'calories' => 309
+            ],
+            [
+                'nom_plat' => 'Torrades integrals amb alvocat i tomaquet',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Pa integral', 'quantitat' => 2, 'unitat' => 'trossos'],
+                    ['nom_ingredient' => 'Alvocat', 'quantitat' => 1, 'unitat' => 'unitat'],
+                    ['nom_ingredient' => 'Tomaquet', 'quantitat' => 1, 'unitat' => 'unitat']
+                ]),
+                'proteines' => 3.6,
+                'carbohidrats' => 18.9,
+                'greixos' => 8.7,
+                'calories' => 158
+            ],     
+            [
+                'nom_plat' => 'Ous remenats amb espinacs i pebrot vermell',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Ous', 'quantitat' => 2, 'unitat' => 'unitats'],
+                    ['nom_ingredient' => 'Espinacs', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Pebrot vermell', 'quantitat' => 50, 'unitat' => 'grams']
+                ]),
+                'proteines' => 15.4,
+                'carbohidrats' => 5.6,
+                'greixos' => 11.1,
+                'calories' => 186
+            ],      
+            [
+                'nom_plat' => 'Avena amb nabius i llavors de lli',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Avena', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Nabius', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Llavors de lli', 'quantitat' => 10, 'unitat' => 'grams']
+                ]),
+                'proteines' => 7.3,
+                'carbohidrats' => 27.4,
+                'greixos' => 6.1,
+                'calories' => 195
+            ],
+            [
+                'nom_plat' => 'Iogurt desnatat amb fruits vermells i ametlles laminades',
+                'apat' => 'esmorzar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Iogurt desnatat', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Maduixes', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Gerds', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Ametlles laminades', 'quantitat' => 10, 'unitat' => 'grams']
+                ]),
+                'proteines' => 6.1,
+                'carbohidrats' => 13.8,
+                'greixos' => 3.9,
+                'calories' => 114
+            ],
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
             [
                 'nom_plat' => 'Batut de proteïna amb fruita',
                 'apat' => 'segon esmorzar',
@@ -242,20 +385,13 @@ class AlimentsTable extends Seeder
                 'greixos' => 14.9,
                 'calories' => 206
             ],
-            [
-                'nom_plat' => 'Batut de proteïna amb fruita',
-                'apat' => 'segon esmorzar',
-                'ingredients' => json_encode([
-                    ['nom_ingredient' => 'Proteïna en pols', 'quantitat' => 1, 'unitat' => 'serving'],
-                    ['nom_ingredient' => 'Maduixes', 'quantitat' => 100, 'unitat' => 'grams'],
-                    ['nom_ingredient' => 'Plàtan', 'quantitat' => 1, 'unitat' => 'unitat'],
-                    ['nom_ingredient' => 'Llet d\'ametlles', 'quantitat' => 200, 'unitat' => 'ml']
-                ]),
-                'proteines' => 28.4,
-                'carbohidrats' => 28.9,
-                'greixos' => 9.3,
-                'calories' => 315
-            ],
+
+            
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            
+
             [
                 'nom_plat' => 'Salmó al forn amb quinoa i espàrrecs',
                 'apat' => 'dinar',
