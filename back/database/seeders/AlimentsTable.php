@@ -909,6 +909,13 @@ class AlimentsTable extends Seeder
                 'greixos' => 11.5,
                 'calories' => 375
             ],
+
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
             [
                 'nom_plat' => 'Batut de proteines amb fruita i ametlles',
                 'apat' => 'berenar',
