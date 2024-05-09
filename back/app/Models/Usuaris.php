@@ -31,6 +31,7 @@ class Usuaris extends Model implements Authenticatable
         'idRutina',
         'idDieta',
         'registre',
+        'amics',
     ];
 
 

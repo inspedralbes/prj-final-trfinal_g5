@@ -36,6 +36,9 @@
 </template>
 
 <script>
+import { useUsuariPerfilStore } from '@/stores/index';
+import { getUsuariosChat } from '@/stores/communicationManager';
+
 export default {
     data() {
         return {
@@ -49,8 +52,13 @@ export default {
                 { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 6', texto: 'Texto 6', hora: '15:00' }
                 // Agrega más elementos según sea necesario
             ],
+            amics:[],
             mostrarMenu: false
         };
+    },
+    mounted() {
+        // Obtiene los usuarios del chat
+        this.obtenerAmigos();
     },
     computed: {
         itemsFiltrados() {
@@ -62,6 +70,21 @@ export default {
         }
     },
     methods: {
+        obtenerAmigos() {
+            const store = useUsuariPerfilStore();
+            const idUsuario = store.id_usuari;
+            console.log(idUsuario);
+            
+            getUsuariosChat(idUsuario).then(response => {
+                this.amics = response;
+                console.log(this.amics);
+            });
+        },
+
+        buscar() {
+            // Realiza la búsqueda
+            console.log('Buscando:', this.busqueda);
+        },
         toggleMenu() {
             this.mostrarMenu = !this.mostrarMenu;
         },
@@ -71,7 +94,7 @@ export default {
         },
         redireccionarAñadirAmigo() {
             // Redirige a la página de Añadir amigo
-            this.$router.push('/añadir-amigo');
+            this.$router.push('/afegir-amic');
         },
         redireccionarConversacion(nombrePersona) {
             // Redirige a la página de conversación con el nombre de la persona

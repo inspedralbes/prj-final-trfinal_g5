@@ -28,11 +28,13 @@ return new class extends Migration
             $table->string('foto_perfil')->default('usuario.png');
             $table->string('alergia_intolerancia')->nullable();
             $table->string ('lesio')->nullable();
+            $table->json('amics')->nullable();
             $table->boolean('registre')->default(false);
             $table->unsignedBigInteger('idRutina')->nullable();
             $table->unsignedBigInteger('idDieta')->nullable();
             $table->foreign('idRutina')->references('id')->on('rutinas');
             $table->foreign('idDieta')->references('id')->on('dietas');
+            
         });
     }
     

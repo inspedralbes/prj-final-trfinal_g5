@@ -31,6 +31,7 @@ class UserController extends Controller
             'pes' => 'numeric',
             'altura' => 'numeric',
             'telefon' => 'integer|digits:9',
+            
         ]);
 
         $usuari = new Usuaris();
@@ -282,7 +283,108 @@ class UserController extends Controller
             'foto_perfil' => $usuari->foto_perfil,
             'registre' => $usuari->registre
         ]);
+
+        
     }
+
+    public function getUsers(Request $request) {
+        $users = Usuaris::all();
+        return response()->json($users);
+    }
+
+    public function getAmics(Request $request, string $id)
+{
+    // Busca al usuario por su ID
+    $usuario = Usuaris::find($id);
+
+    if (!$usuario) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'Usuario no encontrado'
+        ]);
+    }
+
+    // Verifica si el usuario tiene amigos
+    if (!$usuario->amics) {
+        return response()->json([
+            'status' => 1,
+            'message' => 'El usuario no tiene amigos',
+            'amigos' => []
+        ]);
+    }
+
+    // Decodifica el campo "amics" que está en formato JSON
+    $amigos = json_decode($usuario->amics, true);
+
+    // Verifica si la decodificación fue exitosa y $amigos es un array
+    if (!is_array($amigos)) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'Error al decodificar la lista de amigos'
+        ]);
+    }
+
+    // Verifica si $amigos no está vacío
+    if (empty($amigos)) {
+        return response()->json([
+            'status' => 1,
+            'message' => 'El usuario no tiene amigos',
+            'amigos' => []
+        ]);
+    }
+
+    // Encuentra los usuarios que son amigos del usuario actual
+    $amigosUsuarios = Usuaris::whereIn('id', $amigos)->get();
+
+    // Devuelve la lista de amigos del usuario
+    return response()->json([
+        'status' => 1,
+        'message' => 'Amigos del usuario',
+        'amigos' => $amigosUsuarios
+    ]);
+}
+
+
+
+
+    public function afegirAmic(Request $request, $id){
+        $request->validate([
+            'idAmic' => 'required|integer',
+        ]);
+    
+        $usuari = Usuaris::find($id);
+    
+        if (!$usuari) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Usuari no trobat'
+            ]);
+        }
+    
+        $idAmic = $request->idAmic;
+    
+        $amics = $usuari->amics;
+    
+        if (in_array($idAmic, $amics)) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Aquest usuari ja és un amic'
+            ]);
+        }
+    
+        $amics[] = $idAmic;
+    
+        $usuari->amics = $amics;
+    
+        $usuari->save();
+    
+        return response()->json([
+            'status' => 1,
+            'message' => 'Amic afegit correctament'
+        ]);
+
+    }
+    
     
 
 }    
