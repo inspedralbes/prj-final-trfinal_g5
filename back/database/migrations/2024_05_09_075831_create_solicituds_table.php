@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('solicituds', function (Blueprint $table) {
             $table->id();
-            $table->string('usuario_envia_solicitud');
-            $table->string('usuario_recibe_solicitud');
+            $table->unsignedBigInteger('usuario_envia_id');
+            $table->unsignedBigInteger('usuario_recibe_id');
             $table->timestamps();
 
             // Define las claves foráneas
-            $table->foreign('usuario_envia_solicitud')->references('nom_usuari')->on('usuaris');
-            $table->foreign('usuario_recibe_solicitud')->references('nom_usuari')->on('usuaris');
+            $table->foreign('usuario_envia_id')->references('id')->on('usuaris');
+            $table->foreign('usuario_recibe_id')->references('id')->on('usuaris');
         });
     }
 

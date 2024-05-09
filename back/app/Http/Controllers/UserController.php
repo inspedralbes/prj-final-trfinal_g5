@@ -286,6 +286,36 @@ class UserController extends Controller
 
         
     }
+    public function mostrarUsuariosExceptoYo(Request $request, $idUsuario)
+{
+    // Busca el usuario por el ID proporcionado desde el frontend
+    $usuario = Usuaris::find($idUsuario);
+
+    if (!$usuario) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'Usuario no encontrado'
+        ]);
+    }
+
+    // Busca todos los usuarios excepto el usuario proporcionado
+    $usuarios = Usuaris::select('nom', 'nom_usuari', 'cognoms','foto_perfil','id')->where('id', '!=', $idUsuario)->get();
+
+    if ($usuarios->isEmpty()) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'No se encontraron otros usuarios.'
+        ]);
+    }
+
+    // Retorna la lista de usuarios excepto el usuario proporcionado
+    return response()->json([
+        'status' => 1,
+        'message' => 'Usuarios excluyendo el usuario proporcionado.',
+        'usuarios' => $usuarios
+    ]);
+}
+
 
     public function getUsers(Request $request) {
         $users = Usuaris::all();

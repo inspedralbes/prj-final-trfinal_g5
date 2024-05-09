@@ -15,6 +15,7 @@ Route::put('/editar-usuari/{id}', [UserController::class, 'editarUsuari']);
 Route::get('/chatUsuaris/{id}', [UserController::class, 'getAmics']);
 
 
+Route::get('/usuarios-excepto/{idUsuario}', [UserController::class, 'mostrarUsuariosExceptoYo']);
 Route::post('/enviar-solicitud', [SolicitudController::class, 'store']);
 
 
