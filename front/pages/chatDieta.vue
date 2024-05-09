@@ -1,49 +1,50 @@
 <template>
-  <div class="contenedor">
-    <capçalera />
-    <div class="cabecera">Assessorament Dieta</div>
-    <div class="mensaje-bienvenida">
-      <img src="../public/img/icono_Arturo.jpg" alt="">
-      <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
-    </div>
 
-    <div class="chat-container">
-      <div class="chat">
-        <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-          <div class="mensaje"
-            :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-            <div class="info-usuario" v-if="message.role === 'user'">
-              <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil"
-                alt="Avatar usuario" class="avatar-usuario" />
-              <p class="nombre-usuario">{{ nom_usuari }}</p>
-            </div>
-            <div class="contenido-mensaje">
-              <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                class="avatar-asistente" />
-              <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+  <body>
+    <div class="contenedor">
+      <capçalera />
+      <div class="cabecera">Assessorament Dieta</div>
+
+      <div class="chat-container">
+        <div class="chat">
+          <!-- Mensajes de chat de usuario y asistente -->
+          <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+            <div class="mensaje"
+              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+              <div class="info-usuario" v-if="message.role === 'user'">
+                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                  class="avatar-usuario" />
+                <p class="nombre-usuario">{{ nom_usuari }}</p>
+              </div>
+              <div class="contenido-mensaje">
+                <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                  class="avatar-asistente" />
+                <p v-if="message.role === 'assistant'" v-html="message.content"></p>
+              </div>
             </div>
           </div>
-        </div>
-        <div v-if="isLoading || isSending" class="animacion-carga"></div>
-      </div>
-    </div>
-    <div class="botones-preseleccionados" v-if="!isLoading && !isSending">
-      <div v-if="currentQuestion" class="pregunta">
-        <h3>{{ currentQuestion.pregunta }}</h3>
-        <div v-if="currentQuestion.opcions">
-          <div v-for="(option, key) in currentQuestion.opcions" :key="key">
-            <button @click="seleccionarOpcion(option, key)">{{ option }}</button>
+
+          <!-- Opciones de respuesta como botones -->
+          <div v-if="currentOptions && showOptions" class="botones-preseleccionados">
+            <button v-for="(option, key) in currentOptions" :key="key" @click="handleOptionSelect(key)">
+              {{ key }}
+            </button>
           </div>
+
+
+          <!-- Mostrar animación de carga si isLoading es true -->
+          <div v-if="isLoading || isSending" class="animacion-carga"></div>
         </div>
       </div>
+
+      <div class="controles-inferiores">
+        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
+          placeholder="Escriu la teva consulta"></textarea>
+        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+      </div>
+      <navBar />
     </div>
-    <div class="controles-inferiores">
-      <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-        placeholder="Escriu la teva consulta"></textarea>
-      <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
-    </div>
-    <navBar />
-  </div>
+  </body>
 </template>
 
 <script>
@@ -56,7 +57,7 @@ const arbrePreguntes = {
     Volum: {
       pregunta: "Quants apats prefereixes fer al dia per a una dieta de volum?",
       opcions: {
-        "4":"Dieta de volum de 4 apats esmorzar, dinar, berenar, sopar"
+        "4": "Dieta de volum de 4 apats esmorzar, dinar, berenar, sopar"
         ,
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
@@ -65,7 +66,7 @@ const arbrePreguntes = {
             "Post-entrenament": "Dieta de volum de 5 apats esmorzar, dinar, berenar, Post-entrenament, sopar"
           }
         },
-        "6":"Dieta de volum de 6 apats esmorzar, segon esmorzar , dinar, berenar, Post-entrenament, sopar"
+        "6": "Dieta de volum de 6 apats esmorzar, segon esmorzar , dinar, berenar, Post-entrenament, sopar"
       }
     },
     Definició: {
@@ -107,14 +108,44 @@ export default {
       chatMessages: [],
       isLoading: false,
       isSending: false,
-      currentQuestion: null,
-      selectedOptions: [],
+      currentQuestion: arbrePreguntes.pregunta,
+      currentOptions: arbrePreguntes.opcions,
+      showOptions: true,
     };
   },
+  watch: {
+    message(newValue) {
+      this.showOptions = !newValue.trim();
+    }
+  },
   methods: {
-    async enviarMensajePreseleccionado(mensajePreseleccionado) {
-      this.message = mensajePreseleccionado;
-      await this.enviarMensaje();
+    handleOptionSelect(optionKey) {
+      let nextStep = this.currentOptions[optionKey];
+
+      // Comprobar si hay un siguiente nivel de opciones
+      if (nextStep && typeof nextStep === 'object' && nextStep.pregunta) {
+        // Actualizar la pregunta y opciones actuales si hay más preguntas
+        this.currentQuestion = nextStep.pregunta;
+        this.currentOptions = nextStep.opcions || {};
+        // Añadir la respuesta del asistente al chat
+        this.chatMessages.push({
+          role: 'assistant',
+          content: this.currentQuestion
+        });
+      } else {
+        // Manejar el final del árbol de preguntas
+        this.currentQuestion = nextStep; // Esta sería la respuesta final
+        this.currentOptions = {};
+        // Establecer el mensaje final en `message` para ser enviado
+        this.message = nextStep;
+        // Añadir al chat y preparar para enviar
+        this.chatMessages.push({
+          role: 'assistant',
+          content: this.currentQuestion
+        });
+        // Opcional: Llamar a enviarMensaje directamente si se desea enviar inmediatamente
+        this.enviarMensaje();
+      }
     },
     async enviarMensaje() {
       try {
@@ -125,7 +156,7 @@ export default {
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
-        if(this.chatMessages.length === 0) {
+        if (this.chatMessages.length === 0) {
           document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
 
@@ -146,19 +177,23 @@ export default {
 
         console.log(generatedText);
 
-        const dietaJSON = JSON.parse(generatedText);
+        const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
-        await enviarDietaAlServidor(dietaJSON);
+        await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
-        let mensajeDieta = '\nAquí tens la teva dieta:\n';
+        // Construir el mensaje con la lista de apats y platos
+        let mensajeDieta = '\nAquí tens la teva dieta:\n'; // Comienza el mensaje con la introducción
 
         dietaJSON.apats.forEach((apat) => {
-          mensajeDieta += `\n${apat.apat}:\n`;
+          // Iterar sobre cada apat de la dieta
+          mensajeDieta += `\n${apat.apat}:\n`; // Agregar el nombre del apat al mensaje
 
           apat.plats.forEach((plat) => {
+            // Iterar sobre cada plat del apat
             mensajeDieta += `\n- ${plat.nom_plat} (proteines: ${plat.proteines}, carbohidrats: ${plat.carbohidrats}, greixos: ${plat.greixos}, calories: ${plat.calories})\n`;
             mensajeDieta += `\tIngredients:\n`;
             plat.ingredients.forEach((ingredient) => {
+              // Iterar sobre cada ingrediente del plat
               mensajeDieta += `\t- ${ingredient.nom_ingredient}: ${ingredient.quantitat} ${ingredient.unitat}\n`;
             });
           });
@@ -182,8 +217,8 @@ export default {
     },
     async enviarMensajeOnEnter(event) {
       if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault(); 
-        await this.enviarMensaje();
+        event.preventDefault(); // Evitar el salto de línea
+        await this.enviarMensaje(); // Llamar al método enviarMensaje al presionar Enter
       }
     },
     getMessageClass(message) {
@@ -192,23 +227,13 @@ export default {
         'mensaje-asistente': message.role === 'assistant',
       };
     },
-    mostrarSiguientePregunta(pregunta) {
-      this.currentQuestion = pregunta;
-    },
-    seleccionarOpcion(option, key) {
-      this.selectedOptions.push(option);
-      if (typeof this.currentQuestion.opcions[key] === 'string') {
-        console.log('Información recibida:', this.selectedOptions);
-        this.selectedOptions = [];
-        this.currentQuestion = null;
-      } else {
-        this.mostrarSiguientePregunta(this.currentQuestion.opcions[key]);
-      }
-    },
   },
   mounted() {
     this.usuario = localStorage.getItem('username');
-    this.mostrarSiguientePregunta(arbrePreguntes);
+    this.chatMessages.push({
+      role: 'assistant',
+      content: this.currentQuestion
+    });
   },
   computed: {
     nom_usuari() {
@@ -220,7 +245,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 html,
@@ -289,7 +313,7 @@ body {
   margin-left: 45px;
 }
 
-.botones-preseleccionados{
+.botones-preseleccionados {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
@@ -297,10 +321,10 @@ body {
   margin-top: 60px;
   margin-bottom: 20px;
   width: 90%;
-  
+
 }
 
-.botones-preseleccionados button{
+.botones-preseleccionados button {
   background-color: #0000002f;
   color: white;
   border: 4px solid #1b1b1b23;
@@ -316,6 +340,24 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
   margin: auto;
+}
+
+.mensaje-asistente button.boton-preseleccionado {
+  background-color: #0000002f;
+  color: white;
+  border: 4px solid #1b1b1b23;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 10px 0;
 }
 
 .chat-container {
