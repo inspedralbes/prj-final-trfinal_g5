@@ -1,58 +1,84 @@
 <template>
-
   <body>
-      <div class="contenedor">
-        <capçalera />
-        <div class="cabecera">Assessorament de Rutina</div>
-        <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-        <div class="mensaje-bienvenida">
-          <img src="../public/img/icono_Arturo.jpg" alt="">
-          <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
-        </div>
+    <div class="contenedor">
+      <capçalera />
+      <div class="cabecera">Assessorament Dieta</div>
 
-
-        <div class="chat-container">
-          <div class="chat">
-            <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-              <div class="mensaje"
-                :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-                <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
-                    class="avatar-usuario" />
-                  <p class="nombre-usuario">{{ nom_usuari }}</p>
-                </div>
-                <div class="contenido-mensaje">
-                  <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                    class="avatar-asistente" />
-                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
-                </div>
+      <div class="chat-container">
+        <div class="chat">
+          <!-- Mensajes de chat de usuario y asistente -->
+          <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+            <div class="mensaje"
+              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+              <div class="info-usuario" v-if="message.role === 'user'">
+                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                  class="avatar-usuario" />
+                <p class="nombre-usuario">{{ nom_usuari }}</p>
+              </div>
+              <div class="contenido-mensaje">
+                <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                  class="avatar-asistente" />
+                <p v-if="message.role === 'assistant'" v-html="message.content"></p>
               </div>
             </div>
-            <!-- Mostrar animación de carga si isLoading es true -->
-            <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
-        </div>
-        <div class="botones-preseleccionados">
-          <button @click="enviarMensajePreseleccionado('vull rutina')">Vull <br> Rutina</button>
-          <button @click="enviarMensajePreseleccionado('vull rutina de hipertrofia')">Vull Rutina de Hipertofia</button>
-          <button @click="enviarMensajePreseleccionado('vull rutina de calistenia')">Vull Rutina de Calistenia</button>
-          <button @click="enviarMensajePreseleccionado('vull rutina equilibrada')">Vull Rutina Equilibrada</button>
-        </div>
-        <!-- Movido el textarea y el botón al final del contenedor -->
-        <div class="controles-inferiores">
-          <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-            placeholder="Escriu la teva consulta"></textarea>
-          <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
-        </div>
-        <navBar />
 
+          <!-- Opciones de respuesta como botones -->
+          <div v-if="currentOptions && showOptions" class="botones-preseleccionados">
+            <button v-for="(option, key) in currentOptions" :key="key" @click="handleOptionSelect(key)">
+              {{ key }}
+            </button>
+          </div>
+
+
+          <!-- Mostrar animación de carga si isLoading es true -->
+          <div v-if="isLoading || isSending" class="animacion-carga"></div>
+        </div>
       </div>
+
+      <div class="controles-inferiores">
+        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
+          placeholder="Escriu la teva consulta"></textarea>
+        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+      </div>
+      <navBar />
+    </div>
   </body>
 </template>
 
 <script>
 import { enviarMensajeOpenAIRutina } from '@/stores/communicationManager';
 import { useUsuariPerfilStore } from '@/stores/index';
+const arbrePreguntes = {
+  pregunta: "Quin tipus de rutina vols?",
+  opcions: {
+    Hipertrofia: {
+      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      opcions: {
+        "3": "Rutina de hipertrofia de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
+        "4": "Rutina de hipertrofia de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
+        "5": "Rutina de hipertrofia de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+      }
+    },
+    Calistenia: {
+      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      opcions: {
+        "3": "Rutina de calistenia de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
+        "4": "Rutina de calistenia de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
+        "5": "Rutina de calistenia de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+      }
+    },
+    Equilibrada: {
+      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      opcions: {
+        "3": "Rutina de equilibrada de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
+        "4": "Rutina de equilibrada de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
+        "5": "Rutina de equilibrada de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+      }
+    }
+  }
+};
+
 export default {
   data() {
     return {
@@ -61,12 +87,44 @@ export default {
       chatMessages: [],
       isLoading: false,
       isSending: false,
+      currentQuestion: arbrePreguntes.pregunta,
+      currentOptions: arbrePreguntes.opcions,
+      showOptions: true,
     };
   },
+  watch: {
+    message(newValue) {
+      this.showOptions = !newValue.trim();
+    }
+  },
   methods: {
-    async enviarMensajePreseleccionado(mensajePreseleccionado) {
-      this.message = mensajePreseleccionado;
-      await this.enviarMensaje();
+    handleOptionSelect(optionKey) {
+      let nextStep = this.currentOptions[optionKey];
+
+      // Comprobar si hay un siguiente nivel de opciones
+      if (nextStep && typeof nextStep === 'object' && nextStep.pregunta) {
+        // Actualizar la pregunta y opciones actuales si hay más preguntas
+        this.currentQuestion = nextStep.pregunta;
+        this.currentOptions = nextStep.opcions || {};
+        // Añadir la respuesta del asistente al chat
+        this.chatMessages.push({
+          role: 'assistant',
+          content: this.currentQuestion
+        });
+      } else {
+        // Manejar el final del árbol de preguntas
+        this.currentQuestion = nextStep; // Esta sería la respuesta final
+        this.currentOptions = {};
+        // Establecer el mensaje final en `message` para ser enviado
+        this.message = nextStep;
+        // Añadir al chat y preparar para enviar
+        this.chatMessages.push({
+          role: 'assistant',
+          content: this.currentQuestion
+        });
+        // Opcional: Llamar a enviarMensaje directamente si se desea enviar inmediatamente
+        this.enviarMensaje();
+      }
     },
     async enviarMensaje() {
       try {
@@ -77,7 +135,7 @@ export default {
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
-        if(this.chatMessages.length === 0) {
+        if (this.chatMessages.length === 0) {
           document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
 
@@ -150,6 +208,11 @@ export default {
   mounted() {
     // Recuperar el nombre de usuario del almacenamiento local
     this.usuario = localStorage.getItem('username');
+
+    this.chatMessages.push({
+      role: 'assistant',
+      content: this.currentQuestion
+    });
   },
   computed: {
     nom_usuari() {
@@ -229,7 +292,7 @@ body {
   margin-left: 45px;
 }
 
-.botones-preseleccionados{
+.botones-preseleccionados {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
@@ -237,10 +300,10 @@ body {
   margin-top: 60px;
   margin-bottom: 20px;
   width: 90%;
-  
+
 }
 
-.botones-preseleccionados button{
+.botones-preseleccionados button {
   background-color: #0000002f;
   color: white;
   border: 4px solid #1b1b1b23;
