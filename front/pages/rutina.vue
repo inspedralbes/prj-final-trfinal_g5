@@ -52,8 +52,7 @@
                 </div>
 
             </div>
-            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
-
+            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
             <navBar />
 
         </div>
@@ -248,8 +247,10 @@ body {
 
 .dieta-button {
     position: relative;
-    width: 60%;
-    height: 120px;
+    width: 120%;
+    /* Ancho del 80% del contenedor padre */
+    max-width: 200px;
+    height: 80px;
     margin-top: 50px;
     font-size: 1.5em;
     font-weight: bold;

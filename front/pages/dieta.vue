@@ -148,7 +148,7 @@ body {
     background-position: center;
     font-size: 30px;
     color: white;
-    background-color: #FFA500;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
 }
 
 .calories {
