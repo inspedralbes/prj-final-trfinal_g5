@@ -6,7 +6,7 @@
             <h1>Dieta</h1>
 
             <!-- Mostrar mensaje para crear dieta si la base de datos está vacía -->
-            <div v-if="dietas.length === 0 && !loading">
+            <div class="dieta" v-if="dietas.length === 0 && !loading">
                 <p>No hi han dades de dieta dispoibles. Clica el boto per generar una dieta.</p>
             </div>
 
@@ -116,6 +116,7 @@ body {
 }
 
 .meal-item {
+    width: 85%;
     background-color: #f0f0f0;
     border-radius: 10px;
     padding: 10px;
@@ -126,12 +127,14 @@ body {
     font-size: 20px;
     margin-bottom: 5px;
 }
-
+.dieta{
+    text-align: center;
+}
 .dieta-button {
-    width: 160%;
+    width: 120%;
     /* Ancho del 80% del contenedor padre */
-    max-width: 400px;
-    height: 100px;
+    max-width: 200px;
+    height: 80px;
     margin-top: 50px;
     margin-bottom: 50px;
     /* Espacio entre los botones */
@@ -144,8 +147,8 @@ body {
     border-radius: 10px;
     background-position: center;
     font-size: 30px;
-    color: #000;
-    background-color: #666;
+    color: white;
+    background-color: #FFA500;
 }
 
 .calories {

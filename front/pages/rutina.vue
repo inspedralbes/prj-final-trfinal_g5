@@ -50,9 +50,10 @@
                         </div>
                     </div>
                 </div>
-                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
 
             </div>
+            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear nova Rutina</button>
+
             <navBar />
 
         </div>
@@ -248,7 +249,7 @@ body {
 .dieta-button {
     position: relative;
     width: 60%;
-    height: 60px;
+    height: 120px;
     margin-top: 50px;
     font-size: 1.5em;
     font-weight: bold;
@@ -261,27 +262,9 @@ body {
     background-image: linear-gradient(to right, #ff7300, #FFA500);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     background-position: center;
-    color: #474747;
 }
 
-.dia-button {
-    width: 50px;
-    height: 50px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    background-size: cover;
-    border-radius: 10px;
-    background-position: center;
-    font-size: 30px;
-    color: #000;
-    background-color: #666;
-    margin: auto;
-}
+
 
 .loading {
     display: flex;
