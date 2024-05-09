@@ -1,49 +1,45 @@
 <template>
-  <body>
-      <div class="contenedor">
-        <capçalera />
-        <div class="cabecera">Assessorament Dieta</div>
-        <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-        <div class="mensaje-bienvenida">
-          <img src="../public/img/icono_Arturo.jpg" alt="">
-          <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
-        </div>
 
-        <div class="chat-container">
-          <div class="chat">
-            <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-              <div class="mensaje"
-                :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-                <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil"
-                    alt="Avatar usuario" class="avatar-usuario" />
-                  <p class="nombre-usuario">{{ nom_usuari }}</p>
-                </div>
-                <div class="contenido-mensaje">
-                  <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                    class="avatar-asistente" />
-                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
-                </div>
+  <body>
+    <div class="contenedor">
+      <capçalera />
+      <div class="cabecera">Assessorament Dieta</div>
+
+      <div class="chat-container">
+        <div class="chat">
+          <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+            <div class="mensaje"
+              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+              <div class="info-usuario" v-if="message.role === 'user'">
+                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                  class="avatar-usuario" />
+                <p class="nombre-usuario">{{ nom_usuari }}</p>
+              </div>
+              <div class="contenido-mensaje">
+                <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                  class="avatar-asistente" />
+                <p v-if="message.role === 'assistant'" v-html="message.content"></p>
               </div>
             </div>
-            <!-- Mostrar animación de carga si isLoading es true -->
-            <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
+          <!-- Mostrar animación de carga si isLoading es true -->
+          <div v-if="isLoading || isSending" class="animacion-carga"></div>
         </div>
-        <div class="botones-preseleccionados">
-          <button @click="enviarMensajePreseleccionado('vull dieta')">Vull <br> Dieta</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta de definicio')">Vull Dieta de Definició</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta de volum')">Vull Dieta <br> de Volum</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta equilibrada')">Vull Dieta Equilibrada</button>
+        <div v-if="activeButtons.length > 0" class="botones-preseleccionados">
+          <button v-for="button in activeButtons" :key="button" @click="seleccionarOpcion(button)"
+            class="boton-preseleccionado">
+            {{ button }}
+          </button>
         </div>
-        <!-- Movido el textarea y el botón al final del contenedor -->
-        <div class="controles-inferiores">
-          <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-            placeholder="Escriu la teva consulta"></textarea>
-          <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
-        </div>
-        <navBar />
       </div>
+
+      <div class="controles-inferiores">
+        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
+          placeholder="Escriu la teva consulta"></textarea>
+        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+      </div>
+      <navBar />
+    </div>
   </body>
 </template>
 
@@ -110,12 +106,104 @@ export default {
       chatMessages: [],
       isLoading: false,
       isSending: false,
+      currentQuestion: arbrePreguntes.pregunta,
+      currentOptions: arbrePreguntes.opcions,
+      activeButtons: [],
+      respuestasSeleccionadas: [],
     };
   },
   methods: {
-    async enviarMensajePreseleccionado(mensajePreseleccionado) {
-      this.message = mensajePreseleccionado;
-      await this.enviarMensaje();
+    async mostrarPreguntaYPresentarOpciones(pregunta, opciones) {
+      this.chatMessages.push({
+        role: 'assistant',
+        content: pregunta,
+      });
+
+      await this.$nextTick();
+
+      if (typeof opciones === 'string') {
+        // Es un nodo final, detener aquí.
+        this.activeButtons = [];  // Asegúrate de limpiar los botones.
+        this.chatMessages.push({
+          role: 'assistant',
+          content: opciones,
+        });
+        this.handleFinalSelection();  // Llama a la función para manejar la selección final.
+      } else if (opciones) {
+        this.activeButtons = Object.keys(opciones);  // Asegúrate que opciones no es undefined.
+      } else {
+        // En caso de que las opciones sean undefined o null.
+        this.activeButtons = [];  // Limpia los botones para asegurar que no se muestren.
+      }
+    },
+
+    async seleccionarOpcion(opcionSeleccionada) {
+      this.message = opcionSeleccionada;
+      this.chatMessages.push({
+        role: 'user',
+        content: opcionSeleccionada,
+      });
+
+      // Guardar la respuesta seleccionada
+      this.respuestasSeleccionadas.push(opcionSeleccionada);
+
+      this.activeButtons = []; // Limpiar los botones activos antes de cargar nuevos
+
+      const nextNode = this.currentOptions[opcionSeleccionada];
+      if (typeof nextNode === 'string') {
+        // Si nextNode es una cadena, significa que es un nodo final.
+        this.handleFinalSelection(nextNode);
+      } else if (nextNode && nextNode.pregunta && nextNode.opcions) {
+        const siguientePregunta = nextNode.pregunta;
+        const siguienteOpciones = nextNode.opcions;
+
+        this.currentQuestion = siguientePregunta;
+        this.currentOptions = siguienteOpciones;
+        await this.mostrarPreguntaYPresentarOpciones(siguientePregunta, siguienteOpciones);
+      } else {
+        // Si no hay más preguntas u opciones, manejar como final.
+        this.handleFinalSelection();
+      }
+    },
+    handleFinalSelection(finalMessage = "") {
+      // Tomar el último mensaje de las respuestas seleccionadas
+      finalMessage = this.respuestasSeleccionadas[this.respuestasSeleccionadas.length - 1];
+
+      // Actualizar el mensaje que se enviará
+      this.message = finalMessage;
+
+      // Añadir al chat el mensaje final
+      this.chatMessages.push({
+        role: 'assistant',
+        content: "Has completado la selección. Aquí está tu opción final: " + finalMessage,
+      });
+
+      // Limpia los botones activos y los estados de carga
+      this.activeButtons = [];
+      this.isLoading = false;
+      this.isSending = false;
+
+      // Enviar el mensaje automáticamente
+      this.enviarMensaje();
+    },
+
+    async enviarMensajeDieta(mensajeDieta) {
+      this.message = mensajeDieta;  // Establecer el mensaje generado como el mensaje actual
+      await this.enviarMensaje();  // Llamar al método que maneja el envío de mensajes
+    },
+    async seleccionarOpcion(opcionSeleccionada) {
+      this.message = opcionSeleccionada;
+      this.chatMessages.push({
+        role: 'user',
+        content: opcionSeleccionada,
+      });
+
+      const siguientePregunta = this.currentOptions[opcionSeleccionada].pregunta;
+      const siguienteOpciones = this.currentOptions[opcionSeleccionada].opcions;
+      this.currentQuestion = siguientePregunta;
+      this.currentOptions = siguienteOpciones;
+
+      await this.mostrarPreguntaYPresentarOpciones(siguientePregunta, siguienteOpciones);
     },
     async enviarMensaje() {
       try {
@@ -126,7 +214,7 @@ export default {
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
-        if(this.chatMessages.length === 0) {
+        if (this.chatMessages.length === 0) {
           document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
 
@@ -201,6 +289,9 @@ export default {
   mounted() {
     // Recuperar el nombre de usuario del almacenamiento local
     this.usuario = localStorage.getItem('username');
+
+    // Mostrar la primera pregunta y opciones al cargar el componente
+    this.mostrarPreguntaYPresentarOpciones(this.currentQuestion, this.currentOptions);
   },
   computed: {
     nom_usuari() {
@@ -280,7 +371,7 @@ body {
   margin-left: 45px;
 }
 
-.botones-preseleccionados{
+.botones-preseleccionados {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
@@ -288,10 +379,10 @@ body {
   margin-top: 60px;
   margin-bottom: 20px;
   width: 90%;
-  
+
 }
 
-.botones-preseleccionados button{
+.botones-preseleccionados button {
   background-color: #0000002f;
   color: white;
   border: 4px solid #1b1b1b23;
@@ -307,6 +398,24 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
   margin: auto;
+}
+
+.mensaje-asistente button.boton-preseleccionado {
+  background-color: #0000002f;
+  color: white;
+  border: 4px solid #1b1b1b23;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 10px 0;
 }
 
 .chat-container {
