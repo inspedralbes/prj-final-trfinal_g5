@@ -14,8 +14,8 @@
 
             <!-- Menú desplegable -->
             <div v-if="mostrarMenu" class="menu-desplegable">
-                <button @click="redireccionarSolicitudes">Solicitudes</button>
-                <button @click="redireccionarAñadirAmigo">Añadir amigos</button>
+                <button><nuxt-link  href="/solicitudes">Solicitudes</nuxt-link></button>
+                <button><nuxt-link  href="/afegir-amic">Añadir Amigos</nuxt-link></button>
             </div>
 
             <!-- Lista de elementos filtrada -->
@@ -88,14 +88,7 @@ export default {
         toggleMenu() {
             this.mostrarMenu = !this.mostrarMenu;
         },
-        redireccionarSolicitudes() {
-            // Redirige a la página de Solicitudes
-            this.$router.push('/solicitudes');
-        },
-        redireccionarAñadirAmigo() {
-            // Redirige a la página de Añadir amigo
-            this.$router.push('/afegir-amic');
-        },
+       
         redireccionarConversacion(nombrePersona) {
             // Redirige a la página de conversación con el nombre de la persona
             this.$router.push(`/conversacion/${nombrePersona}`);

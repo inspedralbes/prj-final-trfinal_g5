@@ -31,6 +31,7 @@ export default {
     return {
       usuarios: [],
       busqueda: '',
+
     };
   },
   computed: {
@@ -66,13 +67,17 @@ export default {
     },
     async agregarAmigo(idUsuario) {
       try {
-        const response = await fetch('http://localhost:8000/api/agregar-amigo', {
+        const usuario_envia_id = this.id_usuari; // Obtener el ID del usuario que envía desde la variable de datos
+        const usuario_recibe_id = idUsuario; // El ID del usuario que recibe es el ID del usuario seleccionado
+
+        const response = await fetch('http://127.0.0.1:8000/api/enviar-solicitud', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ idUsuario })
+          body: JSON.stringify({ usuario_envia_id, usuario_recibe_id }) // Incluir ambos IDs en el cuerpo de la solicitud
         });
+
         if (!response.ok) {
           throw new Error('Error al agregar amigo');
         }
@@ -81,6 +86,7 @@ export default {
         console.error(error);
       }
     }
+
   }
 }
 </script>
@@ -134,9 +140,7 @@ export default {
   border-radius: 5px;
 }
 
-.add-friend-button:hover {
-  background-color: #45a049;
-}
+
 
 input[type="text"] {
   width: 50%;

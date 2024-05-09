@@ -16,7 +16,8 @@ Route::get('/chatUsuaris/{id}', [UserController::class, 'getAmics']);
 
 
 Route::get('/usuarios-excepto/{idUsuario}', [UserController::class, 'mostrarUsuariosExceptoYo']);
-Route::post('/enviar-solicitud', [SolicitudController::class, 'store']);
+Route::post('/enviar-solicitud', [SolicitudController::class, 'enviarSolicitud']);
+Route::get('/mostrar-solicitudes/{id}', [SolicitudController::class, 'MostrarUsuarioSolicitudes']);
 
 
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
