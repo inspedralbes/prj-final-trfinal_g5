@@ -18,6 +18,7 @@ Route::get('/usuarios-excepto/{idUsuario}', [UserController::class, 'mostrarUsua
 Route::post('/enviar-solicitud', [SolicitudController::class, 'enviarSolicitud']);
 Route::get('/mostrar-solicitudes/{id}', [SolicitudController::class, 'MostrarUsuarioSolicitudes']);
 Route::post('/aceptar-solicitud', [SolicitudController::class, 'aceptarSolicitud']);
+Route::delete('/eliminar-solicitud/{id}', [SolicitudController::class, 'RechazarAmigo']);
 
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
 

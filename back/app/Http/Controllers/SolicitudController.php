@@ -83,4 +83,15 @@ class SolicitudController extends Controller
             ]);
         }
     }
+    public function RechazarAmigo(Request $request , $id)
+    {
+        $solicitud = Solicitud::find($id);
+        $solicitud->delete();
+        return response()->json([
+            'status' => 1,
+            'message' => 'Solicitud rechazada correctamente'
+        ]);
+    }
+    
+    
 }
