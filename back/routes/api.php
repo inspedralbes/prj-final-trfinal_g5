@@ -14,11 +14,10 @@ Route::get('/usuari/{id}', [UserController::class, 'mostrarUsuario']);
 Route::put('/editar-usuari/{id}', [UserController::class, 'editarUsuari']);
 Route::get('/chatUsuaris/{id}', [UserController::class, 'getAmics']);
 
-
 Route::get('/usuarios-excepto/{idUsuario}', [UserController::class, 'mostrarUsuariosExceptoYo']);
 Route::post('/enviar-solicitud', [SolicitudController::class, 'enviarSolicitud']);
 Route::get('/mostrar-solicitudes/{id}', [SolicitudController::class, 'MostrarUsuarioSolicitudes']);
-
+Route::post('/aceptar-solicitud', [SolicitudController::class, 'aceptarSolicitud']);
 
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
 
