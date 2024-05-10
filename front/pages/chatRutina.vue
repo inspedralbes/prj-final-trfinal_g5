@@ -61,25 +61,28 @@ const arbrePreguntes = {
     Hipertrofia: {
       pregunta: "Quants dies prefereixes entrenar a la semana?",
       opcions: {
-        "3": "Rutina de hipertrofia de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
-        "4": "Rutina de hipertrofia de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
-        "5": "Rutina de hipertrofia de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+        "3": "Rutina de hipertrofia de 3 dies: Dilluns, Dimecres, Divendres",
+        "4": "Rutina de hipertrofia de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
+        "5": "Rutina de hipertrofia de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
+        "6": "Rutina de hipertrofia de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
       }
     },
     Calistenia: {
       pregunta: "Quants dies prefereixes entrenar a la semana?",
       opcions: {
-        "3": "Rutina de calistenia de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
-        "4": "Rutina de calistenia de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
-        "5": "Rutina de calistenia de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+        "3": "Rutina de calistenia de 3 dies: Dilluns, Dimecres, Divendres",
+        "4": "Rutina de calistenia de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
+        "5": "Rutina de calistenia de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
+        "6": "Rutina de calistenia de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
       }
     },
     Equilibrada: {
       pregunta: "Quants dies prefereixes entrenar a la semana?",
       opcions: {
-        "3": "Rutina de equilibrada de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
-        "4": "Rutina de equilibrada de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
-        "5": "Rutina de equilibrada de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+        "3": "Rutina de equilibrada de 3 dies: Dilluns, Dimecres, Divendres",
+        "4": "Rutina de equilibrada de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
+        "5": "Rutina de equilibrada de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
+        "6": "Rutina de equilibrada de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
       }
     }
   }
