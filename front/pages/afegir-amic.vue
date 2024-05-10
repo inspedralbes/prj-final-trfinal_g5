@@ -7,16 +7,21 @@
       <p>No se encontraron usuarios</p>
     </div>
     <div v-else>
-      <div v-for="usuario in usuariosFiltrados" :key="usuario.id" class="usuario-container">
-        <div class="info-usuario">
-          <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Usuario"
-            class="user-icon" />
-          <div class="user-details">
-            <p class="user-name">{{ usuario.nom }} {{ usuario.cognoms }}</p>
-            <p class="username">{{ usuario.nom_usuari }}</p>
+      <div v-if="status === 0">
+        <p>No se pueden agregar más amigos</p>
+      </div>
+      <div v-else>
+        <div v-for="usuario in usuariosFiltrados" :key="usuario.id" class="usuario-container">
+          <div class="info-usuario">
+            <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Usuario"
+              class="user-icon" />
+            <div class="user-details">
+              <p class="user-name">{{ usuario.nom }} {{ usuario.cognoms }}</p>
+              <p class="username">{{ usuario.nom_usuari }}</p>
+            </div>
           </div>
+          <button @click="agregarAmigo(usuario.id)" class="add-friend-button">Añadir amigo</button>
         </div>
-        <button @click="agregarAmigo(usuario.id)" class="add-friend-button">Añadir amigo</button>
       </div>
     </div>
   </div>
@@ -31,7 +36,7 @@ export default {
     return {
       usuarios: [],
       busqueda: '',
-
+      status: null
     };
   },
   computed: {
@@ -60,7 +65,10 @@ export default {
           throw new Error('Error al obtener la lista de usuarios');
         }
         const data = await response.json();
-        this.usuarios = data.usuarios;
+        this.status = data.status;
+        if (data.status === 1) {
+          this.usuarios = data.usuarios;
+        }
       } catch (error) {
         console.error(error);
       }
