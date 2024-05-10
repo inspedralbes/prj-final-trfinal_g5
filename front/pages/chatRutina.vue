@@ -2,7 +2,7 @@
   <body>
     <div class="contenedor">
       <capçalera />
-      <div class="cabecera">Assessorament Dieta</div>
+      <div class="cabecera">Assessorament Rutina</div>
 
       <div class="chat-container">
         <div class="chat">
