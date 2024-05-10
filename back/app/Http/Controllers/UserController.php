@@ -374,47 +374,4 @@ class UserController extends Controller
     ]);
 }
 
-
-
-
-    public function afegirAmic(Request $request, $id){
-        $request->validate([
-            'idAmic' => 'required|integer',
-        ]);
-    
-        $usuari = Usuaris::find($id);
-    
-        if (!$usuari) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Usuari no trobat'
-            ]);
-        }
-    
-        $idAmic = $request->idAmic;
-    
-        $amics = $usuari->amics;
-    
-        if (in_array($idAmic, $amics)) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Aquest usuari ja és un amic'
-            ]);
-        }
-    
-        $amics[] = $idAmic;
-    
-        $usuari->amics = $amics;
-    
-        $usuari->save();
-    
-        return response()->json([
-            'status' => 1,
-            'message' => 'Amic afegit correctament'
-        ]);
-
-    }
-    
-    
-
 }    
