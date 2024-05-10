@@ -38,7 +38,7 @@
                     </div>
                     
                 </div>
-                <button class="dieta-button" @click="redirectTo('/chatDieta')">Crear Dieta</button>
+                <button class="dieta-button" @click="redirectToPage('/chatDieta')">Nova Dieta</button>
 
             </div>
 
@@ -90,6 +90,10 @@ export default {
                 });
         },
         redirectTo(page) {
+            this.$router.push(page);
+        },
+        redirectToPage(page) {
+            alert('Si crees una nova dieta, la dieta actual esborrarà. Estàs segur?');
             this.$router.push(page);
         }
     },

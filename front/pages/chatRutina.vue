@@ -208,6 +208,7 @@ export default {
         this.message = '';
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);
+        alert('Error al enviar el missatje. Siusplau, tora-ho a intentar.');
         if (error.message.startsWith("HTTP error! status: 429")) {
           alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
         }
