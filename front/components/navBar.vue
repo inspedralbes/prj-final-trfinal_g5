@@ -5,7 +5,7 @@
         <nuxt-link class="navbar-link" href="/dieta"><img src="../public/diet_white.png" alt="Dieta"></nuxt-link>
         <nuxt-link class="navbar-link" href="/rutina"><img src="../public/rutina_white.png" alt="Dieta"></nuxt-link>
         <nuxt-link class="navbar-link" href="/home"><img src="../public/dumbbell_white.png" alt="Dieta"></nuxt-link>
-        <nuxt-link class="navbar-link" href="/joc"><img src="../public/actividad.png" alt="Dieta"></nuxt-link>
+        <nuxt-link class="navbar-link" href=""><img src="../public/actividad.png" alt="Dieta"></nuxt-link>
         <nuxt-link class="navbar-link" href="/chatia"><img src="../public/chatgpt.png" alt="Dieta"></nuxt-link>
       </div>
     </div>
@@ -16,19 +16,24 @@
 .navbar {
   background-color: #333;
   color: white;
-  width: 100%;
-  padding: 10px 0; /* Modificado para ajustar el espacio vertical */
+  width: 90%;
+  padding: 10px; /* Modificado para ajustar el espacio vertical */
   margin: auto;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center; /* Centra los elementos horizontalmente */
   position: sticky;
   top: 0;
+  border-radius: 30px;
+  z-index: 1000;
+
 }
 
 .navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
 }
 
 .navbar-brand {
@@ -39,13 +44,14 @@
 .navbar-links {
   display: flex;
   justify-content: center; /* Centra los enlaces horizontalmente */
+  margin: auto;
 }
 
 .navbar-link {
   color: white;
   text-decoration: none;
   margin: 0 15px; /* Añade espacio entre los enlaces */
-  
+  text-align: center;
 }
 
 .navbar-link:hover {
@@ -53,7 +59,7 @@
 }
 
 img{
-  height: 50px;
-  width: 50px;
+  width: 60%;
+  text-align: center;
 }
 </style>

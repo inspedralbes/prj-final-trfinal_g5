@@ -1,49 +1,56 @@
 <template>
 
   <body>
-    <div>
-      <div class="contenedor">
-        <div class="cabecera">Assessorament</div>
-        <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
-        <div class="mensaje-bienvenida">
-          <img src="../public/img/icono_Arturo.jpg" alt="">
-          <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
+    <div class="contenedor">
+      <capçalera />
 
-          <nuxt-link to="/chatRutina" class="boton-chat-Rutina">Assessor de Rutina</nuxt-link>
-          <nuxt-link to="/chatDieta" class="boton-chat-Dieta">Assessor de Dieta</nuxt-link>
-        </div>
+      <div class="cabecera">Assessorament</div>
+      <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
+      <div class="mensaje-bienvenida">
+        <img src="../public/img/icono_Arturo.jpg" alt="">
+        <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
 
+       
+      </div>
 
-        <div class="chat-container">
-          <div class="chat">
-            <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-              <div class="mensaje"
-                :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-                <div class="info-usuario" v-if="message.role === 'user'">
-                  <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
-                    class="avatar-usuario" />
-                  <p class="nombre-usuario">{{ nom_usuari }}</p>
-                </div>
-                <div class="contenido-mensaje">
-                  <img v-if="message.role === 'assistant'" src="./public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                    class="avatar-asistente" />
-                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
-                </div>
+      <div class="botones-bienvenida">
+        <nuxt-link to="/chatRutina" class="boton-chat-Rutina">Assessor de Rutina</nuxt-link>
+        <nuxt-link to="/chatDieta" class="boton-chat-Dieta">Assessor de Dieta</nuxt-link>
+
+      </div>
+      
+
+      <div class="chat-container">
+        <div class="chat">
+          <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+            <div class="mensaje"
+              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+              <div class="info-usuario" v-if="message.role === 'user'">
+                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                  class="avatar-usuario" />
+                <p class="nombre-usuario">{{ nom_usuari }}</p>
+              </div>
+              <div class="contenido-mensaje">
+                <img v-if="message.role === 'assistant'" src="../public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                  class="avatar-asistente" />
+                <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
               </div>
             </div>
-            <!-- Mostrar animación de carga si isLoading es true -->
-            <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
-        </div>
-        <!-- Movido el textarea y el botón al final del contenedor -->
-        <div class="controles-inferiores">
-          <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-            placeholder="Escriu la teva consulta"></textarea>
-          <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+          <!-- Mostrar animación de carga si isLoading es true -->
+          <div v-if="isLoading || isSending" class="animacion-carga"></div>
         </div>
       </div>
+      <!-- Movido el textarea y el botón al final del contenedor -->
+      <div class="controles-inferiores">
+        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
+          placeholder="Escriu la teva consulta"></textarea>
+        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+      </div>
       <navBar />
+
     </div>
+
   </body>
 </template>
 
@@ -69,6 +76,10 @@ export default {
 
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
+        }
+
+        if(this.chatMessages.length === 0) {
+          document.querySelector('.botones-bienvenida').style.display = 'none';
         }
 
 
@@ -135,17 +146,19 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+
+
 }
 
 body {
-  font-family: Arial, sans-serif;
   /* Establecer la fuente predeterminada */
   background: linear-gradient(to top right, #FFA500, #f45c36);
 
   /* Color de fondo */
-  height: 100vh;
 }
+
 
 .contenedor {
   display: flex;
@@ -166,16 +179,25 @@ body {
   width: 95%;
   margin: auto;
   margin-top: 20px;
-  margin-bottom: 10px;
 }
 
 .mensaje-bienvenida {
   display: grid;
-  grid-template-columns: .2fr 1fr;
-  margin-top: 50%;
+  grid-template-columns: .1fr 1fr;
+  margin-top: 15%;
+}
 
+.botones-bienvenida{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  margin: auto;
+  margin-top: 170px;
+  margin-bottom: 20px;
+  width: 90%;
 
 }
+
 
 .mensaje-bienvenida h2 {
   font-size: 1.5em;
@@ -265,10 +287,10 @@ body {
 }
 
 .boton-chat-Rutina {
-  background-color: #333;
+  background-color: #0000002f;
   color: white;
-  border: none;
-  padding: 10px 20px;
+  border: 4px solid #1b1b1b23;
+  padding: 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -276,15 +298,18 @@ body {
   font-weight: bold;
   cursor: pointer;
   border-radius: 4px;
-  margin: 10px 10px 0;
-  width: 50%;
+  width: 80%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin: auto;
+
 }
 
 .boton-chat-Dieta {
-  background-color: #333;
+  background-color: #0000002f;
   color: white;
-  border: none;
-  padding: 10px 20px;
+  border: 4px solid #1b1b1b23;
+  padding: 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -292,8 +317,10 @@ body {
   font-weight: bold;
   cursor: pointer;
   border-radius: 4px;
-  margin: 10px 10px 0;
-  width: 50%;
+  width: 80%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin: auto;
 }
 
 
@@ -325,7 +352,6 @@ body {
   align-items: center;
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color: #33333356;
 }
 
 .entrada-mensaje {
@@ -355,16 +381,5 @@ body {
 
 .boton-enviar:hover {
   background-color: #333;
-}
-
-navBar {
-  position: fixed;
-  /* Para que el navbar sea fijo */
-  bottom: 0;
-  /* Lo posiciona en la parte inferior */
-  width: 100%;
-  /* Ocupa todo el ancho de la pantalla */
-  z-index: 999;
-  /* Asegura que esté por encima del contenido */
 }
 </style>

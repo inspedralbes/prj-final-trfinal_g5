@@ -3,73 +3,99 @@
     <body>
         <div class="flex-container">
             <capçalera />
-            <div class="meal-container">
-                <h2 class="meal-type">Desayuno</h2>
-                <div class="meal-item">
-                    <h3 class="meal-name">Avena con frutas</h3>
-                    <p class="calories">300 calorías</p>
-                </div>
-                <div class="meal-item">
-                    <h3 class="meal-name">Tostadas integrales con aguacate</h3>
-                    <p class="calories">250 calorías</p>
-                </div>
-                <!-- Agrega más opciones de desayuno saludable aquí -->
+            <h1>Dieta</h1>            
 
-                <h2 class="meal-type">Comida</h2>
-                <div class="meal-item">
-                    <h3 class="meal-name">Ensalada de quinoa</h3>
-                    <p class="calories">350 calorías</p>
-                </div>
-                <div class="meal-item">
-                    <h3 class="meal-name">Pechuga de pollo a la plancha con verduras</h3>
-                    <p class="calories">400 calorías</p>
-                </div>
-                <h2 class="meal-type">Merienda</h2>
-                <!-- Contenido de la merienda -->
-                <div class="meal-item">
-                    <h3 class="meal-name">Yogur con frutas</h3>
-                    <p class="calories">200 calorías</p>
-                </div>
-                <div class="meal-item">
-                    <h3 class="meal-name">Avena con leche</h3>
-                    <p class="calories">105 calorías</p>
-                </div>
-                <!-- Agrega más opciones de merienda aquí -->
-
-                <h2 class="meal-type">Cena</h2>
-                <!-- Contenido de la cena -->
-                <div class="meal-item">
-                    <h3 class="meal-name">Salmón al horno con verduras</h3>
-                    <p class="calories">400 calorías</p>
-                </div>
-                <div class="meal-item">
-                    <h3 class="meal-name">Arroz con pollo</h3>
-                    <p class="calories">360 calorías</p>
-                </div>
+            <!-- Mostrar spinner de carga mientras se cargan los datos -->
+            <div v-if="loading" class="loading">
+                <img src="@/public/dumbbell_white.png" alt="Loading..." class="loading-image" />
             </div>
-            <button class="dieta-button" @click="redirectTo('chatDieta')">Crear Dieta</button>
+
+            <div class="dieta" v-if="dietas.length === 0 && !loading">
+                <p>No hi han dades de dieta dispoibles. Clica el boto per generar una dieta.</p>
+                <button class="dieta-button" @click="redirectTo('/chatDieta')">Crear Dieta</button>
+
+            </div>
+
+            <div class="main-content" v-else>
+                <div id="data-dieta" v-if="dietas.length > 0">
+                    <p>Desde {{ dietas[0].platos[0].data_inici }} hasta {{ dietas[0].platos[0].data_fi }}</p>
+                </div>
+                <div v-for="(comida, index) in dietas" :key="index">
+                    <h2 id="apat">{{ comida.apat }}</h2>
+                    <div v-for="(plato, index) in comida.platos" :key="index" class="meal-item">
+                        <h3 class="meal-name">{{ plato.nom_plat }}</h3>
+                        <p class="calories">Calories: {{ plato.calories }}</p>
+                        <p>Proteïnes: {{ plato.proteines }}</p>
+                        <p>Carbohidrats: {{ plato.carbohidrats }}</p>
+                        <p>Graixos: {{ plato.grases }}</p>
+                        <p>Ingredients:</p>
+                        <ul>
+                            <li v-for="(ingredient, index) in plato.ingredients" :key="index">
+                                {{ ingredient.quantitat }} {{ ingredient.unitat }} de {{ ingredient.nom_ingredient }}
+                            </li>
+                        </ul>
+
+                    </div>
+                    
+                </div>
+                <button class="dieta-button" @click="redirectTo('/chatDieta')">Crear Dieta</button>
+
+            </div>
+
+            <navBar />
+
         </div>
-        <navBar />
     </body>
 </template>
 
+
 <script>
+import { useUsuariPerfilStore } from '@/stores/index';
+import { getDieta } from '@/stores/communicationManager';
+
 export default {
     data() {
         return {
-            usuario: '' // Cambia esto por el nombre de usuario real o hazlo dinámico si es necesario
+            dietas: [],
+            loading: true // Variable para controlar la carga de datos
         };
     },
-    mounted() {
-        // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
-        this.usuario = localStorage.getItem('username');
-
-
-    },
     methods: {
-      redirectTo(page) {
-        this.$router.push(page);
-      }
+        obtenirDieta(idUsuari) {
+            getDieta(idUsuari)
+                .then(response => {
+                    console.log('Dieta:', response);
+                    // Organizar los platos por tipo de comida
+                    const comidas = {};
+                    response.forEach(plato => {
+                        if (!comidas.hasOwnProperty(plato.apat)) {
+                            comidas[plato.apat] = [];
+                        }
+                        comidas[plato.apat].push(plato);
+                    });
+                    // Convertir el objeto en un array
+                    this.dietas = Object.keys(comidas).map(apat => ({
+                        apat: apat,
+                        platos: comidas[apat].map(plato => ({
+                            ...plato,
+                            ingredients: JSON.parse(plato.ingredients)
+                        }))
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error al obtener la dieta:', error);
+                })
+                .finally(() => {
+                    this.loading = false; // Marcar la carga de datos como completa
+                });
+        },
+        redirectTo(page) {
+            this.$router.push(page);
+        }
+    },
+    mounted() {
+        this.idUsuari = useUsuariPerfilStore().id_usuari;
+        this.obtenirDieta(this.idUsuari);
     }
 }
 </script>
@@ -80,43 +106,38 @@ html,
 body {
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: 100vh;
     overflow-x: hidden;
     /* Evita el desplazamiento horizontal */
-}
-
-body {
-    font-family: Arial, sans-serif;
-    /* Establecer la fuente predeterminada */
 }
 
 .flex-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100%;
+    height: 100vh;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
 }
 
-.meal-container {
-    width: 80%;
-    max-width: 600px;
-    margin-top: 20px;
-    overflow-y: auto; /* Agrega barra de desplazamiento vertical si el contenido es más largo que la pantalla */
-}
-
-.meal-type {
-    font-size: 28px;
-    font-weight: bold;
-    margin-top: 20px;
+.main-content{
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Habilita el scroll si el contenido es más grande que la ventana */
+    padding-top: 10px;
+    /* Altura del header */
+    padding-bottom: 50px;
+    /* Altura del navBar */
+    text-align: center;
 }
 
 .meal-item {
+    width: 85%;
     background-color: #f0f0f0;
     border-radius: 10px;
     padding: 10px;
     margin-top: 10px;
+    margin: auto;
 }
 
 .meal-name {
@@ -124,39 +145,84 @@ body {
     margin-bottom: 5px;
 }
 
+.dieta {
+    text-align: center;
+    margin: auto;
+}
+
 .dieta-button {
-    width: 160%;
+    position: relative;
+    width: 120%;
     /* Ancho del 80% del contenedor padre */
-    max-width: 400px;
-    height: 100px;
+    max-width: 200px;
+    height: 80px;
     margin-top: 50px;
-    margin-bottom: 50px;
-    /* Espacio entre los botones */
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: bold;
+    color: #fff;
     cursor: pointer;
     border: none;
     outline: none;
     background-size: cover;
     border-radius: 10px;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     background-position: center;
-    font-size: 30px;
-    color: #000;
-    background-color: #666;
 }
+
 .calories {
     font-size: 16px;
     color: #666;
 }
 
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-image {
+    width: 100px;
+    /* Tamaño deseado para la imagen */
+    height: auto;
+    /* Mantener la proporción de aspecto */
+    animation: spin 2s linear infinite;
+    /* Animación de rotación */
+}
+
+#data-dieta{
+    margin: auto;
+    text-align: center;
+}
+
+#apat{
+    margin: auto;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
 navBar {
     width: 100%;
     position: fixed;
-    bottom: 0; /* Fija la barra de navegación en la parte inferior */
+    bottom: 0;
+    /* Fija la barra de navegación en la parte inferior */
     background-color: #333;
     color: white;
     padding: 10px;
     text-align: center;
 }
 </style>
-

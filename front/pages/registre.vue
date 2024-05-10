@@ -17,10 +17,6 @@
             <div v-if="currentQuestionIndex === registrationQuestions.length" class="loading">
                 <img src="../public/dumbbell_white.png" alt="" class="loading-image">
             </div>
-            <div v-if="checkingEmail" class="loading">
-                <img src="../public/dumbbell_white.png" alt="" class="loading-image">
-            </div>
-
             <div v-if="currentQuestionIndex < registrationQuestions.length" class="question-container fade-in">
                 <div v-if="currentQuestionIndex <= registrationQuestions.length" class="question-counter">
                     {{ currentQuestionIndex + 1 }} / {{ totalQuestions }}
@@ -66,7 +62,7 @@
                     class="error-message">{{ dateErrorMessage }}</div>
 
                 <div class="buttons fade-in">
-                    <button @click="seguentPregunta">Seguent</button>
+                    <button @click="seguentPregunta" :disabled="checkingEmail">Següent</button>
                     <button v-if="!registrationQuestions[currentQuestionIndex].required"
                         @click="saltarPregunta">Saltar</button>
                 </div>
@@ -101,7 +97,8 @@ export default {
                 genere: "",
                 pes: "",
                 altura: "",
-                telefon: ""
+                telefon: "",
+                registre: false,
             },
             totalQuestions: 0,
             progressPercentage: 0,
@@ -172,19 +169,22 @@ export default {
             // Obtener la pregunta actual
             const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
 
-            // Verificar si la pregunta actual es requerida
+            // Verificar si la pregunta actual es requerida y si la respuesta está vacía
             if (currentQuestion.required && this.currentAnswer === "") {
                 // Mostrar un mensaje de error indicando que la pregunta es requerida
                 this.showErrorMessage = true;
                 this.errorMessage = "Aquesta pregunta és requerida. Si us plau, respon abans de continuar.";
                 return;
             }
+            // Verificar si la respuesta actual está vacía
             if (this.currentAnswer === "") {
                 // Mostrar un mensaje de error indicando que la respuesta es requerida
                 this.showErrorMessage = true;
                 this.errorMessage = "Aquest camp no pot estar buit. Si us plau, respon abans de continuar.";
                 return;
             }
+
+            // Validar la contraseña si es la pregunta de contraseña
             if (currentQuestion.inputType === 'contrasenya') {
                 const isPasswordValid = this.validatePassword();
                 if (!isPasswordValid) {
@@ -192,6 +192,8 @@ export default {
                     return;
                 }
             }
+
+            // Validar la fecha si es la pregunta de fecha de nacimiento
             if (currentQuestion.inputType === 'data_naixement') {
                 const isDateValid = this.validateDate();
                 if (!isDateValid) {
@@ -199,6 +201,8 @@ export default {
                     return;
                 }
             }
+
+            // Validar el número de teléfono si es la pregunta de teléfono
             if (currentQuestion.inputType === 'telefon') {
                 this.validateTelefonInput(); // Validar el número de teléfono
                 if (this.showErrorMessage) {
@@ -207,15 +211,16 @@ export default {
                 }
             }
 
-            // Verificar si el correo electrónico no está vacío y es la pregunta actual
-            if (this.currentAnswer !== "" && currentQuestion.inputType === 'email') {
+            // Validar el correo electrónico si es la pregunta de correo electrónico
+            if (currentQuestion.inputType === 'email') {
                 this.validateEmailInput(); // Validar el correo electrónico
                 if (this.showErrorMessage) {
                     // Mostrar mensaje de error si el correo electrónico no es válido
                     return;
                 } else {
-                    // Realizar la verificación del correo electrónico
-                    const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/comprovaremail', {
+                    // Realizar la comprobación de correo electrónico solo si la respuesta no está vacía
+                    this.checkingEmail = true;
+                    const response = await fetch('http://localhost:8000/api/comprovaremail', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -250,24 +255,29 @@ export default {
             this.currentAnswer = "";
             this.showErrorMessage = false;
 
-            // Si es la última pregunta, registra al usuario
+            // Verificar si todas las preguntas han sido respondidas
             if (this.currentQuestionIndex === this.registrationQuestions.length) {
+                // Si todas las preguntas han sido respondidas, establecer registro en true
+                this.userData.registre = true;
+
+                // Realizar el registro del usuario
                 await this.registerUser();
             }
         },
-
 
         async saltarPregunta() {
             // Obtener la pregunta actual
             const currentQuestion = this.registrationQuestions[this.currentQuestionIndex];
             this.currentAnswer = "";
 
+            // Verificar si la pregunta actual es requerida y si la respuesta está vacía
             if (currentQuestion.required) {
                 // Mostrar un mensaje de error indicando que la pregunta es requerida
                 this.showErrorMessage = true;
                 this.errorMessage = "Aquesta pregunta és requerida. Si us plau, respon abans de continuar";
                 return;
             }
+
             // Si hay una respuesta, guardarla en el objeto de datos del usuario
             if (this.currentAnswer.trim() !== "") {
                 this.userData[currentQuestion.inputType] = this.currentAnswer;
@@ -280,13 +290,12 @@ export default {
             this.currentAnswer = "";
             this.showErrorMessage = false;
 
-            // Si es la última pregunta, registra al usuario
+            // Verificar si todas las preguntas han sido respondidas
             if (this.currentQuestionIndex === this.registrationQuestions.length) {
-                // Filtrar userData para eliminar campos vacíos
+                // Si todas las preguntas han sido respondidas, establecer registro en true
+                this.userData.registre = false;
 
-
-                // Realizar el registro solo si hay datos válidos
-
+                // Realizar el registro del usuario
                 await this.registerUser();
             }
         },
@@ -423,7 +432,7 @@ export default {
                 Object.entries(this.userData).filter(([key, value]) => value !== "")
             );
 
-            const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/registre', {
+            const response = await fetch('http://localhost:8000/api/registre', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -439,20 +448,26 @@ export default {
                 // Convertir la respuesta a formato JSON
                 const userDataResponse = await response.json();
 
-                // console.log(userDataResponse)
+                console.log(userDataResponse);
 
+                // Verificar si alguno de los campos devueltos es null
+                const nullFields = Object.values(userDataResponse).some(value => value === null);
+
+                // Actualizar el estado 'registre' en la tienda Pinia
+                useUsuariPerfilStore().registre = !nullFields;
+
+                // Actualizar otros estados de la tienda Pinia si es necesario
                 useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
                 useUsuariPerfilStore().email_usuari = filteredUserData.email;
                 useUsuariPerfilStore().loguejat = true;
                 useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
                 useUsuariPerfilStore().foto_perfil = "usuario.png";
 
-
+                // Redirigir a la página de inicio después del registro
                 this.$router.push('/home');
             }
-
-
         }
+
     }
 
 };
@@ -467,7 +482,6 @@ body {
     padding: 0;
     height: 100%;
     background-color: #FFA500;
-    font-family: Arial, sans-serif;
 
 }
 

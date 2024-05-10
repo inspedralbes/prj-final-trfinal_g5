@@ -5,30 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Dieta extends Model
+class Aliments extends Model
 {
     use HasFactory;
-    
-    protected $table = 'dietas';
+
+    protected $table = 'aliments';
 
     protected $fillable = [
-        'id_usuari',
         'nom_plat',
         'apat',
         'ingredients',
-        'data_inici',
-        'data_fi',
+        // 'nom_ingredient',
+        // 'quantitat',
+        // 'unitat',
         'calories',
         'proteines',
         'carbohidrats',
-        'grases',
-        
+        'greixos',
     ];
-    public $timestamps = false;
-
-    public function aliments()
-    {
-        return $this->belongsTo(Aliments::class , 'nom_plat');
-    }
 }
-

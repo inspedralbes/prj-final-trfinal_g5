@@ -1,53 +1,47 @@
 <template>
-
   <body>
-      <div class="flex-container">
-          <capçalera />
-          <div class="button-container">
-              <button class="large-button rutina-button" @click="redirectTo('rutina')">
-                  Rutina
-              </button>
-              <button class="large-button dieta-button" @click="redirectTo('dieta')">
-                  Dieta
-              </button>
-              <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
-                  Assesorament
-              </button>
-          </div>
+    <div class="flex-container">
+      <capçalera />
+      <div class="button-container">
+        <button class="large-button rutina-button" @click="redirectTo('rutina')">
+          Rutina
+        </button>
+        <button class="large-button dieta-button" @click="redirectTo('dieta')">
+          Dieta
+
+        </button>
+        <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
+          Assesorament
+
+        </button>
       </div>
       <navBar />
+
+    </div>
   </body>
 </template>
-        
-
-     
 
 <script>
 export default {
-    methods: {
-      redirectTo(page) {
-        this.$router.push(page);
-      }
+  methods: {
+    redirectTo(page) {
+      this.$router.push(page);
     }
   }
-  </script>
-  
+}
+</script>
 
 <style scoped>
 /* Estilos de los divs en el componente */
 html,
 body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow-x: hidden;
-    /* Evita el desplazamiento horizontal */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+  /* Evita el desplazamiento horizontal */
 }
 
-body {
-    font-family: Arial, sans-serif;
-    /* Establecer la fuente predeterminada */
-}
 .page-enter-active,
 .page-leave-active {
   transition: all 0.4s;
@@ -58,70 +52,71 @@ body {
   filter: blur(1rem);
 }
 
-
 .flex-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100%;
-    /* Mínimo 100% de la altura de la ventana */
-    background-color: #FFF;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  /* Mínimo 100% de la altura de la ventana */
+  background-color: #FFF;
+  position: relative;
 }
 
-
-
-
-
 .button-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* Empuja hacia abajo los botones */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Empuja hacia abajo los botones */
 }
 
 .large-button {
-    width: 160%;
-    /* Ancho del 80% del contenedor padre */
-    max-width: 400px;
-    height: 100px;
-    margin-bottom: 50px;
-    /* Espacio entre los botones */
-    font-size: 24px;
-    font-weight: bold;
-    color: #FFF;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    background-size: cover;
-    border-radius: 10px;
+  position: relative; /* Añade posición relativa al botón */
+  width: 160%;
+  /* Ancho del 80% del contenedor padre */
+  max-width: 400px;
+  height: 100px;
+  margin-bottom: 50px;
+  /* Espacio entre los botones */
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-size: cover;
+  border-radius: 10px;
 }
 
 .rutina-button {
-    margin-top: 2.6em;
-    background-image: url('../public/rutina.jpg');
-    background-position: center;
-    font-size: 50px;
+  margin-top: 2.6em;
+  background-image: linear-gradient(to right, #ff7300, #FFA500);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-position: center;
+  font-size: 2.2em;
+  color: #474747;
 }
 
 .dieta-button {
-    background-image: url('../public/dieta.jpg');
-    background-position: center;
-    font-size: 50px;
-    color: #000;
+  background-image: linear-gradient(to right, #ff7300, #FFA500);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-position: center;
+  font-size: 2.2em;
+  color: #474747;
 }
 
 .asesoramiento-button {
-    background-image: url('../public/asesorament.jpg');
-    background-position: center;
-    color: black;
-    font-size: 30px;
-    margin-bottom: 100%;
+  background-image: linear-gradient(to right, #ff7300, #FFA500);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-position: center;
+  font-size: 2.2em;
+  color: #474747;
 }
 
+
+
 navBar {
-    position: fixed;
-    width: 100%;
+  position: fixed;
+  width: 100%;
 }
 </style>
