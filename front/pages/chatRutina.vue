@@ -19,7 +19,7 @@
               <div class="contenido-mensaje">
                 <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
                   class="avatar-asistente" />
-                <p v-if="message.role === 'assistant'" v-html="message.content"></p>
+                <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
               </div>
             </div>
           </div>
