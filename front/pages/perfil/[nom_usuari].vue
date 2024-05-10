@@ -349,15 +349,16 @@ body {
     margin-top: 5px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
+    grid-gap: 30px;
     margin: auto;
+    width: 90%;
 }
 
 input {
     background-color: transparent;
     padding: 2rem;
     margin-bottom: 2.5rem;
-    width: 160px;
+    width: 100%;
 
 }
 

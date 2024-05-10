@@ -67,12 +67,13 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 80%;
   /* Empuja hacia abajo los botones */
 }
 
 .large-button {
   position: relative; /* Añade posición relativa al botón */
-  width: 160%;
+  width: 100%;
   /* Ancho del 80% del contenedor padre */
   max-width: 400px;
   height: 100px;
