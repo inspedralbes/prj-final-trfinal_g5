@@ -26,6 +26,8 @@
             <!-- Mostrar mensaje si no hay datos en la rutina -->
             <div id="rutinaBuida" v-if="exercises.length === 0 && !loading">
                 <p>No hi han dades de rutina disponibles. Clica el boto per crear una rutina.</p>
+                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+
             </div>
 
 
@@ -50,9 +52,9 @@
                         </div>
                     </div>
                 </div>
+                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
 
             </div>
-            <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
             <navBar />
 
         </div>

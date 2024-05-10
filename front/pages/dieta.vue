@@ -3,24 +3,25 @@
     <body>
         <div class="flex-container">
             <capçalera />
-            <h1>Dieta</h1>
-
-            <!-- Mostrar mensaje para crear dieta si la base de datos está vacía -->
-            <div class="dieta" v-if="dietas.length === 0 && !loading">
-                <p>No hi han dades de dieta dispoibles. Clica el boto per generar una dieta.</p>
-            </div>
+            <h1>Dieta</h1>            
 
             <!-- Mostrar spinner de carga mientras se cargan los datos -->
             <div v-if="loading" class="loading">
                 <img src="@/public/dumbbell_white.png" alt="Loading..." class="loading-image" />
             </div>
 
-            <dir v-else>
-                <div v-if="dietas.length > 0">
+            <div class="dieta" v-if="dietas.length === 0 && !loading">
+                <p>No hi han dades de dieta dispoibles. Clica el boto per generar una dieta.</p>
+                <button class="dieta-button" @click="redirectTo('/chatDieta')">Crear Dieta</button>
+
+            </div>
+
+            <div class="main-content" v-else>
+                <div id="data-dieta" v-if="dietas.length > 0">
                     <p>Desde {{ dietas[0].platos[0].data_inici }} hasta {{ dietas[0].platos[0].data_fi }}</p>
                 </div>
                 <div v-for="(comida, index) in dietas" :key="index">
-                    <h2>{{ comida.apat }}</h2>
+                    <h2 id="apat">{{ comida.apat }}</h2>
                     <div v-for="(plato, index) in comida.platos" :key="index" class="meal-item">
                         <h3 class="meal-name">{{ plato.nom_plat }}</h3>
                         <p class="calories">Calories: {{ plato.calories }}</p>
@@ -33,13 +34,17 @@
                                 {{ ingredient.quantitat }} {{ ingredient.unitat }} de {{ ingredient.nom_ingredient }}
                             </li>
                         </ul>
-                    </div>
-                </div>
-            </dir>
 
-            <button class="dieta-button" @click="redirectTo('/chatDieta')">Crear Dieta</button>
+                    </div>
+                    
+                </div>
+                <button class="dieta-button" @click="redirectTo('/chatDieta')">Crear Dieta</button>
+
+            </div>
+
+            <navBar />
+
         </div>
-        <navBar />
     </body>
 </template>
 
@@ -101,7 +106,7 @@ html,
 body {
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: 100vh;
     overflow-x: hidden;
     /* Evita el desplazamiento horizontal */
 }
@@ -110,9 +115,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100%;
+    height: 100vh;
     /* Mínimo 100% de la altura de la ventana */
     background-color: #FFF;
+}
+
+.main-content{
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Habilita el scroll si el contenido es más grande que la ventana */
+    padding-top: 10px;
+    /* Altura del header */
+    padding-bottom: 50px;
+    /* Altura del navBar */
+    text-align: center;
 }
 
 .meal-item {
@@ -121,34 +137,37 @@ body {
     border-radius: 10px;
     padding: 10px;
     margin-top: 10px;
+    margin: auto;
 }
 
 .meal-name {
     font-size: 20px;
     margin-bottom: 5px;
 }
-.dieta{
+
+.dieta {
     text-align: center;
+    margin: auto;
 }
+
 .dieta-button {
+    position: relative;
     width: 120%;
     /* Ancho del 80% del contenedor padre */
     max-width: 200px;
     height: 80px;
     margin-top: 50px;
-    margin-bottom: 50px;
-    /* Espacio entre los botones */
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: bold;
+    color: #fff;
     cursor: pointer;
     border: none;
     outline: none;
     background-size: cover;
     border-radius: 10px;
-    background-position: center;
-    font-size: 30px;
-    color: white;
     background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-position: center;
 }
 
 .calories {
@@ -171,6 +190,18 @@ body {
     /* Mantener la proporción de aspecto */
     animation: spin 2s linear infinite;
     /* Animación de rotación */
+}
+
+#data-dieta{
+    margin: auto;
+    text-align: center;
+}
+
+#apat{
+    margin: auto;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 @keyframes spin {
