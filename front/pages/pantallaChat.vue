@@ -1,43 +1,9 @@
 <template>
-    <div>
+    
         <capçalera />
-
-        <div>
-            <!-- Barra de búsqueda -->
-            <input type="text" v-model="busqueda" placeholder="Buscar...">
-            <button @click="buscar">Buscar</button>
-
-            <!-- Botón de añadir -->
-            <button @click="toggleMenu">+</button>
-
-            <!-- Menú desplegable -->
-            <div v-if="mostrarMenu" class="menu-desplegable">
-                <button><nuxt-link href="/solicitudes">Solicitudes</nuxt-link></button>
-                <button><nuxt-link href="/afegir-amic">Añadir Amigos</nuxt-link></button>
-            </div>
-        </div>
-
-        <!-- Lista de amigos -->
-        <ul class="lista-amigos">
-            <li v-for="amigo in amics" :key="amigo.id" class="amigo">
-                <nuxt-link to="/pantallaChat">
-                    <div class="chat-element">
-                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + amigo.foto_perfil" alt="Imagen de perfil de {{ amigo.nom }}">
-
-                        <div>
-                            <span>{{ amigo.nom }}</span> <br>
-                            <span id="ultim-missatge">IPOP 11 - Aquest és més fàcil que l'anterior</span>
-                        </div>
-
-
-                    </div>
-
-                </nuxt-link>
-            </li>
-        </ul>
-
+        <h1>IPOP 11 NOIS!!</h1>
         <navBar />
-    </div>
+        
 </template>
 
 
