@@ -16,7 +16,7 @@
                         <p class="username">{{ solicitud.usuario.usuario.nom_usuari }}</p>
                     </div>
                 </div>
-                <button class="add-friend-button">Aceptar</button>
+                <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button">Aceptar</button>
                 <button @click="rechazarAmigo(solicitud.id)" class="add-friend-button">Rechazar</button>
             </div>
         </div>
@@ -62,6 +62,24 @@ export default {
         }
     },
     methods: {
+        async AceptarAmigo(solicitudId){
+            try {
+                const response = await fetch(`http://localhost:8000/api/aceptar-solicitud/${solicitudId}`, {
+                    method: 'POST'
+                });
+                const responseData = await response.json();
+                if (responseData.status === 1) {
+                    console.log(responseData.message);
+                    // Actualizamos la lista de solicitudes eliminando la solicitud aceptada
+                    this.solicitudes = this.solicitudes.filter(solicitud => solicitud.id !== solicitudId);
+                } else {
+                    console.log(responseData.message);
+                }
+            } catch (error) {
+                console.error('Error al aceptar la solicitud:', error);
+            }
+        },
+
         async rechazarAmigo(solicitudId) {
             try {
                 const response = await fetch(`http://localhost:8000/api/eliminar-solicitud/${solicitudId}`, {
