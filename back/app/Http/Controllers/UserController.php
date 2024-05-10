@@ -11,6 +11,7 @@ use App\Mail\RegistroCorreo;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Solicitud;
 
 
 
@@ -287,41 +288,49 @@ class UserController extends Controller
         
     }
     public function mostrarUsuariosExceptoYo(Request $request, $idUsuario)
-    {
-        // Busca el usuario por el ID proporcionado desde el frontend
-        $usuario = Usuaris::find($idUsuario);
-    
-        if (!$usuario) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Usuario no encontrado'
-            ]);
-        }
-    
-        // Obtenemos la lista de IDs de amigos del usuario
-        $amigosIds = $usuario->amics ? json_decode($usuario->amics, true) : [];
-    
-        // Busca todos los usuarios excepto el usuario proporcionado y los amigos del usuario
-        $usuarios = Usuaris::select('nom', 'nom_usuari', 'cognoms','foto_perfil','id')
-                            ->where('id', '!=', $idUsuario)
-                            ->whereNotIn('id', $amigosIds)
-                            ->get();
-    
-        if ($usuarios->isEmpty()) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'No se encontraron otros usuarios.'
-            ]);
-        }
-    
-        // Retorna la lista de usuarios excepto el usuario proporcionado y tus amigos
+{
+    // Busca el usuario por el ID proporcionado desde el frontend
+    $usuario = Usuaris::find($idUsuario);
+
+    if (!$usuario) {
         return response()->json([
-            'status' => 1,
-            'message' => 'Usuarios excluyendo el usuario proporcionado y tus amigos.',
-            'usuarios' => $usuarios
+            'status' => 0,
+            'message' => 'Usuario no encontrado'
         ]);
     }
-    
+
+    // Obtenemos la lista de IDs de amigos del usuario
+    $amigosIds = $usuario->amics ? json_decode($usuario->amics, true) : [];
+
+    // Obtenemos la lista de IDs de usuarios a los que se les ha enviado una solicitud de amistad
+    $solicitudesEnviadasIds = Solicitud::where('usuario_envia_id', $idUsuario)
+                                        ->pluck('usuario_recibe_id')
+                                        ->toArray();
+
+    // Unimos las listas de amigos y usuarios a los que se les ha enviado solicitud
+    $usuariosExcluidosIds = array_merge($amigosIds, $solicitudesEnviadasIds);
+
+    // Buscamos todos los usuarios excepto el usuario actual y los usuarios excluidos
+    $usuarios = Usuaris::select('nom', 'nom_usuari', 'cognoms','foto_perfil','id')
+                        ->where('id', '!=', $idUsuario)
+                        ->whereNotIn('id', $usuariosExcluidosIds)
+                        ->get();
+
+    if ($usuarios->isEmpty()) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'No se encontraron otros usuarios.'
+        ]);
+    }
+
+    // Retorna la lista de usuarios excepto el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud
+    return response()->json([
+        'status' => 1,
+        'message' => 'Usuarios excluyendo el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud.',
+        'usuarios' => $usuarios
+    ]);
+}
+
 
 
     public function getUsers(Request $request) {
