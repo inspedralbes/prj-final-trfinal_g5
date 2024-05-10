@@ -1,11 +1,16 @@
 <template>
     <Capçalera />
-    <button @click="mostrarSolicitudes">Solicituts</button>
-    <button @click="mostrarAdios">Meves solicituts </button>
+    <div class="opcion-container">
+        <div @click="mostrarSolicitudes" :class="{ 'selected': mostrarContenido }" class="opcion">Solicitudes</div>
+        <div @click="mostrarAdios" :class="{ 'selected': !mostrarContenido }" class="opcion">Mis solicitudes</div>
+    </div>
     <div v-if="mostrarContenido">
         <h1>{{ titulo }}</h1>
         <div v-if="solicitudes.length === 0">
-            <p>No tienes solicitudes pendientes</p>
+            <div class="vacio">
+                <p>No tens sol·licituds pendents</p>
+            </div>
+
         </div>
         <div v-else>
             <div v-for="solicitud in solicitudes" :key="solicitud.id" class="usuario-container">
@@ -18,15 +23,18 @@
                         <p class="username">{{ solicitud.usuario.usuario.nom_usuari }}</p>
                     </div>
                 </div>
-                <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button">Aceptar</button>
-                <button @click="rechazarAmigo(solicitud.id)" class="add-friend-button">Rechazar</button>
+                <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button"><img src="../public/tick.png">
+                </button>
+                <button @click="rechazarAmigo(solicitud.id)" class="delete-friend-button"><img
+                        src="../public/cruz.png"></button>
             </div>
         </div>
     </div>
     <div v-else>
-        <h1>Solicitudes Enviadas</h1>
         <div v-if="enviadas.length === 0">
-            <p>No tienes solicitudes enviadas</p>
+            <div class="vacio">
+                <p>No tens sol·licituds enviades</p>
+            </div>
         </div>
         <div v-else>
             <div v-for="envia in enviadas" :key="envia.id" class="usuario-container">
@@ -38,7 +46,9 @@
                         <p class="username">{{ envia.usuario.usuario.nom_usuari }}</p>
                     </div>
                 </div>
-                <button>Pendiente</button>
+                <div class="estado-solicitud">
+                    <p>Pendent d'aceptació</p>
+                </div>
             </div>
         </div>
     </div>
@@ -51,7 +61,7 @@ export default {
     data() {
         return {
             solicitudes: [],
-            envias: [],
+            enviadas: [],
             mostrarContenido: true,
 
         };
@@ -97,7 +107,7 @@ export default {
                         const usuarioResponse = await fetch(`http://localhost:8000/api/usuari/${envia.usuario_recibe_id}`);
                         const usuarioData = await usuarioResponse.json();
                         envia.usuario = usuarioData;
-                        console.log(envia.usuario.nom);
+                        console.log(envia.usuario.usuario.nom);
                     } catch (error) {
                         console.error('Error al obtener información del usuario:', error);
                     }
@@ -193,7 +203,8 @@ export default {
 }
 
 .add-friend-button {
-    background-color: #FFA500;
+    width: 15%;
+    background-color: #4CAF50;
     color: white;
     border: none;
     padding: 8px 20px;
@@ -207,6 +218,31 @@ export default {
     border-radius: 5px;
 }
 
+.add-friend-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.delete-friend-button {
+    width: 15%;
+    background-color: #f45b50;
+    border: none;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-friend-button img {
+    width: 20px;
+    height: 20px;
+}
+
 
 
 input[type="text"] {
@@ -214,5 +250,35 @@ input[type="text"] {
     padding: 8px 10px;
     margin: 10px 0;
     box-sizing: border-box;
+}
+
+.opcion-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.opcion {
+    cursor: pointer;
+    margin: 0 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.opcion.selected {
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+}
+
+.opcion:hover {
+    background-color: #f0f0f0;
+}
+.vacio{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 20px;
+    color: #474747;
 }
 </style>
