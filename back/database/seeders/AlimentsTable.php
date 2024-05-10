@@ -1188,6 +1188,58 @@ class AlimentsTable extends Seeder
                 'greixos' => 6.5,
                 'calories' => 240
             ],
+            [
+                'nom_plat' => 'Amanida d espinacs amb maduixes, nous i vinagreta balsàmica',
+                'apat' => 'sopar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Espinacs fresques', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Maduixes', 'quantitat' => 80, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Nous', 'quantitat' => 30, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Vinagre balsàmic', 'quantitat' => 10, 'unitat' => 'ml'],
+                    ['nom_ingredient' => 'Oli d\'oliva', 'quantitat' => 10, 'unitat' => 'ml'],
+                    ['nom_ingredient' => 'Sal', 'quantitat' => 'al gust', 'unitat' => ''],
+                    ['nom_ingredient' => 'Pebre', 'quantitat' => 'al gust', 'unitat' => '']
+                ]),
+                'proteines' => 2.9,
+                'carbohidrats' => 5.7,
+                'greixos' => 10.3,
+                'calories' => 128
+            ],
+            [
+                'nom_plat' => 'Salmó a la planxa amb espàrrecs i bròquil al vapor',
+                'apat' => 'sopar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Filet de salmó', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Espàrrecs', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Bròquil', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Llimona', 'quantitat' => 'al gust', 'unitat' => ''],
+                    ['nom_ingredient' => 'Sal', 'quantitat' => 'al gust', 'unitat' => ''],
+                    ['nom_ingredient' => 'Pebre', 'quantitat' => 'al gust', 'unitat' => '']
+                ]),
+                'proteines' => 26.1,
+                'carbohidrats' => 2.3,
+                'greixos' => 10.1,
+                'calories' => 205
+            ],
+            [
+                'nom_plat' => 'Tofu al curry amb verdures saltejades',
+                'apat' => 'sopar',
+                'ingredients' => json_encode([
+                    ['nom_ingredient' => 'Tofu', 'quantitat' => 150, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Carbassó', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Pepper roig', 'quantitat' => 100, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Ceba', 'quantitat' => 50, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Curry en pols', 'quantitat' => 5, 'unitat' => 'grams'],
+                    ['nom_ingredient' => 'Llet de coco (opcional)', 'quantitat' => 50, 'unitat' => 'ml'],
+                    ['nom_ingredient' => 'Oli d\'oliva', 'quantitat' => 5, 'unitat' => 'ml'],
+                    ['nom_ingredient' => 'Sal', 'quantitat' => 'al gust', 'unitat' => ''],
+                    ['nom_ingredient' => 'Pepper', 'quantitat' => 'al gust', 'unitat' => '']
+                ]),
+                'proteines' => 14.3,
+                'carbohidrats' => 6.6,
+                'greixos' => 12.7,
+                'calories' => 185
+            ]
         ];
         
     DB::table('aliments')->insert($data);
