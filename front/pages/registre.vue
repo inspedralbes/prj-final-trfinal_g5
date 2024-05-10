@@ -220,7 +220,7 @@ export default {
                 } else {
                     // Realizar la comprobación de correo electrónico solo si la respuesta no está vacía
                     this.checkingEmail = true;
-                    const response = await fetch('http://localhost:8000/api/comprovaremail', {
+                    const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/comprovaremail', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
