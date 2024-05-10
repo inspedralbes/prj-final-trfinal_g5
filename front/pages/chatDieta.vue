@@ -1,25 +1,31 @@
 <template>
 
   <body>
-    <div class="contenedor">
-      <capçalera />
-      <div class="cabecera">Assessorament Dieta</div>
+      <div class="contenedor">
+        <capçalera />
+        <div class="cabecera">Assessorament Dieta</div>
+        <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
+        <div class="mensaje-bienvenida">
+          <img src="../public/img/icono_Arturo.jpg" alt="">
+          <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
+        </div>
 
-      <div class="chat-container">
-        <div class="chat">
-          <!-- Mensajes de chat de usuario y asistente -->
-          <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje"
-              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-              <div class="info-usuario" v-if="message.role === 'user'">
-                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
-                  class="avatar-usuario" />
-                <p class="nombre-usuario">{{ nom_usuari }}</p>
-              </div>
-              <div class="contenido-mensaje">
-                <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                  class="avatar-asistente" />
-                <p v-if="message.role === 'assistant'" v-html="message.content"></p>
+
+        <div class="chat-container">
+          <div class="chat">
+            <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
+              <div class="mensaje"
+                :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+                <div class="info-usuario" v-if="message.role === 'user'">
+                  <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil"
+                    alt="Avatar usuario" class="avatar-usuario" />
+                  <p class="nombre-usuario">{{ nom_usuari }}</p>
+                </div>
+                <div class="contenido-mensaje">
+                  <img v-if="message.role === 'assistant'" src="../public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                    class="avatar-asistente" />
+                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+                </div>
               </div>
             </div>
           </div>
