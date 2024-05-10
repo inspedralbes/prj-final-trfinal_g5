@@ -28,31 +28,84 @@
                 </div>
               </div>
             </div>
-            <!-- Mostrar animación de carga si isLoading es true -->
-            <div v-if="isLoading || isSending" class="animacion-carga"></div>
           </div>
-        </div>
-        <div class="botones-preseleccionados">
-          <button @click="enviarMensajePreseleccionado('vull dieta')">Vull <br> Dieta</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta de definicio')">Vull Dieta de Definició</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta de volum')">Vull Dieta <br> de Volum</button>
-          <button @click="enviarMensajePreseleccionado('vull dieta equilibrada')">Vull Dieta Equilibrada</button>
-        </div>
-        <!-- Movido el textarea y el botón al final del contenedor -->
-        <div class="controles-inferiores">
-          <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-            placeholder="Escriu la teva consulta"></textarea>
-          <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
-        </div>
-        <navBar />
 
+          <!-- Opciones de respuesta como botones -->
+          <div v-if="currentOptions && showOptions" class="botones-preseleccionados">
+            <button v-for="(option, key) in currentOptions" :key="key" @click="handleOptionSelect(key)">
+              {{ key }}
+            </button>
+          </div>
+
+
+          <!-- Mostrar animación de carga si isLoading es true -->
+          <div v-if="isLoading || isSending" class="animacion-carga"></div>
+        </div>
       </div>
+
+      <div class="controles-inferiores">
+        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
+          placeholder="Escriu la teva consulta"></textarea>
+        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+      </div>
+      <navBar />
+    </div>
   </body>
 </template>
 
 <script>
 import { enviarMensajeOpenAIDieta } from '@/stores/communicationManager';
 import { useUsuariPerfilStore } from '@/stores/index';
+
+const arbrePreguntes = {
+  pregunta: "Quin tipus de dieta vols?",
+  opcions: {
+    Volum: {
+      pregunta: "Quants apats prefereixes fer al dia per a una dieta de volum?",
+      opcions: {
+        "4": "Dieta de volum de 4 apats esmorzar, dinar, berenar, sopar"
+        ,
+        "5": {
+          pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
+          opcions: {
+            "Segon esmorzar": "Dieta de volum de 5 apats esmorzar, segon esmorzar, dinar, berenar, sopar",
+            "Post-entrenament": "Dieta de volum de 5 apats esmorzar, dinar, berenar, Post-entrenament, sopar"
+          }
+        },
+        "6": "Dieta de volum de 6 apats esmorzar, segon esmorzar , dinar, berenar, Post-entrenament, sopar"
+      }
+    },
+    Definició: {
+      pregunta: "Quants apats prefereixes fer al dia per a una dieta de definició?",
+      opcions: {
+        "4": "Dieta de definicío de 4 apats esmorzar, dinar, berenar, sopar",
+        "5": {
+          pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
+          opcions: {
+            "Segon esmorzar": "Dieta de definició amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
+            "Post-entrenament": "Dieta de definició amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+          }
+        },
+        "6": "Dieta de definició amb 6 apats: esmorzar, segon esmorzar, dinar, post-entrenament, sopar."
+      }
+    },
+    Equilibrada: {
+      pregunta: "Quants apats prefereixes al dia per a una dieta equilibrada?",
+      opcions: {
+        "4": "Dieta equilibrada amb 4 apats",
+        "5": {
+          pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
+          opcions: {
+            "Segon esmorzar": "Dieta de equilibrada amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
+            "Post-entrenament": "Dieta de equilibrada amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+          }
+        },
+        "6": "Dieta equilibrada amb 6 apats"
+      }
+    }
+  }
+};
+
 export default {
   data() {
     return {
@@ -61,12 +114,44 @@ export default {
       chatMessages: [],
       isLoading: false,
       isSending: false,
+      currentQuestion: arbrePreguntes.pregunta,
+      currentOptions: arbrePreguntes.opcions,
+      showOptions: true,
     };
   },
+  watch: {
+    message(newValue) {
+      this.showOptions = !newValue.trim();
+    }
+  },
   methods: {
-    async enviarMensajePreseleccionado(mensajePreseleccionado) {
-      this.message = mensajePreseleccionado;
-      await this.enviarMensaje();
+    handleOptionSelect(optionKey) {
+      let nextStep = this.currentOptions[optionKey];
+
+      // Comprobar si hay un siguiente nivel de opciones
+      if (nextStep && typeof nextStep === 'object' && nextStep.pregunta) {
+        // Actualizar la pregunta y opciones actuales si hay más preguntas
+        this.currentQuestion = nextStep.pregunta;
+        this.currentOptions = nextStep.opcions || {};
+        // Añadir la respuesta del asistente al chat
+        this.chatMessages.push({
+          role: 'assistant',
+          content: this.currentQuestion
+        });
+      } else {
+        // Manejar el final del árbol de preguntas
+        this.currentQuestion = nextStep; // Esta sería la respuesta final
+        this.currentOptions = {};
+        // Establecer el mensaje final en `message` para ser enviado
+        this.message = nextStep;
+        // Añadir al chat y preparar para enviar
+        this.chatMessages.push({
+          role: 'assistant',
+          content: this.currentQuestion
+        });
+        // Opcional: Llamar a enviarMensaje directamente si se desea enviar inmediatamente
+        this.enviarMensaje();
+      }
     },
     async enviarMensaje() {
       try {
@@ -74,14 +159,12 @@ export default {
           return;
         }
 
-
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
-        if(this.chatMessages.length === 0) {
+        if (this.chatMessages.length === 0) {
           document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
-
 
         this.chatMessages.push({
           role: 'user',
@@ -127,7 +210,6 @@ export default {
           content: mensajeDieta,
         });
 
-
         this.message = '';
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);
@@ -153,8 +235,11 @@ export default {
     },
   },
   mounted() {
-    // Recuperar el nombre de usuario del almacenamiento local
     this.usuario = localStorage.getItem('username');
+    this.chatMessages.push({
+      role: 'assistant',
+      content: this.currentQuestion
+    });
   },
   computed: {
     nom_usuari() {
@@ -234,7 +319,7 @@ body {
   margin-left: 45px;
 }
 
-.botones-preseleccionados{
+.botones-preseleccionados {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
@@ -242,10 +327,10 @@ body {
   margin-top: 60px;
   margin-bottom: 20px;
   width: 90%;
-  
+
 }
 
-.botones-preseleccionados button{
+.botones-preseleccionados button {
   background-color: #0000002f;
   color: white;
   border: 4px solid #1b1b1b23;
@@ -261,6 +346,24 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
   margin: auto;
+}
+
+.mensaje-asistente button.boton-preseleccionado {
+  background-color: #0000002f;
+  color: white;
+  border: 4px solid #1b1b1b23;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 10px 0;
 }
 
 .chat-container {
