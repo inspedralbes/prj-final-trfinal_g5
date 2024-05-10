@@ -40,49 +40,64 @@ class SolicitudController extends Controller
         ]);
     }
 
-    public function delete($id){
-        $solicitud = \App\Models\Solicitud::find($id);
-        $solicitud->delete();
-        return response()->json($solicitud);
-    }
-    public function aceptarSolicitud(Request $request)
-    {
-        try {
-            $solicitudId = $request->input('id');
+   
+    public function AceptarAmigo(Request $request, $id)
+{
+    try {
+        // Busca la solicitud por su ID
+        $solicitud = Solicitud::find($id);
 
-            // Encontrar la solicitud por su ID
-            $solicitud = Solicitud::find($solicitudId);
-
-            if (!$solicitud) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Solicitud no encontrada'
-                ]);
-            }
-
-            // Obtener los IDs de usuario de la solicitud
-            $usuarioEnviaId = $solicitud->usuario_envia_id;
-            $usuarioRecibeId = $solicitud->usuario_recibe_id;
-
-            // Encontrar al usuario que recibe la solicitud y actualizar su lista de amigos
-            $usuarioRecibe = Usuaris::find($id);
-            $usuarioRecibe->amics()->attach($usuarioEnviaId);
-
-            // Eliminar la solicitud de amistad correspondiente
-            $solicitud->delete();
-
-            return response()->json([
-                'status' => 1,
-                'message' => 'Amigo añadido correctamente y solicitud eliminada'
-            ]);
-        } catch (\Exception $e) {
-            // Manejar cualquier excepción que pueda ocurrir
+        // Verifica si la solicitud existe
+        if (!$solicitud) {
             return response()->json([
                 'status' => 0,
-                'message' => 'Error al agregar amigo: ' . $e->getMessage()
+                'message' => 'Solicitud no encontrada'
             ]);
         }
+
+        // Encuentra los usuarios involucrados en la solicitud
+        $usuarioEnvia = Usuaris::find($solicitud->usuario_envia_id);
+        $usuarioRecibe = Usuaris::find($solicitud->usuario_recibe_id);
+
+        // Verifica si ambos usuarios existen
+        if (!$usuarioEnvia || !$usuarioRecibe) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Uno o ambos usuarios no encontrados'
+            ]);
+        }
+
+        // Agrega a usuarioEnvia a la lista de amigos de usuarioRecibe
+        $amicsRecibe = json_decode($usuarioRecibe->amics, true);
+        $amicsRecibe[] = $usuarioEnvia->id;
+        $usuarioRecibe->amics = json_encode($amicsRecibe);
+        $usuarioRecibe->save();
+
+        // Agrega a usuarioRecibe a la lista de amigos de usuarioEnvia
+        $amicsEnvia = json_decode($usuarioEnvia->amics, true);
+        $amicsEnvia[] = $usuarioRecibe->id;
+        $usuarioEnvia->amics = json_encode($amicsEnvia);
+        $usuarioEnvia->save();
+
+        // Elimina la solicitud de la base de datos
+        $solicitud->delete();
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Solicitud aceptada correctamente'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'Error al aceptar la solicitud: ' . $e->getMessage()
+        ]);
     }
+}
+
+    
+    
+
+
     public function RechazarAmigo(Request $request , $id)
     {
         $solicitud = Solicitud::find($id);

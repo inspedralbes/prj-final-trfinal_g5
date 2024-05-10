@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,9 +30,12 @@ class Usuaris extends Model implements Authenticatable
         'idRutina',
         'idDieta',
         'registre',
-        'amics',
     ];
 
+    // Define los campos que se deben convertir automáticamente a tipos de datos específicos
+    protected $casts = [
+        'amics' => 'array', // Convierte el campo 'amics' a un array
+    ];
 
     public function dietas()
     {
