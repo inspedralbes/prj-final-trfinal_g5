@@ -17,6 +17,7 @@ Route::get('/chatUsuaris/{id}', [UserController::class, 'getAmics']);
 Route::get('/usuarios-excepto/{idUsuario}', [UserController::class, 'mostrarUsuariosExceptoYo']);
 Route::post('/enviar-solicitud', [SolicitudController::class, 'enviarSolicitud']);
 Route::get('/mostrar-solicitudes/{id}', [SolicitudController::class, 'MostrarUsuarioSolicitudes']);
+Route::get('/mostrar-solicitudes-enviades/{id}', [SolicitudController::class, 'MostrarUsuarioSolicitudesEnviades']);
 Route::post('/aceptar-solicitud/{id}', [SolicitudController::class, 'AceptarAmigo']);
 Route::delete('/eliminar-solicitud/{id}', [SolicitudController::class, 'RechazarAmigo']);
 

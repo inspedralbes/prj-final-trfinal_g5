@@ -1,7 +1,9 @@
 <template>
     <Capçalera />
-    <div>
-        <h1>Listado de Solicitudes</h1>
+    <button @click="mostrarSolicitudes">Solicituts</button>
+    <button @click="mostrarAdios">Meves solicituts </button>
+    <div v-if="mostrarContenido">
+        <h1>{{ titulo }}</h1>
         <div v-if="solicitudes.length === 0">
             <p>No tienes solicitudes pendientes</p>
         </div>
@@ -21,16 +23,37 @@
             </div>
         </div>
     </div>
+    <div v-else>
+        <h1>Solicitudes Enviadas</h1>
+        <div v-if="enviadas.length === 0">
+            <p>No tienes solicitudes enviadas</p>
+        </div>
+        <div v-else>
+            <div v-for="envia in enviadas" :key="envia.id" class="usuario-container">
+                <div class="info-usuario">
+                    <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + envia.usuario.usuario.foto_perfil"
+                        alt="Usuario" class="user-icon" />
+                    <div class="user-details">
+                        <p class="user-name">{{ envia.usuario.usuario.nom }} {{ envia.usuario.usuario.cognoms }}</p>
+                        <p class="username">{{ envia.usuario.usuario.nom_usuari }}</p>
+                    </div>
+                </div>
+                <button>Pendiente</button>
+            </div>
+        </div>
+    </div>
     <NavBar />
 </template>
-solicitud.usuario.usuario.nom
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
 
 export default {
     data() {
         return {
-            solicitudes: []
+            solicitudes: [],
+            envias: [],
+            mostrarContenido: true,
+
         };
     },
     async created() {
@@ -38,7 +61,7 @@ export default {
             const id_usuario = useUsuariPerfilStore().id_usuari;
             const response = await fetch(`http://localhost:8000/api/mostrar-solicitudes/${id_usuario}`);
             const responseData = await response.json();
-            console.log(responseData);
+            // console.log(responseData);
             if (responseData.status === 1) {
                 // Recorremos las solicitudes y hacemos un fetch para obtener información del usuario
                 for (const solicitud of responseData.solicitudes) {
@@ -47,13 +70,38 @@ export default {
                         const usuarioData = await usuarioResponse.json();
                         // Guardamos la información del usuario en cada solicitud
                         solicitud.usuario = usuarioData;
-                        console.log(solicitud.usuario.usuario.nom)
+                        // console.log(solicitud.usuario.usuario.nom)
                     } catch (error) {
-                        console.error('Error al obtener información del usuario:', error);
+                        // console.error('Error al obtener información del usuario:', error);
                     }
                 }
                 // Actualizamos la lista de solicitudes con la información del usuario
                 this.solicitudes = responseData.solicitudes;
+            } else {
+                // console.log(responseData.message);
+            }
+        } catch (error) {
+            console.error('Error al obtener las solicitudes:', error);
+        }
+    },
+    async mounted() {
+        try {
+            const id_usuario = useUsuariPerfilStore().id_usuari;
+            const response = await fetch(`http://localhost:8000/api/mostrar-solicitudes-enviades/${id_usuario}`);
+            const responseData = await response.json();
+            console.log(responseData);
+            if (responseData.status === 1) {
+                this.enviadas = responseData.enviadas; // Almacenar las solicitudes enviadas
+                for (const envia of this.enviadas) {
+                    try {
+                        const usuarioResponse = await fetch(`http://localhost:8000/api/usuari/${envia.usuario_recibe_id}`);
+                        const usuarioData = await usuarioResponse.json();
+                        envia.usuario = usuarioData;
+                        console.log(envia.usuario.nom);
+                    } catch (error) {
+                        console.error('Error al obtener información del usuario:', error);
+                    }
+                }
             } else {
                 console.log(responseData.message);
             }
@@ -61,8 +109,9 @@ export default {
             console.error('Error al obtener las solicitudes:', error);
         }
     },
+
     methods: {
-        async AceptarAmigo(solicitudId){
+        async AceptarAmigo(solicitudId) {
             try {
                 const response = await fetch(`http://localhost:8000/api/aceptar-solicitud/${solicitudId}`, {
                     method: 'POST'
@@ -96,6 +145,12 @@ export default {
             } catch (error) {
                 console.error('Error al rechazar la solicitud:', error);
             }
+        },
+        mostrarSolicitudes() {
+            this.mostrarContenido = true;
+        },
+        mostrarAdios() {
+            this.mostrarContenido = false;
         }
 
     }

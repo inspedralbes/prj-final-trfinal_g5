@@ -27,6 +27,22 @@ class SolicitudController extends Controller
             'solicitudes' => $solicitudes
         ]);
     }
+    public function MostrarUsuarioSolicitudesEnviades($id){
+        $enviar = Solicitud::where('usuario_envia_id', $id)->get();
+        
+        if ($enviar->isEmpty()) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No tienes solicitudes enviadas',
+            ]);
+        }
+    
+        return response()->json([
+            'status' => 1,
+            'message' => 'Solicitudes enviadas',
+            'enviadas' => $enviar
+        ]);
+    }
     
 
     public function enviarSolicitud(Request $request){
