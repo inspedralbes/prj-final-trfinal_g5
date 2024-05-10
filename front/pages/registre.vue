@@ -432,7 +432,7 @@ export default {
                 Object.entries(this.userData).filter(([key, value]) => value !== "")
             );
 
-            const response = await fetch('http://localhost:8000/api/registre', {
+            const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/registre', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -448,7 +448,7 @@ export default {
                 // Convertir la respuesta a formato JSON
                 const userDataResponse = await response.json();
 
-                console.log(userDataResponse);
+                // console.log(userDataResponse);
 
                 // Verificar si alguno de los campos devueltos es null
                 const nullFields = Object.values(userDataResponse).some(value => value === null);

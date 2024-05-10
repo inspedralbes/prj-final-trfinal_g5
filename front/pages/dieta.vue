@@ -64,7 +64,7 @@ export default {
         obtenirDieta(idUsuari) {
             getDieta(idUsuari)
                 .then(response => {
-                    console.log('Dieta:', response);
+                    // console.log('Dieta:', response);
                     // Organizar los platos por tipo de comida
                     const comidas = {};
                     response.forEach(plato => {
@@ -83,7 +83,7 @@ export default {
                     }));
                 })
                 .catch(error => {
-                    console.error('Error al obtener la dieta:', error);
+                    // console.error('Error al obtener la dieta:', error);
                 })
                 .finally(() => {
                     this.loading = false; // Marcar la carga de datos como completa

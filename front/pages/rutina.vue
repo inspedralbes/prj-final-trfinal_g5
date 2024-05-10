@@ -86,7 +86,7 @@ export default {
     mounted() {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
         this.idUsuari = useUsuariPerfilStore().id_usuari;
-        console.log(this.idUsuari);
+        // console.log(this.idUsuari);
         this.obtenirRutina(this.idUsuari);
         this.obtenirDies(this.idUsuari);
     },
@@ -97,12 +97,12 @@ export default {
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)
                 .then((response) => {
-                    console.log(response);
+                    // console.log(response);
                     // Filtrar los ejercicios para mostrar solo los del día seleccionado
                     this.exercises = response.filter(exercise => exercise.dia === this.selectedDay);
                 })
                 .catch((error) => {
-                    console.error(error);
+                    // console.error(error);
                 })
                 .finally(() => {
                     this.loading = false; // Marcar la carga de datos como completa
@@ -113,10 +113,10 @@ export default {
                 .then((response) => {
                     //console.log(response);
                     this.dies = [...new Set(response.map(exercise => exercise.dia))];
-                    console.log(this.dies);
+                    // console.log(this.dies);
                 })
                 .catch((error) => {
-                    console.error(error);
+                    // console.error(error);
                 });
         },
         incrementSelectedDay() {

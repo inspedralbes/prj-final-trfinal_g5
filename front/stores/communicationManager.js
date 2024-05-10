@@ -1,5 +1,5 @@
-const url = 'http://localhost:8000/api';
-//const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
+// const url = 'http://localhost:8000/api';
+const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
 const apiKey = '1234567890';
 
@@ -137,7 +137,7 @@ export async function enviarRutinaAlServidor(rutina) {
         }
 
         const data = await response.json();
-        console.log('datos guardados correctamente');
+        // console.log('datos guardados correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al enviar la rutina al servidor: ' + error.message);
@@ -159,7 +159,7 @@ export async function enviarDietaAlServidor(rutina) {
         }
 
         const data = await response.json();
-        console.log('datos guardados correctamente');
+        // console.log('datos guardados correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al enviar la rutina al servidor: ' + error.message);

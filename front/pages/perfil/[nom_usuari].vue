@@ -178,7 +178,7 @@ export default {
                 .then(data => {
                     // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
-                    console.log('Datos del usuario actualizados:', data);
+                    // console.log('Datos del usuario actualizados:', data);
                     useUsuariPerfilStore().registre = Boolean(Number(data.registre));
 
 
