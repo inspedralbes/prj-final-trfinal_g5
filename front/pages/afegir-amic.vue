@@ -164,7 +164,8 @@ input[type="text"] {
   margin: 10px 0;
   box-sizing: border-box;
   margin-left: 15px;
-  border-radius: 5px;}
+  border-radius: 5px;
+}
 
 .vacio{
     display: flex;

@@ -1,45 +1,35 @@
 <template>
     <div>
-        <capçalera />
-
-        <div>
-            <!-- Barra de búsqueda -->
+        <HeaderChat />
+        <div v-if="amics.length > 0">
             <input type="text" v-model="busqueda" placeholder="Buscar...">
-            <button @click="buscar">Buscar</button>
-
-            <!-- Botón de añadir -->
-            <button @click="toggleMenu">+</button>
-
-            <!-- Menú desplegable -->
-            <div v-if="mostrarMenu" class="menu-desplegable">
-                <button><nuxt-link href="/solicitudes">Solicitudes</nuxt-link></button>
-                <button><nuxt-link href="/afegir-amic">Añadir Amigos</nuxt-link></button>
-            </div>
         </div>
-
-        <!-- Lista de amigos -->
         <ul class="lista-amigos">
-            <li v-for="amigo in amics" :key="amigo.id" class="amigo">
+            <li v-if="amics.length === 0">
+                <div class="vacio">
+                    <p>No tens amics, però pots mirar les sol·licituds o afegir amics</p>
+                </div>
+            </li>
+            <li v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">
                 <nuxt-link to="/pantallaChat">
                     <div class="chat-element">
                         <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + amigo.foto_perfil" alt="Imagen de perfil de {{ amigo.nom }}">
-
                         <div>
-                            <span>{{ amigo.nom }}</span> <br>
+                            <span>{{ amigo.nom }}</span>  <span>12:30</span> <br>
                             <span id="ultim-missatge">IPOP 11 - Aquest és més fàcil que l'anterior</span>
                         </div>
-
-
                     </div>
-
                 </nuxt-link>
             </li>
+            <li v-if="amics.length > 0 && amicsFiltrados.length === 0">
+                <div class="vacio">
+                    <p>No s'ha trobat cap usuari amb aquest nom.</p>
+                </div>
+            </li>
         </ul>
-
         <navBar />
     </div>
 </template>
-
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
@@ -58,11 +48,14 @@ export default {
         this.obtenerAmigos();
     },
     computed: {
-        itemsFiltrados() {
-            return this.items.filter(item => {
-                return item.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) ||
-                    item.texto.toLowerCase().includes(this.busqueda.toLowerCase()) ||
-                    item.hora.toLowerCase().includes(this.busqueda.toLowerCase());
+        amicsFiltrados() {
+            return this.amics.filter(amigo => {
+                const terminoBusqueda = this.busqueda.toLowerCase();
+                return (
+                    amigo.nom.toLowerCase().includes(terminoBusqueda) ||
+                    amigo.cognoms.toLowerCase().includes(terminoBusqueda) ||
+                    amigo.nom_usuari.toLowerCase().includes(terminoBusqueda)
+                );
             });
         }
     },
@@ -77,15 +70,9 @@ export default {
                 console.log(this.amics);
             });
         },
-
-        buscar() {
-            // Realiza la búsqueda
-            console.log('Buscando:', this.busqueda);
-        },
         toggleMenu() {
             this.mostrarMenu = !this.mostrarMenu;
         },
-
         redireccionarConversacion(nombrePersona) {
             // Redirige a la página de conversación con el nombre de la persona
             this.$router.push(`/conversacion/${nombrePersona}`);
@@ -93,7 +80,6 @@ export default {
     }
 };
 </script>
-
 <style scoped>
 a {
     text-decoration: none;
@@ -212,14 +198,24 @@ a {
 
 
 input[type="text"] {
-    width: 50%;
-    padding: 8px 10px;
-    margin: 10px 0;
-    box-sizing: border-box;
+  width: 50%;
+  padding: 8px 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  margin-left: 25px;
+  border-radius: 5px;
 }
 
 #ultim-missatge {
     font-size: 0.8em;
     color: #777;
+}
+.vacio{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 20px;
+    color: #474747;
 }
 </style>
