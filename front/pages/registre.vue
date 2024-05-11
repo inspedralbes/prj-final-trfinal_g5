@@ -489,7 +489,7 @@ export default {
                 const nullFields = Object.values(userDataResponse).some(value => value === null);
 
                 // Actualizar el estado 'registre' en la tienda Pinia
-                useUsuariPerfilStore().registre = !nullFields;
+                useUsuariPerfilStore().registre = userDataResponse.registre;
 
                 // Actualizar otros estados de la tienda Pinia si es necesario
                 useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
