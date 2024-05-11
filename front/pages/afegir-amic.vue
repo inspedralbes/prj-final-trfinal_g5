@@ -22,7 +22,7 @@
             <p class="username">{{ usuario.nom_usuari }}</p>
           </div>
         </div>
-        <button @click="agregarAmigo(usuario.id)" class="add-friend-button">Afegir amic</button>
+        <button @click="agregarAmigo(usuario.id)" class="añadir-friend-button">Afegir amic</button>
       </div>
     </div>
 
@@ -93,7 +93,7 @@ export default {
           throw new Error('Error al agregar amigo');
         }
         else {
-      
+      this.fetchUsuarios();
 
         }
         // Aquí podrías mostrar un mensaje o realizar alguna acción adicional
@@ -140,7 +140,7 @@ export default {
   font-weight: bold;
 }
 
-.add-friend-button {
+.añadir-friend-button {
   background-image: linear-gradient(to right, #ff7300, #FFA500);
 
   color: white;
