@@ -3,17 +3,16 @@
         <div class="imgContainer">
             <div class="user-info">
                 <nuxt-link v-if="nom_usuari" :to="`/perfil/${username}`">
-                    <div :class="{ 'user-icon-container': true, 'incomplete-profile': !registre }">
-                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
-                            class="user-icon" />
+                    <div class="user-icon-container" :class="{ 'incomplete-profile': !registre }">
+                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" />
                     </div>
+                    <h1 id="nomUsuri">{{ username }}</h1>
                 </nuxt-link>
-                <h1 id="nomUsuri">{{ username }}</h1>
             </div>
             <div v-if="!registre" class="alert-sign">
                 !
             </div>
-            <button @click="toggleMenu" class="menu-button">+</button>
+            <button @click="toggleMenu" class="menu-button"><img src="../public/amigo.png"></button>
 
             <!-- Menú desplegable -->
             <transition name="slide">
@@ -137,7 +136,6 @@ h1 {
 }
 
 .menu-button {
-    font-size: 18px; /* Tamaño del botón */
     width: 30px; /* Ajustar el ancho según sea necesario */
     height: 30px; /* Ajustar la altura según sea necesario */
     border: none;
@@ -146,8 +144,9 @@ h1 {
     transition: transform 0.3s ease; /* Transición para animar el botón */
 }
 
-.menu-button:hover {
-    transform: scale(1.1); /* Aumentar el tamaño del botón al pasar el ratón sobre él */
+.menu-button img{
+    width: 30px;
+    height: 30px;
 }
 
 .menu-desplegable {
