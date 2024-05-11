@@ -46,15 +46,63 @@ class SolicitudController extends Controller
     
 
     public function enviarSolicitud(Request $request){
-        $solicitud = new Solicitud();
-        $solicitud->usuario_envia_id = $request->usuario_envia_id;
-        $solicitud->usuario_recibe_id = $request->usuario_recibe_id;
-        $solicitud->save();
-        return response()->json([
-            'status' => 1,
-            'message' => 'Se ha enviado la solicitud correctamente',
-        ]);
+        try {
+            $solicitud = new Solicitud();
+            $solicitud->usuario_envia_id = $request->usuario_envia_id;
+            $solicitud->usuario_recibe_id = $request->usuario_recibe_id;
+            $solicitud->save();
+    
+            // Verifica si hay una solicitud inversa
+            $solicitudInversa = Solicitud::where('usuario_envia_id', $request->usuario_recibe_id)
+                                        ->where('usuario_recibe_id', $request->usuario_envia_id)
+                                        ->first();
+    
+            if ($solicitudInversa) {
+                // Si hay una solicitud inversa, elimina ambas solicitudes
+                $solicitud->delete();
+                $solicitudInversa->delete();
+    
+                // Agrega a usuarioEnvia a la lista de amigos de usuarioRecibe
+                $usuarioEnvia = Usuaris::find($request->usuario_envia_id);
+                $usuarioRecibe = Usuaris::find($request->usuario_recibe_id);
+    
+                // Verifica si ambos usuarios existen
+                if (!$usuarioEnvia || !$usuarioRecibe) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Uno o ambos usuarios no encontrados'
+                    ]);
+                }
+    
+                $amicsRecibe = json_decode($usuarioRecibe->amics, true);
+                $amicsRecibe[] = $usuarioEnvia->id;
+                $usuarioRecibe->amics = json_encode($amicsRecibe);
+                $usuarioRecibe->save();
+    
+                // Agrega a usuarioRecibe a la lista de amigos de usuarioEnvia
+                $amicsEnvia = json_decode($usuarioEnvia->amics, true);
+                $amicsEnvia[] = $usuarioRecibe->id;
+                $usuarioEnvia->amics = json_encode($amicsEnvia);
+                $usuarioEnvia->save();
+    
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Se han aceptado mutuamente como amigos.'
+                ]);
+            }
+    
+            return response()->json([
+                'status' => 1,
+                'message' => 'Se ha enviado la solicitud correctamente',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error al enviar la solicitud: ' . $e->getMessage()
+            ]);
+        }
     }
+    
 
    
     public function AceptarAmigo(Request $request, $id)
