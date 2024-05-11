@@ -1,29 +1,31 @@
 <template>
   <Capçalera />
   <div class="user-list-container">
-    <h1>Lista de Usuarios</h1>
-    <input type="text" v-model="busqueda" placeholder="Buscar por nombre, apellido o nombre de usuario">
-    <div v-if="usuariosFiltrados.length === 0 && busqueda.length > 0">
-      <p>No s'han trobat usuaris</p>
-    </div>
-    <div v-else>
-      <div v-if="status === 0">
+    <div v-if="status === 0">
+      <div class="vacio">
         <p>No es poden afegir més amics</p>
       </div>
-      <div v-else>
-        <div v-for="usuario in usuariosFiltrados" :key="usuario.id" class="usuario-container">
-          <div class="info-usuario">
-            <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Usuario"
-              class="user-icon" />
-            <div class="user-details">
-              <p class="user-name">{{ usuario.nom }} {{ usuario.cognoms }}</p>
-              <p class="username">{{ usuario.nom_usuari }}</p>
-            </div>
-          </div>
-          <button @click="agregarAmigo(usuario.id)" class="add-friend-button">Añadir amigo</button>
+    </div>
+    <div v-else>
+      <input type="text" v-model="busqueda" placeholder="Buscar usuari">
+      <div v-if="usuariosFiltrados.length === 0 && busqueda.length > 0">
+        <div class="vacio">
+          <p>No s'han trobat usuaris</p>
         </div>
       </div>
+      <div v-for="usuario in usuariosFiltrados" :key="usuario.id" class="usuario-container">
+        <div class="info-usuario">
+          <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Usuario"
+            class="user-icon" />
+          <div class="user-details">
+            <p class="user-name">{{ usuario.nom }} {{ usuario.cognoms }}</p>
+            <p class="username">{{ usuario.nom_usuari }}</p>
+          </div>
+        </div>
+        <button @click="agregarAmigo(usuario.id)" class="add-friend-button">Afegir amic</button>
+      </div>
     </div>
+
   </div>
   <NavBar />
 </template>
@@ -84,14 +86,14 @@ export default {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ usuario_envia_id, usuario_recibe_id }) // Incluir ambos IDs en el cuerpo de la solicitud
-          
+
         });
 
         if (!response.ok) {
           throw new Error('Error al agregar amigo');
         }
-        else{
-          this.$router.push('/chatUsuaris');
+        else {
+      
 
         }
         // Aquí podrías mostrar un mensaje o realizar alguna acción adicional
@@ -139,7 +141,8 @@ export default {
 }
 
 .add-friend-button {
-  background-color: #FFA500;
+  background-image: linear-gradient(to right, #ff7300, #FFA500);
+
   color: white;
   border: none;
   padding: 8px 20px;
@@ -160,5 +163,15 @@ input[type="text"] {
   padding: 8px 10px;
   margin: 10px 0;
   box-sizing: border-box;
+  margin-left: 15px;
+  border-radius: 5px;}
+
+.vacio{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 20px;
+    color: #474747;
 }
 </style>
