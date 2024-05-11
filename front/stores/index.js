@@ -4,6 +4,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
     const loguejat = ref(false);
     const tipus_usuari = ref("");
     const nom_usuari = ref("");
+    const amic= ref("");
     const cognoms = ref("");
     const id_usuari = ref("");
     const email_usuari = ref("");
@@ -52,6 +53,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         iniciarSesionExitoso,
         loguejat,
         tipus_usuari,
+        amic,
         nom_usuari,
         email_usuari,
         id_usuari,

@@ -1,36 +1,37 @@
 <template>
     <div>
-        <HeaderChat />
-        <div v-if="amics.length > 0">
-            <input type="text" v-model="busqueda" placeholder="Buscar...">
-        </div>
-        <ul class="lista-amigos">
-            <li v-if="amics.length === 0">
-                <div class="vacio">
-                    <p>No tens amics, però pots mirar les sol·licituds o afegir amics</p>
-                </div>
-            </li>
-            <li v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">
-                <nuxt-link to="/pantallaChat">
-                    <div class="chat-element">
-                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + amigo.foto_perfil" alt="Imagen de perfil de {{ amigo.nom }}">
-                        <div>
-                            <span class="nombre">{{ amigo.nom }}</span>
-                            <span class="ultima-hora">12:30</span> <br>
-                            <span id="ultim-missatge">IPOP 11 - Aquest és més fàcil que l'anterior</span>
-                        </div>
-                    </div>
-                </nuxt-link>
-            </li>
-            <li v-if="amics.length > 0 && amicsFiltrados.length === 0">
-                <div class="vacio">
-                    <p>No s'ha trobat cap usuari amb aquest nom.</p>
-                </div>
-            </li>
-        </ul>
-        <navBar />
+      <HeaderChat />
+      <div v-if="amics.length > 0">
+        <input type="text" v-model="busqueda" placeholder="Buscar...">
+      </div>
+      <ul class="lista-amigos">
+        <li v-if="amics.length === 0">
+          <div class="vacio">
+            <p>No tens amics, però pots mirar les sol·licituds o afegir amics</p>
+          </div>
+        </li>
+        <li v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">
+          <!-- Aquí agregamos el evento @click para redirigir al usuario y guardar el ID del amigo -->
+          <nuxt-link :to="`/pantallaChat/${amigo.id}`" @click="seleccionarAmigo(amigo.id)">
+            <div class="chat-element">
+              <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + amigo.foto_perfil" :alt="'Imagen de perfil de ' + amigo.nom">
+              <div>
+                <span class="nombre">{{ amigo.nom }}</span>
+                <span class="ultima-hora">12:30</span> <br>
+                <span id="ultim-missatge">IPOP 11 - Aquest és més fàcil que l'anterior</span>
+              </div>
+            </div>
+          </nuxt-link>
+        </li>
+        <li v-if="amics.length > 0 && amicsFiltrados.length === 0">
+          <div class="vacio">
+            <p>No s'ha trobat cap usuari amb aquest nom.</p>
+          </div>
+        </li>
+      </ul>
+      <navBar />
     </div>
-</template>
+  </template>
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
@@ -71,6 +72,10 @@ export default {
                 console.log(this.amics);
             });
         },
+        seleccionarAmigo(idAmigo) {
+            // Guarda el ID del amigo en el store
+            useUsuariPerfilStore().amic = idAmigo;
+        }
     }
 };
 </script>
