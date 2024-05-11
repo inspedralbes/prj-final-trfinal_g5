@@ -49,15 +49,6 @@ export default {
     data() {
         return {
             busqueda: '',
-            items: [
-                { imagen: 'icono_grupo.png', nombre: 'Fithub', texto: 'IPOP 10 NOIS', hora: '10:00 am' },
-                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 2', texto: 'Texto 2', hora: '11:00' },
-                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 3', texto: 'Texto 3', hora: '12:00' },
-                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 4', texto: 'Texto 4', hora: '13:00' },
-                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 5', texto: 'Texto 5', hora: '14:00' },
-                { imagen: 'icono_Arturo.jpg', nombre: 'Nombre 6', texto: 'Texto 6', hora: '15:00' }
-                // Agrega más elementos según sea necesario
-            ],
             amics: [],
             mostrarMenu: false
         };
