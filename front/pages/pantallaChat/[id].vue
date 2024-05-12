@@ -18,7 +18,7 @@
             <!-- Área de texto con el botón "+" -->
             <div class="entrada-mensaje-container">
                 <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
-                <button @click="mostrarModal" class="boton-agregar">+</button>
+                <button @click="mostrarModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
             </div>
 
             <!-- Botón para enviar el mensaje -->
@@ -28,8 +28,8 @@
             <div class="modal" v-if="mostrar">
                 <div class="modal-contenido">
                     <!-- Opciones del modal -->
-                    <button @click="opcionSeleccionada('imagen')"><img src="@/public/foto.png"> </button>
-                    <button @click="opcionSeleccionada('video')"><img src="@/public/video.png"></button>
+                  <div>  <img src="@/public/foto.png" class="modal-contenido-foto" @click="opcionSeleccionada('imagen')"></div>
+                    <div><img src="@/public/video.png" class="modal-contenido-video" @click="opcionSeleccionada('video')"></div>
                    <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="opcionSeleccionada('rutina')"></div>
                     <div><img src="@/public/dieta.png" class="modal-contenido-dieta" @click="opcionSeleccionada('dieta')"></div>
                 </div>
@@ -279,7 +279,16 @@ body {
     align-self: flex-end;
     margin-bottom: 8px;
 }
+.boton-agregar {
+    justify-content: center;
+    align-items: center;
+    
+}
+.boton-agregar img{
+    width: 20px;
+    height: 20px;
 
+}
 .mensaje-asistente {
     display: flex;
     align-items: flex-start;
@@ -395,5 +404,11 @@ navBar {
 }
 .modal-contenido-rutina {
     background-color: green;
+}
+.modal-contenido-video {
+    background-color: blue;
+}
+.modal-contenido-foto {
+    background-color: yellow;
 }   
 </style>
