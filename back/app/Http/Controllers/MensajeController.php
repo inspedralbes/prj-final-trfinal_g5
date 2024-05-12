@@ -39,22 +39,48 @@ class MensajeController extends Controller
             $mensaje = new Mensaje();
             $mensaje->usuario_envia_mensaje = $usuari1;
             $mensaje->usuario_recibe_mensaje = $usuari2;
-            $mensaje->mensaje = $request->input('mensaje'); // Obtener el mensaje del cuerpo de la solicitud
+            $mensaje->mensaje = $request->input('mensaje');
             $mensaje->leido = 0;
+    
+            if ($request->has('imagen_base64')) {
+                // Decodificar la imagen base64 y guardarla en el sistema de archivos
+                $base64Image = $request->imagen_base64;
+                $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image)); // Eliminar el encabezado 'data:image/jpeg;base64,' para obtener solo los datos de la imagen
+    
+                // Generar un nombre único para el archivo de imagen
+                $originalFileName = 'imagen_' . uniqid() . '.jpg';
+    
+                // Guardar la imagen en la ruta de almacenamiento
+                file_put_contents(public_path('storage/chat/' . $originalFileName), $imageData);
+    
+                // Asignar el nombre del archivo de imagen al mensaje
+                $mensaje->imagen = $originalFileName;
+            }
+    
+            // Guardar el mensaje en la base de datos
             $mensaje->save();
-            
+    
             return response()->json([
                 'status' => 1,
                 'message' => 'Mensaje enviado',
                 'mensaje' => $mensaje
             ]);
         } catch (\Exception $e) {
+            // Log the detailed error message
+            \Log::error('Error al enviar el mensaje: ' . $e->getMessage());
+        
+            // Return a response with a more informative error message
             return response()->json([
                 'status' => 0,
-                'message' => 'Error al enviar el mensaje',
+                'message' => 'Error al enviar el mensaje: ' . $e->getMessage(),
                 'error' => $e->getMessage()
             ]);
         }
+        
+        
     }
+    
+    
+    
     
 }

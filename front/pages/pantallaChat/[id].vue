@@ -1,6 +1,8 @@
 <template>
     <div>
         <!-- Cabecera del chat -->
+        <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
+
         <div class="cabecera">
             <!-- Mostrar foto de perfil del usuario -->
             <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Foto de perfil">
@@ -17,6 +19,10 @@
                 <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id" class="mensaje-container">
                     <div
                         :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
+                        <!-- Verificar si el mensaje tiene una imagen -->
+                        <template v-if="mensaje.imagen">
+                            <img :src="'http://localhost:8000/storage/chat/' + mensaje.imagen" alt="Foto Chat" class="imagen-chat">
+                        </template>
                         <p>{{ mensaje.mensaje }}</p>
                         <p>{{ formatDate(mensaje.created_at) }}</p>
                     </div>
@@ -37,12 +43,12 @@
             <div class="modal" v-if="mostrar" @click="toggleModal">
                 <div class="modal-contenido" ref="modalContenido">
                     <!-- Opciones del modal -->
-                    <div><img src="@/public/foto.png" class="modal-contenido-foto"
-                            @click="opcionSeleccionada('imagen')"></div>
+                    <div><img src="@/public/foto.png" class="modal-contenido-foto" @click="openFileInput"></div>
                     <div><img src="@/public/video.png" class="modal-contenido-video"
                             @click="opcionSeleccionada('video')"></div>
                     <div><img src="@/public/rutina.png" class="modal-contenido-rutina"
-                            @click="opcionSeleccionada('rutina')"></div>
+                            @click="opcionSeleccionada('rutina')">
+                    </div>
                     <div><img src="@/public/dieta.png" class="modal-contenido-dieta"
                             @click="opcionSeleccionada('dieta')"></div>
                 </div>
@@ -63,7 +69,9 @@ export default {
             usuario: {}, // Objeto para almacenar la información del usuario
             mensajes: {}, // Objeto para almacenar los mensajes agrupados por día
             mostrar: false,
-            mensaje: '',
+            imagen: null,
+            isSaving: false
+
         };
     },
     methods: {
@@ -117,6 +125,81 @@ export default {
                 console.error('Error al obtener los mensajes del chat:', error);
             }
         },
+        handleFileChange(event) {
+            const file = event.target.files[0]; // Obtener el archivo del evento
+
+            if (file) {
+                // Verificar si el archivo es una imagen
+                if (!file.type.startsWith('image/')) {
+                    // console.error('El archivo seleccionado no es una imagen.');
+                    return; // Salir del método si el archivo no es una imagen
+                }
+
+                // Asignar directamente el archivo seleccionado a this.imagen
+                this.imagen = file;
+
+                // Llamar al método para guardar automáticamente los datos del usuario
+                this.guardarMensaje();
+            } else {
+                // console.error('No se seleccionó ningún archivo.');
+            }
+        },
+        async guardarMensaje() {
+            // Verificar si ya se está guardando para evitar múltiples envíos
+            if (this.isSaving) return;
+
+            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
+
+            try {
+                let data = { imagen: this.imagen };
+
+                // Si el mensaje es una imagen, conviértela a base64
+                if (this.imagen instanceof File) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        data.imagen_base64 = reader.result.split(',')[1]; // Extraer solo el contenido base64
+                        this.enviarDatos(data); // Enviar los datos al servidor
+                    };
+                    reader.readAsDataURL(this.imagen);
+                } else {
+                    this.enviarDatos(data); // Si no es una imagen, enviar los datos directamente
+                }
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+            }
+        },
+        async enviarDatos(data) {
+            console.log(data);
+            try {
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const id_amic = useUsuariPerfilStore().amic;
+                const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                const responseData = await response.json();
+                if (responseData.status === 1) {
+                    // Mensaje enviado correctamente
+                    console.log('Mensaje enviado correctamente');
+                    await this.mostrarMensajes();
+                    // Vaciar el área de texto después de enviar el mensaje
+                    this.mensaje = '';
+                } else {
+                    console.error('Error al enviar el mensaje:', responseData.message);
+                }
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+            }
+        },
+
+        ordenarMensajesPorId(mensajes) {
+            // Convertir el objeto de mensajes a un array
+            const mensajesArray = Object.values(mensajes);
+            // Ordenar el array de mensajes por su ID
+            return mensajesArray.flat().sort((a, b) => a.id - b.id);
+        },
         async mostrarAmigo() {
             try {
                 const id_usuario = useUsuariPerfilStore().amic;
@@ -140,41 +223,37 @@ export default {
         toggleModal() {
             this.mostrar = !this.mostrar;
         },
-        cerrarModal() {
-            this.mostrar = false; // Cerrar el modal
-        },
         opcionSeleccionada(opcion) {
             // Aquí puedes manejar la opción seleccionada, como abrir un componente específico o ejecutar una función
             console.log("Opción seleccionada:", opcion);
             // Cerrar el modal después de seleccionar una opción
             this.cerrarModal();
         },
-        ordenarMensajesPorId(mensajes) {
-            return mensajes.sort((a, b) => a.id - b.id);
-        }
+        openFileInput() {
+            // Al hacer clic en la imagen, activar el input de archivo
+            this.$refs.fileInput.click();
+        },
+        cerrarModal() {
+            this.mostrar = false; // Cerrar el modal
+        },
 
     },
     async mounted() {
         await this.mostrarAmigo();
         await this.mostrarMensajes();
     },
-
-    beforeRouteLeave(next) {
-        // Limpiar el campo 'amic' del pinia cuando se abandona la página actual
+    beforeRouteLeave(to, from, next) {
+        // Deja el campo 'amic' del almacenamiento de Pinia como null al salir de la página
         useUsuariPerfilStore().amic = null;
         next();
     },
+    
 
 };
 </script>
 
+
 <style>
-/* Estilos para los mensajes enviados */
-
-
-/* Estilos para los mensajes recibidos */
-
-
 html,
 body {
     margin: 0;
@@ -465,13 +544,15 @@ navBar {
 .mensaje-container {
     display: flex;
     flex-direction: column;
-    gap: 5px;}
+    gap: 5px;
+}
 
 .mensaje-enviado,
 .mensaje-recibido {
     padding: 8px;
     border-radius: 8px;
 }
+
 .mensaje-recibido {
     text-align: left;
     display: flex;
@@ -480,15 +561,21 @@ navBar {
 
     background-color: #E2E2E2;
 }
+
 .mensaje-enviado {
     width: 50%;
     display: flex;
 
     justify-content: flex-end;
     text-align: left;
-    
+
     background-color: red;
     align-self: flex-end;
+}
+.imagen-chat {
+    width: 80%;
+    height: auto;
+    border-radius: 8px;
 }
 h3 {
     text-align: center;
