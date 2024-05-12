@@ -18,7 +18,35 @@ class MensajeController extends Controller
                 ->where('usuario_recibe_mensaje', $usuari1);
         })->orderBy('created_at', 'asc')->get();
 
-        return response()->json($messages);
+        return response()->json([
+            'status' => 1,
+            'message' => 'Mensajes encontrados',
+            'messages' => $messages
+        ]);
+        
         
     }
+    public function enviarMensaje(Request $request, $usuari1, $usuari2) {
+        try {
+            $mensaje = new Mensaje();
+            $mensaje->usuario_envia_mensaje = $usuari1;
+            $mensaje->usuario_recibe_mensaje = $usuari2;
+            $mensaje->mensaje = $request->input('mensaje'); // Obtener el mensaje del cuerpo de la solicitud
+            $mensaje->leido = 0;
+            $mensaje->save();
+            
+            return response()->json([
+                'status' => 1,
+                'message' => 'Mensaje enviado',
+                'mensaje' => $mensaje
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error al enviar el mensaje',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
 }

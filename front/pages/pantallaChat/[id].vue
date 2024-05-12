@@ -1,24 +1,29 @@
 <template>
+
     <body>
         <div>
             <div class="contenedor">
                 <!-- Cabecera del chat -->
                 <div class="cabecera">
                     <!-- Mostrar nombre del usuario -->
-                    
                     <!-- Mostrar foto de perfil del usuario -->
-                    <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Foto de perfil">
+                    <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil"
+                        alt="Foto de perfil">
                     <p>{{ usuario.nom }}</p>
                 </div>
 
-                <div class="chat-container">
-                    <!-- Contenido del chat -->
+                <div class="chat-container"> 
+                <!-- Contenido del chat -->
+                <div v-for="mensaje in mensajes" :key="mensaje.id">
+                        <p>{{ mensaje.mensaje }}</p>
+                    </div>
                 </div>
+
 
                 <!-- Controles inferiores -->
                 <div class="controles-inferiores">
                     <textarea class="entrada-mensaje" placeholder="Escriu el teu missatge"></textarea>
-                    <button class="boton-enviar">Enviar</button>
+                    <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
                 </div>
 
                 <!-- Navbar -->
@@ -34,15 +39,44 @@ import { useUsuariPerfilStore } from '@/stores/index';
 export default {
     data() {
         return {
-            usuario: {} // Objeto para almacenar la información del usuario
+            usuario: {}, // Objeto para almacenar la información del usuario
+            mensajes: [] // Arreglo para almacenar los mensajes del chat
         };
+    },
+    methods: {
+        async enviarMensaje() {
+            try {
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const id_amic = useUsuariPerfilStore().amic;
+                const mensaje = document.querySelector('.entrada-mensaje').value; // Obtener el mensaje del textarea
+                const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ mensaje: mensaje }), // Enviar el mensaje en el cuerpo de la solicitud
+                });
+
+                const responseData = await response.json();
+                if (responseData.status === 1) {
+                    // Mensaje enviado correctamente, puedes manejarlo aquí si lo deseas
+                    console.log('Mensaje enviado correctamente');
+                } else {
+                    // Manejar el caso de error al enviar el mensaje
+                    console.error('Error al enviar el mensaje:', responseData.message);
+                }
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+            }
+        }
+
     },
     async mounted() {
         try {
             const id_usuario = useUsuariPerfilStore().amic;
             const response = await fetch(`http://localhost:8000/api/usuari/${id_usuario}`);
             const responseData = await response.json();
-            console.log(responseData);
+            // console.log(responseData);
             if (responseData.status === 1) {
                 // Asignar la información del usuario devuelta por la API a la variable usuario
                 this.usuario = responseData.usuario;
@@ -53,14 +87,46 @@ export default {
             console.error('Error al obtener las solicitudes:', error);
         }
     },
+    async created() {
+        // Llamar a la función para obtener los mensajes del chat
+        try {
+            const id_usuario = useUsuariPerfilStore().id_usuari;
+            const id_amic = useUsuariPerfilStore().amic;
+            const response = await fetch(`http://localhost:8000/api/missatges/${id_usuario}/${id_amic}`);
+            const responseData = await response.json();
+            if (responseData.status === 1) {
+                // Asignar los mensajes devueltos por la API a la variable mensajes
+                this.mensajes = responseData;
+                console.log(this.mensajes.messages);
+            } else {
+                // Manejar el caso de error
+                console.log("No hay mensajes en el chat")
+            }
+        } catch (error) {
+            console.error('Error al obtener los mensajes del chat:', error);
+        }
+    },
     beforeRouteLeave(next) {
         // Limpiar el campo 'amic' del pinia cuando se abandona la página actual
         useUsuariPerfilStore().amic = null;
         next();
-    }
+    },
 };
 </script>
-<style scoped>
+
+<style>
+/* Estilos para los mensajes enviados */
+.mensaje-enviado {
+    text-align: right;
+    background-color: #DCF8C6;
+}
+
+/* Estilos para los mensajes recibidos */
+.mensaje-recibido {
+    text-align: left;
+    background-color: #E2E2E2;
+}
+
 html,
 body {
     margin: 0;
@@ -83,10 +149,14 @@ body {
     align-items: center;
     height: 100vh;
 }
+
 .cabecera {
-    display: flex; /* Para que los elementos estén en línea */
-    align-items: center; /* Para centrar verticalmente */
-    justify-content: center; /* Para centrar horizontalmente */
+    display: flex;
+    /* Para que los elementos estén en línea */
+    align-items: center;
+    /* Para centrar verticalmente */
+    justify-content: center;
+    /* Para centrar horizontalmente */
     background-color: #333;
     color: rgb(255, 255, 255);
     padding: 10px 20px;

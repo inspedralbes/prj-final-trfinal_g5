@@ -22,6 +22,7 @@ Route::get('/mostrar-solicitudes-enviades/{id}', [SolicitudController::class, 'M
 Route::post('/aceptar-solicitud/{id}', [SolicitudController::class, 'AceptarAmigo']);
 Route::delete('/eliminar-solicitud/{id}', [SolicitudController::class, 'RechazarAmigo']);
 
+Route::post('/enviar-mensaje/{usuari1}/{usuari2}', [MensajeController::class, 'enviarMensaje']);
 Route::get('missatges/{userId1}/{userId2}', [MensajeController::class, 'mostrarMensajeEntreEllos']);
 
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
