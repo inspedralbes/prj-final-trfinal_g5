@@ -19,10 +19,11 @@
             <div class="entrada-mensaje-container">
                 <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
                 <button @click="mostrarModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
+                <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
             </div>
 
             <!-- Botón para enviar el mensaje -->
-            <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
+          
 
             <!-- Modal -->
             <div class="modal" v-if="mostrar">
@@ -282,7 +283,7 @@ body {
 .boton-agregar {
     justify-content: center;
     align-items: center;
-    
+
 }
 .boton-agregar img{
     width: 20px;
@@ -332,7 +333,12 @@ body {
         transform: rotate(360deg);
     }
 }
-
+.entrada-mensaje-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-left: 30px;
+}
 .controles-inferiores {
     width: 100%;
     display: flex;
@@ -343,28 +349,30 @@ body {
 }
 
 .entrada-mensaje {
-    width: calc(100% - 20px);
+    margin-left: 10px;
+    width: 70%;
     padding: 10px;
     margin: 10px 0;
     box-sizing: border-box;
     background-color: #f0f0f0;
     border: none;
     border-radius: 8px;
+    height: 50px;
 }
 
 .boton-enviar {
-    background-color: #000;
+   width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #333;
     color: white;
     border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    border-radius: 4px;
-    margin: 10px 10px 0;
-    width: calc(100% - 20px);
+    transition: background-color 0.3s;
+    margin-left: 10px;
 }
 
 .boton-enviar:hover {
@@ -411,4 +419,5 @@ navBar {
 .modal-contenido-foto {
     background-color: yellow;
 }   
+
 </style>
