@@ -17,12 +17,20 @@ class MensajeController extends Controller
             $query->where('usuario_envia_mensaje', $usuari2)
                 ->where('usuario_recibe_mensaje', $usuari1);
         })->orderBy('created_at', 'asc')->get();
-
+        if ($messages->count() == 0) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No hay mensajes entre los usuarios'
+            ]);
+        }
+        else{
         return response()->json([
             'status' => 1,
             'message' => 'Mensajes encontrados',
             'messages' => $messages
         ]);
+    }
+        
         
         
     }

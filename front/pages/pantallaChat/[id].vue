@@ -1,36 +1,44 @@
 <template>
+    <div>
+        <!-- Cabecera del chat -->
+        <div class="cabecera">
+            <!-- Mostrar foto de perfil del usuario -->
+            <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Foto de perfil">
+            <p>{{ usuario.nom }}</p>
+        </div>
 
-    <body>
-        <div>
-            <div class="contenedor">
-                <!-- Cabecera del chat -->
-                <div class="cabecera">
-                    <!-- Mostrar nombre del usuario -->
-                    <!-- Mostrar foto de perfil del usuario -->
-                    <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil"
-                        alt="Foto de perfil">
-                    <p>{{ usuario.nom }}</p>
+        <!-- Mensajes del chat -->
+        <div v-for="mensaje in mensajes" :key="mensaje.id" class="usuario-container">
+            <p>{{ mensaje.mensaje }}</p>
+            <p>{{ formatDate(mensaje.created_at) }}</p>
+        </div>
+
+        <!-- Controles inferiores -->
+        <div class="controles-inferiores">
+            <!-- Área de texto con el botón "+" -->
+            <div class="entrada-mensaje-container">
+                <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+                <button @click="mostrarModal" class="boton-agregar">+</button>
+            </div>
+
+            <!-- Botón para enviar el mensaje -->
+            <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
+
+            <!-- Modal -->
+            <div class="modal" v-if="mostrar">
+                <div class="modal-contenido">
+                    <!-- Opciones del modal -->
+                    <button @click="opcionSeleccionada('imagen')"><img src="@/public/foto.png"> </button>
+                    <button @click="opcionSeleccionada('video')"><img src="@/public/video.png"></button>
+                   <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="opcionSeleccionada('rutina')"></div>
+                    <div><img src="@/public/dieta.png" class="modal-contenido-dieta" @click="opcionSeleccionada('dieta')"></div>
                 </div>
-
-                <div class="chat-container"> 
-                <!-- Contenido del chat -->
-                <div v-for="mensaje in mensajes" :key="mensaje.id">
-                        <p>{{ mensaje.mensaje }}</p>
-                    </div>
-                </div>
-
-
-                <!-- Controles inferiores -->
-                <div class="controles-inferiores">
-                    <textarea class="entrada-mensaje" placeholder="Escriu el teu missatge"></textarea>
-                    <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
-                </div>
-
-                <!-- Navbar -->
-                <navBar />
             </div>
         </div>
-    </body>
+
+        <!-- Navbar -->
+        <navBar />
+    </div>
 </template>
 
 <script>
@@ -40,7 +48,9 @@ export default {
     data() {
         return {
             usuario: {}, // Objeto para almacenar la información del usuario
-            mensajes: [] // Arreglo para almacenar los mensajes del chat
+            mensajes: [], // Arreglo para almacenar los mensajes del chat
+            status: null,
+            mostrar: false,
         };
     },
     methods: {
@@ -61,6 +71,7 @@ export default {
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente, puedes manejarlo aquí si lo deseas
                     console.log('Mensaje enviado correctamente');
+                    await this.mostrarMensajes();
                 } else {
                     // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);
@@ -68,44 +79,62 @@ export default {
             } catch (error) {
                 console.error('Error al enviar el mensaje:', error);
             }
-        }
+        },
+        async mostrarMensajes() {
+            try {
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const id_amic = useUsuariPerfilStore().amic;
+                const response = await fetch(`http://localhost:8000/api/missatges/${id_usuario}/${id_amic}`);
+                const responseData = await response.json();
+                this.status = responseData.status;
+                if (responseData.status === 1) {
+                    this.mensajes = responseData.messages;
+                    console.log(this.mensajes);
+                }
+            } catch (error) {
+                console.error('Error al obtener los mensajes del chat:', error);
+            }
+        },
+        async mostrarAmigo() {
+            try {
+                const id_usuario = useUsuariPerfilStore().amic;
+                const response = await fetch(`http://localhost:8000/api/usuari/${id_usuario}`);
+                const responseData = await response.json();
+                // console.log(responseData);
+                if (responseData.status === 1) {
+                    // Asignar la información del usuario devuelta por la API a la variable usuario
+                    this.usuario = responseData.usuario;
+                } else {
+                    // Manejar el caso de error
+                }
+            } catch (error) {
+                console.error('Error al obtener las solicitudes:', error);
+            }
+        },
+        formatDate(dateTimeString) {
+            const date = new Date(dateTimeString);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        },
+        mostrarModal() {
+            this.mostrar = true; // Mostrar el modal cuando se hace clic en el botón
+            
+        },
+        cerrarModal() {
+            this.mostrar = false; // Cerrar el modal
+        },
+        opcionSeleccionada(opcion) {
+            // Aquí puedes manejar la opción seleccionada, como abrir un componente específico o ejecutar una función
+            console.log("Opción seleccionada:", opcion);
+            // Cerrar el modal después de seleccionar una opción
+            this.cerrarModal();
+        },
 
     },
     async mounted() {
-        try {
-            const id_usuario = useUsuariPerfilStore().amic;
-            const response = await fetch(`http://localhost:8000/api/usuari/${id_usuario}`);
-            const responseData = await response.json();
-            // console.log(responseData);
-            if (responseData.status === 1) {
-                // Asignar la información del usuario devuelta por la API a la variable usuario
-                this.usuario = responseData.usuario;
-            } else {
-                // Manejar el caso de error
-            }
-        } catch (error) {
-            console.error('Error al obtener las solicitudes:', error);
-        }
+        await this.mostrarAmigo();
+        await this.mostrarMensajes();
     },
-    async created() {
-        // Llamar a la función para obtener los mensajes del chat
-        try {
-            const id_usuario = useUsuariPerfilStore().id_usuari;
-            const id_amic = useUsuariPerfilStore().amic;
-            const response = await fetch(`http://localhost:8000/api/missatges/${id_usuario}/${id_amic}`);
-            const responseData = await response.json();
-            if (responseData.status === 1) {
-                // Asignar los mensajes devueltos por la API a la variable mensajes
-                this.mensajes = responseData;
-                console.log(this.mensajes.messages);
-            } else {
-                // Manejar el caso de error
-                console.log("No hay mensajes en el chat")
-            }
-        } catch (error) {
-            console.error('Error al obtener los mensajes del chat:', error);
-        }
-    },
+
     beforeRouteLeave(next) {
         // Limpiar el campo 'amic' del pinia cuando se abandona la página actual
         useUsuariPerfilStore().amic = null;
@@ -302,7 +331,6 @@ body {
     align-items: center;
     padding-top: 20px;
     padding-bottom: 20px;
-    background-color: #33333356;
 }
 
 .entrada-mensaje {
@@ -344,4 +372,28 @@ navBar {
     z-index: 999;
     /* Asegura que esté por encima del contenido */
 }
+
+.modal-contenido {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+
+}
+
+.modal-contenido img {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    border-radius: 20%;
+}
+
+.modal-contenido-dieta {
+    background-color: red;
+}
+.modal-contenido-rutina {
+    background-color: green;
+}   
 </style>
