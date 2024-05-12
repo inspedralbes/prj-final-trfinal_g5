@@ -15,6 +15,7 @@ class Mensaje extends Model
         'usuario_recibe_mensaje',
         'mensaje',
         'imagen',
+        'video',
         'leido',
     ];
     // Relación con el usuario que envía el mensaje

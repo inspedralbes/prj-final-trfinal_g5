@@ -51,10 +51,24 @@ class MensajeController extends Controller
                 $originalFileName = 'imagen_' . uniqid() . '.jpg';
     
                 // Guardar la imagen en la ruta de almacenamiento
-                file_put_contents(public_path('storage/chat/' . $originalFileName), $imageData);
+                file_put_contents(public_path('storage/imagen/' . $originalFileName), $imageData);
     
                 // Asignar el nombre del archivo de imagen al mensaje
                 $mensaje->imagen = $originalFileName;
+            }
+            if ($request->has('video_base64')) {
+                // Decodificar el video base64 y guardarlo en el sistema de archivos
+                $base64Video = $request->video_base64;
+                $videoData = base64_decode(preg_replace('#^data:video/\w+;base64,#i', '', $base64Video));
+    
+                // Generar un nombre único para el archivo de video
+                $originalFileName = 'video_' . uniqid() . '.mp4';
+    
+                // Guardar el video en la ruta de almacenamiento
+                file_put_contents(public_path('storage/video/' . $originalFileName), $videoData);
+    
+                // Asignar el nombre del archivo de video al mensaje
+                $mensaje->video = $originalFileName; // Guardarlo en la misma columna que la imagen
             }
     
             // Guardar el mensaje en la base de datos
@@ -76,8 +90,6 @@ class MensajeController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
-        
-        
     }
     
     

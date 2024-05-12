@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('usuario_recibe_mensaje');
             $table->string('mensaje')->nullable();
             $table->string('imagen')->nullable();
+            $table->string('video')->nullable();
             $table->boolean('leido');
             $table->timestamps();
             $table->foreign('usuario_envia_mensaje')->references('id')->on('usuaris');

@@ -2,6 +2,7 @@
     <div>
         <!-- Cabecera del chat -->
         <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
+        <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
 
         <div class="cabecera">
             <!-- Mostrar foto de perfil del usuario -->
@@ -21,7 +22,14 @@
                         :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
                         <!-- Verificar si el mensaje tiene una imagen -->
                         <template v-if="mensaje.imagen">
-                            <img :src="'http://localhost:8000/storage/chat/' + mensaje.imagen" alt="Foto Chat" class="imagen-chat">
+                            <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
+                                class="imagen-chat">
+                        </template>
+                        <template v-if="mensaje.video">
+                            <video width="320" height="240" controls>
+                                <source :src="'http://localhost:8000/storage/video/' + mensaje.video" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </template>
                         <p>{{ mensaje.mensaje }}</p>
                         <p>{{ formatDate(mensaje.created_at) }}</p>
@@ -44,8 +52,8 @@
                 <div class="modal-contenido" ref="modalContenido">
                     <!-- Opciones del modal -->
                     <div><img src="@/public/foto.png" class="modal-contenido-foto" @click="openFileInput"></div>
-                    <div><img src="@/public/video.png" class="modal-contenido-video"
-                            @click="opcionSeleccionada('video')"></div>
+                    <div><img src="@/public/video.png" class="modal-contenido-video" @click="openVideo"></div>
+
                     <div><img src="@/public/rutina.png" class="modal-contenido-rutina"
                             @click="opcionSeleccionada('rutina')">
                     </div>
@@ -68,6 +76,7 @@ export default {
         return {
             usuario: {}, // Objeto para almacenar la información del usuario
             mensajes: {}, // Objeto para almacenar los mensajes agrupados por día
+            mensaje: '', // Variable para almacenar el mensaje escrito por el usuario
             mostrar: false,
             imagen: null,
             isSaving: false
@@ -144,6 +153,24 @@ export default {
                 // console.error('No se seleccionó ningún archivo.');
             }
         },
+        handleVideoChange(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                // Verificar si el archivo es un video
+                if (!file.type.startsWith('video/')) {
+                    console.error('El archivo seleccionado no es un video.');
+                    return;
+                }
+
+                this.imagen = file; // Cambiar a this.imagen = file;
+
+                this.guardarMensaje2(); // Llamar al método guardarMensaje2
+            } else {
+                console.error('No se seleccionó ningún archivo.');
+            }
+        },
+
         async guardarMensaje() {
             // Verificar si ya se está guardando para evitar múltiples envíos
             if (this.isSaving) return;
@@ -168,6 +195,32 @@ export default {
                 console.error('Error al enviar el mensaje:', error);
             }
         },
+
+        async guardarMensaje2() {
+            // Verificar si ya se está guardando para evitar múltiples envíos
+            if (this.isSaving) return;
+
+            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
+
+            try {
+                let data = {}; // Inicializar el objeto de datos
+
+                // Si el mensaje es un video, conviértelo a base64
+                if (this.imagen instanceof File) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        data.video_base64 = reader.result.split(',')[1]; // Extraer solo el contenido base64
+                        this.enviarDatos(data); // Enviar los datos al servidor
+                    };
+                    reader.readAsDataURL(this.imagen);
+                } else {
+                    console.error('El archivo del video no se ha seleccionado correctamente.');
+                }
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+            }
+        },
+
         async enviarDatos(data) {
             console.log(data);
             try {
@@ -233,6 +286,9 @@ export default {
             // Al hacer clic en la imagen, activar el input de archivo
             this.$refs.fileInput.click();
         },
+        openVideo() {
+            this.$refs.videoInput.click();
+        },
         cerrarModal() {
             this.mostrar = false; // Cerrar el modal
         },
@@ -247,7 +303,7 @@ export default {
         useUsuariPerfilStore().amic = null;
         next();
     },
-    
+
 
 };
 </script>
@@ -572,11 +628,13 @@ navBar {
     background-color: red;
     align-self: flex-end;
 }
+
 .imagen-chat {
     width: 80%;
     height: auto;
     border-radius: 8px;
 }
+
 h3 {
     text-align: center;
 }
