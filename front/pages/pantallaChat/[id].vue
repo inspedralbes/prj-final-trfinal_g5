@@ -18,21 +18,22 @@
             <!-- Área de texto con el botón "+" -->
             <div class="entrada-mensaje-container">
                 <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
-                <button @click="mostrarModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
+                <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
                 <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
             </div>
 
-            <!-- Botón para enviar el mensaje -->
-          
-
             <!-- Modal -->
-            <div class="modal" v-if="mostrar">
-                <div class="modal-contenido">
+            <div class="modal" v-if="mostrar" @click="toggleModal">
+                <div class="modal-contenido" ref="modalContenido">
                     <!-- Opciones del modal -->
-                  <div>  <img src="@/public/foto.png" class="modal-contenido-foto" @click="opcionSeleccionada('imagen')"></div>
-                    <div><img src="@/public/video.png" class="modal-contenido-video" @click="opcionSeleccionada('video')"></div>
-                   <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="opcionSeleccionada('rutina')"></div>
-                    <div><img src="@/public/dieta.png" class="modal-contenido-dieta" @click="opcionSeleccionada('dieta')"></div>
+                    <div><img src="@/public/foto.png" class="modal-contenido-foto"
+                            @click="opcionSeleccionada('imagen')"></div>
+                    <div><img src="@/public/video.png" class="modal-contenido-video"
+                            @click="opcionSeleccionada('video')"></div>
+                    <div><img src="@/public/rutina.png" class="modal-contenido-rutina"
+                            @click="opcionSeleccionada('rutina')"></div>
+                    <div><img src="@/public/dieta.png" class="modal-contenido-dieta"
+                            @click="opcionSeleccionada('dieta')"></div>
                 </div>
             </div>
         </div>
@@ -116,9 +117,8 @@ export default {
             const date = new Date(dateTimeString);
             return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         },
-        mostrarModal() {
-            this.mostrar = true; // Mostrar el modal cuando se hace clic en el botón
-            
+        toggleModal() {
+            this.mostrar = !this.mostrar;
         },
         cerrarModal() {
             this.mostrar = false; // Cerrar el modal
@@ -280,16 +280,19 @@ body {
     align-self: flex-end;
     margin-bottom: 8px;
 }
+
 .boton-agregar {
     justify-content: center;
     align-items: center;
 
 }
-.boton-agregar img{
+
+.boton-agregar img {
     width: 20px;
     height: 20px;
 
 }
+
 .mensaje-asistente {
     display: flex;
     align-items: flex-start;
@@ -333,12 +336,14 @@ body {
         transform: rotate(360deg);
     }
 }
+
 .entrada-mensaje-container {
     display: flex;
     align-items: center;
     width: 100%;
     margin-left: 30px;
 }
+
 .controles-inferiores {
     width: 100%;
     display: flex;
@@ -361,7 +366,7 @@ body {
 }
 
 .boton-enviar {
-   width: 30px;
+    width: 30px;
     height: 30px;
     border-radius: 50%;
     background-color: #333;
@@ -410,14 +415,16 @@ navBar {
 .modal-contenido-dieta {
     background-color: red;
 }
+
 .modal-contenido-rutina {
     background-color: green;
 }
+
 .modal-contenido-video {
     background-color: blue;
 }
+
 .modal-contenido-foto {
     background-color: yellow;
-}   
-
+}
 </style>
