@@ -53,7 +53,7 @@ export default {
             console.error('Error al obtener las solicitudes:', error);
         }
     },
-    beforeRouteLeave(to, from, next) {
+    beforeRouteLeave(next) {
         // Limpiar el campo 'amic' del pinia cuando se abandona la página actual
         useUsuariPerfilStore().amic = null;
         next();

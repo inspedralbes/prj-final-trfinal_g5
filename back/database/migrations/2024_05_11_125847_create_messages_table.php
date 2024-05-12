@@ -19,9 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('usuario_recibe_mensaje');
             $table->string('mensaje');
             $table->boolean('leido');
-            $table->boolean('enviado');
-            $table->boolean('recibido');
             $table->timestamps();
+            $table->foreign('usuario_envia_mensaje')->references('id')->on('usuaris');
+            $table->foreign('usuario_recibe_mensaje')->references('id')->on('usuaris');
             
         });
     }

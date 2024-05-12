@@ -8,6 +8,7 @@ use App\Http\Controllers\RutinaController;
 use App\Http\Controllers\AlimentsController;
 use App\Http\Controllers\DietaController;
 use App\Http\Controllers\SolicitudController;
+use App\Http\Controllers\MensajeController;
 
 Route::get('/usuaris', [UserController::class, 'getUsers']);
 Route::get('/usuari/{id}', [UserController::class, 'mostrarUsuario']);
@@ -20,6 +21,8 @@ Route::get('/mostrar-solicitudes/{id}', [SolicitudController::class, 'MostrarUsu
 Route::get('/mostrar-solicitudes-enviades/{id}', [SolicitudController::class, 'MostrarUsuarioSolicitudesEnviades']);
 Route::post('/aceptar-solicitud/{id}', [SolicitudController::class, 'AceptarAmigo']);
 Route::delete('/eliminar-solicitud/{id}', [SolicitudController::class, 'RechazarAmigo']);
+
+Route::get('missatges/{userId1}/{userId2}', [MensajeController::class, 'mostrarMensajeEntreEllos']);
 
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
 

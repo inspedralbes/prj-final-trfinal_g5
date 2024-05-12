@@ -17,12 +17,12 @@ class Solicitud extends Model
     // Relación con el usuario que envía la solicitud
     public function usuarioEnvia()
     {
-        return $this->belongsTo(User::class, 'usuario_envia_id');
+        return $this->belongsTo(Usuaris::class, 'usuario_envia_id');
     }
 
     // Relación con el usuario que recibe la solicitud
     public function usuarioRecibe()
     {
-        return $this->belongsTo(User::class, 'usuario_recibe_id');
+        return $this->belongsTo(Usuaris::class, 'usuario_recibe_id');
     }
 }
