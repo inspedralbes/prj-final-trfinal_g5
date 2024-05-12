@@ -7,10 +7,21 @@
             <p>{{ usuario.nom }}</p>
         </div>
 
-        <!-- Mensajes del chat -->
-        <div v-for="mensaje in mensajes" :key="mensaje.id" class="usuario-container">
-            <p>{{ mensaje.mensaje }}</p>
-            <p>{{ formatDate(mensaje.created_at) }}</p>
+        <!-- Contenedor de mensajes -->
+        <div class="mensajes-container">
+            <!-- Iterar sobre los grupos de mensajes por día -->
+            <div v-for="(mensajesDia, fecha) in mensajes" :key="fecha" class="mensajes-dia">
+                <h3>{{ fecha }}</h3>
+
+                <!-- Ordenar los mensajes por su ID -->
+                <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id" class="mensaje-container">
+                    <div
+                        :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
+                        <p>{{ mensaje.mensaje }}</p>
+                        <p>{{ formatDate(mensaje.created_at) }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Controles inferiores -->
@@ -50,9 +61,9 @@ export default {
     data() {
         return {
             usuario: {}, // Objeto para almacenar la información del usuario
-            mensajes: [], // Arreglo para almacenar los mensajes del chat
-            status: null,
+            mensajes: {}, // Objeto para almacenar los mensajes agrupados por día
             mostrar: false,
+            mensaje: '',
         };
     },
     methods: {
@@ -60,22 +71,23 @@ export default {
             try {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
-                const mensaje = document.querySelector('.entrada-mensaje').value; // Obtener el mensaje del textarea
+                const mensaje = this.mensaje; // Usar directamente el mensaje del data
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ mensaje: mensaje }), // Enviar el mensaje en el cuerpo de la solicitud
+                    body: JSON.stringify({ mensaje }), // Enviar el mensaje en el cuerpo de la solicitud
                 });
 
                 const responseData = await response.json();
                 if (responseData.status === 1) {
-                    // Mensaje enviado correctamente, puedes manejarlo aquí si lo deseas
+                    // Mensaje enviado correctamente
                     console.log('Mensaje enviado correctamente');
                     await this.mostrarMensajes();
+                    // Vaciar el área de texto después de enviar el mensaje
+                    this.mensaje = '';
                 } else {
-                    // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);
                 }
             } catch (error) {
@@ -88,10 +100,18 @@ export default {
                 const id_amic = useUsuariPerfilStore().amic;
                 const response = await fetch(`http://localhost:8000/api/missatges/${id_usuario}/${id_amic}`);
                 const responseData = await response.json();
-                this.status = responseData.status;
                 if (responseData.status === 1) {
-                    this.mensajes = responseData.messages;
-                    console.log(this.mensajes);
+                    // Agrupar mensajes por día
+                    const mensajesPorDia = {};
+                    responseData.messages.forEach(mensaje => {
+                        const fecha = new Date(mensaje.created_at).toLocaleDateString('ca-ES');
+                        if (!mensajesPorDia[fecha]) {
+                            mensajesPorDia[fecha] = [];
+                        }
+                        mensajesPorDia[fecha].push(mensaje);
+                    });
+                    // Asignar los mensajes agrupados a la variable mensajes
+                    this.mensajes = mensajesPorDia;
                 }
             } catch (error) {
                 console.error('Error al obtener los mensajes del chat:', error);
@@ -129,6 +149,9 @@ export default {
             // Cerrar el modal después de seleccionar una opción
             this.cerrarModal();
         },
+        ordenarMensajesPorId(mensajes) {
+            return mensajes.sort((a, b) => a.id - b.id);
+        }
 
     },
     async mounted() {
@@ -141,21 +164,16 @@ export default {
         useUsuariPerfilStore().amic = null;
         next();
     },
+
 };
 </script>
 
 <style>
 /* Estilos para los mensajes enviados */
-.mensaje-enviado {
-    text-align: right;
-    background-color: #DCF8C6;
-}
+
 
 /* Estilos para los mensajes recibidos */
-.mensaje-recibido {
-    text-align: left;
-    background-color: #E2E2E2;
-}
+
 
 html,
 body {
@@ -426,5 +444,53 @@ navBar {
 
 .modal-contenido-foto {
     background-color: yellow;
+}
+
+
+/* Estilos para los mensajes recibidos */
+
+
+.mensajes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mensajes-dia {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.mensaje-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;}
+
+.mensaje-enviado,
+.mensaje-recibido {
+    padding: 8px;
+    border-radius: 8px;
+}
+.mensaje-recibido {
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    width: 50%;
+
+    background-color: #E2E2E2;
+}
+.mensaje-enviado {
+    width: 50%;
+    display: flex;
+
+    justify-content: flex-end;
+    text-align: left;
+    
+    background-color: red;
+    align-self: flex-end;
+}
+h3 {
+    text-align: center;
 }
 </style>
