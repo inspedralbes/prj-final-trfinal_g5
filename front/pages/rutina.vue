@@ -16,8 +16,8 @@
                 </div>
                 <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
 
-
             </div>
+
             <!-- Mostrar spinner de carga mientras se cargan los datos -->
             <div v-if="loading" class="loading">
                 <img src="@/public/dumbbell_white.png" alt="Loading..." class="loading-image" />
@@ -26,13 +26,13 @@
             <!-- Mostrar mensaje si no hay datos en la rutina -->
             <div id="rutinaBuida" v-if="exercises.length === 0 && !loading">
                 <p>No hi han dades de rutina disponibles. Clica el boto per crear una rutina.</p>
-                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+                <button class="rutina-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
 
             </div>
 
 
-
             <div v-else class="main-content">
+
                 <div class="exercise-list">
 
                     <div v-for="exercise in exercises" :key="exercise.id">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+                <button class="rutina-button" @click="redirectToPage('/chatRutina')">Nova Rutina</button>
 
             </div>
             <navBar />
@@ -92,6 +92,10 @@ export default {
     },
     methods: {
         redirectTo(page) {
+            this.$router.push(page);
+        },
+        redirectToPage(page) {
+            alert('Si crees una nova dieta, la dieta actual esborrarà. Estàs segur?');
             this.$router.push(page);
         },
         obtenirRutina(idUsuari) {
@@ -247,7 +251,7 @@ body {
 
 }
 
-.dieta-button {
+.rutina-button {
     position: relative;
     width: 120%;
     /* Ancho del 80% del contenedor padre */
@@ -266,8 +270,6 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     background-position: center;
 }
-
-
 
 .loading {
     display: flex;
