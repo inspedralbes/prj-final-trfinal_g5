@@ -6,12 +6,17 @@
                     <div class="user-icon-container" :class="{ 'incomplete-profile': !registre }">
                         <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" />
                     </div>
-                    <h1 id="nomUsuri">{{ username }}</h1>
                 </nuxt-link>
             </div>
             <div v-if="!registre" class="alert-sign">
                 !
             </div>
+            
+        </div>
+        <div>
+            <h1>{{ username }}</h1>   
+        </div>
+        <div class="amics">
             <button @click="toggleMenu" class="menu-button"><img src="../public/amigo.png"></button>
 
             <!-- Menú desplegable -->
@@ -77,6 +82,7 @@ a{
     margin-left: 20px;
     display: grid;
     grid-template-columns: 1.5fr .2fr;
+    padding-bottom: 20px;
 }
 
 .user-icon-container {
@@ -85,6 +91,7 @@ a{
     height: 50px; /* Ajustar el tamaño según sea necesario */
     border-radius: 50%; /* Hacer el contenedor redondo */
     overflow: hidden; /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
+    
 }
 
 .incomplete-profile{
@@ -94,6 +101,7 @@ a{
     border-radius: 50%; /* Hacer el contenedor redondo */
     overflow: hidden; /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
     border: 4px solid #FFA500;
+    
 }
 
 .user-icon {
@@ -133,6 +141,14 @@ h1 {
     position: relative;
     margin-bottom: 20px;
     width: 100%;
+    display: grid;
+    grid-template-columns: .1fr 1fr 2fr;
+    align-items: center;
+}
+
+.amics{
+    text-align: right;
+    margin-right: 20px;
 }
 
 .menu-button {
