@@ -16,7 +16,7 @@
                     </div>
                 </template>
             </div>
-            <button @click="enviarMensaje">Enviar</button>
+            <button  @click="enviarRutina" :disabled="isSaving">Enviar</button>
         </div>
 
 
@@ -81,7 +81,7 @@
                 <div class="entrada-mensaje-container">
                     <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
                     <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
-                    <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
+                    <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">Enviar</button>
                 </div>
 
                 <!-- Modal -->
@@ -131,16 +131,22 @@ export default {
     methods: {
         async enviarMensaje() {
             try {
-                await this.mostrarRutinas(); // Asegurar que rutinas se llena antes de obtener las ID de rutina
+                this.isSaving = true;
 
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
                 const mensaje = this.mensaje;
+                //  Verificar si tanto el mensaje como la imagen están vacíos
+                if (!this.mensaje.trim() && !this.imagenSeleccionada && !this.videoSeleccionado) {
+                    // Si no hay mensaje ni imagen, muestra un mensaje de error y no envíes la solicitud
+                    console.error('No puedes enviar un mensaje vacío.');
+                    this.isSaving = false;
+
+                    return; // Salir del método
+                }
 
                 // Obtener todos los IDs de rutina mostrados
-                const idRutina = this.rutinas.map(rutina => rutina.id);
-
-                let data = { mensaje, idRutina }; // Incluir idRutinas en los datos que se envían al servidor
+                let data = { mensaje }; // Incluir idRutinas en los datos que se envían al servidor
 
                 // Si hay una imagen seleccionada, agregarla a los datos
                 if (this.imagenSeleccionada) {
@@ -168,7 +174,47 @@ export default {
                     // Vaciar la imagen seleccionada después de enviar el mensaje
                     this.imagenSeleccionada = null;
                     this.videoSeleccionado = null;
-                    this.mostrarRutina = false;
+                    this.isSaving = false;
+                } else {
+                    // Manejar el caso de error al enviar el mensaje
+                    console.error('Error al enviar el mensaje:', responseData.message);
+                }
+            } catch (error) {
+                // Manejar errores
+                console.error('Error al enviar el mensaje:', error);
+            }
+        },
+        async enviarRutina() {
+            try {
+                this.isSaving = true;
+                this.mostrarRutina = false;
+
+                await this.mostrarRutinas(); // Asegurar que rutinas se llena antes de obtener las ID de rutina
+
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const id_amic = useUsuariPerfilStore().amic;
+
+                // Obtener todos los IDs de rutina mostrados
+                const idRutina = this.rutinas.map(rutina => rutina.id);
+
+                let data = {  idRutina }; // Incluir idRutinas en los datos que se envían al servidor
+
+                console.log(data);
+                const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data), // Enviar el mensaje, las rutinas y la imagen (si existe) en el cuerpo de la solicitud
+                });
+
+                const responseData = await response.json();
+                console.log(responseData);
+                if (responseData.status === 1) {
+                    // Mensaje enviado correctamente
+                    await this.mostrarMensajes();
+                    this.isSaving = false;
+                   
                 } else {
                     // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);
