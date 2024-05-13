@@ -32,12 +32,12 @@
 
                                     <!-- Mostrar el mensaje si existe -->
                                     {{ amigo.ultimoMensaje && amigo.ultimoMensaje.mensaje ? amigo.ultimoMensaje.mensaje
-            : ''
-                                    }}
+                                        : ''}}
+                                        {{ amigo.ultimoMensaje && amigo.ultimoMensaje.idRutina ? 'Rutina' : ''}}
                                 </div>
                             </div>
                             <div class="ultima-hora">{{ amigo.ultimoMensaje ?
-            formatHora(amigo.ultimoMensaje.created_at) : '' }}</div>
+                                formatHora(amigo.ultimoMensaje.created_at) : '' }}</div>
 
 
                         </div>
