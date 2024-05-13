@@ -175,14 +175,14 @@ export default {
           content: this.message,
         });
 
+        
+        this.isLoading = true;
+        this.isSending = true;
+        
 
         const store = useUsuariPerfilStore();
         const idUsuario = store.id_usuari;
-
-
-        this.isLoading = true;
-        this.isSending = true;
-
+        
 
         const datosUsuario = await getDatosUsuario2(idUsuario);
         const aliments = await getDatosAliments();

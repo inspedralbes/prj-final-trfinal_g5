@@ -166,8 +166,6 @@ export default {
         const idUsuario = store.id_usuari;
 
 
-
-
         const daotsUsuario = await getDatosUsuario2(idUsuario);
         const ejercicios = await getDatosEjercicio();
         const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);

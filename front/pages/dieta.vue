@@ -93,9 +93,18 @@ export default {
             this.$router.push(page);
         },
         redirectToPage(page) {
-            alert('Si crees una nova dieta, la dieta actual esborrarà. Estàs segur?');
-            this.$router.push(page);
-        }
+            this.idUsuari = useUsuariPerfilStore().id_usuari;
+            if (confirm("Si crees una nova dieta, la dieta actual s'eliminarà. ¿Estàs segur?")) {
+                borrarDieta(this.idUsuari)
+                    .then((response) => {
+                        console.log(response);
+                        this.$router.push(page);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        },
     },
     mounted() {
         this.idUsuari = useUsuariPerfilStore().id_usuari;
