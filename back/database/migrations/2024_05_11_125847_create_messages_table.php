@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('mensaje')->nullable();
             $table->string('imagen')->nullable();
             $table->string('video')->nullable();
-            $table->json('idRutina')->nullable();
+            $table->string('idRutina')->nullable();
+            $table->string('idDieta')->nullable();
             $table->boolean('leido');
             $table->timestamps();
             $table->foreign('usuario_envia_mensaje')->references('id')->on('usuaris');

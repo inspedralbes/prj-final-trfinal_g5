@@ -17,11 +17,10 @@ class Mensaje extends Model
         'imagen',
         'video',
         'leido',
+        'idRutina',
+        'idDieta',
     ];
-    // Relación con el usuario que envía el mensaje
-    protected $casts = [
-        'idRutina' => 'array', // Convierte el campo 'idRutina' a un array
-    ];
+    
     public function usuarioEnvia()
     {
         return $this->belongsTo(Usuaris::class, 'usuario_envia_mensaje');

@@ -16,7 +16,7 @@
                     </div>
                 </template>
             </div>
-            <button  @click="enviarRutina" :disabled="isSaving">Enviar</button>
+            <button @click="enviarRutina" :disabled="isSaving">Enviar</button>
         </div>
 
 
@@ -188,24 +188,22 @@ export default {
             try {
                 this.isSaving = true;
                 this.mostrarRutina = false;
-
-                await this.mostrarRutinas(); // Asegurar que rutinas se llena antes de obtener las ID de rutina
+                const idRutina = useUsuariPerfilStore().id_usuari;
 
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
 
                 // Obtener todos los IDs de rutina mostrados
-                const idRutina = this.rutinas.map(rutina => rutina.id);
+                console.log(idRutina);
 
-                let data = {  idRutina }; // Incluir idRutinas en los datos que se envían al servidor
-
-                console.log(data);
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data), // Enviar el mensaje, las rutinas y la imagen (si existe) en el cuerpo de la solicitud
+                    body: JSON.stringify({
+                        idRutina: idRutina // Incluye el valor de idRutina aquí
+                    }),
                 });
 
                 const responseData = await response.json();
@@ -214,7 +212,7 @@ export default {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
                     this.isSaving = false;
-                   
+
                 } else {
                     // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);

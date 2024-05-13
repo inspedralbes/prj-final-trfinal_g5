@@ -41,12 +41,8 @@ class MensajeController extends Controller
             $mensaje->usuario_recibe_mensaje = $usuari2;
             $mensaje->mensaje = $request->input('mensaje');
             $mensaje->leido = 0;
-    
-            // Asociar el idRutina al mensaje si está presente en la solicitud
-            if ($request->has('idRutina')) {
-                $rutinasIds = implode(',', $request->input('idRutina'));
-                $mensaje->idRutina = $rutinasIds;
-            }
+            $mensaje->idRutina=$request->idRutina;
+          
             
     
             // Procesar la imagen si está presente en la solicitud
