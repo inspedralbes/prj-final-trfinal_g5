@@ -165,6 +165,7 @@ export default {
             // Por ejemplo:
             this.serieBase = serie;
             console.log("Serie base seleccionada:", serie); // Agregado: Verificar la serie seleccionada
+        },
 
         redirectToPage(page) {
             this.idUsuari = useUsuariPerfilStore().id_usuari;
