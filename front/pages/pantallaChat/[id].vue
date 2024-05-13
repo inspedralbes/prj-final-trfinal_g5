@@ -45,6 +45,13 @@
                 <p @click="imagenSeleccionada = null">x</p>
                 <img :src="imagenSeleccionada" alt="Imagen seleccionada">
             </div>
+            <div v-if="videoSeleccionado" class="video-seleccionado">
+                <p @click="videoSeleccionado = null">x</p>
+                <video width="320" height="240" controls>
+                    <source :src="videoSeleccionado" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
             <div class="entrada-mensaje-container">
                 <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
                 <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
@@ -85,6 +92,7 @@ export default {
             imagen: null,
             isSaving: false,
             imagenSeleccionada: null,
+            videoSeleccionado: null,
 
         };
     },
@@ -92,7 +100,7 @@ export default {
         async enviarMensaje() {
             try {
                 // Verificar si tanto el mensaje como la imagen están vacíos
-                if (!this.mensaje.trim() && !this.imagenSeleccionada) {
+                if (!this.mensaje.trim() && !this.imagenSeleccionada && !this.videoSeleccionado) {
                     console.error('No puedes enviar un mensaje vacío.');
                     return; // Salir del método si no hay mensaje ni imagen
                 }
@@ -105,6 +113,9 @@ export default {
                 // Si hay una imagen seleccionada, agregarla a los datos
                 if (this.imagenSeleccionada) {
                     data.imagen_base64 = this.imagenSeleccionada.split(',')[1]; // Extraer solo el contenido base64
+                }
+                if (this.videoSeleccionado) {
+                    data.video_base64 = this.videoSeleccionado.split(',')[1];
                 }
 
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
@@ -124,6 +135,7 @@ export default {
                     this.mensaje = '';
                     // Vaciar la imagen seleccionada después de enviar el mensaje
                     this.imagenSeleccionada = null;
+                    this.videoSeleccionado = null;
                 } else {
                     console.error('Error al enviar el mensaje:', responseData.message);
                 }
@@ -135,7 +147,6 @@ export default {
 
         handleFileChange(event) {
             const file = event.target.files[0]; // Obtener el archivo del evento
-            console.log(file);
 
             if (file) {
                 // Verificar si el archivo es una imagen
@@ -163,9 +174,11 @@ export default {
                     return;
                 }
 
-                this.imagen = file; // Cambiar a this.imagen = file;
-
-                this.guardarMensaje2(); // Llamar al método guardarMensaje2
+                const reader = new FileReader();
+                reader.onload = () => {
+                    this.videoSeleccionado = reader.result;
+                };
+                reader.readAsDataURL(file);
             } else {
                 console.error('No se seleccionó ningún archivo.');
             }
@@ -193,58 +206,6 @@ export default {
                 console.error('Error al obtener los mensajes del chat:', error);
             }
         },
-
-        async guardarMensaje2() {
-            // Verificar si ya se está guardando para evitar múltiples envíos
-            if (this.isSaving) return;
-
-            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
-
-            try {
-                let data = {}; // Inicializar el objeto de datos
-
-                // Si el mensaje es un video, conviértelo a base64
-                if (this.imagen instanceof File) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        data.video_base64 = reader.result.split(',')[1]; // Extraer solo el contenido base64
-                        this.enviarDatos(data); // Enviar los datos al servidor
-                    };
-                    reader.readAsDataURL(this.imagen);
-                } else {
-                    console.error('El archivo del video no se ha seleccionado correctamente.');
-                }
-            } catch (error) {
-                console.error('Error al enviar el mensaje:', error);
-            }
-        },
-
-        async enviarDatos(data) {
-            console.log(data);
-            try {
-                const id_usuario = useUsuariPerfilStore().id_usuari;
-                const id_amic = useUsuariPerfilStore().amic;
-                const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
-
-                const responseData = await response.json();
-                if (responseData.status === 1) {
-                    // Mensaje enviado correctamente
-                    console.log('Mensaje enviado correctamente');
-                    await this.mostrarMensajes();
-                    // Vaciar el área de texto después de enviar el mensaje
-                    this.mensaje = '';
-                } else {
-                    console.error('Error al enviar el mensaje:', responseData.message);
-                }
-            } catch (error) {
-                console.error('Error al enviar el mensaje:', error);
-            }
-        },
-
         ordenarMensajesPorId(mensajes) {
             // Convertir el objeto de mensajes a un array
             const mensajesArray = Object.values(mensajes);
@@ -633,7 +594,8 @@ navBar {
     height: auto;
     border-radius: 8px;
 }
-.imagen-seleccionada{
+
+.imagen-seleccionada {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -641,10 +603,12 @@ navBar {
 
 
 }
-.imagen-seleccionada img{
+
+.imagen-seleccionada img {
     width: 50px;
     height: 50px;
 }
+
 h3 {
     text-align: center;
 }
