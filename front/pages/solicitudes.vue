@@ -1,58 +1,66 @@
 <template>
-    <Capçalera />
-    <div class="opcion-container">
-        <div @click="mostrarSolicitudes" :class="{ 'selected': mostrarContenido }" class="opcion">Solicitudes</div>
-        <div @click="mostrarAdios" :class="{ 'selected': !mostrarContenido }" class="opcion">Mis solicitudes</div>
-    </div>
-    <div v-if="mostrarContenido">
-        <h1>{{ titulo }}</h1>
-        <div v-if="solicitudes.length === 0">
-            <div class="vacio">
-                <p>No tens sol·licituds pendents</p>
-            </div>
+    <div class="main-content">
 
+
+        <HeaderChat />
+
+
+        <div class="opcion-container">
+            <div @click="mostrarSolicitudes" :class="{ 'selected': mostrarContenido }" class="opcion">Solicitudes</div>
+            <div @click="mostrarAdios" :class="{ 'selected': !mostrarContenido }" class="opcion">Mis solicitudes</div>
         </div>
-        <div v-else>
-            <div v-for="solicitud in solicitudes" :key="solicitud.id" class="usuario-container">
-                <div class="info-usuario">
-                    <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + solicitud.usuario.usuario.foto_perfil"
-                        alt="Usuario" class="user-icon" />
-                    <div class="user-details">
-                        <p class="user-name">{{ solicitud.usuario.usuario.nom }} {{ solicitud.usuario.usuario.cognoms }}
-                        </p>
-                        <p class="username">{{ solicitud.usuario.usuario.nom_usuari }}</p>
+        <div class="llista-solicituds" v-if="mostrarContenido">
+            <h1>{{ titulo }}</h1>
+            <div v-if="solicitudes.length === 0">
+                <div class="vacio">
+                    <p>No tens sol·licituds pendents</p>
+                </div>
+
+            </div>
+            <div v-else>
+                <div v-for="solicitud in solicitudes" :key="solicitud.id" class="usuario-container">
+                    <div class="info-usuario">
+                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + solicitud.usuario.usuario.foto_perfil"
+                            alt="Usuario" class="user-icon" />
+                        <div class="user-details">
+                            <p class="user-name">{{ solicitud.usuario.usuario.nom }} {{
+                solicitud.usuario.usuario.cognoms }}
+                            </p>
+                            <p class="username">{{ solicitud.usuario.usuario.nom_usuari }}</p>
+                        </div>
+                    </div>
+                    <div class="botons-acceptar-rebutjar">
+                        <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button">Acceptar
+                        </button>
+                        <button @click="rechazarAmigo(solicitud.id)" class="delete-friend-button">Rebutjar</button>
                     </div>
                 </div>
-                <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button"><img src="../public/tick.png">
-                </button>
-                <button @click="rechazarAmigo(solicitud.id)" class="delete-friend-button"><img
-                        src="../public/cruz.png"></button>
             </div>
         </div>
-    </div>
-    <div v-else>
-        <div v-if="enviadas.length === 0">
-            <div class="vacio">
-                <p>No tens sol·licituds enviades</p>
+        <div class="solicituds-enviades" v-else>
+            <div v-if="enviadas.length === 0">
+                <div class="vacio">
+                    <p>No tens sol·licituds enviades</p>
+                </div>
             </div>
-        </div>
-        <div v-else>
-            <div v-for="envia in enviadas" :key="envia.id" class="usuario-container">
-                <div class="info-usuario">
-                    <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + envia.usuario.usuario.foto_perfil"
-                        alt="Usuario" class="user-icon" />
-                    <div class="user-details">
-                        <p class="user-name">{{ envia.usuario.usuario.nom }} {{ envia.usuario.usuario.cognoms }}</p>
-                        <p class="username">{{ envia.usuario.usuario.nom_usuari }}</p>
+            <div  v-else>
+                <div v-for="envia in enviadas" :key="envia.id" class="usuario-container">
+                    <div class="info-usuario">
+                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + envia.usuario.usuario.foto_perfil"
+                            alt="Usuario" class="user-icon" />
+                        <div class="user-details">
+                            <div class="user-name">{{ envia.usuario.usuario.nom }} {{ envia.usuario.usuario.cognoms }}</div>
+                            <div class="username">{{ envia.usuario.usuario.nom_usuari }}</div>
+                        </div>
+                    </div>
+                    <div class="estado-solicitud">
+                        <p>Pendent d'aceptació</p>
                     </div>
                 </div>
-                <div class="estado-solicitud">
-                    <p>Pendent d'aceptació</p>
-                </div>
             </div>
         </div>
+        <navBar />
     </div>
-    <NavBar />
 </template>
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
@@ -169,22 +177,66 @@ export default {
 </script>
 
 <style scoped>
+body {
+    height: 100%;
+    overflow-x: hidden;
+
+}
+
+.main-content {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.llista-solicituds {
+    width: 90%;
+
+}
+
+.solicituds-enviades{
+    width: 90%;
+
+}
+
+.estado-solicitud{
+    color: #919191;
+    font-size: .9em;
+}
+
+
 .user-list-container {
     max-width: 800px;
     margin: 0 auto;
 }
 
 .usuario-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+    display: grid;
+    grid-template-columns: 1fr .2fr;
+    padding-right: 20px;
+    padding-left: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-bottom: 10px;
+
+}
+
+.botons-acceptar-rebutjar{
+    display: grid;
+    grid-template-columns: 1fr ;
+    margin-left: 20%;
+    border-left: 1px solid #ccc;
+
 }
 
 .info-usuario {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .user-icon {
@@ -195,17 +247,23 @@ export default {
 }
 
 .user-details {
-    flex-grow: 1;
+    display: grid;
+    grid-template-rows: 1fr;
 }
 
 .user-name {
     font-weight: bold;
 }
 
+.username {
+    margin-top: 0;
+    font-style: italic;
+}
+
 .add-friend-button {
-    width: 15%;
-    background-color: #4CAF50;
-    color: white;
+    width: 100%;
+    color: #4CAF50;
+    background-color: transparent;
     border: none;
     padding: 8px 20px;
     text-align: center;
@@ -215,7 +273,8 @@ export default {
     margin: 4px 2px;
     transition-duration: 0.4s;
     cursor: pointer;
-    border-radius: 5px;
+    border-bottom: 1px solid #ccc;
+
 }
 
 .add-friend-button img {
@@ -224,8 +283,9 @@ export default {
 }
 
 .delete-friend-button {
-    width: 15%;
-    background-color: #f45b50;
+    width: 100%;
+    color: #f45b50;
+    background-color: transparent;
     border: none;
     padding: 8px 20px;
     text-align: center;
@@ -253,6 +313,8 @@ input[type="text"] {
 }
 
 .opcion-container {
+    position: relative;
+    /* Para poder posicionar el indicador */
     display: flex;
     justify-content: center;
     margin-top: 30px;
@@ -266,6 +328,25 @@ input[type="text"] {
     border-radius: 5px;
 }
 
+.selected {
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    color: white;
+    /* Cambiar el color del texto cuando esté seleccionado */
+}
+
+.toggle-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 4px;
+    /* Ajustar el grosor del indicador */
+    background-color: #FFA500;
+    border-radius: 2px;
+    transition: left 0.3s ease;
+    /* Transición suave */
+}
+
 .opcion.selected {
     background-image: linear-gradient(to right, #ff7300, #FFA500);
 }
@@ -273,7 +354,8 @@ input[type="text"] {
 .opcion:hover {
     background-color: #f0f0f0;
 }
-.vacio{
+
+.vacio {
     display: flex;
     justify-content: center;
     align-items: center;

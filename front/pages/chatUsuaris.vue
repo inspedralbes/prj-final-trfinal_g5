@@ -144,7 +144,6 @@ a {
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    /* Mínimo 100% de la altura de la ventana */
 }
 
 
