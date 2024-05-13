@@ -255,7 +255,7 @@ body {
     /* Evita el desplazamiento horizontal */
 }
 
-/* Timer Css */
+/* Timer CSS */
 
 .time-adjust {
     display: flex;
