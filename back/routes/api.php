@@ -24,6 +24,7 @@ Route::delete('/eliminar-solicitud/{id}', [SolicitudController::class, 'Rechazar
 
 Route::post('/enviar-mensaje/{usuari1}/{usuari2}', [MensajeController::class, 'enviarMensaje']);
 Route::get('missatges/{userId1}/{userId2}', [MensajeController::class, 'mostrarMensajeEntreEllos']);
+Route::get('/ultim-missatge/{userId1}/{userId2}', [MensajeController::class, 'mostrarUltimoMensajeEntreEllos']);
 
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
 
