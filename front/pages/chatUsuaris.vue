@@ -18,8 +18,22 @@
                             :alt="'Imagen de perfil de ' + amigo.nom">
                         <div>
                             <span class="nombre">{{ amigo.nom }}</span>
-                            <span class="ultima-hora">12:30</span> <br>
-                            <span id="ultim-missatge">IPOP 11 - Aquest és més fàcil que l'anterior</span>
+                            <span class="ultima-hora">{{ amigo.ultimoMensaje ?
+                                formatHora(amigo.ultimoMensaje.created_at) : '' }}</span>
+                            <br>
+                            <span id="ultim-missatge">
+                                <!-- Renderizar el icono de foto solo si hay una imagen -->
+                                <template v-if="amigo.ultimoMensaje && amigo.ultimoMensaje.imagen">
+                                    <Icon class="" name="i-ic-round-insert-photo" />
+                                </template>
+                                <template v-if="amigo.ultimoMensaje && amigo.ultimoMensaje.video">
+                                    <Icon class="" name="i-ic-round-video-camera-back" />
+                                </template>
+
+                                <!-- Mostrar el mensaje si existe -->
+                                {{ amigo.ultimoMensaje && amigo.ultimoMensaje.mensaje ? amigo.ultimoMensaje.mensaje : ''
+                                }}
+                            </span>
                         </div>
                     </div>
                 </nuxt-link>
@@ -71,14 +85,42 @@ export default {
             const idUsuario = store.id_usuari;
             console.log(idUsuario);
 
-            getUsuariosChat(idUsuario).then(response => {
+            getUsuariosChat(idUsuario).then(async response => { // Agrega async aquí
                 this.amics = response.amigos;
-                console.log(this.amics);
+
+                // console.log(this.amics);
+                // Usa Promise.all para esperar a que se resuelvan todas las promesas
+                await Promise.all(this.amics.map(async amigo => {
+                    const ultimoMensaje = await this.mostrarUltimoMensajeEntreEllos(idUsuario, amigo.id); // Cambia a this.mostrarUltimoMensajeEntreEllos
+                    amigo.ultimoMensaje = ultimoMensaje;
+                }));
             });
         },
         seleccionarAmigo(idAmigo) {
             // Guarda el ID del amigo en el store
             useUsuariPerfilStore().amic = idAmigo;
+        },
+        async mostrarUltimoMensajeEntreEllos(idUsuario, idAmigo) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/ultim-missatge/${idUsuario}/${idAmigo}`);
+                const responseData = await response.json();
+                // console.log(responseData);
+                if (responseData.status === 1) {
+                    console.log(responseData.message);
+
+                    return responseData.message; // Devuelve el mensaje si se encontró uno
+                } else {
+                    return ''; // Devuelve una cadena vacía si no se encontró ningún mensaje
+                }
+            } catch (error) {
+                console.error('Error al obtener el último mensaje entre los usuarios:', error);
+                return ''; // Devuelve una cadena vacía en caso de error
+            }
+        },
+        formatHora(fecha) {
+            if (!fecha) return '';
+            const hora = new Date(fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return hora;
         }
     }
 };

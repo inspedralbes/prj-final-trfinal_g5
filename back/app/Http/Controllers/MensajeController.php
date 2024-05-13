@@ -91,6 +91,30 @@ class MensajeController extends Controller
             ]);
         }
     }
+    public function mostrarUltimoMensajeEntreEllos($usuari1, $usuari2)
+    {
+        // Obtener el último mensaje enviado y recibido entre los dos usuarios
+        $message = Mensaje::where(function ($query) use ($usuari1, $usuari2) {
+            $query->where('usuario_envia_mensaje', $usuari1)
+                ->where('usuario_recibe_mensaje', $usuari2);
+        })->orWhere(function ($query) use ($usuari1, $usuari2) {
+            $query->where('usuario_envia_mensaje', $usuari2)
+                ->where('usuario_recibe_mensaje', $usuari1);
+        })->orderBy('created_at', 'desc')->first();
+        if ($message == null) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No hay mensajes entre los usuarios'
+            ]);
+        }
+        else{
+        return response()->json([
+            'status' => 1,
+            'message' => 'Mensaje encontrado',
+            'message' => $message
+        ]);
+    }
+    }
     
     
     
