@@ -182,7 +182,7 @@ export default {
 
         const store = useUsuariPerfilStore();
         const idUsuario = store.id_usuari;
-        
+
 
         const datosUsuario = await getDatosUsuario2(idUsuario);
         const aliments = await getDatosAliments();
@@ -191,10 +191,8 @@ export default {
 
         console.log(generatedText);
 
-
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
-
-
+        await borrarDieta(idUsuario); // Borrar la dieta actual del usuario
         await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
 

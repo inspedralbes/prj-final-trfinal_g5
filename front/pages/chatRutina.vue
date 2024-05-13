@@ -173,10 +173,9 @@ export default {
 
         console.log(generatedText);
 
-
         const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
-
+        await borrarRutina(idUsuario); // Borrar la rutina actual del usuario
         await enviarRutinaAlServidor(rutinaJSON); // Enviar el JSON al backend
 
 
