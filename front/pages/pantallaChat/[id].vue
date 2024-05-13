@@ -89,47 +89,48 @@ export default {
     },
     methods: {
         async enviarMensaje() {
-    try {
-        // Verificar si el mensaje está vacío
-        if (!this.mensaje.trim()) {
-            console.error('El mensaje está vacío.');
-            return; // Salir del método si el mensaje está vacío
-        }
+            try {
+                // Verificar si tanto el mensaje como la imagen están vacíos
+                if (!this.mensaje.trim() && !this.imagenSeleccionada) {
+                    console.error('No puedes enviar un mensaje vacío.');
+                    return; // Salir del método si no hay mensaje ni imagen
+                }
 
-        const id_usuario = useUsuariPerfilStore().id_usuari;
-        const id_amic = useUsuariPerfilStore().amic;
-        const mensaje = this.mensaje; // Usar directamente el mensaje del data
-        let data = { mensaje }; // Inicializar el objeto de datos con el mensaje
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const id_amic = useUsuariPerfilStore().amic;
+                const mensaje = this.mensaje; // Usar directamente el mensaje del data
+                let data = { mensaje }; // Inicializar el objeto de datos con el mensaje
 
-        // Si hay una imagen seleccionada, agregarla a los datos
-        if (this.imagenSeleccionada) {
-            data.imagen_base64 = this.imagenSeleccionada.split(',')[1]; // Extraer solo el contenido base64
-        }
+                // Si hay una imagen seleccionada, agregarla a los datos
+                if (this.imagenSeleccionada) {
+                    data.imagen_base64 = this.imagenSeleccionada.split(',')[1]; // Extraer solo el contenido base64
+                }
 
-        const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data), // Enviar el mensaje y la imagen (si existe) en el cuerpo de la solicitud
-        });
+                const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data), // Enviar el mensaje y la imagen (si existe) en el cuerpo de la solicitud
+                });
 
-        const responseData = await response.json();
-        if (responseData.status === 1) {
-            // Mensaje enviado correctamente
-            console.log('Mensaje enviado correctamente');
-            await this.mostrarMensajes();
-            // Vaciar el área de texto después de enviar el mensaje
-            this.mensaje = '';
-            // Vaciar la imagen seleccionada después de enviar el mensaje
-            this.imagenSeleccionada = null;
-        } else {
-            console.error('Error al enviar el mensaje:', responseData.message);
-        }
-    } catch (error) {
-        console.error('Error al enviar el mensaje:', error);
-    }
-},
+                const responseData = await response.json();
+                if (responseData.status === 1) {
+                    // Mensaje enviado correctamente
+                    console.log('Mensaje enviado correctamente');
+                    await this.mostrarMensajes();
+                    // Vaciar el área de texto después de enviar el mensaje
+                    this.mensaje = '';
+                    // Vaciar la imagen seleccionada después de enviar el mensaje
+                    this.imagenSeleccionada = null;
+                } else {
+                    console.error('Error al enviar el mensaje:', responseData.message);
+                }
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+            }
+        },
+
 
         handleFileChange(event) {
             const file = event.target.files[0]; // Obtener el archivo del evento
