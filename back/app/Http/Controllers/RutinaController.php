@@ -55,6 +55,18 @@ class RutinaController extends Controller
 
         return response()->json($rutina, 200);
     }
+    public function getRutinaId($id){
+        $rutina = Rutina::find($id);
+        if (!$rutina) {
+            return response()->json(['error' => 'Rutina not found'], 404);
+        }
+    
+        // Ocultar los campos id_usuario y id_rutina antes de enviar la respuesta JSON
+        $rutina->makeHidden(['id_usuari', 'id']);
+    
+        return response()->json($rutina, 200);
+    }
+    
     
 
 }
