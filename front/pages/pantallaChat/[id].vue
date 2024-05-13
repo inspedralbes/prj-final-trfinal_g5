@@ -42,6 +42,7 @@
         <div class="controles-inferiores">
             <!-- Área de texto con el botón "+" -->
             <div v-if="imagenSeleccionada" class="imagen-seleccionada">
+                <p @click="imagenSeleccionada = null">x</p>
                 <img :src="imagenSeleccionada" alt="Imagen seleccionada">
             </div>
             <div class="entrada-mensaje-container">
@@ -307,7 +308,7 @@ export default {
 
 
 
-<style>
+<style scoped>
 html,
 body {
     margin: 0;
@@ -632,7 +633,18 @@ navBar {
     height: auto;
     border-radius: 8px;
 }
+.imagen-seleccionada{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
 
+
+}
+.imagen-seleccionada img{
+    width: 50px;
+    height: 50px;
+}
 h3 {
     text-align: center;
 }
