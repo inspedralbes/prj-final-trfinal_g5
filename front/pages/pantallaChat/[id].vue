@@ -41,6 +41,9 @@
         <!-- Controles inferiores -->
         <div class="controles-inferiores">
             <!-- Área de texto con el botón "+" -->
+            <div v-if="imagenSeleccionada" class="imagen-seleccionada">
+                <img :src="imagenSeleccionada" alt="Imagen seleccionada">
+            </div>
             <div class="entrada-mensaje-container">
                 <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
                 <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
@@ -79,36 +82,90 @@ export default {
             mensaje: '', // Variable para almacenar el mensaje escrito por el usuario
             mostrar: false,
             imagen: null,
-            isSaving: false
+            isSaving: false,
+            imagenSeleccionada: null,
 
         };
     },
     methods: {
         async enviarMensaje() {
-            try {
-                const id_usuario = useUsuariPerfilStore().id_usuari;
-                const id_amic = useUsuariPerfilStore().amic;
-                const mensaje = this.mensaje; // Usar directamente el mensaje del data
-                const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ mensaje }), // Enviar el mensaje en el cuerpo de la solicitud
-                });
+    try {
+        // Verificar si el mensaje está vacío
+        if (!this.mensaje.trim()) {
+            console.error('El mensaje está vacío.');
+            return; // Salir del método si el mensaje está vacío
+        }
 
-                const responseData = await response.json();
-                if (responseData.status === 1) {
-                    // Mensaje enviado correctamente
-                    console.log('Mensaje enviado correctamente');
-                    await this.mostrarMensajes();
-                    // Vaciar el área de texto después de enviar el mensaje
-                    this.mensaje = '';
-                } else {
-                    console.error('Error al enviar el mensaje:', responseData.message);
+        const id_usuario = useUsuariPerfilStore().id_usuari;
+        const id_amic = useUsuariPerfilStore().amic;
+        const mensaje = this.mensaje; // Usar directamente el mensaje del data
+        let data = { mensaje }; // Inicializar el objeto de datos con el mensaje
+
+        // Si hay una imagen seleccionada, agregarla a los datos
+        if (this.imagenSeleccionada) {
+            data.imagen_base64 = this.imagenSeleccionada.split(',')[1]; // Extraer solo el contenido base64
+        }
+
+        const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data), // Enviar el mensaje y la imagen (si existe) en el cuerpo de la solicitud
+        });
+
+        const responseData = await response.json();
+        if (responseData.status === 1) {
+            // Mensaje enviado correctamente
+            console.log('Mensaje enviado correctamente');
+            await this.mostrarMensajes();
+            // Vaciar el área de texto después de enviar el mensaje
+            this.mensaje = '';
+            // Vaciar la imagen seleccionada después de enviar el mensaje
+            this.imagenSeleccionada = null;
+        } else {
+            console.error('Error al enviar el mensaje:', responseData.message);
+        }
+    } catch (error) {
+        console.error('Error al enviar el mensaje:', error);
+    }
+},
+
+        handleFileChange(event) {
+            const file = event.target.files[0]; // Obtener el archivo del evento
+            console.log(file);
+
+            if (file) {
+                // Verificar si el archivo es una imagen
+                if (!file.type.startsWith('image/')) {
+                    console.error('El archivo seleccionado no es una imagen.');
+                    return; // Salir del método si el archivo no es una imagen
                 }
-            } catch (error) {
-                console.error('Error al enviar el mensaje:', error);
+                // Mostrar la imagen seleccionada
+                const reader = new FileReader();
+                reader.onload = () => {
+                    this.imagenSeleccionada = reader.result; // Asignar la imagen al src
+                };
+                reader.readAsDataURL(file);
+            } else {
+                console.error('No se seleccionó ningún archivo.');
+            }
+        },
+        handleVideoChange(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                // Verificar si el archivo es un video
+                if (!file.type.startsWith('video/')) {
+                    console.error('El archivo seleccionado no es un video.');
+                    return;
+                }
+
+                this.imagen = file; // Cambiar a this.imagen = file;
+
+                this.guardarMensaje2(); // Llamar al método guardarMensaje2
+            } else {
+                console.error('No se seleccionó ningún archivo.');
             }
         },
         async mostrarMensajes() {
@@ -132,67 +189,6 @@ export default {
                 }
             } catch (error) {
                 console.error('Error al obtener los mensajes del chat:', error);
-            }
-        },
-        handleFileChange(event) {
-            const file = event.target.files[0]; // Obtener el archivo del evento
-
-            if (file) {
-                // Verificar si el archivo es una imagen
-                if (!file.type.startsWith('image/')) {
-                    // console.error('El archivo seleccionado no es una imagen.');
-                    return; // Salir del método si el archivo no es una imagen
-                }
-
-                // Asignar directamente el archivo seleccionado a this.imagen
-                this.imagen = file;
-
-                // Llamar al método para guardar automáticamente los datos del usuario
-                this.guardarMensaje();
-            } else {
-                // console.error('No se seleccionó ningún archivo.');
-            }
-        },
-        handleVideoChange(event) {
-            const file = event.target.files[0];
-
-            if (file) {
-                // Verificar si el archivo es un video
-                if (!file.type.startsWith('video/')) {
-                    console.error('El archivo seleccionado no es un video.');
-                    return;
-                }
-
-                this.imagen = file; // Cambiar a this.imagen = file;
-
-                this.guardarMensaje2(); // Llamar al método guardarMensaje2
-            } else {
-                console.error('No se seleccionó ningún archivo.');
-            }
-        },
-
-        async guardarMensaje() {
-            // Verificar si ya se está guardando para evitar múltiples envíos
-            if (this.isSaving) return;
-
-            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
-
-            try {
-                let data = { imagen: this.imagen };
-
-                // Si el mensaje es una imagen, conviértela a base64
-                if (this.imagen instanceof File) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        data.imagen_base64 = reader.result.split(',')[1]; // Extraer solo el contenido base64
-                        this.enviarDatos(data); // Enviar los datos al servidor
-                    };
-                    reader.readAsDataURL(this.imagen);
-                } else {
-                    this.enviarDatos(data); // Si no es una imagen, enviar los datos directamente
-                }
-            } catch (error) {
-                console.error('Error al enviar el mensaje:', error);
             }
         },
 
@@ -307,6 +303,7 @@ export default {
 
 };
 </script>
+
 
 
 <style>
