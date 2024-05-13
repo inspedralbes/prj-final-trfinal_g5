@@ -34,6 +34,7 @@
                                     {{ amigo.ultimoMensaje && amigo.ultimoMensaje.mensaje ? amigo.ultimoMensaje.mensaje
                                         : ''}}
                                         {{ amigo.ultimoMensaje && amigo.ultimoMensaje.idRutina ? 'Rutina' : ''}}
+                                        {{ amigo.ultimoMensaje&& amigo.ultimoMensaje.idDieta ? 'Dieta' : ''}}
                                 </div>
                             </div>
                             <div class="ultima-hora">{{ amigo.ultimoMensaje ?

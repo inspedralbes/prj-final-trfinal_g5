@@ -57,6 +57,14 @@
                                     Your browser does not support the video tag.
                                 </video>
                             </template>
+                            <template v-if="mensaje.idRutina">
+                                <p>Rutina</p>
+                                <div v-for="(ejercicio, index) in rutinas2" :key="index">
+                                    <p>{{ ejercicio.nom_exercici }}</p>
+                                    <p>{{ ejercicio.series }}</p>
+                                    <p>{{ ejercicio.repeticions }}</p>
+                                </div>
+                            </template>
                             <p>{{ mensaje.mensaje }}</p>
                             <p>{{ formatDate(mensaje.created_at) }}</p>
                         </div>
@@ -124,6 +132,7 @@ export default {
             videoSeleccionado: null,
             mostrarRutina: false,
             rutinas: [], // Array para almacenar los datos de las rutinas
+            rutinas2: [],
             diaSeleccionado: null // Almacena el día seleccionado por el usuario
 
         };
@@ -284,12 +293,20 @@ export default {
                 if (responseData.status === 1) {
                     // Agrupar mensajes por día
                     const mensajesPorDia = {};
-                    responseData.messages.forEach(mensaje => {
+                    responseData.messages.forEach(async mensaje => {
                         const fecha = new Date(mensaje.created_at).toLocaleDateString('ca-ES');
                         if (!mensajesPorDia[fecha]) {
                             mensajesPorDia[fecha] = [];
                         }
                         mensajesPorDia[fecha].push(mensaje);
+
+                        // Mostrar un mensaje en la consola si el campo idRutina tiene un valor
+                        if (mensaje.idRutina) {
+                            const rutinaResponse = await fetch(`http://localhost:8000/api/rutina/${mensaje.idRutina}`);
+                            const rutinaData = await rutinaResponse.json();
+                            this.rutinas2 = rutinaData;
+                            console.log('Datos de la rutina:', rutinaData);
+                        }
                     });
                     // Asignar los mensajes agrupados a la variable mensajes
                     this.mensajes = mensajesPorDia;
@@ -298,6 +315,8 @@ export default {
                 // console.error('Error al obtener los mensajes del chat:', error);
             }
         },
+
+
         ordenarMensajesPorId(mensajes) {
             // Convertir el objeto de mensajes a un array
             const mensajesArray = Object.values(mensajes);
