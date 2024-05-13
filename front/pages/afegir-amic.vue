@@ -1,4 +1,6 @@
 <template>
+  <div>
+
         <HeaderChat />
   <div class="user-list-container">
     <div v-if="status === 0">
@@ -28,6 +30,8 @@
 
   </div>
   <navBar/>
+</div>
+
 </template>
 
 <script>
