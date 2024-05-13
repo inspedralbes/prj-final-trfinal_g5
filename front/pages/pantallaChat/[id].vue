@@ -2,6 +2,7 @@
     <div>
         <!-- Mostrar el título solo cuando se activa la rutina -->
         <div v-if="mostrarRutina">
+            <p @click="mostrarRutina = false">x</p>
             <h1>Rutina</h1>
             <div v-for="(ejercicio, index) in rutinas" :key="index">
                 <template v-if="index === 0 || rutinas[index - 1].dia !== ejercicio.dia">
@@ -18,12 +19,30 @@
             </div>
             <button @click="enviarRutina" :disabled="isSaving">Enviar</button>
         </div>
+        <div v-if="mostrarDieta">
+            <p @click="mostrarDieta = false">x</p>
+            <h1>Dieta</h1>
+            <div v-for="(apat, index) in dietas" :key="index">
+                <template v-if="index === 0 || dietas[index - 1].dia !== apat.dia">
+                    <p @click="toggleDia(apat.dia)">Apat {{ apat.dia }}</p>
+                    <div v-if="diaSeleccionado === apat.dia">
+                        <ul>
+                            <!-- Mostrar todos los ejercicios del día -->
+                            <li v-for="(apatDia, idx) in dietas.filter(e => e.dia === apat.dia)" :key="idx">
+                                {{ apatDia.nom_plat }}
+                            </li>
+                        </ul>
+                    </div>
+                </template>
+            </div>
 
+
+        </div>
 
 
 
         <!-- Resto del contenido del chat -->
-        <div v-if="!mostrarRutina">
+        <div v-if="!mostrarRutina && !mostrarDieta">
             <!-- Cabecera del chat -->
             <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
             <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
@@ -102,7 +121,7 @@
                         <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="clickRutina">
                         </div>
                         <div><img src="@/public/dieta.png" class="modal-contenido-dieta"
-                                @click="opcionSeleccionada('dieta')">
+                                @click="clickDieta">
                         </div>
                     </div>
                 </div>
@@ -131,9 +150,11 @@ export default {
             imagenSeleccionada: null,
             videoSeleccionado: null,
             mostrarRutina: false,
+            mostrarDieta: false,
             rutinas: [], // Array para almacenar los datos de las rutinas
             rutinas2: [],
-            diaSeleccionado: null // Almacena el día seleccionado por el usuario
+            diaSeleccionado: null, // Almacena el día seleccionado por el usuario
+            dietas: [],
 
         };
     },
@@ -305,7 +326,7 @@ export default {
                             const rutinaResponse = await fetch(`http://localhost:8000/api/rutina/${mensaje.idRutina}`);
                             const rutinaData = await rutinaResponse.json();
                             this.rutinas2 = rutinaData;
-                            console.log('Datos de la rutina:', rutinaData);
+                            // console.log('Datos de la rutina:', rutinaData);
                         }
                     });
                     // Asignar los mensajes agrupados a la variable mensajes
@@ -366,6 +387,10 @@ export default {
             // Cambiar el estado para mostrar la rutina
             this.mostrarRutina = true;
         },
+        async clickDieta() {
+            // Cambiar el estado para mostrar la dieta
+            this.mostrarDieta = true;
+        },
         async mostrarRutinas() {
             try {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
@@ -376,6 +401,18 @@ export default {
             } catch (error) {
                 // console.error('Error al obtener la rutina:', error);
             }
+        },
+        async mostrarDietas(){
+            try {
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const response = await fetch(`http://localhost:8000/api/dietas/${id_usuario}`);
+                const responseData = await response.json();
+                this.dietas = responseData;
+                console.log(this.dietas);
+
+            } catch (error) {
+                // console.error('Error al obtener la dieta:', error);
+            }
         }
 
 
@@ -384,6 +421,7 @@ export default {
         await this.mostrarAmigo();
         await this.mostrarMensajes();
         await this.mostrarRutinas();
+        await this.mostrarDietas();
 
     },
     beforeRouteLeave(to, from, next) {

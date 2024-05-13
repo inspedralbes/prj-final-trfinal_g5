@@ -42,6 +42,7 @@ class MensajeController extends Controller
             $mensaje->mensaje = $request->input('mensaje');
             $mensaje->leido = 0;
             $mensaje->idRutina=$request->idRutina;
+            $mensaje->idDieta=$request->idDieta;
           
             
     
