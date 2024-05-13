@@ -165,6 +165,12 @@ export default {
             }
         },
         handleVideoChange(event) {
+            // Verificar si ya se ha seleccionado una imagen
+            if (this.imagenSeleccionada) {
+                console.error('Ya has seleccionado una imagen. No puedes seleccionar un video.');
+                return; // Salir del método si ya hay una imagen seleccionada
+            }
+
             const file = event.target.files[0];
 
             if (file) {
