@@ -8,22 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class RutinaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         DB::beginTransaction();
@@ -61,13 +45,6 @@ class RutinaController extends Controller
             return response()->json(['error' => 'Error al guardar las rutinas: ' . $e->getMessage()], 500);
         }
     }     
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function getRutina($id_usuari)
     {
         $rutina = Rutina::where('id_usuari', $id_usuari)->get();
@@ -78,27 +55,6 @@ class RutinaController extends Controller
 
         return response()->json($rutina, 200);
     }
+    
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

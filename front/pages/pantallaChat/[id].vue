@@ -1,75 +1,97 @@
 <template>
     <div>
-        <!-- Cabecera del chat -->
-        <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
-        <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
-
-        <div class="cabecera">
-            <!-- Mostrar foto de perfil del usuario -->
-            <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Foto de perfil">
-            <p>{{ usuario.nom }}</p>
+        <!-- Mostrar el título solo cuando se activa la rutina -->
+        <div v-if="mostrarRutina">
+            <h1>Rutina</h1>
+            <div v-for="(ejercicio, index) in rutinas" :key="index">
+                <!-- Mostrar el día solo si es diferente al día anterior -->
+                <template v-if="index === 0 || rutinas[index - 1].dia !== ejercicio.dia">
+                    <p>Día {{ ejercicio.dia }}</p>
+                </template>
+                <ul>
+                    <li>{{ ejercicio.nom_exercici }}</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Contenedor de mensajes -->
-        <div class="mensajes-container">
-            <!-- Iterar sobre los grupos de mensajes por día -->
-            <div v-for="(mensajesDia, fecha) in mensajes" :key="fecha" class="mensajes-dia">
-                <h3>{{ fecha }}</h3>
 
-                <!-- Ordenar los mensajes por su ID -->
-                <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id" class="mensaje-container">
-                    <div
-                        :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
-                        <!-- Verificar si el mensaje tiene una imagen -->
-                        <template v-if="mensaje.imagen">
-                            <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
-                                class="imagen-chat">
-                        </template>
-                        <template v-if="mensaje.video">
-                            <video width="320" height="240" controls>
-                                <source :src="'http://localhost:8000/storage/video/' + mensaje.video" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </template>
-                        <p>{{ mensaje.mensaje }}</p>
-                        <p>{{ formatDate(mensaje.created_at) }}</p>
+
+
+        <!-- Resto del contenido del chat -->
+        <div v-if="!mostrarRutina">
+            <!-- Cabecera del chat -->
+            <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
+            <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
+
+            <div class="cabecera">
+                <!-- Mostrar foto de perfil del usuario -->
+                <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Foto de perfil">
+                <p>{{ usuario.nom }}</p>
+            </div>
+
+            <!-- Contenedor de mensajes -->
+            <div class="mensajes-container">
+                <!-- Iterar sobre los grupos de mensajes por día -->
+                <div v-for="(mensajesDia, fecha) in mensajes" :key="fecha" class="mensajes-dia">
+                    <h3>{{ fecha }}</h3>
+
+                    <!-- Ordenar los mensajes por su ID -->
+                    <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id"
+                        class="mensaje-container">
+                        <div
+                            :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
+                            <!-- Verificar si el mensaje tiene una imagen -->
+                            <template v-if="mensaje.imagen">
+                                <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
+                                    class="imagen-chat">
+                            </template>
+                            <template v-if="mensaje.video">
+                                <video width="320" height="240" controls>
+                                    <source :src="'http://localhost:8000/storage/video/' + mensaje.video"
+                                        type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </template>
+                            <p>{{ mensaje.mensaje }}</p>
+                            <p>{{ formatDate(mensaje.created_at) }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Controles inferiores -->
-        <div class="controles-inferiores">
-            <!-- Área de texto con el botón "+" -->
-            <div v-if="imagenSeleccionada" class="imagen-seleccionada">
-                <p @click="imagenSeleccionada = null">x</p>
-                <img :src="imagenSeleccionada" alt="Imagen seleccionada">
-            </div>
-            <div v-if="videoSeleccionado" class="video-seleccionado">
-                <p @click="videoSeleccionado = null">x</p>
-                <video width="320" height="240" controls>
-                    <source :src="videoSeleccionado" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div class="entrada-mensaje-container">
-                <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
-                <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
-                <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
-            </div>
+            <!-- Controles inferiores -->
+            <div class="controles-inferiores">
+                <!-- Área de texto con el botón "+" -->
+                <div v-if="imagenSeleccionada" class="imagen-seleccionada">
+                    <p @click="imagenSeleccionada = null">x</p>
+                    <img :src="imagenSeleccionada" alt="Imagen seleccionada">
+                </div>
+                <div v-if="videoSeleccionado" class="video-seleccionado">
+                    <p @click="videoSeleccionado = null">x</p>
+                    <video width="320" height="240" controls>
+                        <source :src="videoSeleccionado" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="entrada-mensaje-container">
+                    <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+                    <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
+                    <button @click="enviarMensaje" class="boton-enviar">Enviar</button>
+                </div>
 
-            <!-- Modal -->
-            <div class="modal" v-if="mostrar" @click="toggleModal">
-                <div class="modal-contenido" ref="modalContenido">
-                    <!-- Opciones del modal -->
-                    <div><img src="@/public/foto.png" class="modal-contenido-foto" @click="openFileInput"></div>
-                    <div><img src="@/public/video.png" class="modal-contenido-video" @click="openVideo"></div>
+                <!-- Modal -->
+                <div class="modal" v-if="mostrar" @click="toggleModal">
+                    <div class="modal-contenido" ref="modalContenido">
+                        <!-- Opciones del modal -->
+                        <div><img src="@/public/foto.png" class="modal-contenido-foto" @click="openFileInput"></div>
+                        <div><img src="@/public/video.png" class="modal-contenido-video" @click="openVideo"></div>
 
-                    <div><img src="@/public/rutina.png" class="modal-contenido-rutina"
-                            @click="opcionSeleccionada('rutina')">
+                        <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="clickRutina">
+                        </div>
+                        <div><img src="@/public/dieta.png" class="modal-contenido-dieta"
+                                @click="opcionSeleccionada('dieta')">
+                        </div>
                     </div>
-                    <div><img src="@/public/dieta.png" class="modal-contenido-dieta"
-                            @click="opcionSeleccionada('dieta')"></div>
                 </div>
             </div>
         </div>
@@ -78,6 +100,8 @@
         <navBar />
     </div>
 </template>
+
+
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
@@ -93,6 +117,7 @@ export default {
             isSaving: false,
             imagenSeleccionada: null,
             videoSeleccionado: null,
+            mostrarRutina: false,
 
         };
     },
@@ -257,11 +282,30 @@ export default {
         cerrarModal() {
             this.mostrar = false; // Cerrar el modal
         },
+        async clickRutina() {
+            // Cambiar el estado para mostrar la rutina
+            this.mostrarRutina = true;
+        },
+        async mostrarRutinas() {
+            try {
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const response = await fetch(`http://localhost:8000/api/rutina/${id_usuario}`);
+                const responseData = await response.json();
+                this.rutinas = responseData;
+                console.log(this.rutinas);
+
+            } catch (error) {
+                console.error('Error al obtener la rutina:', error);
+            }
+        }
+
 
     },
     async mounted() {
         await this.mostrarAmigo();
         await this.mostrarMensajes();
+        await this.mostrarRutinas();
+
     },
     beforeRouteLeave(to, from, next) {
         // Deja el campo 'amic' del almacenamiento de Pinia como null al salir de la página

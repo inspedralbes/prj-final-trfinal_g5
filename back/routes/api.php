@@ -29,6 +29,7 @@ Route::get('/ultim-missatge/{userId1}/{userId2}', [MensajeController::class, 'mo
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
 
 Route::get('/rutina/{id}', [RutinaController::class, 'getRutina']);
+
 Route::post('/guardar-rutina', [RutinaController::class, 'store']);
 
 Route::get('/aliments', [AlimentsController::class, 'index']);
