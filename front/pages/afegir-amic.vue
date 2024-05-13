@@ -106,7 +106,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .user-list-container {
   max-width: 800px;
   margin: 0 auto;
