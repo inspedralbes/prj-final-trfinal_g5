@@ -16,7 +16,9 @@
 
             </div>
 
-            <div class="main-content" v-else>
+            <div class="main-content" v-if="dietas.length != 0 && !loading">
+                <button class="dieta-button" @click="redirectTo('/totesDietes')">Totes Dietes</button>
+
                 <div id="data-dieta" v-if="dietas.length > 0">
                     <p>Desde {{ dietas[0].platos[0].data_inici }} hasta {{ dietas[0].platos[0].data_fi }}</p>
                 </div>
