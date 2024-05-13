@@ -175,13 +175,13 @@ export default {
           content: this.message,
         });
 
+        
+        this.isLoading = true;
+        this.isSending = true;
+        
 
         const store = useUsuariPerfilStore();
         const idUsuario = store.id_usuari;
-
-
-        this.isLoading = true;
-        this.isSending = true;
 
 
         const datosUsuario = await getDatosUsuario2(idUsuario);
@@ -191,10 +191,8 @@ export default {
 
         console.log(generatedText);
 
-
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
-
-
+        await borrarDieta(idUsuario); // Borrar la dieta actual del usuario
         await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
 

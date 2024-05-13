@@ -120,6 +120,7 @@ export default {
             this.$router.push(page);
             console.log("Redirecting to:", page); // Agregado: Verificar la redirección
         },
+
         adjustTime(seconds) {
             // Ajustar el tiempo de descanso
             if (!this.timerRunning) {
@@ -164,6 +165,20 @@ export default {
             // Por ejemplo:
             this.serieBase = serie;
             console.log("Serie base seleccionada:", serie); // Agregado: Verificar la serie seleccionada
+
+        redirectToPage(page) {
+            this.idUsuari = useUsuariPerfilStore().id_usuari;
+            if (confirm("Si crees una rutina nova, la rutina actual s'eliminarà. ¿Estàs segur?")) {
+                borrarRutina(this.idUsuari)
+                    .then((response) => {
+                        console.log(response);
+                        this.$router.push(page);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+
         },
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)

@@ -97,8 +97,15 @@ class RutinaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id_usuari)
     {
-        //
+        try {
+            // Encuentra y elimina todas las rutinas asociadas al ID de usuario
+            Rutina::where('id_usuari', $id_usuari)->delete();
+            
+            return response()->json(['message' => 'Rutinas eliminadas correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar las rutinas: ' . $e->getMessage()], 500);
+        }
     }
 }

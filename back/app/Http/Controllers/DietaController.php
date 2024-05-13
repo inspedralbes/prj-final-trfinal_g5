@@ -69,4 +69,17 @@ class DietaController extends Controller
             return response()->json(['error' => 'Error al guardar las dietas: ' . $e->getMessage()], 500);
         }
     }    
+
+
+    public function delete (Request $request, $id)
+    {
+        try {
+            // Encuentra y elimina todas las dietas asociadas al ID de usuario
+            Dieta::where('id_usuari', $id_usuari)->delete();
+            
+            return response()->json(['message' => 'Dieta eliminadas correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar la dieta: ' . $e->getMessage()], 500);
+        }
+    }
 }
