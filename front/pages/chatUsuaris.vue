@@ -1,40 +1,41 @@
 <template>
     <div class="main-content">
-      <HeaderChat />
-      <div id="barra-busqueda" v-if="amics.length > 0">
-        <input type="text" v-model="busqueda" placeholder="Buscar...">
-      </div>
-      <div class="lista-amigos">
-        <div v-if="amics.length === 0">
-          <div class="vacio">
-            <p>No tens amics, però pots mirar les sol·licituds o afegir amics</p>
-          </div>
+        <HeaderChat />
+        <div id="barra-busqueda" v-if="amics.length > 0">
+            <input type="text" v-model="busqueda" placeholder="Buscar...">
         </div>
-        <div v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">
-          <!-- Aquí agregamos el evento @click para redirigir al usuario y guardar el ID del amigo -->
-          <nuxt-link :to="`/pantallaChat/${amigo.id}`" @click="seleccionarAmigo(amigo.id)">
-            <div class="chat-element">
-              <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + amigo.foto_perfil" :alt="'Imagen de perfil de ' + amigo.nom">
-              <div>
-                <span class="nombre">{{ amigo.nom }}</span>
-                <span class="ultima-hora">12:30</span> <br>
-                <span id="ultim-missatge">IPOP 11 - Aquest és més fàcil que l'anterior</span>
-              </div>
+        <div class="lista-amigos">
+            <div v-if="amics.length === 0">
+                <div class="vacio">
+                    <p>No tens amics, però pots mirar les sol·licituds o afegir amics</p>
+                </div>
             </div>
-          </nuxt-link>
+            <div v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">
+                <!-- Aquí agregamos el evento @click para redirigir al usuario y guardar el ID del amigo -->
+                <nuxt-link :to="`/pantallaChat/${amigo.id}`" @click="seleccionarAmigo(amigo.id)">
+                    <div class="chat-element">
+                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + amigo.foto_perfil"
+                            :alt="'Imagen de perfil de ' + amigo.nom">
+                        <div>
+                            <span class="nombre">{{ amigo.nom }}</span>
+                            <span class="ultima-hora">12:30</span> <br>
+                            <span id="ultim-missatge">IPOP 11 - Aquest és més fàcil que l'anterior</span>
+                        </div>
+                    </div>
+                </nuxt-link>
+            </div>
+            <div v-if="amics.length > 0 && amicsFiltrados.length === 0">
+                <div class="vacio">
+                    <p>No s'ha trobat cap usuari amb aquest nom.</p>
+                </div>
+            </div>
         </div>
-        <div v-if="amics.length > 0 && amicsFiltrados.length === 0">
-          <div class="vacio">
-            <p>No s'ha trobat cap usuari amb aquest nom.</p>
-          </div>
-        </div>
-      </div>
-    <navBar />
+        <navBar />
 
 
     </div>
 
-  </template>
+</template>
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
@@ -101,7 +102,6 @@ a {
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    /* Mínimo 100% de la altura de la ventana */
 }
 
 
@@ -132,11 +132,13 @@ a {
 }
 
 .chat-element .nombre {
-    flex-grow: 1; /* Hace que el nombre ocupe todo el espacio disponible */
+    flex-grow: 1;
+    /* Hace que el nombre ocupe todo el espacio disponible */
 }
 
 .chat-element .hora {
-    margin-left: 20px; /* Ajusta el margen para separar la hora del nombre */
+    margin-left: 20px;
+    /* Ajusta el margen para separar la hora del nombre */
 }
 
 /* Otros estilos */
@@ -155,13 +157,16 @@ a {
 .amigo span {
     font-size: 1.2em;
 }
+
 span.nombre {
     font-weight: bold;
 }
+
 span.ultima-hora {
     margin-left: 150px;
     color: #777;
 }
+
 .amigo img {
     width: 50px;
     height: 50px;
@@ -198,7 +203,8 @@ input[type="text"] {
     font-size: 0.8em;
     color: #777;
 }
-.vacio{
+
+.vacio {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -206,7 +212,4 @@ input[type="text"] {
     font-size: 20px;
     color: #474747;
 }
-
-
-
 </style>
