@@ -2,6 +2,8 @@
     <div class="main-content">
         <HeaderChat />
         <div id="barra-busqueda" v-if="amics.length > 0">
+
+
             <input type="text" v-model="busqueda" placeholder="Buscar...">
         </div>
         <div class="lista-amigos">
@@ -16,24 +18,28 @@
                     <div class="chat-element">
                         <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + amigo.foto_perfil"
                             :alt="'Imagen de perfil de ' + amigo.nom">
-                        <div>
-                            <span class="nombre">{{ amigo.nom }}</span>
-                            <span class="ultima-hora">{{ amigo.ultimoMensaje ?
-                                formatHora(amigo.ultimoMensaje.created_at) : '' }}</span>
-                            <br>
-                            <span id="ultim-missatge">
-                                <!-- Renderizar el icono de foto solo si hay una imagen -->
-                                <template v-if="amigo.ultimoMensaje && amigo.ultimoMensaje.imagen">
-                                    <Icon class="" name="i-ic-round-insert-photo" />
-                                </template>
-                                <template v-if="amigo.ultimoMensaje && amigo.ultimoMensaje.video">
-                                    <Icon class="" name="i-ic-round-video-camera-back" />
-                                </template>
+                        <div class="info-chat">
+                            <div>
+                                <div class="nombre">{{ amigo.nom }}</div>
+                                <div id="ultim-missatge">
+                                    <!-- Renderizar el icono de foto solo si hay una imagen -->
+                                    <template v-if="amigo.ultimoMensaje && amigo.ultimoMensaje.imagen">
+                                        <Icon class="" name="i-ic-round-insert-photo" />
+                                    </template>
+                                    <template v-if="amigo.ultimoMensaje && amigo.ultimoMensaje.video">
+                                        <Icon class="" name="i-ic-round-video-camera-back" />
+                                    </template>
 
-                                <!-- Mostrar el mensaje si existe -->
-                                {{ amigo.ultimoMensaje && amigo.ultimoMensaje.mensaje ? amigo.ultimoMensaje.mensaje : ''
-                                }}
-                            </span>
+                                    <!-- Mostrar el mensaje si existe -->
+                                    {{ amigo.ultimoMensaje && amigo.ultimoMensaje.mensaje ? amigo.ultimoMensaje.mensaje
+            : ''
+                                    }}
+                                </div>
+                            </div>
+                            <div class="ultima-hora">{{ amigo.ultimoMensaje ?
+            formatHora(amigo.ultimoMensaje.created_at) : '' }}</div>
+
+
                         </div>
                     </div>
                 </nuxt-link>
@@ -183,6 +189,12 @@ a {
     /* Ajusta el margen para separar la hora del nombre */
 }
 
+.info-chat {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 /* Otros estilos */
 .lista-amigos {
     width: 80%;
@@ -200,12 +212,14 @@ a {
     font-size: 1.2em;
 }
 
-span.nombre {
+.nombre {
     font-weight: bold;
 }
 
-span.ultima-hora {
-    margin-left: 150px;
+.ultima-hora {
+    font-size: .7em;
+    margin-left: 50%;
+    padding: 20px;
     color: #777;
 }
 
@@ -232,12 +246,14 @@ input[type="text"] {
     box-sizing: border-box;
     margin-left: 25px;
     border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 #barra-busqueda {
     width: 100%;
     display: flex;
     justify-content: left;
+    border: none;
 }
 
 
