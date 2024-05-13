@@ -4,14 +4,19 @@
         <div v-if="mostrarRutina">
             <h1>Rutina</h1>
             <div v-for="(ejercicio, index) in rutinas" :key="index">
-                <!-- Mostrar el día solo si es diferente al día anterior -->
                 <template v-if="index === 0 || rutinas[index - 1].dia !== ejercicio.dia">
-                    <p>Día {{ ejercicio.dia }}</p>
+                    <p @click="toggleDia(ejercicio.dia)">Dia {{ ejercicio.dia }}</p>
+                    <div v-if="diaSeleccionado === ejercicio.dia">
+                        <ul>
+                            <!-- Mostrar todos los ejercicios del día -->
+                            <li v-for="(ejercicioDia, idx) in rutinas.filter(e => e.dia === ejercicio.dia)" :key="idx">
+                                {{ ejercicioDia.nom_exercici }}
+                            </li>
+                        </ul>
+                    </div>
                 </template>
-                <ul>
-                    <li>{{ ejercicio.nom_exercici }}</li>
-                </ul>
             </div>
+            <button @click="enviarMensaje">Enviar</button>
         </div>
 
 
@@ -118,22 +123,24 @@ export default {
             imagenSeleccionada: null,
             videoSeleccionado: null,
             mostrarRutina: false,
+            rutinas: [], // Array para almacenar los datos de las rutinas
+            diaSeleccionado: null // Almacena el día seleccionado por el usuario
 
         };
     },
     methods: {
         async enviarMensaje() {
             try {
-                // Verificar si tanto el mensaje como la imagen están vacíos
-                if (!this.mensaje.trim() && !this.imagenSeleccionada && !this.videoSeleccionado) {
-                    console.error('No puedes enviar un mensaje vacío.');
-                    return; // Salir del método si no hay mensaje ni imagen
-                }
+                await this.mostrarRutinas(); // Asegurar que rutinas se llena antes de obtener las ID de rutina
 
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
-                const mensaje = this.mensaje; // Usar directamente el mensaje del data
-                let data = { mensaje }; // Inicializar el objeto de datos con el mensaje
+                const mensaje = this.mensaje;
+
+                // Obtener todos los IDs de rutina mostrados
+                const idRutina = this.rutinas.map(rutina => rutina.id);
+
+                let data = { mensaje, idRutina }; // Incluir idRutinas en los datos que se envían al servidor
 
                 // Si hay una imagen seleccionada, agregarla a los datos
                 if (this.imagenSeleccionada) {
@@ -142,31 +149,41 @@ export default {
                 if (this.videoSeleccionado) {
                     data.video_base64 = this.videoSeleccionado.split(',')[1];
                 }
-
+                console.log(data);
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data), // Enviar el mensaje y la imagen (si existe) en el cuerpo de la solicitud
+                    body: JSON.stringify(data), // Enviar el mensaje, las rutinas y la imagen (si existe) en el cuerpo de la solicitud
                 });
 
                 const responseData = await response.json();
+                console.log(responseData);
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
-                    console.log('Mensaje enviado correctamente');
                     await this.mostrarMensajes();
                     // Vaciar el área de texto después de enviar el mensaje
                     this.mensaje = '';
                     // Vaciar la imagen seleccionada después de enviar el mensaje
                     this.imagenSeleccionada = null;
                     this.videoSeleccionado = null;
+                    this.mostrarRutina = false;
                 } else {
+                    // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);
                 }
             } catch (error) {
+                // Manejar errores
                 console.error('Error al enviar el mensaje:', error);
             }
+        },
+
+
+
+        async toggleDia(dia) {
+            // Si el día seleccionado es el mismo que el anterior, lo deseleccionamos
+            this.diaSeleccionado = this.diaSeleccionado === dia ? null : dia;
         },
 
 
@@ -176,7 +193,7 @@ export default {
             if (file) {
                 // Verificar si el archivo es una imagen
                 if (!file.type.startsWith('image/')) {
-                    console.error('El archivo seleccionado no es una imagen.');
+                    // console.error('El archivo seleccionado no es una imagen.');
                     return; // Salir del método si el archivo no es una imagen
                 }
                 // Mostrar la imagen seleccionada
@@ -186,13 +203,13 @@ export default {
                 };
                 reader.readAsDataURL(file);
             } else {
-                console.error('No se seleccionó ningún archivo.');
+                // console.error('No se seleccionó ningún archivo.');
             }
         },
         handleVideoChange(event) {
             // Verificar si ya se ha seleccionado una imagen
             if (this.imagenSeleccionada) {
-                console.error('Ya has seleccionado una imagen. No puedes seleccionar un video.');
+                // console.error('Ya has seleccionado una imagen. No puedes seleccionar un video.');
                 return; // Salir del método si ya hay una imagen seleccionada
             }
 
@@ -201,7 +218,7 @@ export default {
             if (file) {
                 // Verificar si el archivo es un video
                 if (!file.type.startsWith('video/')) {
-                    console.error('El archivo seleccionado no es un video.');
+                    // console.error('El archivo seleccionado no es un video.');
                     return;
                 }
 
@@ -211,7 +228,7 @@ export default {
                 };
                 reader.readAsDataURL(file);
             } else {
-                console.error('No se seleccionó ningún archivo.');
+                // console.error('No se seleccionó ningún archivo.');
             }
         },
         async mostrarMensajes() {
@@ -234,7 +251,7 @@ export default {
                     this.mensajes = mensajesPorDia;
                 }
             } catch (error) {
-                console.error('Error al obtener los mensajes del chat:', error);
+                // console.error('Error al obtener los mensajes del chat:', error);
             }
         },
         ordenarMensajesPorId(mensajes) {
@@ -256,7 +273,7 @@ export default {
                     // Manejar el caso de error
                 }
             } catch (error) {
-                console.error('Error al obtener las solicitudes:', error);
+                // console.error('Error al obtener las solicitudes:', error);
             }
         },
         formatDate(dateTimeString) {
@@ -268,7 +285,7 @@ export default {
         },
         opcionSeleccionada(opcion) {
             // Aquí puedes manejar la opción seleccionada, como abrir un componente específico o ejecutar una función
-            console.log("Opción seleccionada:", opcion);
+            // console.log("Opción seleccionada:", opcion);
             // Cerrar el modal después de seleccionar una opción
             this.cerrarModal();
         },
@@ -292,10 +309,9 @@ export default {
                 const response = await fetch(`http://localhost:8000/api/rutina/${id_usuario}`);
                 const responseData = await response.json();
                 this.rutinas = responseData;
-                console.log(this.rutinas);
 
             } catch (error) {
-                console.error('Error al obtener la rutina:', error);
+                // console.error('Error al obtener la rutina:', error);
             }
         }
 
@@ -316,8 +332,6 @@ export default {
 
 };
 </script>
-
-
 
 <style scoped>
 html,

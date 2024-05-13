@@ -42,6 +42,14 @@ class MensajeController extends Controller
             $mensaje->mensaje = $request->input('mensaje');
             $mensaje->leido = 0;
     
+            // Asociar el idRutina al mensaje si está presente en la solicitud
+            if ($request->has('idRutina')) {
+                $rutinasIds = implode(',', $request->input('idRutina'));
+                $mensaje->idRutina = $rutinasIds;
+            }
+            
+    
+            // Procesar la imagen si está presente en la solicitud
             if ($request->has('imagen_base64')) {
                 // Decodificar la imagen base64 y guardarla en el sistema de archivos
                 $base64Image = $request->imagen_base64;
@@ -56,6 +64,8 @@ class MensajeController extends Controller
                 // Asignar el nombre del archivo de imagen al mensaje
                 $mensaje->imagen = $originalFileName;
             }
+    
+            // Procesar el video si está presente en la solicitud
             if ($request->has('video_base64')) {
                 // Decodificar el video base64 y guardarlo en el sistema de archivos
                 $base64Video = $request->video_base64;
@@ -91,6 +101,7 @@ class MensajeController extends Controller
             ]);
         }
     }
+    
     public function mostrarUltimoMensajeEntreEllos($usuari1, $usuari2)
     {
         // Obtener el último mensaje enviado y recibido entre los dos usuarios

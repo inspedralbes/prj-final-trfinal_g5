@@ -1,5 +1,5 @@
 <template>
-  <Capçalera />
+        <HeaderChat />
   <div class="user-list-container">
     <div v-if="status === 0">
       <div class="vacio">
@@ -27,7 +27,7 @@
     </div>
 
   </div>
-  <NavBar />
+  <navBar/>
 </template>
 
 <script>
