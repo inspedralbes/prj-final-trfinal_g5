@@ -7,15 +7,33 @@
 
             <div v-if="exercises.length != 0" class="botons-superior">
                 <Icon class="arrow" @click="decrementSelectedDay" name="ic:baseline-arrow-circle-left" />
-
                 <div class="day-selector">
-
                     <select v-model="selectedDay" @change="obtenirRutina(idUsuari)">
                         <option v-for="day in dies" :value="day">{{ 'Día ' + day }}</option>
                     </select>
                 </div>
                 <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
-
+            </div>
+                <!-- Temporizador -->
+                <div class="timer-container">
+                    <div class="timer">
+                        <span>Temps de descans</span>
+                     
+                        <!-- Botones para ajustar el tiempo de descanso -->
+                        <div class="time-adjust-container">
+                            <div class="time-adjust">
+                                <button class="time-adjust-button" @click="adjustTime(10)">+</button>
+                                <span>{{ formatTime(timerSeconds) }}</span>
+                                <button class="time-adjust-button" @click="adjustTime(-10)">-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timer-buttons">
+                        <button class="timer-button" @click="startTimer">Iniciar</button>
+                        <button class="timer-button" @click="pauseTimer" :disabled="!timerRunning">Pausa</button>
+                        <button class="timer-button" @click="resetTimer">Reiniciar</button>
+                    </div>
+                
             </div>
 
             <!-- Mostrar spinner de carga mientras se cargan los datos -->
@@ -24,23 +42,17 @@
             </div>
 
             <!-- Mostrar mensaje si no hay datos en la rutina -->
-            <div id="rutinaBuida" v-if="exercises.length === 0 && !loading">
-                <p>No hi han dades de rutina disponibles. Clica el boto per crear una rutina.</p>
-                <button class="rutina-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
-
+            <div id="rutinaBuida" v-if="exercises.length == 0 && !loading">
+                <p>No hay datos de rutina disponibles. Haz clic en el botón para crear una rutina.</p>
+                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
             </div>
 
-
             <div v-else class="main-content">
-
                 <div class="exercise-list">
-
                     <div v-for="exercise in exercises" :key="exercise.id">
                         <div class="exercise-item">
                             <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
-
                             <h2>{{ exercise.nom_exercici }}</h2>
-
                             <div class="exercise-details">
                                 <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" />
                                 Día: {{ exercise.dia }} <br> <br>
@@ -49,17 +61,27 @@
                                 <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones:
                                 {{ exercise.repeticions }}
                             </div>
+                            <div class="exercise-controls">
+                                <!-- Botones para marcar serie -->
+                                <div class="series-buttons">
+                                    <button class="series-button" v-for="serie in [1, 2, 3, 4]" :key="serie"
+                                        @click="setSerieBase(serie)">{{ serie }}</button>
+                                </div>
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
-                <button class="rutina-button" @click="redirectToPage('/chatRutina')">Nova Rutina</button>
 
+
+                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
             </div>
             <navBar />
-
         </div>
     </body>
 </template>
+
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
@@ -75,6 +97,9 @@ export default {
             exercises: [],
             dies: [],
             loading: true,
+            timerSeconds: 120, // 2 minutos
+            timerRunning: false,
+            timerInterval: null
         }
     },
     computed: {
@@ -93,7 +118,54 @@ export default {
     methods: {
         redirectTo(page) {
             this.$router.push(page);
+            console.log("Redirecting to:", page); // Agregado: Verificar la redirección
         },
+
+        adjustTime(seconds) {
+            // Ajustar el tiempo de descanso
+            if (!this.timerRunning) {
+                this.timerSeconds += seconds;
+                if (this.timerSeconds < 0) {
+                    this.timerSeconds = 0;
+                }
+            }
+        },
+        startTimer() {
+            if (!this.timerRunning) {
+                this.timerRunning = true;
+                this.timerInterval = setInterval(() => {
+                    if (this.timerSeconds > 0) {
+                        this.timerSeconds--;
+                    } else {
+                        clearInterval(this.timerInterval);
+                        this.timerRunning = false;
+                        // Lógica al finalizar el temporizador
+                        console.log("¡El temporizador ha finalizado!");
+                    }
+                }, 1000); // Actualiza el temporizador cada segundo
+            }
+        },
+        pauseTimer() {
+            clearInterval(this.timerInterval);
+            this.timerRunning = false;
+        },
+        resetTimer() {
+            clearInterval(this.timerInterval);
+            this.timerSeconds = 120; // Reiniciar el temporizador a 2 minutos
+            this.timerRunning = false;
+        },
+        formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        },
+        setSerieBase(serie) {
+            // Establecer la serie base seleccionada
+            // Puedes almacenar esta serie en una variable de datos para su posterior uso
+            // Por ejemplo:
+            this.serieBase = serie;
+            console.log("Serie base seleccionada:", serie); // Agregado: Verificar la serie seleccionada
+
         redirectToPage(page) {
             this.idUsuari = useUsuariPerfilStore().id_usuari;
             if (confirm("Si crees una rutina nova, la rutina actual s'eliminarà. ¿Estàs segur?")) {
@@ -106,19 +178,29 @@ export default {
                         console.error(error);
                     });
             }
+
         },
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)
                 .then((response) => {
-                    console.log(response);
+                    console.log("Datos de rutina recibidos:", response); // Verificar los datos recibidos
+                    console.log("Día seleccionado:", this.selectedDay); // Verificar el día seleccionado
+                    console.log("¿Es response un array?", Array.isArray(response)); // Verificar si response es un array
+                    // Verificar la estructura de cada objeto de ejercicio en response
+                    response.forEach(exercise => console.log("Ejercicio:", exercise));
+
+                    // Convertir this.selectedDay a string si no lo es
+                    const selectedDayString = this.selectedDay.toString();
                     // Filtrar los ejercicios para mostrar solo los del día seleccionado
-                    this.exercises = response.filter(exercise => exercise.dia === this.selectedDay);
+                    this.exercises = response.filter(exercise => exercise.dia == selectedDayString); // Usamos == en lugar de ===
+                    console.log("Ejercicios filtrados:", this.exercises); // Verificar los ejercicios filtrados
                 })
                 .catch((error) => {
                     console.error(error);
                 })
                 .finally(() => {
                     this.loading = false; // Marcar la carga de datos como completa
+                    console.log("Loading:", this.loading); // Verificar el valor de loading
                 });
         },
         obtenirDies(idUsuari) {
@@ -157,6 +239,7 @@ export default {
             }
         }
     }
+
 }
 </script>
 
@@ -171,7 +254,48 @@ body {
     /* Evita el desplazamiento horizontal */
 }
 
+/* Timer Css */
 
+.time-adjust {
+    display: flex;
+    align-items: center;
+}
+
+.time-adjust-button {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; /* Espaciado superior */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.timer {
+    text-align: center;
+}
+
+.time-adjust-container {
+    display: flex;
+    justify-content: center;
+}
+
+.timer-buttons {
+    margin-top: 10px; /* Espaciado entre el temporizador y los botones */
+}
+
+/* ////////////////////////////////////////// */
+
+.series-button:active {
+    background-color: #555; /* Cambiar este valor al color deseado */
+    color: #fff; /* Cambiar el color del texto para asegurar la legibilidad */
+}
 
 .arrow {
     width: 50px;
@@ -260,7 +384,7 @@ body {
 
 }
 
-.rutina-button {
+.dieta-button {
     position: relative;
     width: 120%;
     /* Ancho del 80% del contenedor padre */
@@ -279,6 +403,8 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     background-position: center;
 }
+
+
 
 .loading {
     display: flex;
