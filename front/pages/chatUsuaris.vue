@@ -1,16 +1,16 @@
 <template>
-    <div>
+    <div class="main-content">
       <HeaderChat />
-      <div v-if="amics.length > 0">
+      <div id="barra-busqueda" v-if="amics.length > 0">
         <input type="text" v-model="busqueda" placeholder="Buscar...">
       </div>
-      <ul class="lista-amigos">
-        <li v-if="amics.length === 0">
+      <div class="lista-amigos">
+        <div v-if="amics.length === 0">
           <div class="vacio">
             <p>No tens amics, però pots mirar les sol·licituds o afegir amics</p>
           </div>
-        </li>
-        <li v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">
+        </div>
+        <div v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">
           <!-- Aquí agregamos el evento @click para redirigir al usuario y guardar el ID del amigo -->
           <nuxt-link :to="`/pantallaChat/${amigo.id}`" @click="seleccionarAmigo(amigo.id)">
             <div class="chat-element">
@@ -22,15 +22,18 @@
               </div>
             </div>
           </nuxt-link>
-        </li>
-        <li v-if="amics.length > 0 && amicsFiltrados.length === 0">
+        </div>
+        <div v-if="amics.length > 0 && amicsFiltrados.length === 0">
           <div class="vacio">
             <p>No s'ha trobat cap usuari amb aquest nom.</p>
           </div>
-        </li>
-      </ul>
-      <navBar />
+        </div>
+      </div>
+    <navBar />
+
+
     </div>
+
   </template>
 
 <script>
@@ -80,11 +83,26 @@ export default {
 };
 </script>
 <style scoped>
+body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
 a {
     text-decoration: none;
     color: black;
 }
 
+
+.main-content {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    /* Mínimo 100% de la altura de la ventana */
+}
 
 
 .item {
@@ -123,9 +141,10 @@ a {
 
 /* Otros estilos */
 .lista-amigos {
-    list-style-type: none;
-    padding: 20px;
     width: 80%;
+    margin: 0 auto;
+    margin-left: 3%;
+    margin-top: 20px;
 }
 
 .amigo {
@@ -168,6 +187,13 @@ input[type="text"] {
     border-radius: 5px;
 }
 
+#barra-busqueda {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+}
+
+
 #ultim-missatge {
     font-size: 0.8em;
     color: #777;
@@ -180,5 +206,7 @@ input[type="text"] {
     font-size: 20px;
     color: #474747;
 }
+
+
 
 </style>
