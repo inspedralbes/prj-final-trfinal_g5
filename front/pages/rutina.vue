@@ -14,27 +14,7 @@
                 </div>
                 <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
             </div>
-                <!-- Temporizador -->
-                <div class="timer-container">
-                    <div class="timer">
-                        <span>Temps de descans</span>
-                     
-                        <!-- Botones para ajustar el tiempo de descanso -->
-                        <div class="time-adjust-container">
-                            <div class="time-adjust">
-                                <button class="time-adjust-button" @click="adjustTime(10)">+</button>
-                                <span>{{ formatTime(timerSeconds) }}</span>
-                                <button class="time-adjust-button" @click="adjustTime(-10)">-</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timer-buttons">
-                        <button class="timer-button" @click="startTimer">Iniciar</button>
-                        <button class="timer-button" @click="pauseTimer" :disabled="!timerRunning">Pausa</button>
-                        <button class="timer-button" @click="resetTimer">Reiniciar</button>
-                    </div>
-                
-            </div>
+            
 
             <!-- Mostrar spinner de carga mientras se cargan los datos -->
             <div v-if="loading" class="loading">
@@ -47,7 +27,7 @@
                 <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
             </div>
 
-            <div v-else class="main-content">
+            <div v-if="exercises.length != 0 && !loading" class="main-content">
                 <div class="exercise-list">
                     <div v-for="exercise in exercises" :key="exercise.id">
                         <div class="exercise-item">
@@ -61,21 +41,13 @@
                                 <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones:
                                 {{ exercise.repeticions }}
                             </div>
-                            <div class="exercise-controls">
-                                <!-- Botones para marcar serie -->
-                                <div class="series-buttons">
-                                    <button class="series-button" v-for="serie in [1, 2, 3, 4]" :key="serie"
-                                        @click="setSerieBase(serie)">{{ serie }}</button>
-                                </div>
-
-
-                            </div>
                         </div>
                     </div>
                 </div>
 
 
-                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+                <button class="dieta-button" @click="redirectToPage('/chatRutina')">Nueva Rutina</button>
+                <button class="dieta-button" @click="redirectTo('/comencarRutina')">Començar Rutina</button>
             </div>
             <navBar />
         </div>
@@ -119,52 +91,6 @@ export default {
         redirectTo(page) {
             this.$router.push(page);
             console.log("Redirecting to:", page); // Agregado: Verificar la redirección
-        },
-
-        adjustTime(seconds) {
-            // Ajustar el tiempo de descanso
-            if (!this.timerRunning) {
-                this.timerSeconds += seconds;
-                if (this.timerSeconds < 0) {
-                    this.timerSeconds = 0;
-                }
-            }
-        },
-        startTimer() {
-            if (!this.timerRunning) {
-                this.timerRunning = true;
-                this.timerInterval = setInterval(() => {
-                    if (this.timerSeconds > 0) {
-                        this.timerSeconds--;
-                    } else {
-                        clearInterval(this.timerInterval);
-                        this.timerRunning = false;
-                        // Lógica al finalizar el temporizador
-                        console.log("¡El temporizador ha finalizado!");
-                    }
-                }, 1000); // Actualiza el temporizador cada segundo
-            }
-        },
-        pauseTimer() {
-            clearInterval(this.timerInterval);
-            this.timerRunning = false;
-        },
-        resetTimer() {
-            clearInterval(this.timerInterval);
-            this.timerSeconds = 120; // Reiniciar el temporizador a 2 minutos
-            this.timerRunning = false;
-        },
-        formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-        },
-        setSerieBase(serie) {
-            // Establecer la serie base seleccionada
-            // Puedes almacenar esta serie en una variable de datos para su posterior uso
-            // Por ejemplo:
-            this.serieBase = serie;
-            console.log("Serie base seleccionada:", serie); // Agregado: Verificar la serie seleccionada
         },
 
         redirectToPage(page) {
@@ -274,8 +200,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px; /* Espaciado superior */
-    margin-bottom: 20px; /* Espaciado inferior */
+    margin-top: 20px;
+    /* Espaciado superior */
+    margin-bottom: 20px;
+    /* Espaciado inferior */
 }
 
 .timer {
@@ -288,14 +216,17 @@ body {
 }
 
 .timer-buttons {
-    margin-top: 10px; /* Espaciado entre el temporizador y los botones */
+    margin-top: 10px;
+    /* Espaciado entre el temporizador y los botones */
 }
 
 /* ////////////////////////////////////////// */
 
 .series-button:active {
-    background-color: #555; /* Cambiar este valor al color deseado */
-    color: #fff; /* Cambiar el color del texto para asegurar la legibilidad */
+    background-color: #555;
+    /* Cambiar este valor al color deseado */
+    color: #fff;
+    /* Cambiar el color del texto para asegurar la legibilidad */
 }
 
 .arrow {
