@@ -12,7 +12,6 @@
                     </select>
                 </div>
                 <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
-
                 <button class="historial-button" @click="redirectTo('/totesRutines')">Historial Rutines</button>
             </div>
 
@@ -27,7 +26,7 @@
                 <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
             </div>
 
-            <div v-else class="main-content">
+            <div v-if="exercises.length != 0 && !loading" class="main-content">
                 <div class="exercise-list">
                     <div v-for="exercise in exercises" :key="exercise.id">
                         <div class="exercise-item">
@@ -36,6 +35,7 @@
                             <div class="exercise-details">
                                 <Icon class="" name="ic:baseline-insert-invitation" />
                                 Día: {{ exercise.dia }} <br> <br>
+
                                 <Icon class="" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br> <br>
                                 <Icon class="" name="ic:baseline-cached" />Repeticiones: {{ exercise.repeticions }}
                             </div>
@@ -43,6 +43,7 @@
                     </div>
                 </div>
                 <button class="dieta-button" @click="redirectToPage('/chatRutina')">Nueva Rutina</button>
+                <button class="dieta-button" @click="redirectTo('/comencarRutina')">Començar Rutina</button>
             </div>
             <navBar />
         </div>
@@ -174,7 +175,53 @@ body {
     /* Evita el desplazamiento horizontal */
 }
 
+/* Timer CSS */
+
+.time-adjust {
+    display: flex;
+    align-items: center;
+}
+
+.time-adjust-button {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    /* Espaciado superior */
+    margin-bottom: 20px;
+    /* Espaciado inferior */
+}
+
+.timer {
+    text-align: center;
+}
+
+.time-adjust-container {
+    display: flex;
+    justify-content: center;
+}
+
+.timer-buttons {
+    margin-top: 10px;
+    /* Espaciado entre el temporizador y los botones */
+}
+
 /* ////////////////////////////////////////// */
+
+.series-button:active {
+    background-color: #555;
+    /* Cambiar este valor al color deseado */
+    color: #fff;
+    /* Cambiar el color del texto para asegurar la legibilidad */
+}
 
 .arrow {
     width: 50px;
