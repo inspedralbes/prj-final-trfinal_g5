@@ -74,21 +74,22 @@
                                     Your browser does not support the video tag.
                                 </video>
                             </template>
-                            <template v-if="mensaje.idRutina">
-                                <button @click="descargarRutina">Descargar</button>
-                                <p>Rutina</p>
-                                <div v-for="(ejercicio, index) in rutinas2" :key="index">
-                                    <p>NOM{{ ejercicio.nom_exercici }}</p>
-                                    <p>SERIES{{ ejercicio.series }}</p>
-                                    <p>REPETICIONES{{ ejercicio.repeticions }}</p>
+                            <div>
+                                <p v-if="mensaje.idRutina">Rutina</p>
+                                <div v-if="mensaje.idRutina">
+                                    <div v-for="(ejercicio, index) in rutinas2" :key="index">
+                                        <p>NOM{{ ejercicio.nom_exercici }}</p>
+                                        <p>SERIES{{ ejercicio.series }}</p>
+                                        <p>REPETICIONES{{ ejercicio.repeticions }}</p>
+                                    </div>
+                                    <button @click="GuardarRutina(usuarioActual, rutinas2)">Guardar Rutina</button>
                                 </div>
-                                
-                            </template>
+                            </div>
+
                             <template v-if="mensaje.idDieta">
                                 <p>Dieta</p>
                                 <div v-for="(plat, index) in dietas2" :key="index">
                                     <p>Nom{{ plat.nom_plat }}</p>
-                                    <p>Descripcio{{ plat.ingredients }}</p>
                                 </div>
                             </template>
                             <p>{{ mensaje.mensaje }}</p>
@@ -162,6 +163,7 @@ export default {
             diaSeleccionado: null, // Almacena el día seleccionado por el usuario
             dietas: [],
             dietas2: [],
+            usuarioActual: null,
 
         };
     },
@@ -173,6 +175,7 @@ export default {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
                 const mensaje = this.mensaje;
+
                 //  Verificar si tanto el mensaje como la imagen están vacíos
                 if (!this.mensaje.trim() && !this.imagenSeleccionada && !this.videoSeleccionado) {
                     // Si no hay mensaje ni imagen, muestra un mensaje de error y no envíes la solicitud
@@ -192,7 +195,7 @@ export default {
                 if (this.videoSeleccionado) {
                     data.video_base64 = this.videoSeleccionado.split(',')[1];
                 }
-                console.log(data);
+                // console.log(data);
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
                     headers: {
@@ -244,7 +247,7 @@ export default {
                 });
 
                 const responseData = await response.json();
-                console.log(responseData);
+                // console.log(responseData);
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
@@ -269,7 +272,7 @@ export default {
                 const id_amic = useUsuariPerfilStore().amic;
 
                 // Obtener todos los IDs de rutina mostrados
-                console.log(idDieta);
+                // console.log(idDieta);
 
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
@@ -282,7 +285,7 @@ export default {
                 });
 
                 const responseData = await response.json();
-                console.log(responseData);
+                // console.log(responseData);
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
@@ -296,6 +299,34 @@ export default {
                 // Manejar errores
                 console.error('Error al enviar el mensaje:', error);
             }
+        },
+        async GuardarRutina(usuario, rutinas2) {
+            // Modificar rutinas2 para cambiar el id_usuario según el usuario actual
+            rutinas2.forEach((ejercicio, index) => {
+                // console.log(`Datos del ejercicio ${index + 1}:`);
+                for (const key in ejercicio) {
+                    // console.log(`${key}: ${ejercicio[key]}`);
+                    // Verificar si la clave es igual a "id_usuari"
+                    if (key === "id_usuari") {
+                        ejercicio[key] = usuario; // Asignar el valor del id_usuari del usuario al campo correspondiente del ejercicio
+                    }
+                }
+                // console.log("----------------------");
+            });
+
+            console.log("Rutinas modificadas:", rutinas2); // Agrega este console.log
+            const response = await fetch(`http://localhost:8000/api/descargarRutina`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(rutinas2), // Enviar los datos de la rutina al servidor
+
+            });
+            const responseData = await response.json();
+            console.log(responseData);
+
+
         },
 
 
@@ -353,6 +384,7 @@ export default {
         async mostrarMensajes() {
             try {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
+                this.usuarioActual = id_usuario;
                 const id_amic = useUsuariPerfilStore().amic;
                 const response = await fetch(`http://localhost:8000/api/missatges/${id_usuario}/${id_amic}`);
                 const responseData = await response.json();
@@ -373,7 +405,7 @@ export default {
                             this.rutinas2 = rutinaData;
                             // console.log('Datos de la rutina:', rutinaData);
                         }
-                        if(mensaje.idDieta){
+                        if (mensaje.idDieta) {
                             const dietaResponse = await fetch(`http://localhost:8000/api/dietas/${mensaje.idDieta}`);
                             const dietaData = await dietaResponse.json();
                             this.dietas2 = dietaData;
@@ -458,7 +490,7 @@ export default {
                 const response = await fetch(`http://localhost:8000/api/dietas/${id_usuario}`);
                 const responseData = await response.json();
                 this.dietas = responseData;
-                console.log(this.dietas);
+                // console.log(this.dietas);
 
             } catch (error) {
                 // console.error('Error al obtener la dieta:', error);

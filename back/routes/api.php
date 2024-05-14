@@ -32,6 +32,7 @@ Route::get('/rutina/{id}', [RutinaController::class, 'getRutina']);
 Route::get('/rutina-id/{id}', [RutinaController::class, 'getRutinaId']);
 
 Route::post('/guardar-rutina', [RutinaController::class, 'store']);
+Route::post('/descargarRutina', [RutinaController::class, 'saveRoutines']);
 
 Route::get('/aliments', [AlimentsController::class, 'index']);
 
