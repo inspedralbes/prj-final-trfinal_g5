@@ -22,7 +22,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 1,
                 "imatge" => "imatge_curl_martillo_inclinado.jpg",
-                "descripció" => "Flexiona els colzes alevant les mancurnes cap als musclel."
+                "descripció" => "Flexiona els colzes elevant les mancurnes cap als muscles en banc inclinat."
             ],
             [
                 "id" => 2,
@@ -30,7 +30,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 1,
                 "imatge" => "imatge_curl_barra_agarre_ancho.jpg",
-                "descripció" => "Flexiona els colzes alevant la barra ample cap als musclel."
+                "descripció" => "Flexiona els colzes elevant la barra amb un agafador ampli cap als muscles."
             ],
             [
                 "id" => 3,
@@ -38,15 +38,15 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 1,
                 "imatge" => "imatge_curl_martillo.jpg",
-                "descripció" => "Aixeca les mancurnes cap als musclel mantenint les palmes cap a dins."
+                "descripció" => "Aixeca les mancurnes cap als muscles mantenint les palmes cap a dins."
             ],
             [
                 "id" => 4,
                 "nom_exercici" => "Curl de Barra Z",
                 "dificultat" => "intermedi",
                 "idCategoria" => 1,
-                "imatge" => "imatge_curl_barra_ez.jpg",
-                "descripció" => "Flexiona els colzes alevant la barra Z cap als musclel."
+                "imatge" => "imatge_curl_barra_z.jpg",
+                "descripció" => "Flexiona els colzes elevant la barra Z cap als muscles."
             ],
             [
                 "id" => 5,
@@ -54,7 +54,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 1,
                 "imatge" => "imatge_curl_barra.jpg",
-                "descripció" => "Flexiona els colzes alevant la barra recta cap als musclel."
+                "descripció" => "Flexiona els colzes elevant la barra agafantla a una amplitut basante en l'espatlla recta cap als muscles."
             ],
             [
                 "id" => 6,
@@ -64,14 +64,14 @@ class EjerciciosTable extends Seeder
                 "imatge" => "imatge_curl_concentrado.jpg",
                 "descripció" => "Realitza curls concentrats per aïllar i enfortir els bíceps."
             ],
-            [
-                "id" => 7,
-                "nom_exercici" => "Curl de Martell Inclinat Flexor",
-                "dificultat" => "principiant",
-                "idCategoria" => 1,
-                "imatge" => "imatge_curl_martillo_inclinado_flexor.jpg",
-                "descripció" => "Flexiona els colzes alevant les mancurnes cap als musclel amb agafada neutra."
-            ],
+            // [
+            //     "id" => 7,
+            //     "nom_exercici" => "Curl de Martell Inclinat Flexor",
+            //     "dificultat" => "principiant",
+            //     "idCategoria" => 1,
+            //     "imatge" => "imatge_curl_martillo_inclinado_flexor.jpg",
+            //     "descripció" => "Flexiona els colzes elevant les mancurnes cap als muscles amb agafada neutra."
+            // ],
             [
                 "id" => 8,
                 "nom_exercici" => "Gir de barra",
@@ -136,21 +136,21 @@ class EjerciciosTable extends Seeder
                 "imatge" => "imatge_circulos_cadera.jpg",
                 "descripció" => "Dret, fes cercles amb la cadera per abductors."
             ],
-            [
-                "id" => 16,
-                "nom_exercici" => "Moviments Circulars de Cames",
-                "dificultat" => "intermedi",
-                "idCategoria" => 3,
-                "imatge" => "imatge_movimientos_circulares_piernas.jpg",
-                "descripció" => "Dret, realitza moviments circulars amb les cames."
-            ],
+            // [
+            //     "id" => 16,
+            //     "nom_exercici" => "Moviments Circulars de Cames",
+            //     "dificultat" => "intermedi",
+            //     "idCategoria" => 3,
+            //     "imatge" => "imatge_movimientos_circulares_piernas.jpg",
+            //     "descripció" => "Dret, realitza moviments circulars amb les cames."
+            // ],
             [
                 "id" => 17,
-                "nom_exercici" => "Estirament d'Abductors",
-                "dificultat" => "principiant",
-                "idCategoria" => 3,
-                "imatge" => "imatge_estiramiento_abductores.jpg",
-                "descripció" => "Acostat, creua una cama per estirar els abductors."
+                "nom_exercici" => "Hip-Thrust amb barra",
+                "dificultat" => "intermedi",
+                "idCategoria" => 5,
+                "imatge" => "imatge_empuje_cadera_barra.jpg",
+                "descripció" => "Empenta de cadera amb una barra y pes des de posició asseguda per enfortir glúteos."
             ],
             [
                 "id" => 18,
@@ -170,10 +170,10 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 20,
-                "nom_exercici" => "Press de Banca Inclinat amb Mancurnes",
+                "nom_exercici" => "Press de Inclinat amb Mancurnes",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
-                "imatge" => "imatge_press_banca_inclinado_mancuernas.jpg",
+                "imatge" => "imatge_press_inclinado_mancuernas.jpg",
                 "descripció" => "Press de banca inclinat amb mancurnes per pectorals superiors."
             ],
             [
@@ -202,19 +202,19 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 24,
-                "nom_exercici" => "Apertures amb Mancurnes Declinades",
+                "nom_exercici" => "Apertures amb Mancurnes inclinades",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
-                "imatge" => "imatge_aperturas_mancuernas_declinadas.jpg",
-                "descripció" => "Apertures amb mancurnes declinades per pectorals inferiors."
+                "imatge" => "imatge_aperturas_mancuernas_inclinadas.jpg",
+                "descripció" => "Apertures amb mancurnes inclinades per pectorals inferiors."
             ],
             [
                 "id" => 25,
-                "nom_exercici" => "Apertures amb Mancurnes",
+                "nom_exercici" => "Apertures amb Mancurnes planes",
                 "dificultat" => "principiant",
                 "idCategoria" => 4,
-                "imatge" => "imatge_aperturas_mancuernas.jpg",
-                "descripció" => "Apertures amb mancurnes per pectorals."
+                "imatge" => "imatge_aperturas_mancuernas_planes.jpg",
+                "descripció" => "Apertures amb mancurnes per pectorals amb el banc pla."
             ],
             [
                 "id" => 26,
@@ -252,7 +252,7 @@ class EjerciciosTable extends Seeder
                 "id" => 30,
                 "nom_exercici" => "Elevació de Genoll al Pit",
                 "dificultat" => "principiant",
-                "idCategoria" => 5,
+                "idCategoria" => 3,
                 "imatge" => "imatge_elevacion_rodilla_pecho.jpg",
                 "descripció" => "Eleva el genoll al pit mentre fas un pas."
             ],
@@ -298,11 +298,11 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 36,
-                "nom_exercici" => "Aixecament de Barra fins als Musclel",
+                "nom_exercici" => "Aixecament de Barra fins als muscles",
                 "dificultat" => "principiant",
                 "idCategoria" => 6,
                 "imatge" => "imatge_levantamiento_barra_hombros.jpg",
-                "descripció" => "Aixeca la barra fins als musclel en un sol moviment."
+                "descripció" => "Aixeca la barra fins als muscles en un sol moviment."
             ],
             [
                 "id" => 37,
@@ -342,7 +342,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 6,
                 "imatge" => "peso_muerto_arrancada.jpg",
-                "descripció" => "Aixeca la barra fins als musclel en un moviment explosiu."
+                "descripció" => "Aixeca la barra fins als muscles en un moviment explosiu."
             ],
             [
                 "id" => 42,
@@ -366,7 +366,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 7,
                 "imatge" => "imatge_dominadas.jpg",
-                "descripció" => "Agafa la barra amb mans a l'amplada dels musclel."
+                "descripció" => "Agafa la barra amb mans a l'amplada dels muscles."
             ],
             [
                 "id" => 45,
