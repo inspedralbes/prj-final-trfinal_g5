@@ -75,12 +75,14 @@
                                 </video>
                             </template>
                             <template v-if="mensaje.idRutina">
+                                <button @click="descargarRutina">Descargar</button>
                                 <p>Rutina</p>
                                 <div v-for="(ejercicio, index) in rutinas2" :key="index">
                                     <p>NOM{{ ejercicio.nom_exercici }}</p>
                                     <p>SERIES{{ ejercicio.series }}</p>
                                     <p>REPETICIONES{{ ejercicio.repeticions }}</p>
                                 </div>
+                                
                             </template>
                             <template v-if="mensaje.idDieta">
                                 <p>Dieta</p>
