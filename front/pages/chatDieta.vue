@@ -1,4 +1,5 @@
 <template>
+
   <body>
     <div class="contenedor">
       <capçalera />
@@ -19,7 +20,7 @@
               <div class="contenido-mensaje">
                 <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
                   class="avatar-asistente" />
-                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+                <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
               </div>
             </div>
           </div>
@@ -155,6 +156,24 @@ export default {
         this.enviarMensaje();
       }
     },
+    async obtenirDietaDeHoy(idUsuari) {
+      try {
+        const response = await getDieta(idUsuari);
+        const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        return response.some(plato => new Date(plato.data_inici).toISOString().split('T')[0] === today);
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    },
+    async borrarDietaDeHoy(idUsuari) {
+      try {
+        const response = await borrarDietaHoy(idUsuari);
+        console.log('Dietas de hoy eliminadas:', response);
+      } catch (error) {
+        console.error('Error al eliminar las dietas de hoy:', error);
+      }
+    },
     async enviarMensaje() {
       try {
         if (!this.message.trim()) {
@@ -175,10 +194,8 @@ export default {
           content: this.message,
         });
 
-        
         this.isLoading = true;
         this.isSending = true;
-        
 
         const store = useUsuariPerfilStore();
         const idUsuario = store.id_usuari;
@@ -188,23 +205,23 @@ export default {
         const aliments = await getDatosAliments();
         const generatedText = await enviarMensajeOpenAIDieta(this.message, datosUsuario, aliments);
 
-
         console.log(generatedText);
 
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
-        // await borrarDieta(idUsuario); // Borrar la dieta actual del usuario
-        await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
+        
+        // Comprueba si hoy ya hay una rutina y elimínala si existe
+        const existeRutinaHoy = await this.obtenirRutinaDeHoy(idUsuario);
+        if (existeRutinaHoy) {
+          await this.borrarRutinaDeHoy(idUsuario);
+        }
 
+        await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
         // Construir el mensaje con la lista de apats y platos
         let mensajeDieta = '\nAquí tens la teva dieta:\n'; // Comienza el mensaje con la introducción
-
-
         dietaJSON.apats.forEach((apat) => {
           // Iterar sobre cada apat de la dieta
           mensajeDieta += `\n${apat.apat}:\n`; // Agregar el nombre del apat al mensaje
-
-
           apat.plats.forEach((plat) => {
             // Iterar sobre cada plat del apat
             mensajeDieta += `\n- ${plat.nom_plat} (proteines: ${plat.proteines}, carbohidrats: ${plat.carbohidrats}, greixos: ${plat.greixos}, calories: ${plat.calories})\n`;
@@ -215,7 +232,6 @@ export default {
             });
           });
         });
-
 
         this.chatMessages.push({
           role: 'assistant',

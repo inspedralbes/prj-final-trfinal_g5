@@ -88,34 +88,34 @@ export default {
 
         async redirectToPage(page) {
             this.idUsuari = useUsuariPerfilStore().id_usuari;
-            const existeRutinaHoy = await this.obtenirRutinaDeHoy(this.idUsuari);
+            // const existeRutinaHoy = await this.obtenirRutinaDeHoy(this.idUsuari);
 
             if (confirm("Si creas una rutina nova, la rutina actual cambiará. ¿Estàs segur?")) {
-                if (existeRutinaHoy) {
-                    await this.borrarRutinaDeHoy(this.idUsuari);
-                }
+                // if (existeRutinaHoy) {
+                //     await this.borrarRutinaDeHoy(this.idUsuari);
+                // }
                 this.$router.push(page);
             }
         },
-        async obtenirRutinaDeHoy(idUsuari) {
-            try {
-                const response = await getRutina(idUsuari);
-                const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
-                return response.some(exercise => new Date(exercise.data).toISOString().split('T')[0] === today);
-            } catch (error) {
-                console.error(error);
-                return false;
-            }
-        },
+        // async obtenirRutinaDeHoy(idUsuari) {
+        //     try {
+        //         const response = await getRutina(idUsuari);
+        //         const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        //         return response.some(exercise => new Date(exercise.data).toISOString().split('T')[0] === today);
+        //     } catch (error) {
+        //         console.error(error);
+        //         return false;
+        //     }
+        // },
 
-        async borrarRutinaDeHoy(idUsuari) {
-            try {
-                const response = await borrarRutinaDia(idUsuari);
-                console.log('Rutinas de hoy eliminadas:', response);
-            } catch (error) {
-                console.error('Error al eliminar las rutinas de hoy:', error);
-            }
-        },
+        // async borrarRutinaDeHoy(idUsuari) {
+        //     try {
+        //         const response = await borrarRutinaDia(idUsuari);
+        //         console.log('Rutinas de hoy eliminadas:', response);
+        //     } catch (error) {
+        //         console.error('Error al eliminar las rutinas de hoy:', error);
+        //     }
+        // },
 
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)

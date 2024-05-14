@@ -1,4 +1,5 @@
 <template>
+
   <body>
     <div class="contenedor">
       <capçalera />
@@ -137,6 +138,25 @@ export default {
         this.enviarMensaje();
       }
     },
+    async obtenirRutinaDeHoy(idUsuari) {
+      try {
+        const response = await getRutina(idUsuari);
+        const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        return response.some(exercise => new Date(exercise.data).toISOString().split('T')[0] === today);
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    },
+
+    async borrarRutinaDeHoy(idUsuari) {
+      try {
+        const response = await borrarRutinaDia(idUsuari);
+        console.log('Rutinas de hoy eliminadas:', response);
+      } catch (error) {
+        console.error('Error al eliminar las rutinas de hoy:', error);
+      }
+    },
     async enviarMensaje() {
       try {
         if (!this.message.trim()) {
@@ -175,35 +195,31 @@ export default {
 
         const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
+        // Comprueba si hoy ya hay una rutina y elimínala si existe
+        const existeRutinaHoy = await this.obtenirRutinaDeHoy(idUsuario);
+        if (existeRutinaHoy) {
+          await this.borrarRutinaDeHoy(idUsuario);
+        }
+
         // await borrarRutina(idUsuario); // Borrar la rutina actual del usuario
         await enviarRutinaAlServidor(rutinaJSON); // Enviar el JSON al backend
 
 
         // Construir el mensaje con la lista de días y ejercicios
         let mensajeRutina = '\nAquí tens la teva rutina:\n'; // Comienza el mensaje con la introducción
-
-
         rutinaJSON.dias.forEach((dia) => {
           // Iterar sobre cada día de la rutina
           mensajeRutina += `\nDía: ${dia.dia}\n`; // Agregar el número del día al mensaje
-
-
           dia.exercicis.forEach((exercicio) => {
             // Iterar sobre cada ejercicio del día
             mensajeRutina += `\n- ${exercicio.nom_exercici}( series de ${exercicio.series} amb  ${exercicio.repeticions} repeticions) \n`;
           });
         });
 
-
-
-
         this.chatMessages.push({
           role: 'assistant',
           content: mensajeRutina,
         });
-
-
-
 
         this.message = '';
       } catch (error) {

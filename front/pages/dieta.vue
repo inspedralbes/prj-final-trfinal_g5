@@ -103,24 +103,24 @@ export default {
                 this.$router.push(page);
             }
         },
-        async obtenirDietaDeHoy(idUsuari) {
-            try {
-                const response = await getDieta(idUsuari);
-                const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
-                return response.some(plato => new Date(plato.data_inici).toISOString().split('T')[0] === today);
-            } catch (error) {
-                console.error(error);
-                return false;
-            }
-        },
-        async borrarDietaDeHoy(idUsuari) {
-            try {
-                const response = await borrarDietaHoy(idUsuari);
-                console.log('Dietas de hoy eliminadas:', response);
-            } catch (error) {
-                console.error('Error al eliminar las dietas de hoy:', error);
-            }
-        },
+        // async obtenirDietaDeHoy(idUsuari) {
+        //     try {
+        //         const response = await getDieta(idUsuari);
+        //         const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        //         return response.some(plato => new Date(plato.data_inici).toISOString().split('T')[0] === today);
+        //     } catch (error) {
+        //         console.error(error);
+        //         return false;
+        //     }
+        // },
+        // async borrarDietaDeHoy(idUsuari) {
+        //     try {
+        //         const response = await borrarDietaHoy(idUsuari);
+        //         console.log('Dietas de hoy eliminadas:', response);
+        //     } catch (error) {
+        //         console.error('Error al eliminar las dietas de hoy:', error);
+        //     }
+        // },
     },
     mounted() {
         this.idUsuari = useUsuariPerfilStore().id_usuari;
