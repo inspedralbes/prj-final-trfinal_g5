@@ -4,7 +4,7 @@
         <div id="barra-busqueda" v-if="amics.length > 0">
 
 
-            <input type="text" v-model="busqueda" placeholder="Buscar...">
+            <input type="text" v-model="busqueda" placeholder="&#128269; Buscar...">
         </div>
         <div class="lista-amigos">
             <div v-if="amics.length === 0">
