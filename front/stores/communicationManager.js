@@ -241,6 +241,24 @@ export async function borrarDieta(idUsuario) {
     }
 }
 
+export async function borrarDietaHoy(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-dieta-hoy/${idUsuario}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar la dieta');
+        }
+
+        const data = await response.json();
+        console.log('Dieta borrada correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar la dieta: ' + error.message);
+    }
+}
+
 
 //fetch para la api de openai
 

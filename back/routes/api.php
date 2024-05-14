@@ -24,6 +24,7 @@ Route::get('/aliments', [AlimentsController::class, 'index']);
 Route::get('/dieta/{id}', [DietaController::class, 'getDietas']);
 Route::post('/guardar-dieta', [DietaController::class, 'store']);
 Route::delete('/eliminar-dieta/{id}', [DietaController::class, 'destroy']);
+Route::delete('/eliminar-dieta-hoy/{id}', [DietaController::class, 'destroyToday']);
 
 Route::post('/registre', [UserController::class, 'registre']);
 Route::post('/loguejat', [UserController::class, 'loguejat']);

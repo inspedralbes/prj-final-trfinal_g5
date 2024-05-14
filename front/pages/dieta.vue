@@ -46,13 +46,14 @@
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
-import { getDieta, borrarDieta } from '@/stores/communicationManager';
+import { getDieta, borrarDieta, borrarDietaHoy } from '@/stores/communicationManager';
 
 export default {
     data() {
         return {
             dietas: [],
-            loading: true // Variable para controlar la carga de datos
+            loading: true, // Variable para controlar la carga de datos
+            idUsuari: '' // Agregado para almacenar el id del usuario
         };
     },
     methods: {
@@ -91,17 +92,33 @@ export default {
         redirectTo(page) {
             this.$router.push(page);
         },
-        redirectToPage(page) {
+        async redirectToPage(page) {
             this.idUsuari = useUsuariPerfilStore().id_usuari;
-            if (confirm("Si crees una nova dieta, la dieta actual s'eliminarà. ¿Estàs segur?")) {
-                borrarDieta(this.idUsuari)
-                    .then((response) => {
-                        console.log(response);
-                        this.$router.push(page);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
+            const existeDietaHoy = await this.obtenirDietaDeHoy(this.idUsuari);
+
+            if (confirm("Si creas una nova dieta, la dieta actual s'eliminarà. ¿Estàs segur?")) {
+                if (existeDietaHoy) {
+                    await this.borrarDietaDeHoy(this.idUsuari);
+                }
+                this.$router.push(page);
+            }
+        },
+        async obtenirDietaDeHoy(idUsuari) {
+            try {
+                const response = await getDieta(idUsuari);
+                const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+                return response.some(plato => new Date(plato.data_inici).toISOString().split('T')[0] === today);
+            } catch (error) {
+                console.error(error);
+                return false;
+            }
+        },
+        async borrarDietaDeHoy(idUsuari) {
+            try {
+                const response = await borrarDietaHoy(idUsuari);
+                console.log('Dietas de hoy eliminadas:', response);
+            } catch (error) {
+                console.error('Error al eliminar las dietas de hoy:', error);
             }
         },
     },
