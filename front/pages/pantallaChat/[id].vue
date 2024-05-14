@@ -22,22 +22,20 @@
         <div v-if="mostrarDieta">
             <p @click="mostrarDieta = false">x</p>
             <h1>Dieta</h1>
-            <div v-for="(apat, index) in dietas" :key="index">
-                <template v-if="index === 0 || dietas[index - 1].dia !== apat.dia">
-                    <p @click="toggleDia(apat.dia)">Apat {{ apat.dia }}</p>
-                    <div v-if="diaSeleccionado === apat.dia">
-                        <ul>
-                            <!-- Mostrar todos los ejercicios del día -->
-                            <li v-for="(apatDia, idx) in dietas.filter(e => e.dia === apat.dia)" :key="idx">
-                                {{ apatDia.nom_plat }}
-                            </li>
-                        </ul>
-                    </div>
+            <template v-for="(apats, index) in dietas" :key="index">
+                <template v-if="index === 0 || dietas[index - 1].apat !== apats.apat">
+                    <p @click="toggleDia(apats.apat)">Apat {{ apats.apat }}</p>
                 </template>
-            </div>
-
-
+                <div v-if="diaSeleccionado === apats.apat">
+                    <ul>
+                        <li>{{ apats.nom_plat }}</li>
+                    </ul>
+                </div>
+            </template>
+            <button @click="enviarDieta" :disabled="isSaving">Enviar</button>
         </div>
+
+
 
 
 
@@ -120,8 +118,7 @@
 
                         <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="clickRutina">
                         </div>
-                        <div><img src="@/public/dieta.png" class="modal-contenido-dieta"
-                                @click="clickDieta">
+                        <div><img src="@/public/dieta.png" class="modal-contenido-dieta" @click="clickDieta">
                         </div>
                     </div>
                 </div>
@@ -233,6 +230,44 @@ export default {
                     },
                     body: JSON.stringify({
                         idRutina: idRutina // Incluye el valor de idRutina aquí
+                    }),
+                });
+
+                const responseData = await response.json();
+                console.log(responseData);
+                if (responseData.status === 1) {
+                    // Mensaje enviado correctamente
+                    await this.mostrarMensajes();
+                    this.isSaving = false;
+
+                } else {
+                    // Manejar el caso de error al enviar el mensaje
+                    console.error('Error al enviar el mensaje:', responseData.message);
+                }
+            } catch (error) {
+                // Manejar errores
+                console.error('Error al enviar el mensaje:', error);
+            }
+        },
+        async enviarDieta() {
+            try {
+                this.isSaving = true;
+                this.mostrarDieta = false;
+                const idDieta = useUsuariPerfilStore().id_usuari;
+
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const id_amic = useUsuariPerfilStore().amic;
+
+                // Obtener todos los IDs de rutina mostrados
+                console.log(idDieta);
+
+                const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        idDieta: idDieta // Incluye el valor de idRutina aquí
                     }),
                 });
 
@@ -402,7 +437,7 @@ export default {
                 // console.error('Error al obtener la rutina:', error);
             }
         },
-        async mostrarDietas(){
+        async mostrarDietas() {
             try {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const response = await fetch(`http://localhost:8000/api/dietas/${id_usuario}`);
