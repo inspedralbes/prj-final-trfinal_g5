@@ -1,5 +1,4 @@
 <template>
-
     <body>
         <div class="flex-container">
             <capçalera />
@@ -14,9 +13,8 @@
                 </div>
                 <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
 
-                <button class="dieta-button" @click="redirectTo('/totesRutines')">Totes Rutines</button>
+                <button class="historial-button" @click="redirectTo('/totesRutines')">Historial Rutines</button>
             </div>
-            
 
             <!-- Mostrar spinner de carga mientras se cargan los datos -->
             <div v-if="loading" class="loading">
@@ -36,18 +34,14 @@
                             <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
                             <h2>{{ exercise.nom_exercici }}</h2>
                             <div class="exercise-details">
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" />
+                                <Icon class="" name="ic:baseline-insert-invitation" />
                                 Día: {{ exercise.dia }} <br> <br>
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-fitness-center" />Series:
-                                {{ exercise.series }} <br> <br>
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones:
-                                {{ exercise.repeticions }}
+                                <Icon class="" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br> <br>
+                                <Icon class="" name="ic:baseline-cached" />Repeticiones: {{ exercise.repeticions }}
                             </div>
                         </div>
                     </div>
                 </div>
-
-
                 <button class="dieta-button" @click="redirectToPage('/chatRutina')">Nueva Rutina</button>
             </div>
             <navBar />
@@ -55,11 +49,9 @@
     </body>
 </template>
 
-
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
 import { getRutina } from '@/stores/communicationManager';
-
 
 export default {
     data() {
@@ -70,9 +62,6 @@ export default {
             exercises: [],
             dies: [],
             loading: true,
-            timerSeconds: 120, // 2 minutos
-            timerRunning: false,
-            timerInterval: null
         }
     },
     computed: {
@@ -107,7 +96,6 @@ export default {
                 //     });
                 this.$router.push(page);
             }
-
         },
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)
@@ -118,10 +106,13 @@ export default {
                     // Verificar la estructura de cada objeto de ejercicio en response
                     response.forEach(exercise => console.log("Ejercicio:", exercise));
 
-                    // Convertir this.selectedDay a string si no lo es
-                    const selectedDayString = this.selectedDay.toString();
+                    // Filtrar las rutinas para obtener solo la más reciente
+                    const recentDate = Math.max(...response.map(exercise => new Date(exercise.data).getTime()));
+                    const recentExercises = response.filter(exercise => new Date(exercise.data).getTime() === recentDate);
+
                     // Filtrar los ejercicios para mostrar solo los del día seleccionado
-                    this.exercises = response.filter(exercise => exercise.dia == selectedDayString); // Usamos == en lugar de ===
+                    const selectedDayString = this.selectedDay.toString();
+                    this.exercises = recentExercises.filter(exercise => exercise.dia == selectedDayString); // Usamos == en lugar de ===
                     console.log("Ejercicios filtrados:", this.exercises); // Verificar los ejercicios filtrados
                 })
                 .catch((error) => {
@@ -135,8 +126,11 @@ export default {
         obtenirDies(idUsuari) {
             getRutina(idUsuari)
                 .then((response) => {
-                    //console.log(response);
-                    this.dies = [...new Set(response.map(exercise => exercise.dia))];
+                    // Filtrar las rutinas para obtener solo la más reciente
+                    const recentDate = Math.max(...response.map(exercise => new Date(exercise.data).getTime()));
+                    const recentExercises = response.filter(exercise => new Date(exercise.data).getTime() === recentDate);
+
+                    this.dies = [...new Set(recentExercises.map(exercise => exercise.dia))];
                     console.log(this.dies);
                 })
                 .catch((error) => {
@@ -153,9 +147,7 @@ export default {
                 this.selectedDay = '1';
                 this.obtenirRutina(this.idUsuari);
             }
-
         },
-
         decrementSelectedDay() {
             // Restar 1 al día seleccionado
             if (this.selectedDay > '1') {
@@ -168,7 +160,6 @@ export default {
             }
         }
     }
-
 }
 </script>
 
@@ -183,9 +174,7 @@ body {
     /* Evita el desplazamiento horizontal */
 }
 
-
 /* ////////////////////////////////////////// */
-
 
 .arrow {
     width: 50px;
@@ -210,7 +199,6 @@ body {
     font-weight: bold;
 }
 
-
 .main-content {
     flex-grow: 1;
     overflow-y: auto;
@@ -220,7 +208,6 @@ body {
     padding-bottom: 50px;
     /* Altura del navBar */
     text-align: center;
-
 }
 
 .exercise-list {
@@ -271,7 +258,6 @@ body {
     padding-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
-
 }
 
 .dieta-button {
@@ -294,7 +280,25 @@ body {
     background-position: center;
 }
 
-
+.historial-button {
+    position: relative;
+    width: 180%;
+    /* Ancho del 80% del contenedor padre */
+    max-width: 300px;
+    height: 60px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-position: center;
+    margin-left: 75%;
+}
 
 .loading {
     display: flex;
@@ -334,7 +338,6 @@ navBar {
     display: flex;
     align-items: center;
     margin: auto;
-
 }
 
 .day-selector select {
@@ -347,7 +350,6 @@ navBar {
     text-align: center;
     margin-top: 20px;
     padding: 20px;
-
 }
 
 /* Media query para pantallas más pequeñas */

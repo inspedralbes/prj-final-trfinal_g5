@@ -1,5 +1,4 @@
 <template>
-
     <body>
         <div class="flex-container">
             <capçalera />
@@ -11,9 +10,8 @@
             </div>
 
             <div class="dieta" v-if="dietas.length === 0 && !loading">
-                <p>No hi han dades de dieta dispoibles. Clica el boto per generar una dieta.</p>
+                <p>No hi han dades de dieta disponibles. Clica el botó per generar una dieta.</p>
                 <button class="dieta-button" @click="redirectTo('/chatDieta')">Crear Dieta</button>
-
             </div>
 
             <div class="main-content" v-if="dietas.length != 0 && !loading">
@@ -36,24 +34,19 @@
                                 {{ ingredient.quantitat }} {{ ingredient.unitat }} de {{ ingredient.nom_ingredient }}
                             </li>
                         </ul>
-
                     </div>
-                    
                 </div>
                 <button class="dieta-button" @click="redirectToPage('/chatDieta')">Nova Dieta</button>
-
             </div>
 
             <navBar />
-
         </div>
     </body>
 </template>
 
-
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
-import { getDieta } from '@/stores/communicationManager';
+import { getDieta, borrarDieta } from '@/stores/communicationManager';
 
 export default {
     data() {
@@ -67,9 +60,13 @@ export default {
             getDieta(idUsuari)
                 .then(response => {
                     console.log('Dieta:', response);
+                    // Encontrar la dieta más reciente
+                    const recentDate = Math.max(...response.map(plato => new Date(plato.data_inici).getTime()));
+                    const recentDiet = response.filter(plato => new Date(plato.data_inici).getTime() === recentDate);
+
                     // Organizar los platos por tipo de comida
                     const comidas = {};
-                    response.forEach(plato => {
+                    recentDiet.forEach(plato => {
                         if (!comidas.hasOwnProperty(plato.apat)) {
                             comidas[plato.apat] = [];
                         }
@@ -135,7 +132,7 @@ body {
     background-color: #FFF;
 }
 
-.main-content{
+.main-content {
     flex-grow: 1;
     overflow-y: auto;
     /* Habilita el scroll si el contenido es más grande que la ventana */
@@ -207,12 +204,12 @@ body {
     /* Animación de rotación */
 }
 
-#data-dieta{
+#data-dieta {
     margin: auto;
     text-align: center;
 }
 
-#apat{
+#apat {
     margin: auto;
     text-align: center;
     margin-top: 40px;
@@ -228,7 +225,6 @@ body {
         transform: rotate(360deg);
     }
 }
-
 
 navBar {
     width: 100%;

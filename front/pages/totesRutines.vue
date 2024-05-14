@@ -127,7 +127,7 @@ body {
 }
 
 h1 {
-    margin-left: 170px;
+    margin-left: 35%;
 }
 
 .day-selector {
@@ -163,8 +163,8 @@ ul {
 
 .sidebar {
     background-color: #f4f4f4;
-    padding: 20px;
-    width: 120px;
+    padding: 10px;
+    width: 25%;
     /* más estrecho */
     position: fixed;
     top: 90px;
