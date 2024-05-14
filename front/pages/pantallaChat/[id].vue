@@ -77,9 +77,16 @@
                             <template v-if="mensaje.idRutina">
                                 <p>Rutina</p>
                                 <div v-for="(ejercicio, index) in rutinas2" :key="index">
-                                    <p>{{ ejercicio.nom_exercici }}</p>
-                                    <p>{{ ejercicio.series }}</p>
-                                    <p>{{ ejercicio.repeticions }}</p>
+                                    <p>NOM{{ ejercicio.nom_exercici }}</p>
+                                    <p>SERIES{{ ejercicio.series }}</p>
+                                    <p>REPETICIONES{{ ejercicio.repeticions }}</p>
+                                </div>
+                            </template>
+                            <template v-if="mensaje.idDieta">
+                                <p>Dieta</p>
+                                <div v-for="(plat, index) in dietas2" :key="index">
+                                    <p>Nom{{ plat.nom_plat }}</p>
+                                    <p>Descripcio{{ plat.ingredients }}</p>
                                 </div>
                             </template>
                             <p>{{ mensaje.mensaje }}</p>
@@ -152,6 +159,7 @@ export default {
             rutinas2: [],
             diaSeleccionado: null, // Almacena el día seleccionado por el usuario
             dietas: [],
+            dietas2: [],
 
         };
     },
@@ -362,6 +370,11 @@ export default {
                             const rutinaData = await rutinaResponse.json();
                             this.rutinas2 = rutinaData;
                             // console.log('Datos de la rutina:', rutinaData);
+                        }
+                        if(mensaje.idDieta){
+                            const dietaResponse = await fetch(`http://localhost:8000/api/dietas/${mensaje.idDieta}`);
+                            const dietaData = await dietaResponse.json();
+                            this.dietas2 = dietaData;
                         }
                     });
                     // Asignar los mensajes agrupados a la variable mensajes
