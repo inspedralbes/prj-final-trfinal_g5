@@ -192,7 +192,7 @@ export default {
         console.log(generatedText);
 
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
-        await borrarDieta(idUsuario); // Borrar la dieta actual del usuario
+        // await borrarDieta(idUsuario); // Borrar la dieta actual del usuario
         await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
 

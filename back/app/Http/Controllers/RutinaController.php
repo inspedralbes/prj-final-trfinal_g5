@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Rutina;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class RutinaController extends Controller
 {
@@ -38,6 +39,7 @@ class RutinaController extends Controller
                 $nombre_dia = $dia['dia']; // Obtener el nombre del día
     
                 $exercicis = $dia['exercicis']; // Obtener los ejercicios del día
+                $data = Carbon::now();
     
                 foreach ($exercicis as $exercici) {
                     // Crear una nueva rutina para cada ejercicio
@@ -47,6 +49,7 @@ class RutinaController extends Controller
                         'nom_exercici' => $exercici['nom_exercici'],
                         'series' => $exercici['series'],
                         'repeticions' => $exercici['repeticions'],
+                        'data' => $data,
                         'id_exercici' => $exercici['id_exercici']
                     ]);
                 }
