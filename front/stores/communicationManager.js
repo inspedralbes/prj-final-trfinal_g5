@@ -204,9 +204,46 @@ export async function borrarRutina(idUsuario) {
     }
 }
 
+export async function borrarRutinaDia(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-rutina-hoy/${idUsuario}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar la rutina');
+        }
+
+        const data = await response.json();
+        console.log('Rutina borrada correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar la rutina: ' + error.message);
+    }
+}
+
+
 export async function borrarDieta(idUsuario) {
     try {
         const response = await fetch(`${url}/eliminar-dieta/${idUsuario}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar la dieta');
+        }
+
+        const data = await response.json();
+        console.log('Dieta borrada correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar la dieta: ' + error.message);
+    }
+}
+
+export async function borrarDietaHoy(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-dieta-hoy/${idUsuario}`, {
             method: 'DELETE',
         });
 

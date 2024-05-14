@@ -1,5 +1,4 @@
 <template>
-
     <body>
         <div class="flex-container">
             <capçalera />
@@ -13,27 +12,7 @@
                     </select>
                 </div>
                 <Icon class="arrow" @click="incrementSelectedDay" name="ic:baseline-arrow-circle-right" />
-            </div>
-                <!-- Temporizador -->
-                <div class="timer-container">
-                    <div class="timer">
-                        <span>Temps de descans</span>
-                     
-                        <!-- Botones para ajustar el tiempo de descanso -->
-                        <div class="time-adjust-container">
-                            <div class="time-adjust">
-                                <button class="time-adjust-button" @click="adjustTime(10)">+</button>
-                                <span>{{ formatTime(timerSeconds) }}</span>
-                                <button class="time-adjust-button" @click="adjustTime(-10)">-</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timer-buttons">
-                        <button class="timer-button" @click="startTimer">Iniciar</button>
-                        <button class="timer-button" @click="pauseTimer" :disabled="!timerRunning">Pausa</button>
-                        <button class="timer-button" @click="resetTimer">Reiniciar</button>
-                    </div>
-                
+                <button class="historial-button" @click="redirectTo('/totesRutines')">Historial Rutines</button>
             </div>
 
             <!-- Mostrar spinner de carga mientras se cargan los datos -->
@@ -47,46 +26,35 @@
                 <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
             </div>
 
-            <div v-else class="main-content">
+            <div v-if="exercises.length != 0 && !loading" class="main-content">
                 <div class="exercise-list">
                     <div v-for="exercise in exercises" :key="exercise.id">
                         <div class="exercise-item">
                             <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
                             <h2>{{ exercise.nom_exercici }}</h2>
                             <div class="exercise-details">
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-insert-invitation" />
+                                <Icon class="" name="ic:baseline-insert-invitation" />
                                 Día: {{ exercise.dia }} <br> <br>
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-fitness-center" />Series:
-                                {{ exercise.series }} <br> <br>
-                                <Icon class="" @click="incrementSelectedDay" name="ic:baseline-cached" />Repeticiones:
-                                {{ exercise.repeticions }}
-                            </div>
-                            <div class="exercise-controls">
-                                <!-- Botones para marcar serie -->
-                                <div class="series-buttons">
-                                    <button class="series-button" v-for="serie in [1, 2, 3, 4]" :key="serie"
-                                        @click="setSerieBase(serie)">{{ serie }}</button>
-                                </div>
 
-
+                                <Icon class="" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br> <br>
+                                <Icon class="" name="ic:baseline-cached" />Repeticiones: {{ exercise.repeticions }}
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-                <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
+                <div class="buttons-container">
+                    <button class="dieta-button" @click="redirectToPage('/chatRutina')">Nueva Rutina</button>
+                    <button class="comencar-button" @click="redirectTo('/comencarRutina')">Començar Rutina</button>
+                </div>
             </div>
             <navBar />
         </div>
     </body>
 </template>
 
-
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
-import { getRutina } from '@/stores/communicationManager';
-
+import { getRutina, borrarRutina } from '@/stores/communicationManager';
 
 export default {
     data() {
@@ -97,9 +65,6 @@ export default {
             exercises: [],
             dies: [],
             loading: true,
-            timerSeconds: 120, // 2 minutos
-            timerRunning: false,
-            timerInterval: null
         }
     },
     computed: {
@@ -121,66 +86,37 @@ export default {
             console.log("Redirecting to:", page); // Agregado: Verificar la redirección
         },
 
-        adjustTime(seconds) {
-            // Ajustar el tiempo de descanso
-            if (!this.timerRunning) {
-                this.timerSeconds += seconds;
-                if (this.timerSeconds < 0) {
-                    this.timerSeconds = 0;
-                }
-            }
-        },
-        startTimer() {
-            if (!this.timerRunning) {
-                this.timerRunning = true;
-                this.timerInterval = setInterval(() => {
-                    if (this.timerSeconds > 0) {
-                        this.timerSeconds--;
-                    } else {
-                        clearInterval(this.timerInterval);
-                        this.timerRunning = false;
-                        // Lógica al finalizar el temporizador
-                        console.log("¡El temporizador ha finalizado!");
-                    }
-                }, 1000); // Actualiza el temporizador cada segundo
-            }
-        },
-        pauseTimer() {
-            clearInterval(this.timerInterval);
-            this.timerRunning = false;
-        },
-        resetTimer() {
-            clearInterval(this.timerInterval);
-            this.timerSeconds = 120; // Reiniciar el temporizador a 2 minutos
-            this.timerRunning = false;
-        },
-        formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-        },
-        setSerieBase(serie) {
-            // Establecer la serie base seleccionada
-            // Puedes almacenar esta serie en una variable de datos para su posterior uso
-            // Por ejemplo:
-            this.serieBase = serie;
-            console.log("Serie base seleccionada:", serie); // Agregado: Verificar la serie seleccionada
-        },
-
-        redirectToPage(page) {
+        async redirectToPage(page) {
             this.idUsuari = useUsuariPerfilStore().id_usuari;
-            if (confirm("Si crees una rutina nova, la rutina actual s'eliminarà. ¿Estàs segur?")) {
-                borrarRutina(this.idUsuari)
-                    .then((response) => {
-                        console.log(response);
-                        this.$router.push(page);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            }
+            // const existeRutinaHoy = await this.obtenirRutinaDeHoy(this.idUsuari);
 
+            if (confirm("Si creas una rutina nova, la rutina actual cambiará. ¿Estàs segur?")) {
+                // if (existeRutinaHoy) {
+                //     await this.borrarRutinaDeHoy(this.idUsuari);
+                // }
+                this.$router.push(page);
+            }
         },
+        // async obtenirRutinaDeHoy(idUsuari) {
+        //     try {
+        //         const response = await getRutina(idUsuari);
+        //         const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        //         return response.some(exercise => new Date(exercise.data).toISOString().split('T')[0] === today);
+        //     } catch (error) {
+        //         console.error(error);
+        //         return false;
+        //     }
+        // },
+
+        // async borrarRutinaDeHoy(idUsuari) {
+        //     try {
+        //         const response = await borrarRutinaDia(idUsuari);
+        //         console.log('Rutinas de hoy eliminadas:', response);
+        //     } catch (error) {
+        //         console.error('Error al eliminar las rutinas de hoy:', error);
+        //     }
+        // },
+
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)
                 .then((response) => {
@@ -190,10 +126,13 @@ export default {
                     // Verificar la estructura de cada objeto de ejercicio en response
                     response.forEach(exercise => console.log("Ejercicio:", exercise));
 
-                    // Convertir this.selectedDay a string si no lo es
-                    const selectedDayString = this.selectedDay.toString();
+                    // Filtrar las rutinas para obtener solo la más reciente
+                    const recentDate = Math.max(...response.map(exercise => new Date(exercise.data).getTime()));
+                    const recentExercises = response.filter(exercise => new Date(exercise.data).getTime() === recentDate);
+
                     // Filtrar los ejercicios para mostrar solo los del día seleccionado
-                    this.exercises = response.filter(exercise => exercise.dia == selectedDayString); // Usamos == en lugar de ===
+                    const selectedDayString = this.selectedDay.toString();
+                    this.exercises = recentExercises.filter(exercise => exercise.dia == selectedDayString); // Usamos == en lugar de ===
                     console.log("Ejercicios filtrados:", this.exercises); // Verificar los ejercicios filtrados
                 })
                 .catch((error) => {
@@ -207,8 +146,11 @@ export default {
         obtenirDies(idUsuari) {
             getRutina(idUsuari)
                 .then((response) => {
-                    //console.log(response);
-                    this.dies = [...new Set(response.map(exercise => exercise.dia))];
+                    // Filtrar las rutinas para obtener solo la más reciente
+                    const recentDate = Math.max(...response.map(exercise => new Date(exercise.data).getTime()));
+                    const recentExercises = response.filter(exercise => new Date(exercise.data).getTime() === recentDate);
+
+                    this.dies = [...new Set(recentExercises.map(exercise => exercise.dia))];
                     console.log(this.dies);
                 })
                 .catch((error) => {
@@ -225,9 +167,7 @@ export default {
                 this.selectedDay = '1';
                 this.obtenirRutina(this.idUsuari);
             }
-
         },
-
         decrementSelectedDay() {
             // Restar 1 al día seleccionado
             if (this.selectedDay > '1') {
@@ -240,7 +180,6 @@ export default {
             }
         }
     }
-
 }
 </script>
 
@@ -274,8 +213,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px; /* Espaciado superior */
-    margin-bottom: 20px; /* Espaciado inferior */
+    margin-top: 20px;
+    /* Espaciado superior */
+    margin-bottom: 20px;
+    /* Espaciado inferior */
 }
 
 .timer {
@@ -288,14 +229,17 @@ body {
 }
 
 .timer-buttons {
-    margin-top: 10px; /* Espaciado entre el temporizador y los botones */
+    margin-top: 10px;
+    /* Espaciado entre el temporizador y los botones */
 }
 
 /* ////////////////////////////////////////// */
 
 .series-button:active {
-    background-color: #555; /* Cambiar este valor al color deseado */
-    color: #fff; /* Cambiar el color del texto para asegurar la legibilidad */
+    background-color: #555;
+    /* Cambiar este valor al color deseado */
+    color: #fff;
+    /* Cambiar el color del texto para asegurar la legibilidad */
 }
 
 .arrow {
@@ -315,12 +259,11 @@ body {
 }
 
 .flex-container h1 {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: -5px;
+    margin-bottom: 3px;
     font-size: 36px;
     font-weight: bold;
 }
-
 
 .main-content {
     flex-grow: 1;
@@ -331,7 +274,6 @@ body {
     padding-bottom: 50px;
     /* Altura del navBar */
     text-align: center;
-
 }
 
 .exercise-list {
@@ -382,7 +324,6 @@ body {
     padding-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
-
 }
 
 .dieta-button {
@@ -390,7 +331,7 @@ body {
     width: 120%;
     /* Ancho del 80% del contenedor padre */
     max-width: 200px;
-    height: 80px;
+    height: 60px;
     margin-top: 50px;
     font-size: 1.5em;
     font-weight: bold;
@@ -405,7 +346,45 @@ body {
     background-position: center;
 }
 
+.comencar-button {
+    position: relative;
+    width: 180%;
+    /* Ancho del 80% del contenedor padre */
+    max-width: 250px;
+    height: 60px;
+    margin-top: 20px; /* Reducir el espaciado superior */
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-position: center;
+}
 
+.historial-button {
+    position: relative;
+    width: 180%;
+    /* Ancho del 80% del contenedor padre */
+    max-width: 300px;
+    height: 50px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-position: center;
+    margin-left: 75%;
+}
 
 .loading {
     display: flex;
@@ -445,7 +424,6 @@ navBar {
     display: flex;
     align-items: center;
     margin: auto;
-
 }
 
 .day-selector select {
@@ -458,7 +436,13 @@ navBar {
     text-align: center;
     margin-top: 20px;
     padding: 20px;
+}
 
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
 /* Media query para pantallas más pequeñas */

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Rutina;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class RutinaController extends Controller
 {
@@ -38,6 +39,7 @@ class RutinaController extends Controller
                 $nombre_dia = $dia['dia']; // Obtener el nombre del día
     
                 $exercicis = $dia['exercicis']; // Obtener los ejercicios del día
+                $data = Carbon::now();
     
                 foreach ($exercicis as $exercici) {
                     // Crear una nueva rutina para cada ejercicio
@@ -47,6 +49,7 @@ class RutinaController extends Controller
                         'nom_exercici' => $exercici['nom_exercici'],
                         'series' => $exercici['series'],
                         'repeticions' => $exercici['repeticions'],
+                        'data' => $data,
                         'id_exercici' => $exercici['id_exercici']
                     ]);
                 }
@@ -106,6 +109,26 @@ class RutinaController extends Controller
             return response()->json(['message' => 'Rutinas eliminadas correctamente'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al eliminar las rutinas: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Remove today's routines for the specified user.
+     *
+     * @param  int  $id_usuari
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyToday($id_usuari)
+    {
+        try {
+            $today = Carbon::today()->toDateString();
+            Rutina::where('id_usuari', $id_usuari)
+                ->whereDate('data', $today)
+                ->delete();
+
+            return response()->json(['message' => 'Rutinas de hoy eliminadas correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar las rutinas de hoy: ' . $e->getMessage()], 500);
         }
     }
 }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('nom_exercici');
             $table->string('series')->nullable();
             $table->string('repeticions')->nullable();
+            $table->date('data')->nullable();
             $table->foreignid('id_exercici')->constrained('ejercicios')->onDelete('cascade');
         });
     }
