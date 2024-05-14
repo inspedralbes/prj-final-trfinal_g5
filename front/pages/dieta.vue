@@ -94,12 +94,12 @@ export default {
         },
         async redirectToPage(page) {
             this.idUsuari = useUsuariPerfilStore().id_usuari;
-            const existeDietaHoy = await this.obtenirDietaDeHoy(this.idUsuari);
+            // const existeDietaHoy = await this.obtenirDietaDeHoy(this.idUsuari);
 
             if (confirm("Si creas una nova dieta, la dieta actual s'eliminarà. ¿Estàs segur?")) {
-                if (existeDietaHoy) {
-                    await this.borrarDietaDeHoy(this.idUsuari);
-                }
+                // if (existeDietaHoy) {
+                //     await this.borrarDietaDeHoy(this.idUsuari);
+                // }
                 this.$router.push(page);
             }
         },
