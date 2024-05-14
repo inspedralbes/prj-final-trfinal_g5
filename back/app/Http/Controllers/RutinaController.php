@@ -111,4 +111,24 @@ class RutinaController extends Controller
             return response()->json(['error' => 'Error al eliminar las rutinas: ' . $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Remove today's routines for the specified user.
+     *
+     * @param  int  $id_usuari
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyToday($id_usuari)
+    {
+        try {
+            $today = Carbon::today()->toDateString();
+            Rutina::where('id_usuari', $id_usuari)
+                ->whereDate('data', $today)
+                ->delete();
+
+            return response()->json(['message' => 'Rutinas de hoy eliminadas correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar las rutinas de hoy: ' . $e->getMessage()], 500);
+        }
+    }
 }

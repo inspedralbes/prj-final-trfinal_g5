@@ -15,7 +15,7 @@
             </div>
 
             <div class="main-content" v-if="dietas.length != 0 && !loading">
-                <button class="dieta-button" @click="redirectTo('/totesDietes')">Totes Dietes</button>
+                <button class="historial-button" @click="redirectTo('/totesDietes')">Historial Dietes</button>
 
                 <div id="data-dieta" v-if="dietas.length > 0">
                     <p>Desde {{ dietas[0].platos[0].data_inici }} hasta {{ dietas[0].platos[0].data_fi }}</p>
@@ -167,8 +167,27 @@ body {
     width: 120%;
     /* Ancho del 80% del contenedor padre */
     max-width: 200px;
-    height: 80px;
+    height: 60px;
     margin-top: 50px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-position: center;
+}
+
+.historial-button {
+    position: relative;
+    width: 100%;
+    /* Ancho del 80% del contenedor padre */
+    max-width: 240px;
+    height: 60px;
     font-size: 1.5em;
     font-weight: bold;
     color: #fff;

@@ -14,11 +14,11 @@
                 <h2 v-if="fechaSeleccionada">{{ fechaSeleccionada }}</h2>
                 <div v-for="dieta in dietas" :key="dieta.id" v-if="fechaSeleccionada">
                     <div class="exercise-item">
-                        <img :src="dieta.image" alt="Imagen de la dieta" class="exercise-image" />
                         <h3>{{ dieta.nom_plat }}</h3>
-                        <p>Día: {{ dieta.data_inici | dateFormat }}</p>
                         <p>Calorías: {{ dieta.calories }}</p>
                         <p>Proteínas: {{ dieta.proteines }}</p>
+                        <p>Carbohidratos: {{ dieta.carbohidrats }}</p>
+                        <p>Greixos: {{ dieta.grases }}</p>
                     </div>
                 </div>
             </div>
@@ -129,8 +129,8 @@ ul {
 
 .sidebar {
     background-color: #f4f4f4;
-    padding: 20px;
-    width: 120px;
+    padding: 10px;
+    width: 27%;
     /* más estrecho */
     position: fixed;
     top: 90px;

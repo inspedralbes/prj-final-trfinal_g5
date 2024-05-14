@@ -42,8 +42,10 @@
                         </div>
                     </div>
                 </div>
-                <button class="dieta-button" @click="redirectToPage('/chatRutina')">Nueva Rutina</button>
-                <button class="dieta-button" @click="redirectTo('/comencarRutina')">Començar Rutina</button>
+                <div class="buttons-container">
+                    <button class="dieta-button" @click="redirectToPage('/chatRutina')">Nueva Rutina</button>
+                    <button class="comencar-button" @click="redirectTo('/comencarRutina')">Començar Rutina</button>
+                </div>
             </div>
             <navBar />
         </div>
@@ -52,7 +54,7 @@
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
-import { getRutina } from '@/stores/communicationManager';
+import { getRutina, borrarRutina } from '@/stores/communicationManager';
 
 export default {
     data() {
@@ -84,20 +86,37 @@ export default {
             console.log("Redirecting to:", page); // Agregado: Verificar la redirección
         },
 
-        redirectToPage(page) {
+        async redirectToPage(page) {
             this.idUsuari = useUsuariPerfilStore().id_usuari;
-            if (confirm("Si crees una rutina nova, la rutina actual cambiara. ¿Estàs segur?")) {
-                // borrarRutina(this.idUsuari)
-                //     .then((response) => {
-                //         console.log(response);
-                //         this.$router.push(page);
-                //     })
-                //     .catch((error) => {
-                //         console.error(error);
-                //     });
+            const existeRutinaHoy = await this.obtenirRutinaDeHoy(this.idUsuari);
+
+            if (confirm("Si creas una rutina nova, la rutina actual cambiará. ¿Estàs segur?")) {
+                if (existeRutinaHoy) {
+                    await this.borrarRutinaDeHoy(this.idUsuari);
+                }
                 this.$router.push(page);
             }
         },
+        async obtenirRutinaDeHoy(idUsuari) {
+            try {
+                const response = await getRutina(idUsuari);
+                const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+                return response.some(exercise => new Date(exercise.data).toISOString().split('T')[0] === today);
+            } catch (error) {
+                console.error(error);
+                return false;
+            }
+        },
+
+        async borrarRutinaDeHoy(idUsuari) {
+            try {
+                const response = await borrarRutinaDia(idUsuari);
+                console.log('Rutinas de hoy eliminadas:', response);
+            } catch (error) {
+                console.error('Error al eliminar las rutinas de hoy:', error);
+            }
+        },
+
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)
                 .then((response) => {
@@ -240,8 +259,8 @@ body {
 }
 
 .flex-container h1 {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: -5px;
+    margin-bottom: 3px;
     font-size: 36px;
     font-weight: bold;
 }
@@ -312,8 +331,28 @@ body {
     width: 120%;
     /* Ancho del 80% del contenedor padre */
     max-width: 200px;
-    height: 80px;
+    height: 60px;
     margin-top: 50px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-size: cover;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #ff7300, #FFA500);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-position: center;
+}
+
+.comencar-button {
+    position: relative;
+    width: 180%;
+    /* Ancho del 80% del contenedor padre */
+    max-width: 250px;
+    height: 60px;
+    margin-top: 20px; /* Reducir el espaciado superior */
     font-size: 1.5em;
     font-weight: bold;
     color: #fff;
@@ -332,7 +371,7 @@ body {
     width: 180%;
     /* Ancho del 80% del contenedor padre */
     max-width: 300px;
-    height: 60px;
+    height: 50px;
     font-size: 1.5em;
     font-weight: bold;
     color: #fff;
@@ -397,6 +436,13 @@ navBar {
     text-align: center;
     margin-top: 20px;
     padding: 20px;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
 /* Media query para pantallas más pequeñas */
