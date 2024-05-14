@@ -266,19 +266,19 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 32,
-                "nom_exercici" => "Camaixes Laterals des de Posició Quadrúpeda",
+                "nom_exercici" => "Puntada Laterals des de Posició Quadrúpeda",
                 "dificultat" => "intermedi",
                 "idCategoria" => 5,
                 "imatge" => "imatge_patadas_laterales_cuadrupeda.jpg",
-                "descripció" => "Camaixes cap als costats des de posició quadrúpeda per als glutis."
+                "descripció" => "puntada cap als costats des de posició quadrúpeda per als glutis."
             ],
             [
                 "id" => 33,
-                "nom_exercici" => "Camaixes cap enrere des de Posició d'Peu",
+                "nom_exercici" => "Puntada cap enrere des de Posició d'Peu",
                 "dificultat" => "principiant",
                 "idCategoria" => 5,
                 "imatge" => "imatge_patada_atras_posicion_pie.jpg",
-                "descripció" => "Camaixes cap enrere des de posició d'peu per als glutis."
+                "descripció" => "puntada cap enrere des de posició d'peu per als glutis."
             ],
             [
                 "id" => 34,
