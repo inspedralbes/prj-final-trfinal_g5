@@ -1,15 +1,20 @@
 <template>
-    <div>
-        <body>
-        <div class="main-content">
-            <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
-            <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
 
+    <body>
+        <div class="main-content">
             <div class="cabecera">
                 <!-- Mostrar foto de perfil del usuario -->
                 <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Foto de perfil">
                 <p>{{ usuario.nom }}</p>
             </div>
+            <!-- Mostrar el título solo cuando se activa la rutina -->
+
+
+            <!-- Resto del contenido del chat -->
+            <div class="chat-container">
+                <!-- Cabecera del chat -->
+                <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
+                <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
 
                 <!-- Contenedor de mensajes -->
                 <div class="mensajes-container">
@@ -17,48 +22,77 @@
                     <div v-for="(mensajesDia, fecha) in mensajes" :key="fecha" class="mensajes-dia">
                         <h3>{{ fecha }}</h3>
 
-                    <!-- Ordenar los mensajes por su ID -->
-                    <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id"
-                        class="mensaje-container">
-                        <div
-                            :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
-                            <!-- Verificar si el mensaje tiene una imagen -->
-                            <template v-if="mensaje.imagen">
-                                <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
-                                    class="imagen-chat">
-                            </template>
-                            <template v-if="mensaje.video">
-                                <video width="320" height="240" controls>
-                                    <source :src="'http://localhost:8000/storage/video/' + mensaje.video"
-                                        type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                            </template>
-                            <template v-if="mensaje.idRutina">
-                                <button @click="descargarRutina">Descargar</button>
-                                <p>Rutina</p>
-                                <div v-for="(ejercicio, index) in rutinas2" :key="index">
-                                    <p>NOM{{ ejercicio.nom_exercici }}</p>
-                                    <p>SERIES{{ ejercicio.series }}</p>
-                                    <p>REPETICIONES{{ ejercicio.repeticions }}</p>
+                        <!-- Ordenar los mensajes por su ID -->
+                        <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id"
+                            class="mensaje-container">
+                            <div
+                                :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
+                                <!-- Verificar si el mensaje tiene una imagen -->
+                                <div class="mensaje-imagen" v-if="mensaje.imagen">
+                                    <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
+                                        class="imagen-chat">
+                                    <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
+                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
                                 </div>
-                                
-                            </template>
-                            <template v-if="mensaje.idDieta">
-                                <p>Dieta</p>
-                                <div v-for="(plat, index) in dietas2" :key="index">
-                                    <p>Nom{{ plat.nom_plat }}</p>
-                                    <p>Descripcio{{ plat.ingredients }}</p>
+                                <template v-if="mensaje.video">
+                                    <video width="1920" height="240" controls>
+                                        <source :src="'http://localhost:8000/storage/video/' + mensaje.video"
+                                            type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
+
+                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
+                                </template>
+                                <div v-if="mensaje.idRutina">
+                                    <h3 v-if="mensaje.idRutina">Rutina</h3>
+                                    <div class="rutina-container">
+                                        <div id="taula-rutina" v-for="(ejercicio, index) in rutinas2" :key="index">
+                                            <h4 id="exercici">{{ ejercicio.nom_exercici }}</h4>
+                                            <p id="series">Series: {{ ejercicio.series }}</p>
+                                            <p id="reps">Reps: {{ ejercicio.repeticions }}</p>
+                                        </div>
+                                    </div>
+                                    <button id="guardar-rutina" @click="GuardarRutina(usuarioActual, rutinas2)">Guardar Rutina</button>
+                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
                                 </div>
-                            </template>
-                            <p>{{ mensaje.mensaje }}</p>
-                            <p>{{ formatDate(mensaje.created_at) }}</p>
+                                <div v-if="mensaje.idDieta">
+                                    <p v-if="mensaje.idDieta">Dieta</p>
+                                    <div>
+                                        <div v-for="(plat, index) in dietas2" :key="index">
+                                            <p>{{ plat.nom_plat }}</p>
+                                        </div>
+                                        <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
+
+                                    </div>
+                                </div>
+
+                                <div class="mensaje-recibido-container"
+                                    v-if="mensaje.usuario_envia_mensaje === usuario.id && !mensaje.idRutina && !mensaje.idDieta && !mensaje.video && !mensaje.imagen">
+
+                                    <div id="mensaje-texto"> {{ mensaje.mensaje }}</div>
+                                    <div class="hora-container">
+                                        <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
+
+                                    </div>
+                                </div>
+                                <div class="mensaje-texto-container"
+                                    v-if="mensaje.usuario_envia_mensaje !== usuario.id && !mensaje.idRutina && !mensaje.idDieta && !mensaje.video && !mensaje.imagen">
+                                    <div id="mensaje-texto">
+
+                                        {{ mensaje.mensaje }}
+
+                                    </div>
+                                    <div class="hora-container">
+                                        <span id="hora-missatge-enviat">{{ formatDate(mensaje.created_at) }}</span>
+
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            </div>
-            </body>
 
                 <!-- Controles inferiores -->
             </div>
@@ -102,11 +136,11 @@
                                 class="compartir">Vídeo</span>
                         </div>
                         <div>
-                            <Icon id="routine" @click="clickRutina" name="i-ic:round-fitness-center"></Icon>
+                            <Icon id="routine" @click="enviarRutina" name="i-ic:round-fitness-center"></Icon>
                             <p class="compartir">Rutina</p>
                         </div>
                         <div>
-                            <Icon id="diet" @click="clickDieta" name="i-mdi:food-apple"></Icon>
+                            <Icon id="diet" @click="enviarDieta" name="i-mdi:food-apple"></Icon>
                             <p class="compartir">Dieta</p>
                         </div>
                     </div>
@@ -134,14 +168,12 @@ export default {
             isSaving: false,
             imagenSeleccionada: null,
             videoSeleccionado: null,
-            mostrarRutina: false,
-            mostrarDieta: false,
+            usuarioActual: null,
             rutinas: [], // Array para almacenar los datos de las rutinas
             rutinas2: [],
             diaSeleccionado: null, // Almacena el día seleccionado por el usuario
             dietas: [],
             dietas2: [],
-            usuarioActual: null,
 
         };
     },
@@ -153,7 +185,6 @@ export default {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
                 const mensaje = this.mensaje;
-
                 //  Verificar si tanto el mensaje como la imagen están vacíos
                 if (!this.mensaje.trim() && !this.imagenSeleccionada && !this.videoSeleccionado) {
                     // Si no hay mensaje ni imagen, muestra un mensaje de error y no envíes la solicitud
@@ -173,7 +204,7 @@ export default {
                 if (this.videoSeleccionado) {
                     data.video_base64 = this.videoSeleccionado.split(',')[1];
                 }
-                // console.log(data);
+                console.log(data);
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
                     headers: {
@@ -205,7 +236,6 @@ export default {
         async enviarRutina() {
             try {
                 this.isSaving = true;
-                this.mostrarRutina = false;
                 const idRutina = useUsuariPerfilStore().id_usuari;
 
                 const id_usuario = useUsuariPerfilStore().id_usuari;
@@ -225,14 +255,10 @@ export default {
                 });
 
                 const responseData = await response.json();
-                // console.log(responseData);
+                console.log(responseData);
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
-                    const finalDePagina = this.$refs.finalDePagina;
-        // Desplazarse hasta el elemento
-        finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
                     this.isSaving = false;
 
                 } else {
@@ -247,14 +273,13 @@ export default {
         async enviarDieta() {
             try {
                 this.isSaving = true;
-                this.mostrarDieta = false;
                 const idDieta = useUsuariPerfilStore().id_usuari;
 
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
 
                 // Obtener todos los IDs de rutina mostrados
-                // console.log(idDieta);
+                console.log(idDieta);
 
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
@@ -267,15 +292,10 @@ export default {
                 });
 
                 const responseData = await response.json();
-                // console.log(responseData);
+                console.log(responseData);
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
-                    const finalDePagina = this.$refs.finalDePagina;
-        // Desplazarse hasta el elemento
-        finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
-
                     this.isSaving = false;
 
                 } else {
@@ -286,34 +306,6 @@ export default {
                 // Manejar errores
                 console.error('Error al enviar el mensaje:', error);
             }
-        },
-        async GuardarRutina(usuario, rutinas2) {
-            // Modificar rutinas2 para cambiar el id_usuario según el usuario actual
-            rutinas2.forEach((ejercicio, index) => {
-                // console.log(`Datos del ejercicio ${index + 1}:`);
-                for (const key in ejercicio) {
-                    // console.log(`${key}: ${ejercicio[key]}`);
-                    // Verificar si la clave es igual a "id_usuari"
-                    if (key === "id_usuari") {
-                        ejercicio[key] = usuario; // Asignar el valor del id_usuari del usuario al campo correspondiente del ejercicio
-                    }
-                }
-                // console.log("----------------------");
-            });
-
-            console.log("Rutinas modificadas:", rutinas2); // Agrega este console.log
-            const response = await fetch(`http://localhost:8000/api/descargarRutina`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(rutinas2), // Enviar los datos de la rutina al servidor
-
-            });
-            const responseData = await response.json();
-            console.log(responseData);
-
-
         },
 
 
@@ -405,7 +397,34 @@ export default {
                 // console.error('Error al obtener los mensajes del chat:', error);
             }
         },
+        async GuardarRutina(usuario, rutinas2) {
+            // Modificar rutinas2 para cambiar el id_usuario según el usuario actual
+            rutinas2.forEach((ejercicio, index) => {
+                // console.log(`Datos del ejercicio ${index + 1}:`);
+                for (const key in ejercicio) {
+                    // console.log(`${key}: ${ejercicio[key]}`);
+                    // Verificar si la clave es igual a "id_usuari"
+                    if (key === "id_usuari") {
+                        ejercicio[key] = usuario; // Asignar el valor del id_usuari del usuario al campo correspondiente del ejercicio
+                    }
+                }
+                // console.log("----------------------");
+            });
 
+            console.log("Rutinas modificadas:", rutinas2); // Agrega este console.log
+            const response = await fetch(`http://localhost:8000/api/descargarRutina`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(rutinas2), // Enviar los datos de la rutina al servidor
+
+            });
+            const responseData = await response.json();
+            console.log(responseData);
+
+
+        },
 
         ordenarMensajesPorId(mensajes) {
             // Convertir el objeto de mensajes a un array
@@ -452,59 +471,14 @@ export default {
         cerrarModal() {
             this.mostrar = false; // Cerrar el modal
         },
-        async clickRutina() {
-            // Cambiar el estado para mostrar la rutina
-            this.mostrarRutina = true;
-        },
-        async clickmostrarRutina() {
-            // Cambiar el estado para mostrar la rutina
-            this.mostrarRutina = false;
-            await this.mostrarMensajes();
-
-            const finalDePagina = this.$refs.finalDePagina;
-            // Desplazarse hasta el elemento
-            finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        },
-        async clickDieta() {
-            // Cambiar el estado para mostrar la dieta
-            this.mostrarDieta = true;
-        },
-        async mostrarRutinas() {
-            try {
-                const id_usuario = useUsuariPerfilStore().id_usuari;
-                const response = await fetch(`http://localhost:8000/api/rutina/${id_usuario}`);
-                const responseData = await response.json();
-                this.rutinas = responseData;
-
-            } catch (error) {
-                // console.error('Error al obtener la rutina:', error);
-            }
-        },
-        async mostrarDietas() {
-            try {
-                const id_usuario = useUsuariPerfilStore().id_usuari;
-                const response = await fetch(`http://localhost:8000/api/dietas/${id_usuario}`);
-                const responseData = await response.json();
-                this.dietas = responseData;
-                // console.log(this.dietas);
-
-            } catch (error) {
-                // console.error('Error al obtener la dieta:', error);
-            }
-        }
 
 
     },
     async mounted() {
-
         await this.mostrarAmigo();
         await this.mostrarMensajes();
-        await this.mostrarRutinas();
-        await this.mostrarDietas();
-        const finalDePagina = this.$refs.finalDePagina;
-        // Desplazarse hasta el elemento
-        finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
+        
+      
 
     },
     beforeRouteLeave(to, from, next) {
@@ -529,69 +503,6 @@ body {
 
     height: 100vh;
 }
-
-/* Contenedor principal de la rutina */
-.rutina-container {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* Estilos para el icono de cierre */
-.close-icon {
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
-/* Estilos para el título */
-.rutina-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-/* Estilos para los días */
-.rutina-day {
-    margin-bottom: 15px;
-}
-
-/* Estilos para las etiquetas de los días */
-.rutina-day-label {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* Estilos para los ejercicios */
-.rutina-exercises {
-    padding-left: 20px;
-}
-
-/* Estilos para cada ejercicio */
-.ejercicio {
-    margin-bottom: 5px;
-    
-}
-
-/* Estilos para el botón de enviar */
-.rutina-submit {
-    background-color: #FFA500;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.rutina-submit:hover {
-    background-color: #0056b3;
-}
-
 
 .main-content {
     display: flex;
@@ -835,7 +746,8 @@ body {
     padding-left: 15px;
     border-radius: 8px;
     width: 70%;
-    word-wrap: break-word; /* Agrega esta línea */
+    word-wrap: break-word;
+    /* Agrega esta línea */
 }
 
 .mensaje-recibido {
@@ -877,7 +789,7 @@ body {
 
 .mensaje-texto-container {
     display: grid;
-    grid-template-columns: 1fr ;
+    grid-template-columns: 1fr;
     gap: 10px;
     margin: auto;
     max-width: fit-content;
@@ -885,11 +797,12 @@ body {
 }
 
 
-.mensaje-recibido-container{
+.mensaje-recibido-container {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
-    word-wrap: break-word; /* Agrega esta línea */
+    word-wrap: break-word;
+    /* Agrega esta línea */
 
 }
 
@@ -899,7 +812,7 @@ body {
     word-break: break-all;
     padding-left: 5px;
 
-    
+
 }
 
 .imagen-chat {
@@ -979,13 +892,14 @@ video {
 
 }
 
-#hora-missatge-enviat{
+#hora-missatge-enviat {
     font-size: .75em;
     font-style: italic;
     color: #333;
     text-align: right;
     margin-left: 85%;
-    margin-top: 20px;text-align: right;
+    margin-top: 20px;
+    text-align: right;
 }
 
 #taula-rutina {
