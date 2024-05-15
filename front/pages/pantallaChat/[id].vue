@@ -1,47 +1,5 @@
 <template>
     <div>
-        <!-- Mostrar el título solo cuando se activa la rutina -->
-        <div v-if="mostrarRutina">
-            <p @click="mostrarRutina = false">x</p>
-            <h1>Rutina</h1>
-            <div v-for="(ejercicio, index) in rutinas" :key="index">
-                <template v-if="index === 0 || rutinas[index - 1].dia !== ejercicio.dia">
-                    <p @click="toggleDia(ejercicio.dia)">Dia {{ ejercicio.dia }}</p>
-                    <div v-if="diaSeleccionado === ejercicio.dia">
-                        <ul>
-                            <!-- Mostrar todos los ejercicios del día -->
-                            <li v-for="(ejercicioDia, idx) in rutinas.filter(e => e.dia === ejercicio.dia)" :key="idx">
-                                {{ ejercicioDia.nom_exercici }}
-                            </li>
-                        </ul>
-                    </div>
-                </template>
-            </div>
-            <button @click="enviarRutina" :disabled="isSaving">Enviar</button>
-        </div>
-        <div v-if="mostrarDieta">
-            <p @click="mostrarDieta = false">x</p>
-            <h1>Dieta</h1>
-            <template v-for="(apats, index) in dietas" :key="index">
-                <template v-if="index === 0 || dietas[index - 1].apat !== apats.apat">
-                    <p @click="toggleDia(apats.apat)">Apat {{ apats.apat }}</p>
-                </template>
-                <div v-if="diaSeleccionado === apats.apat">
-                    <ul>
-                        <li>{{ apats.nom_plat }}</li>
-                    </ul>
-                </div>
-            </template>
-            <button @click="enviarDieta" :disabled="isSaving">Enviar</button>
-        </div>
-
-
-
-
-
-        <!-- Resto del contenido del chat -->
-        <div v-if="!mostrarRutina && !mostrarDieta">
-            <!-- Cabecera del chat -->
             <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
             <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
 
@@ -99,45 +57,42 @@
                 </div>
             </div>
             <div ref="finalDePagina">
+                <!-- Controles inferiores -->
+                <div class="controles-inferiores">
+                    <!-- Área de texto con el botón "+" -->
+                    <div v-if="imagenSeleccionada" class="imagen-seleccionada">
+                        <p @click="imagenSeleccionada = null">x</p>
+                        <img :src="imagenSeleccionada" alt="Imagen seleccionada">
+                    </div>
+                    <div v-if="videoSeleccionado" class="video-seleccionado">
+                        <p @click="videoSeleccionado = null">x</p>
+                        <video width="320" height="240" controls>
+                            <source :src="videoSeleccionado" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="entrada-mensaje-container">
+                        <textarea v-model="mensaje" class="entrada-mensaje"
+                            placeholder="Escribe tu mensaje..."></textarea>
+                        <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
+                        <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">Enviar</button>
+                    </div>
 
-            <!-- Controles inferiores -->
-            <div class="controles-inferiores">
-                <!-- Área de texto con el botón "+" -->
-                <div v-if="imagenSeleccionada" class="imagen-seleccionada">
-                    <p @click="imagenSeleccionada = null">x</p>
-                    <img :src="imagenSeleccionada" alt="Imagen seleccionada">
-                </div>
-                <div v-if="videoSeleccionado" class="video-seleccionado">
-                    <p @click="videoSeleccionado = null">x</p>
-                    <video width="320" height="240" controls>
-                        <source :src="videoSeleccionado" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                <div class="entrada-mensaje-container">
-                    <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
-                    <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
-                    <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">Enviar</button>
-                </div>
+                    <!-- Modal -->
+                    <div class="modal" v-if="mostrar" @click="toggleModal">
+                        <div class="modal-contenido" ref="modalContenido">
+                            <!-- Opciones del modal -->
+                            <div><img src="@/public/foto.png" class="modal-contenido-foto" @click="openFileInput"></div>
+                            <div><img src="@/public/video.png" class="modal-contenido-video" @click="openVideo"></div>
 
-                <!-- Modal -->
-                <div class="modal" v-if="mostrar" @click="toggleModal">
-                    <div class="modal-contenido" ref="modalContenido">
-                        <!-- Opciones del modal -->
-                        <div><img src="@/public/foto.png" class="modal-contenido-foto" @click="openFileInput"></div>
-                        <div><img src="@/public/video.png" class="modal-contenido-video" @click="openVideo"></div>
-
-                        <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="clickRutina">
-                        </div>
-                        <div><img src="@/public/dieta.png" class="modal-contenido-dieta" @click="clickDieta">
+                            <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="enviarRutina">
+                            </div>
+                            <div><img src="@/public/dieta.png" class="modal-contenido-dieta" @click="enviarDieta">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
-        </div>
-
-        <!-- Navbar -->
         <navBar />
     </div>
 </template>
@@ -471,45 +426,27 @@ export default {
             // Cambiar el estado para mostrar la rutina
             this.mostrarRutina = true;
         },
+        async clickmostrarRutina() {
+            // Cambiar el estado para mostrar la rutina
+            this.mostrarRutina = false;
+            await this.mostrarMensajes();
+
+            const finalDePagina = this.$refs.finalDePagina;
+            // Desplazarse hasta el elemento
+            finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        },
         async clickDieta() {
             // Cambiar el estado para mostrar la dieta
             this.mostrarDieta = true;
         },
-        async mostrarRutinas() {
-            try {
-                const id_usuario = useUsuariPerfilStore().id_usuari;
-                const response = await fetch(`http://localhost:8000/api/rutina/${id_usuario}`);
-                const responseData = await response.json();
-                this.rutinas = responseData;
-
-            } catch (error) {
-                // console.error('Error al obtener la rutina:', error);
-            }
-        },
-        async mostrarDietas() {
-            try {
-                const id_usuario = useUsuariPerfilStore().id_usuari;
-                const response = await fetch(`http://localhost:8000/api/dietas/${id_usuario}`);
-                const responseData = await response.json();
-                this.dietas = responseData;
-                // console.log(this.dietas);
-
-            } catch (error) {
-                // console.error('Error al obtener la dieta:', error);
-            }
-        }
-
-
     },
     async mounted() {
 
         await this.mostrarAmigo();
         await this.mostrarMensajes();
-        await this.mostrarRutinas();
-        await this.mostrarDietas();
         const finalDePagina = this.$refs.finalDePagina;
-    // Desplazarse hasta el elemento
-    finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        // Desplazarse hasta el elemento
+        finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
 
     },
@@ -538,6 +475,69 @@ body {
     /* Color de fondo */
     height: 100vh;
 }
+
+/* Contenedor principal de la rutina */
+.rutina-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Estilos para el icono de cierre */
+.close-icon {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Estilos para el título */
+.rutina-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para los días */
+.rutina-day {
+    margin-bottom: 15px;
+}
+
+/* Estilos para las etiquetas de los días */
+.rutina-day-label {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Estilos para los ejercicios */
+.rutina-exercises {
+    padding-left: 20px;
+}
+
+/* Estilos para cada ejercicio */
+.ejercicio {
+    margin-bottom: 5px;
+    
+}
+
+/* Estilos para el botón de enviar */
+.rutina-submit {
+    background-color: #FFA500;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.rutina-submit:hover {
+    background-color: #0056b3;
+}
+
 
 .contenedor {
     display: flex;
