@@ -23,6 +23,7 @@ class UserController extends Controller
         $validator = $request->validate([
             'email' => 'required|string|email|max:255|unique:usuaris',
             'contrasenya' => 'required|string|min:6',
+            // 'tipus' => 'string',
             'nom' => 'required|string|max:255',
             'cognoms' => 'required|string|max:255',
             'data_naixement' => 'date',
@@ -43,6 +44,10 @@ class UserController extends Controller
         }
         if ($request->has('genere')) {
             $usuari->genere = $request->genere;
+        }
+
+        if ($request->has('tipus')) {
+            $usuari->tipus = $request->tipus;
         }
 
         if ($request->has('pes')) {
@@ -72,6 +77,7 @@ class UserController extends Controller
             'message' => 'Usuari creat correctament',
             'idUsuario' => $idUsuario,
             'telefon' => $usuari->telefon,
+            'tipus' => $usuari->tipus,
             'data_naixement' => $usuari->data_naixement,
             'genere' => $usuari->genere,
             'pes' => $usuari->pes,
@@ -112,6 +118,7 @@ class UserController extends Controller
                     'id' => $usuari->id,
                     'foto_perfil' => $usuari->foto_perfil,
                     'registre' => $usuari->registre,
+                    'tipus' => $usuari->tipus,  
                 ]);
             } else {
                 return response()->json([

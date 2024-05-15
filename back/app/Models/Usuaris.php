@@ -17,7 +17,7 @@ class Usuaris extends Model implements Authenticatable
     protected $fillable = [
         'email',
         'contrasenya',
-        'nom',
+        'tipus', 
         'cognoms',
         'genere',
         'data_naixement',

@@ -461,6 +461,7 @@ export default {
                 useUsuariPerfilStore().email_usuari = filteredUserData.email;
                 useUsuariPerfilStore().loguejat = true;
                 useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
+                useUsuariPerfilStore().tipus_usuari = filteredUserData.tipus;
                 useUsuariPerfilStore().foto_perfil = "usuario.png";
 
                 // Redirigir a la página de inicio después del registro

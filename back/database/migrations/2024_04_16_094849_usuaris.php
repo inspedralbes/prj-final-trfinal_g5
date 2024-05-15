@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('email')->unique();
             $table->string('contrasenya');
-            $table->string('nom');
             $table->string('tipus')->default('user');
+            $table->string('nom');
             $table->string('cognoms')->nullable();
             $table->string('genere')->nullable();
             $table->date('data_naixement')->nullable();

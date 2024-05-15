@@ -8,25 +8,33 @@
         </button>
         <button class="large-button dieta-button" @click="redirectTo('dieta')">
           Dieta
-
         </button>
         <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
           Assesorament
-
+        </button>
+        <button v-if="tipus_usuari === 'admin'" class="large-button admin-button" @click="redirectTo(`/admin/${nom_usuari}`)">
+          Administració
         </button>
       </div>
       <navBar />
-
     </div>
   </body>
 </template>
 
 <script>
+import { useUsuariPerfilStore } from '@/stores/index';
 export default {
   methods: {
     redirectTo(page) {
       this.$router.push(page);
     }
+  },
+  setup() {
+    const store = useUsuariPerfilStore();
+    return {
+      tipus_usuari: store.tipus_usuari,
+      nom_usuari: store.nom_usuari
+    };
   }
 }
 </script>
@@ -46,6 +54,7 @@ body {
 .page-leave-active {
   transition: all 0.4s;
 }
+
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
@@ -72,7 +81,8 @@ body {
 }
 
 .large-button {
-  position: relative; /* Añade posición relativa al botón */
+  position: relative;
+  /* Añade posición relativa al botón */
   width: 100%;
   /* Ancho del 80% del contenedor padre */
   max-width: 400px;
@@ -87,6 +97,14 @@ body {
   outline: none;
   background-size: cover;
   border-radius: 10px;
+  display: flex;
+  /* Añadido */
+  align-items: center;
+  /* Añadido */
+  justify-content: center;
+  /* Añadido */
+  text-decoration: none;
+  /* Añadido */
 }
 
 .rutina-button {
@@ -114,7 +132,23 @@ body {
   color: #474747;
 }
 
-
+.admin-button {
+  background-image: linear-gradient(to right, #ff7300, #FFA500);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-position: center;
+  font-size: 2.2em;
+  color: #474747;
+  text-align: center;
+  /* Añadido */
+  display: flex;
+  /* Añadido */
+  align-items: center;
+  /* Añadido */
+  justify-content: center;
+  /* Añadido */
+  text-decoration: none;
+  /* Añadido */
+}
 
 navBar {
   position: fixed;
