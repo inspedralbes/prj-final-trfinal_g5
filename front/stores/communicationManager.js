@@ -354,7 +354,8 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
                         " { id_usuari:'', dias:[{dia: '1', exercicis: [{'nom_exercici':'','series':'','repeticions':'','id_exercici':''},...]},...]}" +
                         " Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis." +
                         " Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret." +
-                        " Si en el missatge conte dies fes la rutina dels dies que et demanen; si no fes una rutina de 5 dies." +
+                        " Si  el missatge conte dades epsecifiques o informació agafa tota l'informació i crea la dieta; si no fes una rutina de 5 dies amb 5 musculs per dia i que sigui variada," +
+                        " Si en el missatge s'especifica quin tipus de rutina volen i els dies, fes-la com ho diuen. Si falta informacio fes 5 dies amb 5 musculs per dia variats" +
                         " Agafa les dades del usuari per fer rutines mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari.",
                 },
                 {
