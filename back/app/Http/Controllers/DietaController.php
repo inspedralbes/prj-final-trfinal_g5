@@ -68,6 +68,11 @@ class DietaController extends Controller
     
             return response()->json(['error' => 'Error al guardar las dietas: ' . $e->getMessage()], 500);
         }
+    }
+    public function mostrarDietasUsuario($id)
+    {
+        $dietas = Dieta::where('id_usuari', $id)->get();
+        return response()->json($dietas);
     }    
 
 

@@ -17,8 +17,8 @@
                                 @input="capitalizeOnInput($event, 'cognoms')" maxlength="80">
                         </div>
                         <div class="input-container">
-                            <label>Correu electrònic:</label>
-                            <input type="email" placeholder="Correu electronic" v-model="usuario.email" disabled>
+                            <label>Nom usuari:</label>
+                            <input type="text" placeholder="Usuari" v-model="usuario.nom_usuari" maxlength="20">
                         </div>
                         <div class="input-container">
                             <label>Telefon:</label>
@@ -42,7 +42,7 @@
                         <div class="input-container">
                             <label>Altura:</label><br>
                             <input type="text" v-model="usuario.altura" placeholder="Altura (cm)"
-                                @input="validateAltura"maxlength="4">
+                                @input="validateAltura" maxlength="4">
                         </div>
 
                         <div class="input-container">
@@ -85,6 +85,7 @@ export default {
             usuario: {
                 nom: '',
                 cognoms: '',
+                nom_usuari: '',
                 email: '',
                 telefon: '',
                 data_naixement: '',
@@ -120,22 +121,64 @@ export default {
                 });
         },
         guardarDatosUsuario() {
-            // Verificar si ya se está guardando para evitar múltiples envíos
-            if (this.isSaving) return;
-
+            this.errorMessage = ''; // Limpiar el mensaje de error antes de guardar los datos
             // Verificar si hay errores de validación
             if (this.errorMessage) {
                 // Mostrar un mensaje de error y no continuar con el guardado
                 return;
             }
 
-            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
+            // Verificar si los campos obligatorios están vacíos
+            if (!this.usuario.nom || !this.usuario.cognoms || !this.usuario.nom_usuari) {
+                this.errorMessage = "Els camps nom, cognoms i nom d'usuari són requerits.";
+                return;
+            }
 
+            // Verificar si el nom_usuari ha sido modificado y existe
+            if (this.usuario.nom_usuari !== this.datosOriginales.nom_usuari) {
+                this.comprobarNomUsuari();
+            } else {
+                // Si el nom_usuari no ha sido modificado o es el mismo que el original, continuar con el guardado
+                this.continuarGuardado();
+            }
+        },
+        async comprobarNomUsuari() {
+            // console.log(this.usuario.nom_usuari)
+            try {
+                const response = await fetch('http://localhost:8000/api/comprovarnomusuari', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nom_usuari: this.usuario.nom_usuari,
+                    }),
+                });
+                const data = await response.json();
+
+                // Verificar si el nom_usuari existe
+                if (data.status === 1) {
+                    // El nom_usuari ya existe, mostrar mensaje de error
+                    this.errorMessage = 'El nom d\'usuari ja existeix. Si us plau, tria un altre.';
+                } else if (data.status === 0) {
+                    // El nom_usuari no existe, continuar con el guardado
+                    this.continuarGuardado();
+                }
+            } catch (error) {
+                console.error('Error al comprobar el nom d\'usuari:', error);
+                this.errorMessage = 'S\'ha produït un error al comprovar el nom d\'usuari.';
+                this.isSaving = false; // Restablecer la variable de estado a false si hay un error
+            }
+        },
+
+
+        continuarGuardado() {
             // Si hay otros campos modificados además de la foto de perfil
             if (this.hayOtrosCamposModificados()) {
                 this.guardarDatosUsuarioSinFotoPerfil();
             }
         },
+
 
         hayOtrosCamposModificados() {
             // Verifica si hay otros campos modificados además de la foto de perfil
@@ -178,13 +221,16 @@ export default {
                 .then(data => {
                     // console.log('Datos del usuario actualizados:', data);
                     this.$router.push('/home');
-                    console.log('Datos del usuario actualizados:', data);
+                    // console.log('Datos del usuario actualizados:', data);
                     useUsuariPerfilStore().registre = Boolean(Number(data.registre));
 
 
                     // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
                     if (this.usuario.nom) {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
+                    }
+                    if (this.usuario.nom_usuari) {
+                        useUsuariPerfilStore().username = this.usuario.nom_usuari;
                     }
 
                     // Actualizar los datos originales con los datos modificados
@@ -321,6 +367,7 @@ export default {
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
+
 html,
 body {
     margin: 0;

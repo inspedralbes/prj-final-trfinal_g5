@@ -40,6 +40,41 @@ export async function getDatosUsuario2(idUsuario) {
     }
 }
 
+export async function getUsuariosChat(idUsuario) {
+    try {
+        const response = await fetch(`${url}/chatUsuaris/${idUsuario}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del usuario: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        console.log('Datos recibidos del servidor:', data); // Agregar esta línea para verificar los datos recibidos
+        return data; // Devuelve los datos del usuario en JSON
+    }
+    catch (error) {
+        throw new Error('Error de red al obtener los datos del usuario: ' + error.message);
+    }
+}
+
+export async function getUsers() {
+    try {
+        const response = await fetch(`${url}/usuaris`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del usuario: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        console.log('Datos recibidos del servidor:', data); // Agregar esta línea para verificar los datos recibidos
+        return data; // Devuelve los datos del usuario en JSON
+    }
+    catch (error) {
+        throw new Error('Error de red al obtener los datos del usuario: ' + error.message);
+    }
+
+}
+
+
+
 export async function getDatosEjercicio() {
     try {
         const response = await fetch(`${url}/exercicis`);
@@ -163,6 +198,31 @@ export async function enviarDietaAlServidor(rutina) {
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al enviar la rutina al servidor: ' + error.message);
+    }
+}
+
+export async function enviarSolicitudAmistad(usuarioEnviaId, usuarioRecibeId) {
+    try {
+        const response = await fetch(`${url}/enviar-solicitud`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                usuario_envia_id: usuarioEnviaId,
+                usuario_recibe_id: usuarioRecibeId,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al enviar la solicitud de amistad: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        console.log('Solicitud de amistad enviada correctamente:', data);
+        return data;
+    } catch (error) {
+        throw new Error('Error al enviar la solicitud de amistad: ' + error.message);
     }
 }
 

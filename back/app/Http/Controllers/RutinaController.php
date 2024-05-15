@@ -9,22 +9,6 @@ use Carbon\Carbon;
 
 class RutinaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         DB::beginTransaction();
@@ -64,13 +48,6 @@ class RutinaController extends Controller
             return response()->json(['error' => 'Error al guardar las rutinas: ' . $e->getMessage()], 500);
         }
     }     
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function getRutina($id_usuari)
     {
         $rutina = Rutina::where('id_usuari', $id_usuari)->get();
@@ -81,54 +58,61 @@ class RutinaController extends Controller
 
         return response()->json($rutina, 200);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id_usuari)
+    public function getRutinaId($id){
+        $rutina = Rutina::find($id);
+        if (!$rutina) {
+            return response()->json(['error' => 'Rutina not found'], 404);
+        }
+    
+        // Ocultar los campos id_usuario y id_rutina antes de enviar la respuesta JSON
+        $rutina->makeHidden(['id_usuari', 'id']);
+    
+        return response()->json($rutina, 200);
+    }public function saveRoutines(Request $request)
     {
         try {
-            // Encuentra y elimina todas las rutinas asociadas al ID de usuario
-            Rutina::where('id_usuari', $id_usuari)->delete();
+            $data = $request->json()->all(); // Obtener todos los datos del JSON
             
-            return response()->json(['message' => 'Rutinas eliminadas correctamente'], 200);
+            // Registro de los datos recibidos
+            \Log::info('Datos recibidos:', $data);
+            
+            $routines = $data; // Obtener las rutinas del JSON
+    
+            foreach ($routines as $routine) {
+                // Verificar que todos los campos necesarios estén presentes en cada rutina
+                $required_fields = ['id_usuari', 'dia', 'nom_exercici', 'series', 'repeticions', 'id_exercici'];
+                foreach ($required_fields as $field) {
+                    if (!isset($routine[$field])) {
+                        throw new \Exception("El campo '{$field}' no está presente en una o más rutinas.");
+                    }
+                }
+    
+                // Crear una nueva rutina con los datos proporcionados
+                Rutina::create([
+                    'id_usuari' => $routine['id_usuari'],
+                    'dia' => $routine['dia'],
+                    'nom_exercici' => $routine['nom_exercici'],
+                    'series' => $routine['series'],
+                    'repeticions' => $routine['repeticions'],
+                    'id_exercici' => $routine['id_exercici']
+                ]);
+            }
+    
+            return response()->json(['message' => 'Rutinas guardadas correctamente'], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al eliminar las rutinas: ' . $e->getMessage()], 500);
+            // Registro del error
+            \Log::error('Error al guardar las rutinas: ' . $e->getMessage());
+    
+            return response()->json(['error' => 'Error al guardar las rutinas: ' . $e->getMessage()], 500);
         }
     }
+    
 
-    /**
-     * Remove today's routines for the specified user.
-     *
-     * @param  int  $id_usuari
-     * @return \Illuminate\Http\Response
-     */
-    public function destroyToday($id_usuari)
-    {
-        try {
-            $today = Carbon::today()->toDateString();
-            Rutina::where('id_usuari', $id_usuari)
-                ->whereDate('data', $today)
-                ->delete();
+    
+    
 
-            return response()->json(['message' => 'Rutinas de hoy eliminadas correctamente'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al eliminar las rutinas de hoy: ' . $e->getMessage()], 500);
-        }
-    }
+    
+    
+    
+
 }
