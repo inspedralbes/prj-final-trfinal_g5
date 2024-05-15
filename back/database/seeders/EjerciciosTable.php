@@ -389,8 +389,8 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 7,
                 "imatge" => "42imatge_jalon_abierto_poleas_altas.jpg",
-                "link" =>"",
-                "descripció" => "Ajusta el pes i subjecta les empunyadures. Porta les mans cap avall i els costats."
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/01971201.mp4",
+                "descripció" => "Ajusta el pes i subjecta les empunyadures de forma ampla. Porta les mans cap avall i els costats."
             ],
             [
                 "id" => 43,
