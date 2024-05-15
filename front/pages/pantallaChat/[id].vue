@@ -1,114 +1,105 @@
 <template>
+    <div>
+        <!-- Mostrar el título solo cuando se activa la rutina -->
+        <div v-if="mostrarRutina">
+            <p @click="mostrarRutina = false">x</p>
+            <h1>Rutina</h1>
+            <div v-for="(ejercicio, index) in rutinas" :key="index">
+                <template v-if="index === 0 || rutinas[index - 1].dia !== ejercicio.dia">
+                    <p @click="toggleDia(ejercicio.dia)">Dia {{ ejercicio.dia }}</p>
+                    <div v-if="diaSeleccionado === ejercicio.dia">
+                        <ul>
+                            <!-- Mostrar todos los ejercicios del día -->
+                            <li v-for="(ejercicioDia, idx) in rutinas.filter(e => e.dia === ejercicio.dia)" :key="idx">
+                                {{ ejercicioDia.nom_exercici }}
+                            </li>
+                        </ul>
+                    </div>
+                </template>
+            </div>
+            <button @click="enviarRutina" :disabled="isSaving">Enviar</button>
+        </div>
+        <div v-if="mostrarDieta">
+            <p @click="mostrarDieta = false">x</p>
+            <h1>Dieta</h1>
+            <template v-for="(apats, index) in dietas" :key="index">
+                <template v-if="index === 0 || dietas[index - 1].apat !== apats.apat">
+                    <p @click="toggleDia(apats.apat)">Apat {{ apats.apat }}</p>
+                </template>
+                <div v-if="diaSeleccionado === apats.apat">
+                    <ul>
+                        <li>{{ apats.nom_plat }}</li>
+                    </ul>
+                </div>
+            </template>
+            <button @click="enviarDieta" :disabled="isSaving">Enviar</button>
+        </div>
 
-    <body>
 
 
-        <div class="main-content">
+
+
+        <!-- Resto del contenido del chat -->
+        <div v-if="!mostrarRutina && !mostrarDieta">
+            <!-- Cabecera del chat -->
+            <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
+            <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
+
             <div class="cabecera">
                 <!-- Mostrar foto de perfil del usuario -->
                 <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Foto de perfil">
                 <p>{{ usuario.nom }}</p>
             </div>
-            <!-- Mostrar el título solo cuando se activa la rutina -->
-            <div v-if="mostrarRutina">
-                <p @click="mostrarRutina = false">x</p>
-                <h1>Rutina</h1>
-                <div v-for="(ejercicio, index) in rutinas" :key="index">
-                    <template v-if="index === 0 || rutinas[index - 1].dia !== ejercicio.dia">
-                        <p @click="toggleDia(ejercicio.dia)">Dia {{ ejercicio.dia }}</p>
-                        <div v-if="diaSeleccionado === ejercicio.dia">
-                            <ul>
-                                <!-- Mostrar todos los ejercicios del día -->
-                                <li v-for="(ejercicioDia, idx) in rutinas.filter(e => e.dia === ejercicio.dia)"
-                                    :key="idx">
-                                    {{ ejercicioDia.nom_exercici }}
-                                </li>
-                            </ul>
-                        </div>
-                    </template>
-                </div>
-                <button @click="enviarRutina" :disabled="isSaving">Enviar</button>
-            </div>
-            <div v-if="mostrarDieta">
-                <p @click="mostrarDieta = false">x</p>
-                <h1>Dieta</h1>
-                <template v-for="(apats, index) in dietas" :key="index">
-                    <template v-if="index === 0 || dietas[index - 1].apat !== apats.apat">
-                        <p @click="toggleDia(apats.apat)">Apat {{ apats.apat }}</p>
-                    </template>
-                    <div v-if="diaSeleccionado === apats.apat">
-                        <ul>
-                            <li>{{ apats.nom_plat }}</li>
-                        </ul>
-                    </div>
-                </template>
-                <button @click="enviarDieta" :disabled="isSaving">Enviar</button>
-            </div>
 
+            <!-- Contenedor de mensajes -->
+            <div class="mensajes-container">
+                <!-- Iterar sobre los grupos de mensajes por día -->
+                <div v-for="(mensajesDia, fecha) in mensajes" :key="fecha" class="mensajes-dia">
+                    <h3>{{ fecha }}</h3>
 
-
-
-
-            <!-- Resto del contenido del chat -->
-            <div class="chat-container" v-if="!mostrarRutina && !mostrarDieta">
-                <!-- Cabecera del chat -->
-                <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
-                <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
-
-
-
-                <!-- Contenedor de mensajes -->
-                <div class="mensajes-container">
-                    <!-- Iterar sobre los grupos de mensajes por día -->
-                    <div v-for="(mensajesDia, fecha) in mensajes" :key="fecha" class="mensajes-dia">
-                        <h3>{{ fecha }}</h3>
-
-                        <!-- Ordenar los mensajes por su ID -->
-                        <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id"
-                            class="mensaje-container">
-                            <div
-                                :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
-                                <!-- Verificar si el mensaje tiene una imagen -->
-                                <template v-if="mensaje.imagen">
-                                    <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
-                                        class="imagen-chat">
-                                </template>
-                                <template v-if="mensaje.video">
-                                    <video width="320" height="240" controls>
-                                        <source :src="'http://localhost:8000/storage/video/' + mensaje.video"
-                                            type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </template>
-                                <div>
-                                    <p v-if="mensaje.idRutina">Rutina</p>
-                                    <div v-if="mensaje.idRutina">
-                                        <button @click="descargarRutina">Descargar</button>
-                                        <div v-for="(ejercicio, index) in rutinas2" :key="index">
-                                            <p>NOM{{ ejercicio.nom_exercici }}</p>
-                                            <p>SERIES{{ ejercicio.series }}</p>
-                                            <p>REPETICIONES{{ ejercicio.repeticions }}</p>
-                                        </div>
+                    <!-- Ordenar los mensajes por su ID -->
+                    <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id"
+                        class="mensaje-container">
+                        <div
+                            :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
+                            <!-- Verificar si el mensaje tiene una imagen -->
+                            <template v-if="mensaje.imagen">
+                                <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
+                                    class="imagen-chat">
+                            </template>
+                            <template v-if="mensaje.video">
+                                <video width="320" height="240" controls>
+                                    <source :src="'http://localhost:8000/storage/video/' + mensaje.video"
+                                        type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </template>
+                            <div>
+                                <p v-if="mensaje.idRutina">Rutina</p>
+                                <div v-if="mensaje.idRutina">
+                                    <div v-for="(ejercicio, index) in rutinas2" :key="index">
+                                        <p>NOM{{ ejercicio.nom_exercici }}</p>
+                                        <p>SERIES{{ ejercicio.series }}</p>
+                                        <p>REPETICIONES{{ ejercicio.repeticions }}</p>
                                     </div>
+                                    <button @click="GuardarRutina(usuarioActual, rutinas2)">Guardar Rutina</button>
                                 </div>
-                                <div>
-                                    <p v-if="mensaje.idDieta">Dieta</p>
-                                    <div v-if="mensaje.idDieta">
-                                        <div v-for="(plat, index) in dietas2" :key="index">
-                                            <p>{{ plat.nom_plat }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>{{ mensaje.mensaje }}</p>
-                                <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
                             </div>
+
+                            <template v-if="mensaje.idDieta">
+                                <p>Dieta</p>
+                                <div v-for="(plat, index) in dietas2" :key="index">
+                                    <p>Nom{{ plat.nom_plat }}</p>
+                                </div>
+                            </template>
+                            <p>{{ mensaje.mensaje }}</p>
+                            <p>{{ formatDate(mensaje.created_at) }}</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Controles inferiores -->
-
             </div>
+
+            <!-- Controles inferiores -->
             <div class="controles-inferiores">
                 <!-- Área de texto con el botón "+" -->
                 <div v-if="imagenSeleccionada" class="imagen-seleccionada">
@@ -124,39 +115,29 @@
                 </div>
                 <div class="entrada-mensaje-container">
                     <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
-                    <button @click="toggleModal" class="boton-agregar">
-                        <Icon id="attach" name="i-ic:round-attach-file"></Icon>
-                    </button>
-                    <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
-                        <Icon id="send" name="i-ic:round-send"></Icon>
-                    </button>
+                    <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
+                    <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">Enviar</button>
                 </div>
 
                 <!-- Modal -->
                 <div class="modal" v-if="mostrar" @click="toggleModal">
                     <div class="modal-contenido" ref="modalContenido">
                         <!-- Opciones del modal -->
-                        <div>
-                            <Icon id="image" @click="openFileInput" name="i-material-symbols-image"></Icon><span class="compartir">Imatge</span>
-                        </div>
-                        <div>
-                            <Icon id="video" @click="openVideo" name="i-ic:baseline-video-camera-back"></Icon><span class="compartir">Vídeo</span>
-                        </div>
+                        <div><img src="@/public/foto.png" class="modal-contenido-foto" @click="openFileInput"></div>
+                        <div><img src="@/public/video.png" class="modal-contenido-video" @click="openVideo"></div>
 
-                        <div>
-                            <Icon id="routine" @click="clickRutina" name="i-ic:round-fitness-center" </Icon><p class="compartir">Rutina</p>
+                        <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="clickRutina">
                         </div>
-                        <div>
-                            <Icon id="diet" @click="clickDieta" name="i-mdi:food-apple"></Icon><p class="compartir">Dieta</p>
+                        <div><img src="@/public/dieta.png" class="modal-contenido-dieta" @click="clickDieta">
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Navbar -->
-            <navBar />
         </div>
 
-    </body>
+        <!-- Navbar -->
+        <navBar />
+    </div>
 </template>
 
 
@@ -182,6 +163,7 @@ export default {
             diaSeleccionado: null, // Almacena el día seleccionado por el usuario
             dietas: [],
             dietas2: [],
+            usuarioActual: null,
 
         };
     },
@@ -193,6 +175,7 @@ export default {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
                 const mensaje = this.mensaje;
+
                 //  Verificar si tanto el mensaje como la imagen están vacíos
                 if (!this.mensaje.trim() && !this.imagenSeleccionada && !this.videoSeleccionado) {
                     // Si no hay mensaje ni imagen, muestra un mensaje de error y no envíes la solicitud
@@ -212,7 +195,7 @@ export default {
                 if (this.videoSeleccionado) {
                     data.video_base64 = this.videoSeleccionado.split(',')[1];
                 }
-                console.log(data);
+                // console.log(data);
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
                     headers: {
@@ -264,7 +247,7 @@ export default {
                 });
 
                 const responseData = await response.json();
-                console.log(responseData);
+                // console.log(responseData);
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
@@ -289,7 +272,7 @@ export default {
                 const id_amic = useUsuariPerfilStore().amic;
 
                 // Obtener todos los IDs de rutina mostrados
-                console.log(idDieta);
+                // console.log(idDieta);
 
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
@@ -302,7 +285,7 @@ export default {
                 });
 
                 const responseData = await response.json();
-                console.log(responseData);
+                // console.log(responseData);
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
@@ -316,6 +299,34 @@ export default {
                 // Manejar errores
                 console.error('Error al enviar el mensaje:', error);
             }
+        },
+        async GuardarRutina(usuario, rutinas2) {
+            // Modificar rutinas2 para cambiar el id_usuario según el usuario actual
+            rutinas2.forEach((ejercicio, index) => {
+                // console.log(`Datos del ejercicio ${index + 1}:`);
+                for (const key in ejercicio) {
+                    // console.log(`${key}: ${ejercicio[key]}`);
+                    // Verificar si la clave es igual a "id_usuari"
+                    if (key === "id_usuari") {
+                        ejercicio[key] = usuario; // Asignar el valor del id_usuari del usuario al campo correspondiente del ejercicio
+                    }
+                }
+                // console.log("----------------------");
+            });
+
+            console.log("Rutinas modificadas:", rutinas2); // Agrega este console.log
+            const response = await fetch(`http://localhost:8000/api/descargarRutina`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(rutinas2), // Enviar los datos de la rutina al servidor
+
+            });
+            const responseData = await response.json();
+            console.log(responseData);
+
+
         },
 
 
@@ -373,6 +384,7 @@ export default {
         async mostrarMensajes() {
             try {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
+                this.usuarioActual = id_usuario;
                 const id_amic = useUsuariPerfilStore().amic;
                 const response = await fetch(`http://localhost:8000/api/missatges/${id_usuario}/${id_amic}`);
                 const responseData = await response.json();
@@ -478,7 +490,7 @@ export default {
                 const response = await fetch(`http://localhost:8000/api/dietas/${id_usuario}`);
                 const responseData = await response.json();
                 this.dietas = responseData;
-                console.log(this.dietas);
+                // console.log(this.dietas);
 
             } catch (error) {
                 // console.error('Error al obtener la dieta:', error);
@@ -509,21 +521,23 @@ html,
 body {
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    height: 100%;
 }
 
 body {
+    /* Establecer la fuente predeterminada */
+    background: linear-gradient(to top right, #FFA500, #f45c36);
 
+    /* Color de fondo */
     height: 100vh;
 }
 
-.main-content {
+.contenedor {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     height: 100vh;
-    width: 100%;
 }
 
 .cabecera {
@@ -531,20 +545,21 @@ body {
     /* Para que los elementos estén en línea */
     align-items: center;
     /* Para centrar verticalmente */
-    justify-content: left;
+    justify-content: center;
     /* Para centrar horizontalmente */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: #333;
-    padding: 20px 20px;
-    margin-left: 40px;
+    background-color: #333;
+    color: rgb(255, 255, 255);
+    padding: 10px 20px;
     border-radius: 10px;
-    width: 100%;
+    width: 95%;
+    margin-top: 20px;
     margin-bottom: 10px;
 }
 
 .cabecera p {
-    margin-left: 10px;
+    margin-left: 20px;
 
+    margin: 0;
     font-size: 18px;
 }
 
@@ -629,23 +644,65 @@ body {
 .boton-agregar {
     justify-content: center;
     align-items: center;
-    width: 50px;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    color: #333;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    margin-left: 10px;
 
 }
 
+.boton-agregar img {
+    width: 20px;
+    height: 20px;
 
+}
 
+.mensaje-asistente {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 25px;
+    border-bottom-left-radius: 0;
+    background-color: #c7ab92;
+    margin-right: 10%;
+}
 
+.avatar-asistente {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: #FFA500;
+}
+
+.contenido-mensaje-asistente {
+    max-width: 100%;
+}
+
+.animacion-carga {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 50%;
+    border-top: 2px solid #ccc;
+    animation: spin 1s linear infinite;
+    align-self: flex-start;
+    margin-bottom: 8px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.entrada-mensaje-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-left: 30px;
+}
 
 .controles-inferiores {
     width: 100%;
@@ -654,36 +711,23 @@ body {
     align-items: center;
     padding-top: 20px;
     padding-bottom: 20px;
-    border-radius: 20px;
-}
-
-.entrada-mensaje-container {
-    display: flex;
-    align-items: center;
-    display: grid;
-    grid-template-columns: 5fr .1fr .1fr;
-    width: 90%;
-    padding: 10px;
-    border-radius: 30px;
-    background-color: #ccc;
 }
 
 .entrada-mensaje {
-    margin-left: 2px;
-    width: 95%;
-    padding-left: 10px;
-    padding-top: 10px;
+    margin-left: 10px;
+    width: 70%;
+    padding: 10px;
+    margin: 10px 0;
     box-sizing: border-box;
     background-color: #f0f0f0;
     border: none;
-    border-radius: 20px;
-    height: 35px;
-    overflow-y: hidden;
+    border-radius: 8px;
+    height: 50px;
 }
 
 .boton-enviar {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background-color: #333;
     color: white;
@@ -700,21 +744,15 @@ body {
     background-color: #333;
 }
 
-.modal {
-    width: 70%;
-    margin-top: 10px;
-    background-color: #a3a3a3;
-    border-radius: 15px;
 
-}
 
 .modal-contenido {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    margin: auto;
-    width: 50%;
-    text-align: center;
-    padding: 10px;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: white;
 
 }
 
@@ -725,6 +763,21 @@ body {
     border-radius: 20%;
 }
 
+.modal-contenido-dieta {
+    background-color: red;
+}
+
+.modal-contenido-rutina {
+    background-color: green;
+}
+
+.modal-contenido-video {
+    background-color: blue;
+}
+
+.modal-contenido-foto {
+    background-color: yellow;
+}
 
 
 /* Estilos para los mensajes recibidos */
@@ -752,7 +805,6 @@ body {
 .mensaje-recibido {
     padding: 8px;
     border-radius: 8px;
-    width: 90%;
 }
 
 .mensaje-recibido {
@@ -765,14 +817,14 @@ body {
 }
 
 .mensaje-enviado {
-    max-width: fit-content;
-    justify-content: flex-end;
-    background-color: #ffd78c;
-    align-self: flex-end;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding-left: 20px;
+    width: 50%;
+    display: flex;
 
+    justify-content: flex-end;
+    text-align: left;
+
+    background-color: red;
+    align-self: flex-end;
 }
 
 .imagen-chat {
@@ -795,70 +847,7 @@ body {
     height: 50px;
 }
 
-.compartir{
-    font-size: .75em;
-    line-height: 1;
-    font-weight: 600;
-    font-style: italic;
-    color: #333;
-}
-
 h3 {
     text-align: center;
 }
-
-#hora-missatge{
-    font-size: .75em;
-    font-style: italic;
-    color: #333;
-    text-align: right;
-    margin-right: 5px;
-    margin-top: 20px;
-
-}
-
-#rutina {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-#send {
-    width: 100%;
-    height: 100%;
-    margin-left: 2px;
-}
-
-#attach {
-    width: 100%;
-    height: 100%;
-    margin-left: 2px;
-}
-
-#image{
-    width: 65%;
-    height: 65%;
-    color: #1a1a1a;
-}
-
-#video{
-    width: 65%;
-    height: 65%;
-    color: #1a1a1a;
-
-}
-
-#routine{
-    width: 65%;
-    height: 65%;
-    color: #1a1a1a;
-
-}
-
-#diet{
-    width: 65%;
-    height: 65%;
-    color: #1a1a1a;
-
-}
-
 </style>
