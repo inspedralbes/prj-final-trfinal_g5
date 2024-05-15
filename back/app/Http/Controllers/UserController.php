@@ -270,5 +270,20 @@ class UserController extends Controller
         ]);
     }
     
+    public function listarUsuaris()
+    {
+        try {
+            $usuaris = Usuaris::all();
+            return response()->json([
+                'status' => 1,
+                'usuaris' => $usuaris
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error al obtener los usuarios: ' . $e->getMessage()
+            ]);
+        }
+    }
 
 }    

@@ -4,12 +4,6 @@
         <capçalera />
         <h1>Administració</h1>
         <div class="button-container">
-          <button class="large-button dietas-button" @click="redirectTo('/admin/dietas')">
-            Dietes
-          </button>
-          <button class="large-button rutinas-button" @click="redirectTo('/admin/rutines')">
-            Rutines
-          </button>
           <button class="large-button usuarios-button" @click="redirectTo('/admin/usuaris')">
             Usuaris
           </button>

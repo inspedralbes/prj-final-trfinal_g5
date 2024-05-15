@@ -9,6 +9,7 @@ use App\Http\Controllers\AlimentsController;
 use App\Http\Controllers\DietaController;
 
 
+Route::get('/tots-usuaris', [UserController::class, 'listarUsuaris']);
 Route::get('/usuari/{id}', [UserController::class, 'mostrarUsuario']);
 Route::put('/editar-usuari/{id}', [UserController::class, 'editarUsuari']);
 

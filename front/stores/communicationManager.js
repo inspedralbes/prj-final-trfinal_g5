@@ -40,6 +40,26 @@ export async function getDatosUsuario2(idUsuario) {
     }
 }
 
+export function getTotosUsuaris() {
+    return new Promise((resolve, reject) => {
+        fetch(`${url}/tots-usuaris`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    reject('Error al obtener los usuarios: ' + response.statusText);
+                }
+            })
+            .then(data => {
+                resolve(data);
+            })
+            .catch(error => {
+                reject('Error de red al obtener los usuarios: ' + error.message);
+            });
+    });
+}
+
+
 export async function getDatosEjercicio() {
     try {
         const response = await fetch(`${url}/exercicis`);
