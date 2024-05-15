@@ -77,6 +77,7 @@ class RutinaController extends Controller
             \Log::info('Datos recibidos:', $data);
             
             $routines = $data; // Obtener las rutinas del JSON
+            $datas = Carbon::now();
     
             foreach ($routines as $routine) {
                 // Verificar que todos los campos necesarios estén presentes en cada rutina
@@ -94,7 +95,8 @@ class RutinaController extends Controller
                     'nom_exercici' => $routine['nom_exercici'],
                     'series' => $routine['series'],
                     'repeticions' => $routine['repeticions'],
-                    'id_exercici' => $routine['id_exercici']
+                    'id_exercici' => $routine['id_exercici'],
+                    'data'=>$datas,
                 ]);
             }
     
