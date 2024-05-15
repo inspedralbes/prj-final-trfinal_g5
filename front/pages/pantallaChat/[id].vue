@@ -1,8 +1,6 @@
 <template>
 
     <body>
-
-
         <div class="main-content">
             <div class="cabecera">
                 <!-- Mostrar foto de perfil del usuario -->
@@ -45,17 +43,11 @@
                 <button @click="enviarDieta" :disabled="isSaving">Enviar</button>
             </div>
 
-
-
-
-
             <!-- Resto del contenido del chat -->
             <div class="chat-container" v-if="!mostrarRutina && !mostrarDieta">
                 <!-- Cabecera del chat -->
                 <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
                 <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
-
-
 
                 <!-- Contenedor de mensajes -->
                 <div class="mensajes-container">
@@ -69,11 +61,11 @@
                             <div
                                 :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
                                 <!-- Verificar si el mensaje tiene una imagen -->
-                                <div class="mensaje-imagen"v-if="mensaje.imagen">
+                                <div class="mensaje-imagen" v-if="mensaje.imagen">
                                     <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
                                         class="imagen-chat">
-                                        <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
-
+                                        <p v-if="mensaje.mensaje">{{mensaje.mensaje}}</p>
+                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
                                 </div>
                                 <template v-if="mensaje.video">
                                     <video width="1920" height="240" controls>
@@ -81,57 +73,65 @@
                                             type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
-                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
+                                    <p v-if="mensaje.mensaje">{{mensaje.mensaje}}</p>
 
+                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
                                 </template>
-                                <div v-if="mensaje.idRutina" >
+                                <div v-if="mensaje.idRutina">
                                     <h3 v-if="mensaje.idRutina">Rutina</h3>
                                     <div class="rutina-container">
                                         <div id="taula-rutina" v-for="(ejercicio, index) in rutinas2" :key="index">
                                             <h4 id="exercici">{{ ejercicio.nom_exercici }}</h4>
-                                            <p id="series" >Series: {{ ejercicio.series }}</p>
+                                            <p id="series">Series: {{ ejercicio.series }}</p>
                                             <p id="reps">Reps: {{ ejercicio.repeticions }}</p>
                                         </div>
-
-
                                     </div>
                                     <button id="guardar-rutina" @click="descargarRutina">Descargar</button>
-
                                     <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
-
                                 </div>
                                 <div v-if="mensaje.idDieta">
                                     <p v-if="mensaje.idDieta">Dieta</p>
-                                    <div >
+                                    <div>
                                         <div v-for="(plat, index) in dietas2" :key="index">
                                             <p>{{ plat.nom_plat }}</p>
                                             <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
-
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mensaje-texto-container"  v-if=mensaje.mensaje>
-                                    <p id="mensaje-texto">{{ mensaje.mensaje }} </p>
-                                    <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
-                                </div>
                                 
+                                <div class="mensaje-recibido-container" v-if=" mensaje.usuario_envia_mensaje === usuario.id && !mensaje.idRutina && !mensaje.idDieta && !mensaje.video &&!mensaje.imagen">
+                                    
+                                    <div id="mensaje-texto">  {{ mensaje.mensaje }}</div>
+                                    <div class="hora-container">
+                                        <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
+
+                                    </div>
+                                </div>
+                                <div class="mensaje-texto-container" v-if=" mensaje.usuario_envia_mensaje !== usuario.id && !mensaje.idRutina && !mensaje.idDieta && !mensaje.video && !mensaje.imagen">
+                                    <div id="mensaje-texto" > 
+
+                                        {{ mensaje.mensaje }} 
+                                    
+                                    </div>
+                                   <div class="hora-container">
+                                    <span id="hora-missatge-enviat">{{ formatDate(mensaje.created_at) }}</span>
+
+                                   </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Controles inferiores -->
-
             </div>
             <div class="controles-inferiores">
                 <!-- Área de texto con el botón "+" -->
                 <div v-if="imagenSeleccionada" class="imagen-seleccionada">
-                    
                     <div>
                         <img :src="imagenSeleccionada" alt="Imagen seleccionada">
-
                     </div>
-
                     <div>
                         <Icon id="close" name="i-ic-round-close" @click="imagenSeleccionada = null"></Icon>
                     </div>
@@ -158,17 +158,20 @@
                     <div class="modal-contenido" ref="modalContenido">
                         <!-- Opciones del modal -->
                         <div>
-                            <Icon id="image" @click="openFileInput" name="i-material-symbols-image"></Icon><span class="compartir">Imatge</span>
+                            <Icon id="image" @click="openFileInput" name="i-material-symbols-image"></Icon><span
+                                class="compartir">Imatge</span>
                         </div>
                         <div>
-                            <Icon id="video" @click="openVideo" name="i-ic:baseline-video-camera-back"></Icon><span class="compartir">Vídeo</span>
-                        </div>
-
-                        <div>
-                            <Icon id="routine" @click="clickRutina" name="i-ic:round-fitness-center" </Icon><p class="compartir">Rutina</p>
+                            <Icon id="video" @click="openVideo" name="i-ic:baseline-video-camera-back"></Icon><span
+                                class="compartir">Vídeo</span>
                         </div>
                         <div>
-                            <Icon id="diet" @click="clickDieta" name="i-mdi:food-apple"></Icon><p class="compartir">Dieta</p>
+                            <Icon id="routine" @click="clickRutina" name="i-ic:round-fitness-center"></Icon>
+                            <p class="compartir">Rutina</p>
+                        </div>
+                        <div>
+                            <Icon id="diet" @click="clickDieta" name="i-mdi:food-apple"></Icon>
+                            <p class="compartir">Dieta</p>
                         </div>
                     </div>
                 </div>
@@ -176,7 +179,6 @@
             <!-- Navbar -->
             <navBar />
         </div>
-
     </body>
 </template>
 
@@ -665,7 +667,7 @@ body {
 }
 
 
-.rutina-container{
+.rutina-container {
     max-width: fit-content;
     justify-content: flex-end;
     align-self: flex-end;
@@ -777,18 +779,23 @@ body {
 
 .mensaje-enviado,
 .mensaje-recibido {
-    padding: 8px;
+    padding-left: 15px;
     border-radius: 8px;
-    width: 90%;
+    width: 70%;
+    word-wrap: break-word; /* Agrega esta línea */
 }
 
 .mensaje-recibido {
     text-align: left;
     display: flex;
     justify-content: flex-start;
-    width: 50%;
-
     background-color: #E2E2E2;
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .mensaje-enviado {
@@ -805,25 +812,41 @@ body {
 
 }
 
-.mensaje-imagen{
+.mensaje-imagen {
     max-width: fit-content;
     justify-content: flex-end;
-    background-color: #FFA500;
     align-self: flex-end;
     display: grid;
     grid-template-columns: 1fr;
-    
-    
+
+
 }
 
-.mensaje-texto-container{
+.mensaje-texto-container {
     display: grid;
-    grid-template-columns: 1fr .1fr;
+    grid-template-columns: 1fr ;
     gap: 10px;
+    margin: auto;
+    max-width: fit-content;
+    justify-content: flex-end;
 }
 
-#mensaje-texto{
-    margin: 20px;
+
+.mensaje-recibido-container{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    word-wrap: break-word; /* Agrega esta línea */
+
+}
+
+
+#mensaje-texto {
+    max-width: fit-content;
+    word-break: break-all;
+    padding-left: 5px;
+
+    
 }
 
 .imagen-chat {
@@ -832,7 +855,7 @@ body {
     border-radius: 8px;
     display: block;
     margin: auto;
-    
+
 }
 
 .imagen-seleccionada {
@@ -842,7 +865,7 @@ body {
     margin-bottom: 10px;
     width: 100%;
     margin: auto;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px -25px 20px 0px ;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px -25px 20px 0px;
 
 }
 
@@ -866,11 +889,11 @@ body {
     display: block;
     margin: auto;
     margin-top: 20px;
-    
-    
+
+
 }
 
-.compartir{
+.compartir {
     font-size: .75em;
     line-height: 1;
     font-weight: 600;
@@ -886,14 +909,14 @@ h4 {
     font-weight: bolder;
 }
 
-video{
+video {
     width: 100%;
     height: auto;
     border-radius: 8px;
 
 }
 
-#hora-missatge{
+#hora-missatge {
     font-size: .75em;
     font-style: italic;
     color: #333;
@@ -903,15 +926,24 @@ video{
 
 }
 
-#taula-rutina{
+#hora-missatge-enviat{
+    font-size: .75em;
+    font-style: italic;
+    color: #333;
+    text-align: right;
+    margin-left: 85%;
+    margin-top: 20px;text-align: right;
+}
+
+#taula-rutina {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     border-bottom: 1px solid #ffffff49;
-    
+
 }
 
 
-#exercici{
+#exercici {
     font-size: .7em;
     font-weight: 600;
     text-align: center;
@@ -922,7 +954,7 @@ video{
     border-right: 1px solid #ffffff49;
 }
 
-#series{
+#series {
     font-size: .7em;
     font-weight: 600;
     text-align: center;
@@ -931,10 +963,10 @@ video{
     width: 70%;
     margin: auto;
     border-radius: 10px;
-    
+
 }
 
-#reps{
+#reps {
     font-size: .7em;
     font-weight: 600;
     text-align: center;
@@ -957,31 +989,30 @@ video{
     margin-left: 2px;
 }
 
-#image{
+#image {
     width: 65%;
     height: 65%;
     color: #1a1a1a;
 }
 
-#video{
-    width: 65%;
-    height: 65%;
-    color: #1a1a1a;
-
-}
-
-#routine{
+#video {
     width: 65%;
     height: 65%;
     color: #1a1a1a;
 
 }
 
-#diet{
+#routine {
     width: 65%;
     height: 65%;
     color: #1a1a1a;
 
 }
 
+#diet {
+    width: 65%;
+    height: 65%;
+    color: #1a1a1a;
+
+}
 </style>
