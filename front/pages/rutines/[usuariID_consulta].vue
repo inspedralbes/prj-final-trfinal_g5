@@ -118,7 +118,7 @@ export default {
                 const fecha = this.fechaSeleccionada;
                 if (idUsuario && fecha) {
                     await deleteRutinaByDate(idUsuario, fecha);
-                    this.$router.push('/rutina'); 
+                    this.$router.push('/admin/usuaris'); 
                 } else {
                     console.error('No hay fecha o usuario seleccionados para borrar');
                 }

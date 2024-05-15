@@ -286,4 +286,18 @@ class UserController extends Controller
         }
     }
 
+    public function eliminarUsuari($id) {
+        try {
+            $usuari = Usuaris::find($id);
+            if (!$usuari) {
+                return response()->json(['status' => 0, 'message' => 'Usuario no encontrado']);
+            }
+            $usuari->delete();
+            return response()->json(['status' => 1, 'message' => 'Usuario eliminado correctamente']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 0, 'message' => 'Error al eliminar el usuario: ' . $e->getMessage()]);
+        }
+    }
+    
+
 }    

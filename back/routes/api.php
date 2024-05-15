@@ -12,13 +12,17 @@ use App\Http\Controllers\DietaController;
 Route::get('/tots-usuaris', [UserController::class, 'listarUsuaris']);
 Route::get('/usuari/{id}', [UserController::class, 'mostrarUsuario']);
 Route::put('/editar-usuari/{id}', [UserController::class, 'editarUsuari']);
+Route::delete('/eliminar-usuari/{id}', [UserController::class, 'eliminarUsuari']);
+
 
 Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
 
 Route::get('/rutina/{id}', [RutinaController::class, 'getRutina']);
 Route::post('/guardar-rutina', [RutinaController::class, 'store']);
-Route::delete('/eliminar-rutina/{id}', [RutinaController::class, 'destroy']);
+Route::delete('/eliminar-rutina/{id}', [RutinaController::class, 'destroyTodo']);
 Route::delete('/eliminar-rutina-hoy/{id}', [RutinaController::class, 'destroyToday']);
+Route::delete('/rutinas/{id_usuari}/{fecha}', [RutinaController::class, 'destroyByDate']); 
+
 
 Route::get('/aliments', [AlimentsController::class, 'index']);
 

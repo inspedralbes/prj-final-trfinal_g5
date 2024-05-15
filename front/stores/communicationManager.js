@@ -279,6 +279,44 @@ export async function borrarDietaHoy(idUsuario) {
     }
 }
 
+export async function borrarUsuari(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-usuari/${idUsuario}`, { // Ajusta la URL según tu backend
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar el usuario');
+        }
+
+        const data = await response.json();
+        console.log('Usuario borrado correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
+}
+
+export async function deleteRutinaByDate(idUsuario, fecha) {
+    try {
+        const response = await fetch(`${url}/rutinas/${idUsuario}/${fecha}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al eliminar la rutina');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
+
+}
 
 //fetch para la api de openai
 

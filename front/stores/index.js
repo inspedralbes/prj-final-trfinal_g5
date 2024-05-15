@@ -16,6 +16,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
     const alergia_intolerancia = ref("");
     const telefon = ref("");
     const registre = ref(false);
+    const usuariID_consulta = ref("");
 
 
     function iniciarSesionExitoso() {
@@ -58,6 +59,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         registreIncomplet,
         registratExitosament,
         actualitzarDadesUsuari,
+        usuariID_consulta,
     };
 },
     {
