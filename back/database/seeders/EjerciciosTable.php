@@ -21,8 +21,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Curl de Martell Inclinat",
                 "dificultat" => "principiant",
                 "idCategoria" => 1,
-                "imatge" => "imatge_curl_martillo_inclinado.jpg",
-                "link" =>"",
+                "imatge" => "1imatge_curl_martillo_inclinado.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/24941201.mp4",
                 "descripció" => "Flexiona els colzes elevant les mancurnes cap als muscles en banc inclinat."
             ],
             [
@@ -30,8 +30,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Curl de Barra d'Agafador Ampli",
                 "dificultat" => "principiant",
                 "idCategoria" => 1,
-                "imatge" => "imatge_curl_barra_agarre_ancho.jpg",
-                "link" =>"",
+                "imatge" => "2imatge_curl_barra_agarre_ancho.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/35921201.mp4",
                 "descripció" => "Flexiona els colzes elevant la barra amb un agafador ampli cap als muscles."
             ],
             [
@@ -39,8 +39,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Curl de Martell",
                 "dificultat" => "intermedi",
                 "idCategoria" => 1,
-                "imatge" => "imatge_curl_martillo.jpg",
-                "link" =>"",
+                "imatge" => "3imatge_curl_martillo.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/03121201.mp4",
                 "descripció" => "Aixeca les mancurnes cap als muscles mantenint les palmes cap a dins."
             ],
             [
@@ -48,8 +48,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Curl de Barra Z",
                 "dificultat" => "intermedi",
                 "idCategoria" => 1,
-                "imatge" => "imatge_curl_barra_z.jpg",
-                "link" =>"",
+                "imatge" => "4imatge_curl_barra_z.jpg",
+                "link" =>"https://youtu.be/no-dXip-rJM",
                 "descripció" => "Flexiona els colzes elevant la barra Z cap als muscles."
             ],
             [
@@ -57,8 +57,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Curl de Barra",
                 "dificultat" => "intermedi",
                 "idCategoria" => 1,
-                "imatge" => "imatge_curl_barra.jpg",
-                "link" =>"",
+                "imatge" => "5imatge_curl_barra.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/35921201.mp4",
                 "descripció" => "Flexiona els colzes elevant la barra agafantla a una amplitut basante en l'espatlla recta cap als muscles."
             ],
             [
@@ -66,8 +66,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Curl Concentrat",
                 "dificultat" => "intermedi",
                 "idCategoria" => 1,
-                "imatge" => "imatge_curl_concentrado.jpg",
-                "link" =>"",
+                "imatge" => "6imatge_curl_concentrado.jpg",
+                "link" =>"https://youtu.be/EbOn-SVVbaA",
                 "descripció" => "Realitza curls concentrats per aïllar i enfortir els bíceps."
             ],
             // [
@@ -83,8 +83,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Gir de barra",
                 "dificultat" => "intermedi",
                 "idCategoria" => 2,
-                "imatge" => "imatge_giro_barra.jpg",
-                "link" =>"",
+                "imatge" => "8imatge_giro_barra.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/00941201.mp4",
                 "descripció" => "Fes girs amb la barra per enfortir els abdominals."
             ],
             [
@@ -92,8 +92,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Plancha de colzes",
                 "dificultat" => "intermedi",
                 "idCategoria" => 2,
-                "imatge" => "imatge_plancha_codos.jpg",
-                "link" =>"",
+                "imatge" => "9imatge_plancha_codos.jpg",
+                "link" =>"https://www.youtube.com/watch?v=ogfuXWgXVs",
                 "descripció" => "Mantén la posició de planxa amb colzes recolzats."
             ],
             [
@@ -101,8 +101,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Abdominals suspesos",
                 "dificultat" => "intermèdia",
                 "idCategoria" => 2,
-                "imatge" => "imatge_abdominales_suspendidos.jpg",
-                "link" =>"",
+                "imatge" => "10imatge_abdominales_suspendidos.jpg",
+                "link" =>"https://youtu.be/yLuqrzNT6yw",
                 "descripció" => "Aixeca cames amb el tors suspès per enfortir el core."
             ],
             [
@@ -110,8 +110,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Jab Creuat V-sit amb Mancurna",
                 "dificultat" => "intermedi",
                 "idCategoria" => 2,
-                "imatge" => "imatge_jab_cruzado_mancuerna.jpg",
-                "link" =>"",
+                "imatge" => "11imatge_jab_cruzado_mancuerna.jpg",
+                "link" =>"https://youtu.be/VF7N6ZzrLWg",
                 "descripció" => "Assegut, realitza jab creuat amb mancurna en posició V-Sit."
             ],
             [
@@ -119,8 +119,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Gir de Cable de baix a alt",
                 "dificultat" => "intermedi",
                 "idCategoria" => 3,
-                "imatge" => "imatge_giro_cable.jpg",
-                "link" =>"",
+                "imatge" => "12imatge_giro_cable.jpg",
+                "link" =>"https://www.youtube.com/watch?v=olXNyQ5Yaps",
                 "descripció" => "Dret, gira el cable de baix cap amunt."
             ],
             [
@@ -128,8 +128,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Llançador de sortilegis amb mancurnes",
                 "dificultat" => "principiant",
                 "idCategoria" => 2,
-                "imatge" => "imatge_lanzador_hechizos_mancuernas.jpg",
-                "link" =>"",
+                "imatge" => "13imatge_lanzador_hechizos_mancuernas.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/07771201.mp4",
                 "descripció" => "Dret, aixeca les mancurnes amb braços estesos."
             ],
             [
@@ -137,8 +137,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Crunch Invers Declinat",
                 "dificultat" => "intermedi",
                 "idCategoria" => 2,
-                "imatge" => "imatge_crunch_inverso_banco_declinado.jpg",
-                "link" =>"",
+                "imatge" => "14imatge_crunch_inverso_banco_declinado.jpg",
+                "link" =>"https://youtu.be/SJub6eDszec",
                 "descripció" => "Fes crunch invers a banc declinat per a abdominals inferiors."
             ],
             [
@@ -146,8 +146,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Cercles de Cadera d'Peu",
                 "dificultat" => "principiant",
                 "idCategoria" => 3,
-                "imatge" => "imatge_circulos_cadera.jpg",
-                "link" =>"",
+                "imatge" => "15imatge_circulos_cadera.jpg",
+                "link" =>"https://media.physitrack.com/exercises/f813695a-4c07-42cb-bdad-7550de74e83f/es/video_720p.mp4",
                 "descripció" => "Dret, fes cercles amb la cadera per abductors."
             ],
             // [
@@ -163,8 +163,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Hip-Thrust amb barra",
                 "dificultat" => "intermedi",
                 "idCategoria" => 5,
-                "imatge" => "imatge_empuje_cadera_barra.jpg",
-                "link" =>"",
+                "imatge" => "17imatge_empuje_cadera_barra.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/22161201.mp4",
                 "descripció" => "Empenta de cadera amb una barra y pes des de posició asseguda per enfortir glúteos."
             ],
             [
@@ -172,8 +172,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Press de Banca amb Mancurnes",
                 "dificultat" => "principiant",
                 "idCategoria" => 4,
-                "imatge" => "imatge_press_banca_mancuernas.jpg",
-                "link" =>"",
+                "imatge" => "18imatge_press_banca_mancuernas.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/02891201.mp4",
                 "descripció" => "Acostat, press de banca amb mancurnes per pectorals."
             ],
             [
@@ -181,8 +181,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Flexions de Pit",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
-                "imatge" => "imatge_flexiones_plancha.jpg",
-                "link" =>"",
+                "imatge" => "19imatge_flexiones_plancha.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/31451201.mp4",
                 "descripció" => "Flexions des de posició de planxa per pectorals."
             ],
             [
@@ -190,8 +190,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Press de Inclinat amb Mancurnes",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
-                "imatge" => "imatge_press_inclinado_mancuernas.jpg",
-                "link" =>"",
+                "imatge" => "20imatge_press_inclinado_mancuernas.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/24411201.mp4",
                 "descripció" => "Press de banca inclinat amb mancurnes per pectorals superiors."
             ],
             [
@@ -199,8 +199,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Cross-Over amb Cables Baixos",
                 "dificultat" => "principiant",
                 "idCategoria" => 4,
-                "imatge" => "imatge_cross_over_cables_bajos.jpg",
-                "link" =>"",
+                "imatge" => "21imatge_cross_over_cables_bajos.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/22521201.mp4",
                 "descripció" => "Cross-over amb cables baixos per aïllar pectorals."
             ],
             [
@@ -208,8 +208,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Press de Banca amb Barra",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
-                "imatge" => "imatge_press_banca_barra.jpg",
-                "link" =>"",
+                "imatge" => "22imatge_press_banca_barra.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/24401201.mp4",
                 "descripció" => "Acostat, press de banca amb barra per pectorals."
             ],
             [
@@ -217,8 +217,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Dips de Pit",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
-                "imatge" => "imatge_dips_enfocados_pecho.jpg",
-                "link" =>"",
+                "imatge" => "23imatge_dips_enfocados_pecho.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/02511201.mp4",
                 "descripció" => "Dips enfocats en pit per a pectorals i tríceps."
             ],
             [
@@ -226,8 +226,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Apertures amb Mancurnes inclinades",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
-                "imatge" => "imatge_aperturas_mancuernas_inclinadas.jpg",
-                "link" =>"",
+                "imatge" => "24imatge_aperturas_mancuernas_inclinadas.jpg",
+                "link" =>"https://youtu.be/3bBv7kgOzmE",
                 "descripció" => "Apertures amb mancurnes inclinades per pectorals inferiors."
             ],
             [
@@ -235,8 +235,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Apertures amb Mancurnes planes",
                 "dificultat" => "principiant",
                 "idCategoria" => 4,
-                "imatge" => "imatge_aperturas_mancuernas_planes.jpg",
-                "link" =>"",
+                "imatge" => "25imatge_aperturas_mancuernas_planes.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/22161201.mp4",
                 "descripció" => "Apertures amb mancurnes per pectorals amb el banc pla."
             ],
             [
@@ -244,8 +244,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Hip-Thrust",
                 "dificultat" => "intermedi",
                 "idCategoria" => 5,
-                "imatge" => "imatge_empuje_cadera.jpg",
-                "link" =>"",
+                "imatge" => "17imatge_empuje_cadera.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/21451201.mp4",
                 "descripció" => "Empenta de cadera des de posició asseguda per enfortir glúteos."
             ],
             [
@@ -253,8 +253,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Extensions de Cadera amb Cable en una Cama",
                 "dificultat" => "intermedi",
                 "idCategoria" => 5,
-                "imatge" => "imatge_extensiones_cadera_cable_pierna.jpg",
-                "link" =>"",
+                "imatge" => "27imatge_extensiones_cadera_cable_pierna.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/08801201.mp4",
                 "descripció" => "Extensions de cadera amb cable en una cama per a glúteos."
             ],
             [
@@ -262,8 +262,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Pont de Glúteos",
                 "dificultat" => "principiant",
                 "idCategoria" => 5,
-                "imatge" => "imatge_puente_gluteos.jpg",
-                "link" =>"",
+                "imatge" => "28imatge_puente_gluteos.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/24711201.mp4",
                 "descripció" => "Pont de glúteos des de posició acostada per enfortir-los."
             ],
             [
@@ -271,17 +271,17 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Pont de Glúteos en una Cama",
                 "dificultat" => "intermedi",
                 "idCategoria" => 5,
-                "imatge" => "imatge_puente_gluteos_pierna.jpg",
-                "link" =>"",
+                "imatge" => "29imatge_puente_gluteos_pierna.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/24731201.mp4",
                 "descripció" => "Pont de glúteos en una cama per a estabilitat."
             ],
             [
                 "id" => 30,
-                "nom_exercici" => "Elevació de Genoll al Pit",
+                "nom_exercici" => "Elevació de Genoll",
                 "dificultat" => "principiant",
                 "idCategoria" => 3,
-                "imatge" => "imatge_elevacion_rodilla_pecho.jpg",
-                "link" =>"",
+                "imatge" => "30imatge_elevacion_rodilla_pecho.jpg",
+                "link" =>"https://youtu.be/iBpgkuFuENY",
                 "descripció" => "Eleva el genoll al pit mentre fas un pas."
             ],
             [
@@ -289,8 +289,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Sentadilla des de Posició Genolls",
                 "dificultat" => "principiant",
                 "idCategoria" => 5,
-                "imatge" => "imatge_sentadilla_posicion_arrodillada.jpg",
-                "link" =>"",
+                "imatge" => "31imatge_sentadilla_posicion_arrodillada.jpg",
+                "link" =>"https://youtu.be/ypWwfzVw6go",
                 "descripció" => "Sentadilla des de posició genolls per als glutis."
             ],
             [
@@ -298,8 +298,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Puntada Laterals des de Posició Quadrúpeda",
                 "dificultat" => "intermedi",
                 "idCategoria" => 5,
-                "imatge" => "imatge_patadas_laterales_cuadrupeda.jpg",
-                "link" =>"",
+                "imatge" => "32imatge_patadas_laterales_cuadrupeda.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/14751201.mp4",
                 "descripció" => "puntada cap als costats des de posició quadrúpeda per als glutis."
             ],
             [
@@ -307,8 +307,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Puntada cap enrere des de Posició d'Peu",
                 "dificultat" => "principiant",
                 "idCategoria" => 5,
-                "imatge" => "imatge_patada_atras_posicion_pie.jpg",
-                "link" =>"",
+                "imatge" => "33imatge_patada_atras_posicion_pie.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/36131201.mp4",
                 "descripció" => "Puntada cap enrere des de posició d'peu per als glutis."
             ],
             [
@@ -443,7 +443,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 7,
                 "imatge" => "48imatge_Dominades_Asistides.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/05721201.mp4",
                 "descripció" => "Agafa la barra de forma supina amb mans a l'amplada dels muscles y amb ajut de la maquina fes el moviment."
             ],
             [
@@ -479,7 +479,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 8,
                 "imatge" => "52imatge_extension_espalda.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/36071201.mp4",
                 "descripció" => "Colocat a la maquina fes el moviment rotatio d'avall cap amunt per enfortir la part baixa de l'esquena."
             ],
             [
@@ -695,7 +695,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 12,
                 "imatge" => "76imatge_press_frances_barra_z.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/36461201.mp4",
                 "descripció" => "Flexiona els braços baixant la barra darrere del cap amb barra Z."
             ],
             [
@@ -704,7 +704,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 12,
                 "imatge" => "77imatge_empuje_abajo_triceps_agarre_invertido.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/16061201.mp4",
                 "descripció" => "Estira els braços cap avall amb agafada invertida."
             ],
             [
@@ -713,7 +713,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 12,
                 "imatge" => "78imatge_flexiones_triceps_posicion_mano_cerrada.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/02591201.mp4",
                 "descripció" => "Realitza flexions amb les mans prop del cos per treballar els tríceps."
             ],
             [
@@ -722,7 +722,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 12,
                 "imatge" => "79imatge_extension_triceps_cable_un_brazo.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/02311201.mp4",
                 "descripció" => "Estira el braç cap avall amb el cable per treballar els tríceps."
             ],
             [
@@ -731,7 +731,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 12,
                 "imatge" => "80imatge_extension_triceps_mancuerna.jpg",
-                "link" =>"",
+                "link" =>"https://www.youtube.com/watch?v=_44a_ecMyaw",
                 "descripció" => "Flexiona i estén el braç amb la mancuerna per treballar els tríceps."
             ]
         ];
