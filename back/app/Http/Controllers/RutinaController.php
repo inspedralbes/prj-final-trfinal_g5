@@ -106,13 +106,4 @@ class RutinaController extends Controller
             return response()->json(['error' => 'Error al guardar las rutinas: ' . $e->getMessage()], 500);
         }
     }
-    
-
-    
-    
-
-    
-    
-    
-
 }

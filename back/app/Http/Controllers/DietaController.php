@@ -68,11 +68,6 @@ class DietaController extends Controller
     
             return response()->json(['error' => 'Error al guardar las dietas: ' . $e->getMessage()], 500);
         }
-    }
-    public function mostrarDietasUsuario($id)
-    {
-        $dietas = Dieta::where('id_usuari', $id)->get();
-        return response()->json($dietas);
     }    
 
 
@@ -85,20 +80,6 @@ class DietaController extends Controller
             return response()->json(['message' => 'Dieta eliminadas correctamente'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al eliminar la dieta: ' . $e->getMessage()], 500);
-        }
-    }
-
-    public function destroyToday($id)
-    {
-        try {
-            $today = Carbon::today()->toDateString();
-            Dieta::where('id_usuari', $id)
-                ->whereDate('data_inici', $today)
-                ->delete();
-
-            return response()->json(['message' => 'Dietas de hoy eliminadas correctamente'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al eliminar las dietas de hoy: ' . $e->getMessage()], 500);
         }
     }
 }
