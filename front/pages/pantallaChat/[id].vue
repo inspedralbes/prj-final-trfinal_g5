@@ -1,5 +1,7 @@
 <template>
     <div>
+        <body>
+        <div class="main-content">
             <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
             <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
 
@@ -9,11 +11,11 @@
                 <p>{{ usuario.nom }}</p>
             </div>
 
-            <!-- Contenedor de mensajes -->
-            <div class="mensajes-container">
-                <!-- Iterar sobre los grupos de mensajes por día -->
-                <div v-for="(mensajesDia, fecha) in mensajes" :key="fecha" class="mensajes-dia">
-                    <h3>{{ fecha }}</h3>
+                <!-- Contenedor de mensajes -->
+                <div class="mensajes-container">
+                    <!-- Iterar sobre los grupos de mensajes por día -->
+                    <div v-for="(mensajesDia, fecha) in mensajes" :key="fecha" class="mensajes-dia">
+                        <h3>{{ fecha }}</h3>
 
                     <!-- Ordenar los mensajes por su ID -->
                     <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id"
@@ -32,22 +34,21 @@
                                     Your browser does not support the video tag.
                                 </video>
                             </template>
-                            <div>
-                                <p v-if="mensaje.idRutina">Rutina</p>
-                                <div v-if="mensaje.idRutina">
-                                    <div v-for="(ejercicio, index) in rutinas2" :key="index">
-                                        <p>NOM{{ ejercicio.nom_exercici }}</p>
-                                        <p>SERIES{{ ejercicio.series }}</p>
-                                        <p>REPETICIONES{{ ejercicio.repeticions }}</p>
-                                    </div>
-                                    <button @click="GuardarRutina(usuarioActual, rutinas2)">Guardar Rutina</button>
+                            <template v-if="mensaje.idRutina">
+                                <button @click="descargarRutina">Descargar</button>
+                                <p>Rutina</p>
+                                <div v-for="(ejercicio, index) in rutinas2" :key="index">
+                                    <p>NOM{{ ejercicio.nom_exercici }}</p>
+                                    <p>SERIES{{ ejercicio.series }}</p>
+                                    <p>REPETICIONES{{ ejercicio.repeticions }}</p>
                                 </div>
-                            </div>
-
+                                
+                            </template>
                             <template v-if="mensaje.idDieta">
                                 <p>Dieta</p>
                                 <div v-for="(plat, index) in dietas2" :key="index">
                                     <p>Nom{{ plat.nom_plat }}</p>
+                                    <p>Descripcio{{ plat.ingredients }}</p>
                                 </div>
                             </template>
                             <p>{{ mensaje.mensaje }}</p>
@@ -56,48 +57,65 @@
                     </div>
                 </div>
             </div>
-            <div ref="finalDePagina">
+            </div>
+            </body>
 
                 <!-- Controles inferiores -->
-                <div class="controles-inferiores">
-                    <!-- Área de texto con el botón "+" -->
-                    <div v-if="imagenSeleccionada" class="imagen-seleccionada">
-                        <p @click="imagenSeleccionada = null">x</p>
+            </div>
+            <div class="controles-inferiores">
+                <!-- Área de texto con el botón "+" -->
+                <div v-if="imagenSeleccionada" class="imagen-seleccionada">
+                    <div>
                         <img :src="imagenSeleccionada" alt="Imagen seleccionada">
                     </div>
-                    <div v-if="videoSeleccionado" class="video-seleccionado">
-                        <p @click="videoSeleccionado = null">x</p>
-                        <video width="320" height="240" controls>
-                            <source :src="videoSeleccionado" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+                    <div>
+                        <Icon id="close" name="i-ic-round-close" @click="imagenSeleccionada = null"></Icon>
                     </div>
-                    <div class="entrada-mensaje-container">
-                        <textarea v-model="mensaje" class="entrada-mensaje"
-                            placeholder="Escribe tu mensaje..."></textarea>
-                        <button @click="toggleModal" class="boton-agregar"><img src="@/public/adjunto.png"></button>
-                        <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">Enviar</button>
-                    </div>
+                </div>
+                <div v-if="videoSeleccionado" class="video-seleccionado">
+                    <p @click="videoSeleccionado = null">x</p>
+                    <video width="320" height="240" controls>
+                        <source :src="videoSeleccionado" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="entrada-mensaje-container">
+                    <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+                    <button @click="toggleModal" class="boton-agregar">
+                        <Icon id="attach" name="i-ic:round-attach-file"></Icon>
+                    </button>
+                    <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
+                        <Icon id="send" name="i-ic:round-send"></Icon>
+                    </button>
+                </div>
 
-                    <!-- Modal -->
-                    <div class="modal" v-if="mostrar" @click="toggleModal">
-                        <div class="modal-contenido" ref="modalContenido">
-                            <!-- Opciones del modal -->
-                            <div><img src="@/public/foto.png" class="modal-contenido-foto" @click="openFileInput"></div>
-                            <div><img src="@/public/video.png" class="modal-contenido-video" @click="openVideo"></div>
-
-                            <div><img src="@/public/rutina.png" class="modal-contenido-rutina" @click="enviarRutina">
-                            </div>
-                            <div><img src="@/public/dieta.png" class="modal-contenido-dieta" @click="enviarDieta">
-                            </div>
+                <!-- Modal -->
+                <div class="modal" v-if="mostrar" @click="toggleModal">
+                    <div class="modal-contenido" ref="modalContenido">
+                        <!-- Opciones del modal -->
+                        <div>
+                            <Icon id="image" @click="openFileInput" name="i-material-symbols-image"></Icon><span
+                                class="compartir">Imatge</span>
+                        </div>
+                        <div>
+                            <Icon id="video" @click="openVideo" name="i-ic:baseline-video-camera-back"></Icon><span
+                                class="compartir">Vídeo</span>
+                        </div>
+                        <div>
+                            <Icon id="routine" @click="clickRutina" name="i-ic:round-fitness-center"></Icon>
+                            <p class="compartir">Rutina</p>
+                        </div>
+                        <div>
+                            <Icon id="diet" @click="clickDieta" name="i-mdi:food-apple"></Icon>
+                            <p class="compartir">Dieta</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-        <!-- Navbar -->
-        <navBar />
-    </div>
+            <!-- Navbar -->
+            <navBar />
+        </div>
+    </body>
 </template>
 
 
@@ -504,14 +522,11 @@ html,
 body {
     margin: 0;
     padding: 0;
-    height: 100%;
+    overflow-x: hidden;
 }
 
 body {
-    /* Establecer la fuente predeterminada */
-    background: linear-gradient(to top right, #FFA500, #f45c36);
 
-    /* Color de fondo */
     height: 100vh;
 }
 
@@ -578,12 +593,13 @@ body {
 }
 
 
-.contenedor {
+.main-content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     height: 100vh;
+    width: 100%;
 }
 
 .cabecera {
@@ -591,21 +607,20 @@ body {
     /* Para que los elementos estén en línea */
     align-items: center;
     /* Para centrar verticalmente */
-    justify-content: center;
+    justify-content: left;
     /* Para centrar horizontalmente */
-    background-color: #333;
-    color: rgb(255, 255, 255);
-    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #333;
+    padding: 20px 20px;
+    margin-left: 40px;
     border-radius: 10px;
-    width: 95%;
-    margin-top: 20px;
+    width: 100%;
     margin-bottom: 10px;
 }
 
 .cabecera p {
-    margin-left: 20px;
+    margin-left: 10px;
 
-    margin: 0;
     font-size: 18px;
 }
 
@@ -690,90 +705,67 @@ body {
 .boton-agregar {
     justify-content: center;
     align-items: center;
-
-}
-
-.boton-agregar img {
-    width: 20px;
-    height: 20px;
-
-}
-
-.mensaje-asistente {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 8px;
-    padding: 10px;
-    border-radius: 25px;
-    border-bottom-left-radius: 0;
-    background-color: #c7ab92;
-    margin-right: 10%;
-}
-
-.avatar-asistente {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
-    margin-right: 10px;
-    background-color: #FFA500;
-}
-
-.contenido-mensaje-asistente {
-    max-width: 100%;
-}
-
-.animacion-carga {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #4CAF50;
-    border-radius: 50%;
-    border-top: 2px solid #ccc;
-    animation: spin 1s linear infinite;
-    align-self: flex-start;
-    margin-bottom: 8px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.entrada-mensaje-container {
+    color: #333;
+    border: none;
     display: flex;
+    justify-content: center;
     align-items: center;
-    width: 100%;
-    margin-left: 30px;
+    cursor: pointer;
+    margin-left: 10px;
+
 }
+
+
+.rutina-container {
+    max-width: fit-content;
+    justify-content: flex-end;
+    align-self: flex-end;
+    display: grid;
+    grid-template-columns: 1fr;
+    border-radius: 10px;
+
+}
+
 
 .controles-inferiores {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
     padding-bottom: 20px;
 }
 
-.entrada-mensaje {
-    margin-left: 10px;
-    width: 70%;
+.entrada-mensaje-container {
+    display: flex;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 5fr .1fr .1fr;
+    width: 90%;
     padding: 10px;
-    margin: 10px 0;
+    border-radius: 30px;
+    background-color: #ccc;
+}
+
+.entrada-mensaje {
+    margin-left: 2px;
+    width: 95%;
+    padding-left: 10px;
+    padding-top: 10px;
     box-sizing: border-box;
     background-color: #f0f0f0;
     border: none;
-    border-radius: 8px;
-    height: 50px;
+    border-radius: 20px;
+    height: 35px;
+    overflow-y: hidden;
 }
 
 .boton-enviar {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     background-color: #333;
     color: white;
@@ -790,15 +782,21 @@ body {
     background-color: #333;
 }
 
+.modal {
+    width: 70%;
+    margin-top: 10px;
+    background-color: #a3a3a3;
+    border-radius: 15px;
 
+}
 
 .modal-contenido {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: white;
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    padding: 10px;
 
 }
 
@@ -809,21 +807,6 @@ body {
     border-radius: 20%;
 }
 
-.modal-contenido-dieta {
-    background-color: red;
-}
-
-.modal-contenido-rutina {
-    background-color: green;
-}
-
-.modal-contenido-video {
-    background-color: blue;
-}
-
-.modal-contenido-foto {
-    background-color: yellow;
-}
 
 
 /* Estilos para los mensajes recibidos */
@@ -849,51 +832,240 @@ body {
 
 .mensaje-enviado,
 .mensaje-recibido {
-    padding: 8px;
+    padding-left: 15px;
     border-radius: 8px;
+    width: 70%;
+    word-wrap: break-word; /* Agrega esta línea */
 }
 
 .mensaje-recibido {
     text-align: left;
     display: flex;
     justify-content: flex-start;
-    width: 50%;
-
     background-color: #E2E2E2;
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .mensaje-enviado {
-    width: 50%;
-    display: flex;
-
+    max-width: fit-content;
     justify-content: flex-end;
-    text-align: left;
-
-    background-color: red;
+    background-color: #FFA500;
     align-self: flex-end;
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
+.mensaje-imagen {
+    max-width: fit-content;
+    justify-content: flex-end;
+    align-self: flex-end;
+    display: grid;
+    grid-template-columns: 1fr;
+
+
+}
+
+.mensaje-texto-container {
+    display: grid;
+    grid-template-columns: 1fr ;
+    gap: 10px;
+    margin: auto;
+    max-width: fit-content;
+    justify-content: flex-end;
+}
+
+
+.mensaje-recibido-container{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    word-wrap: break-word; /* Agrega esta línea */
+
+}
+
+
+#mensaje-texto {
+    max-width: fit-content;
+    word-break: break-all;
+    padding-left: 5px;
+
+    
 }
 
 .imagen-chat {
-    width: 80%;
+    width: 100%;
     height: auto;
     border-radius: 8px;
+    display: block;
+    margin: auto;
+
 }
 
 .imagen-seleccionada {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr .1fr;
     gap: 10px;
     margin-bottom: 10px;
+    width: 100%;
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px -25px 20px 0px;
+
+}
+
+#close {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: 10px;
+    padding: 2px;
+}
+
+.imagen-seleccionada img {
+    width: 80%;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
 
 
 }
 
-.imagen-seleccionada img {
-    width: 50px;
-    height: 50px;
+.compartir {
+    font-size: .75em;
+    line-height: 1;
+    font-weight: 600;
+    font-style: italic;
+    color: #333;
 }
 
 h3 {
     text-align: center;
+}
+
+h4 {
+    font-weight: bolder;
+}
+
+video {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+
+}
+
+#hora-missatge {
+    font-size: .75em;
+    font-style: italic;
+    color: #333;
+    text-align: right;
+    margin-right: 5px;
+    margin-top: 20px;
+
+}
+
+#hora-missatge-enviat{
+    font-size: .75em;
+    font-style: italic;
+    color: #333;
+    text-align: right;
+    margin-left: 85%;
+    margin-top: 20px;text-align: right;
+}
+
+#taula-rutina {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid #ffffff49;
+
+}
+
+
+#exercici {
+    font-size: .7em;
+    font-weight: 600;
+    text-align: center;
+    padding: 15px;
+    font-style: italic;
+    width: 70%;
+    margin: auto;
+    border-right: 1px solid #ffffff49;
+}
+
+#series {
+    font-size: .7em;
+    font-weight: 600;
+    text-align: center;
+    padding: 15px;
+    font-style: italic;
+    width: 70%;
+    margin: auto;
+    border-radius: 10px;
+
+}
+
+#reps {
+    font-size: .7em;
+    font-weight: 600;
+    text-align: center;
+    padding: 15px;
+    font-style: italic;
+    width: 70%;
+    margin: auto;
+    border-radius: 10px;
+}
+
+#send {
+    width: 100%;
+    height: 100%;
+    margin-left: 2px;
+}
+
+#attach {
+    width: 100%;
+    height: 100%;
+    margin-left: 2px;
+}
+
+#image {
+    width: 65%;
+    height: 65%;
+    color: #1a1a1a;
+}
+
+#video {
+    width: 65%;
+    height: 65%;
+    color: #1a1a1a;
+
+}
+
+#routine {
+    width: 65%;
+    height: 65%;
+    color: #1a1a1a;
+
+}
+
+#diet {
+    width: 65%;
+    height: 65%;
+    color: #1a1a1a;
+
 }
 </style>
