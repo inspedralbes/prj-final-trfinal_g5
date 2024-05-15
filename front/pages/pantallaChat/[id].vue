@@ -69,14 +69,14 @@
                             <div
                                 :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
                                 <!-- Verificar si el mensaje tiene una imagen -->
-                                <template v-if="mensaje.imagen">
+                                <div class="mensaje-imagen"v-if="mensaje.imagen">
                                     <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
                                         class="imagen-chat">
                                         <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
 
-                                </template>
+                                </div>
                                 <template v-if="mensaje.video">
-                                    <video width="320" height="240" controls>
+                                    <video width="1920" height="240" controls>
                                         <source :src="'http://localhost:8000/storage/video/' + mensaje.video"
                                             type="video/mp4">
                                         Your browser does not support the video tag.
@@ -110,8 +110,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if=mensaje.mensaje>
-                                    <p>{{ mensaje.mensaje }} <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span></p>
+                                <div class="mensaje-texto-container"  v-if=mensaje.mensaje>
+                                    <p id="mensaje-texto">{{ mensaje.mensaje }} </p>
+                                    <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
                                 </div>
                                 
                             </div>
@@ -125,8 +126,15 @@
             <div class="controles-inferiores">
                 <!-- Área de texto con el botón "+" -->
                 <div v-if="imagenSeleccionada" class="imagen-seleccionada">
-                    <p @click="imagenSeleccionada = null">x</p>
-                    <img :src="imagenSeleccionada" alt="Imagen seleccionada">
+                    
+                    <div>
+                        <img :src="imagenSeleccionada" alt="Imagen seleccionada">
+
+                    </div>
+
+                    <div>
+                        <Icon id="close" name="i-ic-round-close" @click="imagenSeleccionada = null"></Icon>
+                    </div>
                 </div>
                 <div v-if="videoSeleccionado" class="video-seleccionado">
                     <p @click="videoSeleccionado = null">x</p>
@@ -663,7 +671,6 @@ body {
     align-self: flex-end;
     display: grid;
     grid-template-columns: 1fr;
-    background-color: rgba(255, 255, 255, 0.158);
     border-radius: 10px;
 
 }
@@ -674,9 +681,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
     padding-bottom: 20px;
-    border-radius: 20px;
 }
 
 .entrada-mensaje-container {
@@ -793,28 +798,76 @@ body {
     align-self: flex-end;
     display: grid;
     grid-template-columns: 1fr;
-    padding-left: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 
+}
+
+.mensaje-imagen{
+    max-width: fit-content;
+    justify-content: flex-end;
+    background-color: #FFA500;
+    align-self: flex-end;
+    display: grid;
+    grid-template-columns: 1fr;
+    
+    
+}
+
+.mensaje-texto-container{
+    display: grid;
+    grid-template-columns: 1fr .1fr;
+    gap: 10px;
+}
+
+#mensaje-texto{
+    margin: 20px;
 }
 
 .imagen-chat {
-    width: 80%;
+    width: 100%;
     height: auto;
     border-radius: 8px;
+    display: block;
+    margin: auto;
+    
 }
 
 .imagen-seleccionada {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr .1fr;
     gap: 10px;
     margin-bottom: 10px;
-
+    width: 100%;
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px -25px 20px 0px ;
 
 }
 
+#close {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: 10px;
+    padding: 2px;
+}
+
 .imagen-seleccionada img {
-    width: 50px;
-    height: 50px;
+    width: 80%;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    
+    
 }
 
 .compartir{
@@ -827,6 +880,17 @@ body {
 
 h3 {
     text-align: center;
+}
+
+h4 {
+    font-weight: bolder;
+}
+
+video{
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+
 }
 
 #hora-missatge{
@@ -842,7 +906,7 @@ h3 {
 #taula-rutina{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    border-bottom: 2px solid #ffffff2a;
+    border-bottom: 1px solid #ffffff49;
     
 }
 
@@ -855,7 +919,7 @@ h3 {
     font-style: italic;
     width: 70%;
     margin: auto;
-    border-radius: 10px;
+    border-right: 1px solid #ffffff49;
 }
 
 #series{
@@ -867,6 +931,7 @@ h3 {
     width: 70%;
     margin: auto;
     border-radius: 10px;
+    
 }
 
 #reps{
