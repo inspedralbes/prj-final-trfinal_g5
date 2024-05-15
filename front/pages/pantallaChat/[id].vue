@@ -98,6 +98,7 @@
                     </div>
                 </div>
             </div>
+            <div ref="finalDePagina">
 
             <!-- Controles inferiores -->
             <div class="controles-inferiores">
@@ -132,6 +133,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
 
@@ -500,10 +502,15 @@ export default {
 
     },
     async mounted() {
+
         await this.mostrarAmigo();
         await this.mostrarMensajes();
         await this.mostrarRutinas();
         await this.mostrarDietas();
+        const finalDePagina = this.$refs.finalDePagina;
+    // Desplazarse hasta el elemento
+    finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
 
     },
     beforeRouteLeave(to, from, next) {
