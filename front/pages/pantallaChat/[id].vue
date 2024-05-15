@@ -57,6 +57,7 @@
                 </div>
             </div>
             <div ref="finalDePagina">
+
                 <!-- Controles inferiores -->
                 <div class="controles-inferiores">
                     <!-- Área de texto con el botón "+" -->
@@ -93,6 +94,8 @@
                     </div>
                 </div>
             </div>
+
+        <!-- Navbar -->
         <navBar />
     </div>
 </template>
@@ -208,6 +211,10 @@ export default {
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
+                    const finalDePagina = this.$refs.finalDePagina;
+        // Desplazarse hasta el elemento
+        finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
                     this.isSaving = false;
 
                 } else {
@@ -246,6 +253,11 @@ export default {
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
+                    const finalDePagina = this.$refs.finalDePagina;
+        // Desplazarse hasta el elemento
+        finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+
                     this.isSaving = false;
 
                 } else {
@@ -439,11 +451,38 @@ export default {
             // Cambiar el estado para mostrar la dieta
             this.mostrarDieta = true;
         },
+        async mostrarRutinas() {
+            try {
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const response = await fetch(`http://localhost:8000/api/rutina/${id_usuario}`);
+                const responseData = await response.json();
+                this.rutinas = responseData;
+
+            } catch (error) {
+                // console.error('Error al obtener la rutina:', error);
+            }
+        },
+        async mostrarDietas() {
+            try {
+                const id_usuario = useUsuariPerfilStore().id_usuari;
+                const response = await fetch(`http://localhost:8000/api/dietas/${id_usuario}`);
+                const responseData = await response.json();
+                this.dietas = responseData;
+                // console.log(this.dietas);
+
+            } catch (error) {
+                // console.error('Error al obtener la dieta:', error);
+            }
+        }
+
+
     },
     async mounted() {
 
         await this.mostrarAmigo();
         await this.mostrarMensajes();
+        await this.mostrarRutinas();
+        await this.mostrarDietas();
         const finalDePagina = this.$refs.finalDePagina;
         // Desplazarse hasta el elemento
         finalDePagina.scrollIntoView({ behavior: 'smooth', block: 'end' });
