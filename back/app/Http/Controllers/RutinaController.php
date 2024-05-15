@@ -80,7 +80,7 @@ class RutinaController extends Controller
     
             foreach ($routines as $routine) {
                 // Verificar que todos los campos necesarios estén presentes en cada rutina
-                $required_fields = ['id_usuari', 'dia', 'nom_exercici', 'series', 'repeticions', 'id_exercici'];
+                $required_fields = ['id_usuari', 'dia', 'nom_exercici', 'series', 'repeticions', 'id_exercici','data'];
                 foreach ($required_fields as $field) {
                     if (!isset($routine[$field])) {
                         throw new \Exception("El campo '{$field}' no está presente en una o más rutinas.");
