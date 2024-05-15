@@ -51,7 +51,7 @@ export default {
     },
     async mounted() {
         const store = useUsuariPerfilStore();
-        const idUsuario = store.usuariID_consulta;
+        const idUsuario = store.id_usuari;
         this.obtenirRutina(idUsuario);
     },
     computed: {
