@@ -398,7 +398,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 7,
                 "imatge" => "43imatge_jalon_agarre_cerrado.jpg",
-                "link" =>"",
+                "link" =>"https://www.youtube.com/watch?v=IgzxdPVZmyw",
                 "descripció" => "Amb agafador tancat, tira cap avall mantenint els colzes a prop."
             ],
             [
@@ -407,7 +407,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 7,
                 "imatge" => "44imatge_dominadas.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/39001201.mp4",
                 "descripció" => "Agafa la barra amb mans a l'amplada dels muscles."
             ],
             [
