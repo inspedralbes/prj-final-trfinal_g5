@@ -415,8 +415,8 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Rem amb Barra",
                 "dificultat" => "intermedi",
                 "idCategoria" => 7,
-                "imatge" => "45imatge_remo_barra_shotgun_row.jpg",
-                "link" =>"",
+                "imatge" => "45imatge_remo_barra.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/22421201.mp4",
                 "descripció" => "Inclina't cap endavant amb agafada ampla i porta la barra a l'abdomen."
             ],
             [
@@ -425,35 +425,35 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 7,
                 "imatge" => "46imatge_jalon_agarre_cerrado_frontal.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/37541201.mp4",
                 "descripció" => "Amb agafador tancat frontal, porta la barra cap avall al front."
             ],
             [
                 "id" => 47,
-                "nom_exercici" => "Dominades amb Barra en V",
+                "nom_exercici" => "Dominades frontals",
                 "dificultat" => "intermedi",
                 "idCategoria" => 7,
-                "imatge" => "47imatge_dominadas_barra_en_v.jpg",
-                "link" =>"",
-                "descripció" => "Agafa la barra en forma de V i realitza el moviment."
+                "imatge" => "47imatge_dominadas_frontales.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/23821201.mp4",
+                "descripció" => "Agafa la barra de forma supina de forma tancada i realitza el moviment."
             ],
             [
                 "id" => 48,
-                "nom_exercici" => "Pes Mort amb Eix",
+                "nom_exercici" => "Dominades Asistides amb Màquina",
                 "dificultat" => "principiant",
-                "idCategoria" => 8,
-                "imatge" => "48imatge_peso_muerto_eje.jpg",
+                "idCategoria" => 7,
+                "imatge" => "48imatge_Dominades_Asistides.jpg",
                 "link" =>"",
-                "descripció" => "Aixeca la barra fins a la cadera per enfortir la part baixa de l'esquena."
+                "descripció" => "Agafa la barra de forma supina amb mans a l'amplada dels muscles y amb ajut de la maquina fes el moviment."
             ],
             [
                 "id" => 49,
-                "nom_exercici" => "Hiperextensions sense Banc",
+                "nom_exercici" => "Hiperextensions amb Banc",
                 "dificultat" => "principiant",
                 "idCategoria" => 8,
-                "imatge" => "49imatge_hiperextensiones_sin_banco.jpg",
-                "link" =>"",
-                "descripció" => "Fes una extensió cap enrere sense banc per enfortir la part baixa de l'esquena."
+                "imatge" => "49imatge_hiperextensiones_en_banco.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/18601201.mp4",
+                "descripció" => "Fes una extensió cap enrere recolzat en un banc per enfortir la part baixa de l'esquena."
             ],
             [
                 "id" => 50,
@@ -461,7 +461,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 8,
                 "imatge" => "50imatge_peso_muerto_bandas.jpg",
-                "link" =>"",
+                "link" =>"https://www.youtube.com/watch?v=q65l6-MlvvA",
                 "descripció" => "Aixeca la barra amb bandes de resistència per enfortir la part baixa de l'esquena."
             ],
             [
@@ -470,26 +470,26 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 8,
                 "imatge" => "51imatge_peso_muerto_mancuernas.jpg",
-                "link" =>"",
+                "link" =>"https://www.youtube.com/watch?v=jLmZCDBqzx0",
                 "descripció" => "Aixeca les mancuernes fins a la cadera per enfortir la part baixa de l'esquena."
             ],
             [
                 "id" => 52,
-                "nom_exercici" => "Superman",
+                "nom_exercici" => "Extensio d'esquena en maquina",
                 "dificultat" => "intermedi",
                 "idCategoria" => 8,
-                "imatge" => "52imatge_superman.jpg",
+                "imatge" => "52imatge_extension_espalda.jpg",
                 "link" =>"",
-                "descripció" => "Estira't boca avall. Aixeca els braços, pit i cames per enfortir la part baixa de l'esquena."
+                "descripció" => "Colocat a la maquina fes el moviment rotatio d'avall cap amunt per enfortir la part baixa de l'esquena."
             ],
             [
                 "id" => 53,
-                "nom_exercici" => "Rem amb Asa T-Bar",
+                "nom_exercici" => "Rem amb barra-T",
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
-                "imatge" => "53imatge_remo_tbar_con_asa.jpg",
-                "link" =>"",
-                "descripció" => "Agafa l'asa i tira cap a l'abdomen mantenint l'esquena recta."
+                "imatge" => "53imatge_remo_barraT.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/06061201.mp4",
+                "descripció" => "Agafa l'asa i tira cap a l'abdomen mantenint l'esquena recta. Es pot fer amb barra, mancurnes o maquina."
             ],
             [
                 "id" => 54,
@@ -497,7 +497,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
                 "imatge" => "54imatge_remo_barra_inclinada_agarre_revertido.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/01181201.mp4",
                 "descripció" => "Inclina't cap endavant i tira la barra cap a l'abdomen."
             ],
             [
@@ -506,8 +506,8 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
                 "imatge" => "55imatge_remo_mancuerna_un_brazo.jpg",
-                "link" =>"",
-                "descripció" => "Tira de la mancuerna cap a l'abdomen mantenint l'esquena recta."
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/23931201.mp4",
+                "descripció" => "Tira de la mancuerna cap a l'abdomen mantenint l'esquena recta. Es pot fer amb banc pla o inclinat."
             ],
             [
                 "id" => 56,
@@ -515,25 +515,25 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
                 "imatge" => "56imatge_remo_barra_un_brazo.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/40381201.mp4",
                 "descripció" => "Tira de la barra cap a l'abdomen mantenint l'esquena recta."
             ],
-            [
-                "id" => 57,
-                "nom_exercici" => "Rem T-Bar",
-                "dificultat" => "intermedi",
-                "idCategoria" => 9,
-                "imatge" => "57imatge_remo_tbar.jpg",
-                "link" =>"",
-                "descripció" => "Agafa l'asa i tira la barra cap a l'abdomen."
-            ],
+            // [
+            //     "id" => 57,
+            //     "nom_exercici" => "Rem T-Bar",
+            //     "dificultat" => "intermedi",
+            //     "idCategoria" => 9,
+            //     "imatge" => "57imatge_remo_tbar.jpg",
+            //     "link" =>"",
+            //     "descripció" => "Agafa l'asa i tira la barra cap a l'abdomen."
+            // ],
             [
                 "id" => 58,
                 "nom_exercici" => "Rem amb Barra de Dos Braços Inclinada",
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
                 "imatge" => "58imatge_remo_barra_dos_brazos_inclinado.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/00271201.mp4",
                 "descripció" => "Inclina't cap endavant i tira la barra cap a l'abdomen."
             ],
             [
@@ -542,7 +542,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
                 "imatge" => "59imatge_remo_maquina.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/05881201.mp4",
                 "descripció" => "Tira dels punys cap al tors mantenint l'esquena recta."
             ],
             [
@@ -551,8 +551,8 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
                 "imatge" => "60imatge_remo_sentado_polea.jpg",
-                "link" =>"",
-                "descripció" => "Tira de la barra cap a l'abdomen mantenint l'esquena recta."
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/13231201.mp4",
+                "descripció" => "Tira de la corda de forma oberta cap a l'abdomen mantenint l'esquena recta."
             ],
             [
                 "id" => 61,
@@ -560,16 +560,16 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
                 "imatge" => "61imatge_remo_inclinado_mancuernas.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/24821201.mp4",
                 "descripció" => "Porta els colzes cap amunt i cap enrere amb les mancuernes."
             ], 
             [
                 "id" => 62,
-                "nom" => "Pressa amb una cama",
+                "nom" => "Pressa inclinada 45º amb una cama",
                 "dificultat" => "intermèdia",
                 "idCategoria" => 10,
                 "imatge" => "62imatge_pressa_amb_una_cama.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/14251201.mp4",
                 "descripció" => "Posa un peu a la plataforma i prem cap amunt."
             ],
             [
@@ -578,7 +578,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 10,
                 "imatge" => "63imatge_pressa_inclinada.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/07391201.mp4",
                 "descripció" => "Asseu-te a la màquina amb l'esquena enganxada al respatller."
             ],
             [
@@ -587,25 +587,25 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 10,
                 "imatge" => "64imatge_sentadilla_completa_barra.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/01241201.mp4",
                 "descripció" => "Descendeix flexionant genolls i malucs fins que l'espatlla sigui paral·la al terra."
             ],
-            [
-                "id" => 65,
-                "nom" => "Empenta-pressa",
-                "dificultat" => "intermèdia",
-                "idCategoria" => 10,
-                "imatge" => "65imatge_empenta_pressa.jpg",
-                "link" =>"",
-                "descripció" => "Impulsa la barra des de l'espatlla amb l'ajuda de les cames."
-            ],
+            // [
+            //     "id" => 65,
+            //     "nom" => "Empenta-pressa",
+            //     "dificultat" => "intermèdia",
+            //     "idCategoria" => 10,
+            //     "imatge" => "65imatge_empenta_pressa.jpg",
+            //     "link" =>"",
+            //     "descripció" => "Impulsa la barra des de l'espatlla amb l'ajuda de les cames."
+            // ],
             [
                 "id" => 66,
                 "nom" => "Elevació barra hombrofrontal sentadilla",
                 "dificultat" => "intermèdia",
                 "idCategoria" => 10,
                 "imatge" => "66imatge_elevacio_hombrofrontal_sentadilla.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/00421201.mp4",
                 "descripció" => "Aixeca la barra des dels espatlla amb una sentadilla."
             ],
             [
@@ -614,7 +614,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 10,
                 "imatge" => "67imatge_sentadilla_amb_banda.jpg",
-                "link" =>"",
+                "link" =>"https://youtu.be/i3aW4gekSRk",
                 "descripció" => "Realitza sentadilles amb resistència addicional d'una banda elàstica."
             ],
             [
@@ -623,7 +623,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 10,
                 "imatge" => "68imatge_salt_corda.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/26121201.mp4",
                 "descripció" => "Salta sobre una corda mantenint el ritme continu."
             ],
             [
@@ -632,52 +632,52 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 11,
                 "imatge" => "69imatge_elevacio_espatlles_maquina.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/14541201.mp4",
                 "descripció" => "Aixeca les espatlles cap amunt utilitzant una màquina especialitzada."
             ],
             [
                 "id" => 70,
-                "nom" => "Encogiment d'espatlles amb pes",
+                "nom" => "Encogiment d'espatlles amb barra",
                 "dificultat" => "principiant",
                 "idCategoria" => 11,
-                "imatge" => "70imatge_encogiment_espatlles_pes.jpg",
-                "link" =>"",
+                "imatge" => "70imatge_encogiment_espatlles_barra.jpg",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/00951201.mp4",
                 "descripció" => "Encogeix les espatlles cap amunt amb pes addicional."
             ],
-            [
-                "id" => 71,
-                "nom_exercici" => "Press Francès amb Màquina",
-                "dificultat" => "intermèdia",
-                "idCategoria" => 12,
-                "imatge" => "71imatge_press_frances_maquina.jpg",
-                "link" =>"",
-                "descripció" => "Flexiona els colzes amb la màquina cap al cap i després estén-los."
-            ],
+            // [
+            //     "id" => 71,
+            //     "nom_exercici" => "Press Francès amb Màquina",
+            //     "dificultat" => "intermèdia",
+            //     "idCategoria" => 12,
+            //     "imatge" => "71imatge_press_frances_maquina.jpg",
+            //     "link" =>"",
+            //     "descripció" => "Flexiona els colzes amb la màquina cap al cap i després estén-los."
+            // ],
             [
                 "id" => 72,
-                "nom_exercici" => "Dips de tríceps",
+                "nom_exercici" => "Dips de tríceps en banco",
                 "dificultat" => "intermèdia",
                 "idCategoria" => 12,
                 "imatge" => "72imatge_dips_triceps.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/08121201.mp4",
                 "descripció" => "Flexiona els braços baixant el cos i després estén-los."
             ],
-            [
-                "id" => 73,
-                "nom_exercici" => "Press Francès",
-                "dificultat" => "intermèdia",
-                "idCategoria" => 12,
-                "imatge" => "73imatge_press_frances.jpg",
-                "link" =>"",
-                "descripció" => "Flexiona els braços baixant la barra darrere del cap."
-            ],
+            // [
+            //     "id" => 73,
+            //     "nom_exercici" => "Press Francès",
+            //     "dificultat" => "intermèdia",
+            //     "idCategoria" => 12,
+            //     "imatge" => "73imatge_press_frances.jpg",
+            //     "link" =>"",
+            //     "descripció" => "Flexiona els braços baixant la barra darrere del cap."
+            // ],
             [
                 "id" => 74,
                 "nom_exercici" => "Press Francès amb mancuernes",
                 "dificultat" => "intermèdia",
                 "idCategoria" => 12,
                 "imatge" => "74imatge_press_frances_mancuernas.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/41511201.mp4",
                 "descripció" => "Flexiona els braços baixant les mancunianes darrere del cap."
             ],
             [
@@ -686,12 +686,12 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 12,
                 "imatge" => "75imatge_empuje_abajo_barra_v_polea.jpg",
-                "link" =>"",
+                "link" =>"https://www.lyfta.app/video/GymvisualMP4/17221201.mp4",
                 "descripció" => "Estira els braços cap avall utilitzant una barra en forma de V."
             ],
             [
                 "id" => 76,
-                "nom_exercici" => "Press Francès amb barra Z",
+                "nom_exercici" => "Press Francès amb barra Z en banco plano",
                 "dificultat" => "intermèdia",
                 "idCategoria" => 12,
                 "imatge" => "76imatge_press_frances_barra_z.jpg",
