@@ -315,7 +315,26 @@ export async function deleteRutinaByDate(idUsuario, fecha) {
     } catch (error) {
         throw new Error('Error al borrar el usuario: ' + error.message);
     }
+}
 
+export async function deleteDietaByDate(idUsuario, fecha) {
+    try {
+        const response = await fetch(`${url}/rutinas/${idUsuario}/${fecha}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al eliminar la rutina');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
 }
 
 //fetch para la api de openai

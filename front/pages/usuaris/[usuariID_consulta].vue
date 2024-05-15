@@ -73,6 +73,9 @@ export default {
         anarRutina(idUsuario) {
             this.$router.push(`/rutines/${idUsuario}`);
         },
+        anarDieta(idUsuario) {
+            this.$router.push(`/dietes/${idUsuario}`);
+        },
     }
 };
 </script>

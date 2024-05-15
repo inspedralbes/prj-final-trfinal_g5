@@ -114,7 +114,7 @@ export default {
         async borrarRutinaSeleccionada() {
             try {
                 const store = useUsuariPerfilStore();
-                const idUsuario = store.usuariID_consulta;
+                const idUsuario = store.id_usuari;
                 const fecha = this.fechaSeleccionada;
                 if (idUsuario && fecha) {
                     await deleteRutinaByDate(idUsuario, fecha);
