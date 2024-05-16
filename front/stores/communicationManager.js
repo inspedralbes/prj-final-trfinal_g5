@@ -40,6 +40,26 @@ export async function getDatosUsuario2(idUsuario) {
     }
 }
 
+
+export function getTotosUsuaris() {
+    return new Promise((resolve, reject) => {
+        fetch(`${url}/tots-usuaris`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    reject('Error al obtener los usuarios: ' + response.statusText);
+                }
+            })
+            .then(data => {
+                resolve(data);
+            })
+            .catch(error => {
+                reject('Error de red al obtener los usuarios: ' + error.message);
+            });
+    });
+}
+
 export async function getUsuariosChat(idUsuario) {
     try {
         const response = await fetch(`${url}/chatUsuaris/${idUsuario}`);
@@ -72,7 +92,6 @@ export async function getUsers() {
     }
 
 }
-
 
 
 export async function getDatosEjercicio() {
@@ -319,6 +338,63 @@ export async function borrarDietaHoy(idUsuario) {
     }
 }
 
+export async function borrarUsuari(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-usuari/${idUsuario}`, { // Ajusta la URL según tu backend
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar el usuario');
+        }
+
+        const data = await response.json();
+        console.log('Usuario borrado correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
+}
+
+export async function deleteRutinaByDate(idUsuario, fecha) {
+    try {
+        const response = await fetch(`${url}/rutinas/${idUsuario}/${fecha}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al eliminar la rutina');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
+}
+
+export async function deleteDietaByDate(idUsuario, fecha) {
+    try {
+        const response = await fetch(`${url}/dietas/${idUsuario}/${fecha}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al eliminar la rutina');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
+}
 
 //fetch para la api de openai
 
@@ -337,7 +413,8 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
                         " { id_usuari:'', dias:[{dia: '1', exercicis: [{'nom_exercici':'','series':'','repeticions':'','id_exercici':''},...]},...]}" +
                         " Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis." +
                         " Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret." +
-                        " Si en el missatge conte dies fes la rutina dels dies que et demanen; si no fes una rutina de 5 dies." +
+                        " Si  el missatge conte dades epsecifiques o informació agafa tota l'informació i crea la dieta; si no fes una rutina de 5 dies amb 5 musculs per dia i que sigui variada," +
+                        " Si en el missatge s'especifica quin tipus de rutina volen i els dies, fes-la com ho diuen. Si falta informacio fes 5 dies amb 5 musculs per dia variats" +
                         " Agafa les dades del usuari per fer rutines mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari.",
                 },
                 {

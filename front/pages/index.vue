@@ -59,6 +59,7 @@ export default {
                     store.username= data.nom_usuari;
                     store.email_usuari = data.email;
                     store.foto_perfil = data.foto_perfil;
+                    store.tipus_usuari = data.tipus;
                     store.registre = Boolean(Number(data.registre));
                     this.$router.push('/home');
                 } else {

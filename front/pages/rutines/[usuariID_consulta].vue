@@ -51,7 +51,7 @@ export default {
     },
     async mounted() {
         const store = useUsuariPerfilStore();
-        const idUsuario = store.id_usuari;
+        const idUsuario = store.usuariID_consulta;
         this.obtenirRutina(idUsuario);
     },
     computed: {
@@ -114,11 +114,11 @@ export default {
         async borrarRutinaSeleccionada() {
             try {
                 const store = useUsuariPerfilStore();
-                const idUsuario = store.id_usuari;
+                const idUsuario = store.usuariID_consulta;
                 const fecha = this.fechaSeleccionada;
                 if (idUsuario && fecha) {
                     await deleteRutinaByDate(idUsuario, fecha);
-                    this.$router.push('/rutina'); 
+                    this.$router.push('/admin/usuaris'); 
                 } else {
                     console.error('No hay fecha o usuario seleccionados para borrar');
                 }

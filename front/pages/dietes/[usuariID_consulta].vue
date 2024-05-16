@@ -42,7 +42,7 @@ export default {
     },
     async mounted() {
         const store = useUsuariPerfilStore();
-        const idUsuario = store.id_usuari;
+        const idUsuario = store.usuariID_consulta;
         this.obtenirDieta(idUsuario);
     },
     methods: {
@@ -77,11 +77,11 @@ export default {
         async borrarDietaSeleccionada() {
             try {
                 const store = useUsuariPerfilStore();
-                const idUsuario = store.id_usuari;
+                const idUsuario = store.usuariID_consulta;
                 const fecha = this.fechaSeleccionada;
                 if (idUsuario && fecha) {
                     await deleteDietaByDate(idUsuario, fecha);
-                    this.$router.push('/dieta'); 
+                    this.$router.push('/admin/usuaris'); 
                 } else {
                     console.error('No hay fecha o usuario seleccionados para borrar');
                 }

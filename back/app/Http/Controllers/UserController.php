@@ -24,6 +24,7 @@ class UserController extends Controller
         $validator = $request->validate([
             'email' => 'required|string|email|max:255|unique:usuaris',
             'contrasenya' => 'required|string|min:6',
+            // 'tipus' => 'string',
             'nom_usuari' => 'required|string|max:255|unique:usuaris',
             'nom' => 'required|string|max:255',
             'cognoms' => 'required|string|max:255',
@@ -47,6 +48,10 @@ class UserController extends Controller
         }
         if ($request->has('genere')) {
             $usuari->genere = $request->genere;
+        }
+
+        if ($request->has('tipus')) {
+            $usuari->tipus = $request->tipus;
         }
 
         if ($request->has('pes')) {
@@ -75,6 +80,12 @@ class UserController extends Controller
             'status' => 1,
             'message' => 'Usuari creat correctament',
             'idUsuario' => $idUsuario,
+            'telefon' => $usuari->telefon,
+            'tipus' => $usuari->tipus,
+            'data_naixement' => $usuari->data_naixement,
+            'genere' => $usuari->genere,
+            'pes' => $usuari->pes,
+            'altura' => $usuari->altura,
             'registre' => $usuari->registre
         ]);
     } catch (ValidationException $e) {
@@ -113,6 +124,7 @@ class UserController extends Controller
                     'id' => $usuari->id,
                     'foto_perfil' => $usuari->foto_perfil,
                     'registre' => $usuari->registre,
+                    'tipus' => $usuari->tipus,  
                 ]);
             } else {
                 return response()->json([
@@ -288,107 +300,137 @@ class UserController extends Controller
 
         
     }
-    public function mostrarUsuariosExceptoYo(Request $request, $idUsuario)
-{
-    // Busca el usuario por el ID proporcionado desde el frontend
-    $usuario = Usuaris::find($idUsuario);
+    
+    public function listarUsuaris()
+    {
+        try {
+            $usuaris = Usuaris::all();
+            return response()->json([
+                'status' => 1,
+                'usuaris' => $usuaris
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error al obtener los usuarios: ' . $e->getMessage()
+            ]);
+        }
+    }
 
-    if (!$usuario) {
+    public function eliminarUsuari($id) {
+        try {
+            $usuari = Usuaris::find($id);
+            if (!$usuari) {
+                return response()->json(['status' => 0, 'message' => 'Usuario no encontrado']);
+            }
+            $usuari->delete();
+            return response()->json(['status' => 1, 'message' => 'Usuario eliminado correctamente']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 0, 'message' => 'Error al eliminar el usuario: ' . $e->getMessage()]);
+        }
+    }
+    
+    public function mostrarUsuariosExceptoYo(Request $request, $idUsuario)
+    {
+      // Busca el usuario por el ID proporcionado desde el frontend
+      $usuario = Usuaris::find($idUsuario);
+
+      if (!$usuario) {
         return response()->json([
             'status' => 0,
             'message' => 'Usuario no encontrado'
         ]);
-    }
+      }
 
-    // Obtenemos la lista de IDs de amigos del usuario
-    $amigosIds = $usuario->amics ? json_decode($usuario->amics, true) : [];
+      // Obtenemos la lista de IDs de amigos del usuario
+      $amigosIds = $usuario->amics ? json_decode($usuario->amics, true) : [];
 
-    // Obtenemos la lista de IDs de usuarios a los que se les ha enviado una solicitud de amistad
-    $solicitudesEnviadasIds = Solicitud::where('usuario_envia_id', $idUsuario)
+      // Obtenemos la lista de IDs de usuarios a los que se les ha enviado una solicitud de amistad
+      $solicitudesEnviadasIds = Solicitud::where('usuario_envia_id', $idUsuario)
                                         ->pluck('usuario_recibe_id')
                                         ->toArray();
 
-    // Unimos las listas de amigos y usuarios a los que se les ha enviado solicitud
-    $usuariosExcluidosIds = array_merge($amigosIds, $solicitudesEnviadasIds);
+      // Unimos las listas de amigos y usuarios a los que se les ha enviado solicitud
+      $usuariosExcluidosIds = array_merge($amigosIds, $solicitudesEnviadasIds);
 
-    // Buscamos todos los usuarios excepto el usuario actual y los usuarios excluidos
-    $usuarios = Usuaris::select('nom', 'nom_usuari', 'cognoms','foto_perfil','id')
+      // Buscamos todos los usuarios excepto el usuario actual y los usuarios excluidos
+      $usuarios = Usuaris::select('nom', 'nom_usuari', 'cognoms','foto_perfil','id')
                         ->where('id', '!=', $idUsuario)
                         ->whereNotIn('id', $usuariosExcluidosIds)
                         ->get();
 
-    if ($usuarios->isEmpty()) {
-        return response()->json([
-            'status' => 0,
-            'message' => 'No se encontraron otros usuarios.'
-        ]);
-    }
+      if ($usuarios->isEmpty()) {
+          return response()->json([
+              'status' => 0,
+              'message' => 'No se encontraron otros usuarios.'
+          ]);
+      }
 
-    // Retorna la lista de usuarios excepto el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud
-    return response()->json([
-        'status' => 1,
-        'message' => 'Usuarios excluyendo el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud.',
-        'usuarios' => $usuarios
-    ]);
-}
+      // Retorna la lista de usuarios excepto el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud
+      return response()->json([
+          'status' => 1,
+          'message' => 'Usuarios excluyendo el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud.',
+          'usuarios' => $usuarios
+      ]);
+  }
 
 
 
-    public function getUsers(Request $request) {
-        $users = Usuaris::all();
-        return response()->json($users);
-    }
+     public function getUsers(Request $request) {
+          $users = Usuaris::all();
+          return response()->json($users);
+     }
 
-    public function getAmics(Request $request, string $id)
-{
-    // Busca al usuario por su ID
-    $usuario = Usuaris::find($id);
+     public function getAmics(Request $request, string $id)
+    {
+      // Busca al usuario por su ID
+      $usuario = Usuaris::find($id);
 
-    if (!$usuario) {
-        return response()->json([
-            'status' => 0,
-            'message' => 'Usuario no encontrado'
-        ]);
-    }
+      if (!$usuario) {
+          return response()->json([
+              'status' => 0,
+              'message' => 'Usuario no encontrado'
+          ]);
+      }
 
-    // Verifica si el usuario tiene amigos
-    if (!$usuario->amics) {
-        return response()->json([
-            'status' => 1,
-            'message' => 'El usuario no tiene amigos',
-            'amigos' => []
-        ]);
-    }
+      // Verifica si el usuario tiene amigos
+      if (!$usuario->amics) {
+          return response()->json([
+              'status' => 1,
+              'message' => 'El usuario no tiene amigos',
+              'amigos' => []
+          ]);
+      }
 
-    // Decodifica el campo "amics" que está en formato JSON
-    $amigos = json_decode($usuario->amics, true);
+      // Decodifica el campo "amics" que está en formato JSON
+      $amigos = json_decode($usuario->amics, true);
 
-    // Verifica si la decodificación fue exitosa y $amigos es un array
-    if (!is_array($amigos)) {
-        return response()->json([
-            'status' => 0,
-            'message' => 'Error al decodificar la lista de amigos'
-        ]);
-    }
+      // Verifica si la decodificación fue exitosa y $amigos es un array
+      if (!is_array($amigos)) {
+          return response()->json([
+              'status' => 0,
+              'message' => 'Error al decodificar la lista de amigos'
+          ]);
+      }
 
-    // Verifica si $amigos no está vacío
-    if (empty($amigos)) {
-        return response()->json([
-            'status' => 1,
-            'message' => 'El usuario no tiene amigos',
-            'amigos' => []
-        ]);
-    }
+      // Verifica si $amigos no está vacío
+      if (empty($amigos)) {
+          return response()->json([
+              'status' => 1,
+              'message' => 'El usuario no tiene amigos',
+              'amigos' => []
+          ]);
+      }
 
-    // Encuentra los usuarios que son amigos del usuario actual
-    $amigosUsuarios = Usuaris::whereIn('id', $amigos)->get();
+      // Encuentra los usuarios que son amigos del usuario actual
+      $amigosUsuarios = Usuaris::whereIn('id', $amigos)->get();
 
-    // Devuelve la lista de amigos del usuario
-    return response()->json([
-        'status' => 1,
-        'message' => 'Amigos del usuario',
-        'amigos' => $amigosUsuarios
-    ]);
-}
+      // Devuelve la lista de amigos del usuario
+      return response()->json([
+          'status' => 1,
+          'message' => 'Amigos del usuario',
+          'amigos' => $amigosUsuarios
+      ]);
+  }
 
 }    

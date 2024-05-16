@@ -58,16 +58,19 @@ class RutinaController extends Controller
 
         return response()->json($rutina, 200);
     }
-    public function getRutinaId($id){
-        $rutina = Rutina::find($id);
-        if (!$rutina) {
-            return response()->json(['error' => 'Rutina not found'], 404);
-        }
-    
-        // Ocultar los campos id_usuario y id_rutina antes de enviar la respuesta JSON
-        $rutina->makeHidden(['id_usuari', 'id']);
-    
-        return response()->json($rutina, 200);
+  
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+  
     }public function saveRoutines(Request $request)
     {
         try {
@@ -108,4 +111,56 @@ class RutinaController extends Controller
             return response()->json(['error' => 'Error al guardar las rutinas: ' . $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyTodo($id_usuari)
+    {
+        try {
+            // Encuentra y elimina todas las rutinas asociadas al ID de usuario
+            Rutina::where('id_usuari', $id_usuari)->delete();
+            
+            return response()->json(['message' => 'Rutinas eliminadas correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar las rutinas: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Remove today's routines for the specified user.
+     *
+     * @param  int  $id_usuari
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyToday($id_usuari)
+    {
+        try {
+            $today = Carbon::today()->toDateString();
+            Rutina::where('id_usuari', $id_usuari)
+                ->whereDate('data', $today)
+                ->delete();
+
+            return response()->json(['message' => 'Rutinas de hoy eliminadas correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar las rutinas de hoy: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function destroyByDate($id_usuari, $fecha)
+    {
+        try {
+            Rutina::where('id_usuari', $id_usuari)
+                  ->whereDate('data', $fecha)
+                  ->delete();
+    
+            return response()->json(['message' => 'Rutinas eliminadas correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar las rutinas: ' . $e->getMessage()], 500);
+        }
+    }
+    
 }

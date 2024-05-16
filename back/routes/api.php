@@ -10,6 +10,8 @@ use App\Http\Controllers\DietaController;
 use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\MensajeController;
 
+Route::get('/tots-usuaris', [UserController::class, 'listarUsuaris']);
+Route::delete('/eliminar-usuari/{id}', [UserController::class, 'eliminarUsuari']);
 Route::get('/usuaris', [UserController::class, 'getUsers']);
 Route::get('/usuari/{id}', [UserController::class, 'mostrarUsuario']);
 Route::put('/editar-usuari/{id}', [UserController::class, 'editarUsuari']);
@@ -39,7 +41,10 @@ Route::get('/exercicis', [EjercicioController::class, 'getEjercicios']);
 
 Route::get('/rutina/{id}', [RutinaController::class, 'getRutina']);
 Route::post('/guardar-rutina', [RutinaController::class, 'store']);
-Route::delete('/eliminar-rutina/{id}', [RutinaController::class, 'destroy']);
+Route::delete('/eliminar-rutina/{id}', [RutinaController::class, 'destroyTodo']);
+Route::delete('/eliminar-rutina-hoy/{id}', [RutinaController::class, 'destroyToday']);
+Route::delete('/rutinas/{id_usuari}/{fecha}', [RutinaController::class, 'destroyByDate']); 
+// Route::delete('/eliminar-rutina/{id}', [RutinaController::class, 'destroy']);
 Route::post('/descargarRutina', [RutinaController::class, 'saveRoutines']);
 
 
@@ -49,7 +54,9 @@ Route::get('/aliments', [AlimentsController::class, 'index']);
 
 Route::get('/dieta/{id}', [DietaController::class, 'getDietas']);
 Route::post('/guardar-dieta', [DietaController::class, 'store']);
-Route::delete('/eliminar-dieta/{id}', [DietaController::class, 'destroy']);
+// Route::delete('/eliminar-dieta/{id}', [DietaController::class, 'destroy']);
+Route::delete('/eliminar-dieta-hoy/{id}', [DietaController::class, 'destroyToday']);
+Route::delete('/dietas/{id_usuari}/{fecha}', [DietaController::class, 'destroyByDate']);
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
