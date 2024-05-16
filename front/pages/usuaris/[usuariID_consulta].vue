@@ -3,7 +3,7 @@
     <body>
         <div class="flex-container">
             <capçalera />
-            <h1>Detalls de l'Usuario</h1>
+            <h1>Detalls de l'Usuari</h1>
             <div v-if="usuario">
                 <p><strong>Nom:</strong> {{ usuario.nom }}</p>
                 <p><strong>Congons:</strong> {{ usuario.cognoms }}</p>
@@ -13,6 +13,8 @@
                 <p><strong>Pes:</strong> {{ usuario.pes }}</p>
                 <p><strong>Altura:</strong> {{ usuario.altura }}</p>
                 <p><strong>Teléfon:</strong> {{ usuario.telefon }}</p>
+                <p><strong>Tipus d'Usuari:</strong> {{ usuario.tipus }}</p>
+
 
                 <button class="borrar-button" @click="borrarUsuari(usuario.id)">Borrar Usuari</button>
                 <button class="rutina-button" @click="anarRutina(usuario.id)" >Rutines Usuari</button>

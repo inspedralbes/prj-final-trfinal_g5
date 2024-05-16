@@ -319,7 +319,7 @@ export async function deleteRutinaByDate(idUsuario, fecha) {
 
 export async function deleteDietaByDate(idUsuario, fecha) {
     try {
-        const response = await fetch(`${url}/rutinas/${idUsuario}/${fecha}`, {
+        const response = await fetch(`${url}/dietas/${idUsuario}/${fecha}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
