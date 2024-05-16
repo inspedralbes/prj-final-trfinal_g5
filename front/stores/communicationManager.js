@@ -1,7 +1,7 @@
 const url = 'http://localhost:8000/api';
 //const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '';
+const apiKey = '11';
 
 
 //ejemplo de peticion fetch get
@@ -102,6 +102,7 @@ export async function getDatosEjercicio() {
         }
 
         const data = await response.json();
+       
         return data; // Devuelve los datos del ejercicio en JSON
     } catch (error) {
         throw new Error('Error de red al obtener los datos del ejercicio: ' + error.message);

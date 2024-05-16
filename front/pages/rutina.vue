@@ -1,4 +1,5 @@
 <template>
+
     <body>
         <div class="flex-container">
             <capçalera />
@@ -33,13 +34,27 @@
                             <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
                             <h2>{{ exercise.nom_exercici }}</h2>
                             <div class="exercise-details">
+                                <Icon class="info-icon" @click="showExerciseDetails(exercise)"
+                                    name="ic:baseline-info" /> <br>
                                 <Icon class="" name="ic:baseline-insert-invitation" />
                                 Día: {{ exercise.dia }} <br> <br>
 
-                                <Icon class="" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br> <br>
+                                <Icon class="" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br>
+                                <br>
                                 <Icon class="" name="ic:baseline-cached" />Repeticiones: {{ exercise.repeticions }}
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div v-if="showModal" class="modal">
+                    <!-- Contenido del modal o tarjeta -->
+                    <div class="modal-content">
+                        <span class="close" @click="hideModal">&times;</span>
+                        <!-- Contenido dinámico del ejercicio seleccionado -->
+                        <h2>{{ selectedExercise.nom_exercici }}</h2>
+                       <iframe width="266" :src="selectedExercise.link" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <h2>{{ selectedExercise.descripció }}</h2>
+
                     </div>
                 </div>
                 <div class="buttons-container">
@@ -65,6 +80,9 @@ export default {
             exercises: [],
             dies: [],
             loading: true,
+            showModal: false, // Variable para controlar la visualización del modal
+            selectedExercise: null // Ejercicio seleccionado para mostrar sus detalles
+
         }
     },
     computed: {
@@ -97,25 +115,14 @@ export default {
                 this.$router.push(page);
             }
         },
-        // async obtenirRutinaDeHoy(idUsuari) {
-        //     try {
-        //         const response = await getRutina(idUsuari);
-        //         const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
-        //         return response.some(exercise => new Date(exercise.data).toISOString().split('T')[0] === today);
-        //     } catch (error) {
-        //         console.error(error);
-        //         return false;
-        //     }
-        // },
-
-        // async borrarRutinaDeHoy(idUsuari) {
-        //     try {
-        //         const response = await borrarRutinaDia(idUsuari);
-        //         console.log('Rutinas de hoy eliminadas:', response);
-        //     } catch (error) {
-        //         console.error('Error al eliminar las rutinas de hoy:', error);
-        //     }
-        // },
+        showExerciseDetails(exercise) {
+            this.selectedExercise = exercise;
+            this.showModal = true;
+        },
+        // Método para ocultar el modal
+        hideModal() {
+            this.showModal = false;
+        },
 
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)
@@ -242,6 +249,35 @@ body {
     /* Cambiar el color del texto para asegurar la legibilidad */
 }
 
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Fondo oscuro semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
 .arrow {
     width: 50px;
     height: 50px;
@@ -352,7 +388,8 @@ body {
     /* Ancho del 80% del contenedor padre */
     max-width: 250px;
     height: 60px;
-    margin-top: 20px; /* Reducir el espaciado superior */
+    margin-top: 20px;
+    /* Reducir el espaciado superior */
     font-size: 1.5em;
     font-weight: bold;
     color: #fff;

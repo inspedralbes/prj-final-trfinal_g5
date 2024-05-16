@@ -50,12 +50,15 @@ class RutinaController extends Controller
     }     
     public function getRutina($id_usuari)
     {
-        $rutina = Rutina::where('id_usuari', $id_usuari)->get();
-
-        if (!$rutina) {
+        $rutina = Rutina::where('id_usuari', $id_usuari)
+            ->join('ejercicios', 'rutinas.id_exercici', '=', 'ejercicios.id')
+            ->select('rutinas.*', 'ejercicios.descripció', 'ejercicios.link')
+            ->get();
+    
+        if ($rutina->isEmpty()) {
             return response()->json(['error' => 'Rutina not found'], 404);
         }
-
+    
         return response()->json($rutina, 200);
     }
   
@@ -71,7 +74,7 @@ class RutinaController extends Controller
         //
     }
   
-    }public function saveRoutines(Request $request)
+    public function saveRoutines(Request $request)
     {
         try {
             $data = $request->json()->all(); // Obtener todos los datos del JSON

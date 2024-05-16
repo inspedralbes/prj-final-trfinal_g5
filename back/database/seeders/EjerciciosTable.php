@@ -93,7 +93,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 2,
                 "imatge" => "9imatge_plancha_codos.jpg",
-                "link" =>"https://www.youtube.com/watch?v=ogfuXWgXVs",
+                "link" =>"https://www.youtube.com/embed/ygJCAPiRMDg",
                 "descripció" => "Mantén la posició de planxa amb colzes recolzats."
             ],
             [
@@ -102,7 +102,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 2,
                 "imatge" => "10imatge_abdominales_suspendidos.jpg",
-                "link" =>"https://youtu.be/yLuqrzNT6yw",
+                "link" =>"https://www.youtube.com/embed/yLuqrzNT6yw",
                 "descripció" => "Aixeca cames amb el tors suspès per enfortir el core."
             ],
             [
@@ -111,7 +111,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 2,
                 "imatge" => "11imatge_jab_cruzado_mancuerna.jpg",
-                "link" =>"https://youtu.be/VF7N6ZzrLWg",
+                "link" =>"https://www.youtube.com/embed/VF7N6ZzrLWg",
                 "descripció" => "Assegut, realitza jab creuat amb mancurna en posició V-Sit."
             ],
             [
@@ -120,7 +120,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 3,
                 "imatge" => "12imatge_giro_cable.jpg",
-                "link" =>"https://www.youtube.com/watch?v=olXNyQ5Yaps",
+                "link" =>"https://www.youtube.com/embed/watch?v=olXNyQ5Yaps",
                 "descripció" => "Dret, gira el cable de baix cap amunt."
             ],
             [
@@ -335,7 +335,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 6,
                 "imatge" => "36imatge_levantamiento_barra_hombros.jpg",
-                "link" =>"https://www.youtube.com/watch?v=Bvlxg2HwgJQ",
+                "link" =>"https://www.youtube.com/embed/Bvlxg2HwgJQ",
                 "descripció" => "Aixeca la barra fins als muscles en un sol moviment."
             ],
             [
@@ -353,7 +353,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 6,
                 "imatge" => "38imatge_peso_muerto_rumano_deficit.jpg",
-                "link" =>"https://www.youtube.com/watch?v=J4i88TYvGjc",
+                "link" =>"https://www.youtube.com/embed/J4i88TYvGjc",
                 "descripció" => "Pes mort romà des de posició més baixa."
             ],
             // [
@@ -398,7 +398,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermedi",
                 "idCategoria" => 7,
                 "imatge" => "43imatge_jalon_agarre_cerrado.jpg",
-                "link" =>"https://www.youtube.com/watch?v=IgzxdPVZmyw",
+                "link" =>"https://www.youtube.com/embed/IgzxdPVZmyw",
                 "descripció" => "Amb agafador tancat, tira cap avall mantenint els colzes a prop."
             ],
             [
@@ -461,7 +461,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 8,
                 "imatge" => "50imatge_peso_muerto_bandas.jpg",
-                "link" =>"https://www.youtube.com/watch?v=q65l6-MlvvA",
+                "link" =>"https://www.youtube.com/embed/q65l6-MlvvA",
                 "descripció" => "Aixeca la barra amb bandes de resistència per enfortir la part baixa de l'esquena."
             ],
             [
@@ -470,7 +470,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 8,
                 "imatge" => "51imatge_peso_muerto_mancuernas.jpg",
-                "link" =>"https://www.youtube.com/watch?v=jLmZCDBqzx0",
+                "link" =>"https://www.youtube.com/embed/jLmZCDBqzx0",
                 "descripció" => "Aixeca les mancuernes fins a la cadera per enfortir la part baixa de l'esquena."
             ],
             [
@@ -614,7 +614,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "intermèdia",
                 "idCategoria" => 10,
                 "imatge" => "67imatge_sentadilla_amb_banda.jpg",
-                "link" =>"https://youtu.be/i3aW4gekSRk",
+                "link" =>"https://www.youtube.com/embed/i3aW4gekSRk",
                 "descripció" => "Realitza sentadilles amb resistència addicional d'una banda elàstica."
             ],
             [
@@ -731,7 +731,7 @@ class EjerciciosTable extends Seeder
                 "dificultat" => "principiant",
                 "idCategoria" => 12,
                 "imatge" => "80imatge_extension_triceps_mancuerna.jpg",
-                "link" =>"https://www.youtube.com/watch?v=_44a_ecMyaw",
+                "link" =>"https://www.youtube.com/embed/_44a_ecMyaw",
                 "descripció" => "Flexiona i estén el braç amb la mancuerna per treballar els tríceps."
             ]
         ];
