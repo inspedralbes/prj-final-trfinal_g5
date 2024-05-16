@@ -462,7 +462,7 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
 export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) {
     try {
         const payload = {
-            model: 'gpt-3.5-turbo',
+            model: 'gpt-4-turbo',
             messages: [
                 {
                     role: 'system',
@@ -471,23 +471,23 @@ export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) 
                         " Si puedes dar consejos y argumentos pero hacerlo de forma resumida en 2 líneas, que no te digan que quieren más información." +
                         " Coje los alimentos y toda la información que encuentres en el json de alimentos para crear la dieta. " +
                         " Sólo puedes responder con formato JSON y siguiendo esta estructura: " +
-                        " {id_usuari:'',apats:[apat:'',plats:[{nom_plat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',caloreis:''},],apat:'',plats:[nom_plat:'',...],apat:'',plats:[nom_plat:'',...]]}" +
+                        " {id_usuari:'',apats:[apat:'',plats:[{nom_plat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',calories:''},],apat:'',plats:[nom_plat:'',...],apat:'',plats:[nom_plat:'',...]]}" +
                         // " Si te piden definicion o adelgazar o definir, toma platos que sean para ello; si quieren volumen, ganar mucho músculo o ganar peso toma los platos necesarios para ello. Si no te especifican una dieta neutra" +
                         " Coge los datos del usuario para hacer dietas más personalizadas y también coge el id del usuario para ponerlo en id_usuari." +
                         " Haz que las 5 comdias diarias sean: desayuno, segundo desayuno, comida, merienda y cena. " +
                         " Para cada comida diaria ponle 3 platos para cada una de las 5 comidas. Si te piden algo más concreto hazlo de forma más concreta.",
                 },
                 {
-                    role: 'user',
-                    content: message
+                    role: 'system',
+                    content: JSON.stringify(aliments)
                 },
                 {
                     role: 'system',
                     content: JSON.stringify(datosUsuario)
                 },
                 {
-                    role: 'system',
-                    content: JSON.stringify(aliments)
+                    role: 'user',
+                    content: message
                 },
             ]
         };

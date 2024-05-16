@@ -155,12 +155,11 @@ export default {
         // Opcional: Llamar a enviarMensaje directamente si se desea enviar inmediatamente
         this.enviarMensaje();
       }
-    },
-    async obtenirDietaDeHoy(idUsuari) {
+    }, async obtenirDietaDeHoy(idUsuari) {
       try {
         const response = await getDieta(idUsuari);
         const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
-        return response.some(plato => new Date(plato.data_inici).toISOString().split('T')[0] === today);
+        return response.some(dieta => new Date(dieta.data_inici).toISOString().split('T')[0] === today);
       } catch (error) {
         console.error(error);
         return false;
@@ -168,7 +167,8 @@ export default {
     },
     async borrarDietaDeHoy(idUsuari) {
       try {
-        const response = await borrarDietaHoy(idUsuari);
+        const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        const response = await deleteDietaByDate(idUsuari, today);
         console.log('Dietas de hoy eliminadas:', response);
       } catch (error) {
         console.error('Error al eliminar las dietas de hoy:', error);
@@ -180,14 +180,12 @@ export default {
           return;
         }
 
-
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
         }
         if (this.chatMessages.length === 0) {
           document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
-
 
         this.chatMessages.push({
           role: 'user',
@@ -200,7 +198,6 @@ export default {
         const store = useUsuariPerfilStore();
         const idUsuario = store.id_usuari;
 
-
         const datosUsuario = await getDatosUsuario2(idUsuario);
         const aliments = await getDatosAliments();
         const generatedText = await enviarMensajeOpenAIDieta(this.message, datosUsuario, aliments);
@@ -208,11 +205,11 @@ export default {
         console.log(generatedText);
 
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
-        
-        // Comprueba si hoy ya hay una rutina y elimínala si existe
-        const existeRutinaHoy = await this.obtenirRutinaDeHoy(idUsuario);
-        if (existeRutinaHoy) {
-          await this.borrarRutinaDeHoy(idUsuario);
+
+        // Comprueba si hoy ya hay una dieta y elimínala si existe
+        const existeDietaHoy = await this.obtenirDietaDeHoy(idUsuario);
+        if (existeDietaHoy) {
+          await this.borrarDietaDeHoy(idUsuario);
         }
 
         await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
@@ -237,7 +234,6 @@ export default {
           role: 'assistant',
           content: mensajeDieta,
         });
-
 
         this.message = '';
       } catch (error) {
@@ -265,7 +261,8 @@ export default {
     },
   },
   mounted() {
-    this.usuario = localStorage.getItem('username');
+    const store = useUsuariPerfilStore();
+    this.usuario = store.nom_usuari;
     this.chatMessages.push({
       role: 'assistant',
       content: this.currentQuestion
