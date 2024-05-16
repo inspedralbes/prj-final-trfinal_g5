@@ -5,7 +5,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@vesp/nuxt-fontawesome',
-    'nuxt-icon'
+    'nuxt-icon',
+    
   ],
  
   css: [
