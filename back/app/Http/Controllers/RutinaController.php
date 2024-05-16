@@ -71,7 +71,7 @@ class RutinaController extends Controller
         //
     }
   
-    }public function saveRoutines(Request $request)
+    public function saveRoutines(Request $request)
     {
         try {
             $data = $request->json()->all(); // Obtener todos los datos del JSON
