@@ -70,9 +70,17 @@ class UserController extends Controller
         if ($request->filled(['email', 'contrasenya','nom', 'nom_usuari', 'cognoms', 'data_naixement', 'genere','pes','altura','telefon'])) {
             $usuari->registre = true;
         }
+        else{
+            $usuari->registre = false;
+        }
+        $usuari->tipus = ($usuari->email == "a20aitbaresc@inspedralbes.cat" ||
+        $usuari->email == "a16miqbargim@inspedralbes.cat"|| 
+        $usuari->email == "a21aledelfel@inspedralbes.cat" || 
+        $usuari->email == "a22erirodnos@inspedralbes.cat") ? "admin" : "usuari";
+
 
         $usuari->save();
-        \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
+        // \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
 
         $idUsuario = $usuari->id;
 
