@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('dificultat');
             $table->string('imatge');
             $table->string('descripció');
-            // $table->string('link');
+            $table->string('link');
             // $table->foreign('idCategoria')->references('idCategoria')->on('categoriasm');
             $table->foreignId('idCategoria')->constrained('categoriasm')->onDelete('cascade');
         });

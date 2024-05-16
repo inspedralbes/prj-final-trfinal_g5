@@ -18,6 +18,7 @@ class Ejercicio extends Model
         'imatge',
         // 'link',
         'descripció',
+        'link',
         'idCategoria',
 
     ];

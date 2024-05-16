@@ -29,6 +29,8 @@
                     v-model="currentAnswer" type="email" placeholder="Correu electronic" @input="validateEmailInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
                     v-model="currentAnswer" type="password" placeholder="Contraseña" @input="validatePassword">
+                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom_usuari'"
+                    v-model="currentAnswer" type="text" placeholder="Nom usuari" maxlength="20">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom'"
                     v-model="currentAnswer" type="text" placeholder="Nom" @input="validateNameInput" maxlength="25">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
@@ -91,6 +93,7 @@ export default {
             userData: {
                 email: "",
                 contrasenya: "",
+                nom_usuari: "",
                 nom: "",
                 cognoms: "",
                 data_naixement: "",
@@ -115,6 +118,11 @@ export default {
                     inputType: 'contrasenya',
                     required: true,
 
+                },
+                {
+                    question: "Quin es el teu nom d'usuari?",
+                    inputType: 'nom_usuari',
+                    required: true,
                 },
                 {
                     question: "Quin es el teu nom?",
@@ -212,6 +220,33 @@ export default {
             }
 
             // Validar el correo electrónico si es la pregunta de correo electrónico
+            if (currentQuestion.inputType === 'nom_usuari') {
+
+                this.checkingEmail = true;
+                // Realizar la comprobación de correo electrónico solo si la respuesta no está vacía
+                const response = await fetch('http://localhost:8000/api/comprovarnomusuari', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nom_usuari: this.currentAnswer
+                    }),
+                });
+
+                this.checkingEmail = false;
+
+                // Convertir la respuesta a formato JSON
+                const responseData = await response.json();
+
+                // Si el correo ya existe, mostrar el mensaje de error y no avanzar
+                if (responseData.status === 1) {
+                    this.showErrorMessage = true;
+                    this.errorMessage = responseData.message;
+                    return;
+                }
+
+            }
             if (currentQuestion.inputType === 'email') {
                 this.validateEmailInput(); // Validar el correo electrónico
                 if (this.showErrorMessage) {
@@ -454,10 +489,11 @@ export default {
                 const nullFields = Object.values(userDataResponse).some(value => value === null);
 
                 // Actualizar el estado 'registre' en la tienda Pinia
-                useUsuariPerfilStore().registre = !nullFields;
+                useUsuariPerfilStore().registre = userDataResponse.registre;
 
                 // Actualizar otros estados de la tienda Pinia si es necesario
                 useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
+                useUsuariPerfilStore().username = filteredUserData.nom_usuari;
                 useUsuariPerfilStore().email_usuari = filteredUserData.email;
                 useUsuariPerfilStore().loguejat = true;
                 useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
