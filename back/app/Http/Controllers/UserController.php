@@ -72,7 +72,7 @@ class UserController extends Controller
         }
 
         $usuari->save();
-        // \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
+        \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
 
         $idUsuario = $usuari->id;
 
