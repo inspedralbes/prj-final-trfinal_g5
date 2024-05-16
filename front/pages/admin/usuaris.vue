@@ -1,10 +1,10 @@
 <template>
-
     <body>
         <div class="flex-container">
             <capçalera />
             <h1>Llistat d'Usuaris</h1>
-            <ul>
+            <div v-if="loading">Carregant usuaris...</div>
+            <ul v-else>
                 <li v-for="usuari in usuaris" :key="usuari.id">
                     <button @click="verDetalleUsuari(usuari.id)">
                         {{ usuari.nom }} {{ usuari.cognoms }}
@@ -18,24 +18,28 @@
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
+
 export default {
     data() {
         return {
-            usuaris: []
+            usuaris: [],
+            loading: false
         };
     },
     mounted() {
         this.cargarUsuaris();
-
     },
     methods: {
         cargarUsuaris() {
+            this.loading = true;
             getTotosUsuaris()
                 .then(data => {
                     this.usuaris = data.usuaris;
+                    this.loading = false;
                 })
                 .catch(error => {
                     console.error('Error al cargar los usuarios:', error);
+                    this.loading = false;
                 });
         },
         verDetalleUsuari(idUsuari) {
@@ -83,7 +87,6 @@ ul {
     width: 55%;
 }
 
-
 button {
     background-image: linear-gradient(to right, #ff7300, #FFA500);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -114,17 +117,4 @@ navBar {
     position: fixed;
     width: 100%;
 }
-
-/* button {
-    margin: 5px;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-} */
 </style>
