@@ -32,7 +32,10 @@
                                     <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
                                         class="imagen-chat">
                                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
-                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
+                                    <div class="hora-container">
+                                        <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
+
+                                    </div>
                                 </div>
                                 <template v-if="mensaje.video">
                                     <video width="1920" height="240" controls>
@@ -42,7 +45,10 @@
                                     </video>
                                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
 
-                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
+                                    <div class="hora-container">
+                                        <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
+
+                                    </div>
                                 </template>
                                 <div v-if="mensaje.idRutina">
                                     <h3 v-if="mensaje.idRutina">Rutina</h3>
@@ -648,6 +654,7 @@ body {
     flex-direction: column;
     align-items: center;
     padding-bottom: 20px;
+    background-color: #f0f0f034;
 }
 
 .entrada-mensaje-container {
@@ -659,6 +666,7 @@ body {
     padding: 10px;
     border-radius: 30px;
     background-color: #ccc;
+    margin-top: 10px;
 }
 
 .entrada-mensaje {
@@ -703,9 +711,9 @@ body {
 
 .modal-contenido {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     margin: auto;
-    width: 50%;
+    width: 80%;
     text-align: center;
     padding: 10px;
 
@@ -745,15 +753,14 @@ body {
 .mensaje-recibido {
     padding-left: 15px;
     border-radius: 8px;
-    width: 70%;
     word-wrap: break-word;
     /* Agrega esta línea */
 }
 
 .mensaje-recibido {
     text-align: left;
-    display: flex;
     justify-content: flex-start;
+    align-self: flex-start;
     background-color: #E2E2E2;
     display: grid;
     grid-template-columns: 1fr;
@@ -761,10 +768,14 @@ body {
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
+    max-width: 60%;
+    vertical-align: baseline;
+    
+    
+
 }
 
 .mensaje-enviado {
-    max-width: fit-content;
     justify-content: flex-end;
     background-color: #FFA500;
     align-self: flex-end;
@@ -774,6 +785,8 @@ body {
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
+    max-width: 60%;
+    vertical-align: baseline;
 
 }
 
@@ -802,6 +815,7 @@ body {
     grid-template-columns: 1fr;
     gap: 10px;
     word-wrap: break-word;
+    text-align: left;
     /* Agrega esta línea */
 
 }
@@ -869,6 +883,8 @@ body {
 
 h3 {
     text-align: center;
+    font-size: .7em;
+    color: #9c9c9c;
 }
 
 h4 {
@@ -883,23 +899,24 @@ video {
 }
 
 #hora-missatge {
-    font-size: .75em;
+    font-size: .60em;
     font-style: italic;
     color: #333;
     text-align: right;
     margin-right: 5px;
     margin-top: 20px;
+    
 
 }
 
 #hora-missatge-enviat {
-    font-size: .75em;
+    font-size: .60em;
     font-style: italic;
     color: #333;
-    text-align: right;
-    margin-left: 85%;
+    
     margin-top: 20px;
-    text-align: right;
+    word-wrap: normal;
+    
 }
 
 #taula-rutina {
@@ -959,27 +976,27 @@ video {
 #image {
     width: 65%;
     height: 65%;
-    color: #1a1a1a;
+    color: #1a1a1a8c;
 }
 
 #video {
     width: 65%;
     height: 65%;
-    color: #1a1a1a;
+    color: #1a1a1a8c;
 
 }
 
 #routine {
-    width: 65%;
-    height: 65%;
-    color: #1a1a1a;
+    width: 60%;
+    height: 60%;
+    color: #1a1a1a8c;
 
 }
 
 #diet {
-    width: 65%;
-    height: 65%;
-    color: #1a1a1a;
+    width: 60%;
+    height: 60%;
+    color: #1a1a1a8c;
 
 }
 </style>
