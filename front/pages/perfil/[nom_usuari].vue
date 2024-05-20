@@ -454,7 +454,6 @@ form {
     padding-top: 40px;
     border-radius: 20px;
     margin-top: 0;
-    width: 85%;
     margin-bottom: 20px;
 }
 
