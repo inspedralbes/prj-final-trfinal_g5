@@ -25,16 +25,16 @@
             <span>Temps de descans</span>
             <div class="time-adjust-container">
               <div class="time-adjust">
-                <button class="time-adjust-button" @click="adjustTime(10)">+</button>
+                <button class="time-adjust-button" @click="adjustTime(10)"> <Icon name="ic:round-plus"></Icon> </button>
                 <span>{{ formatTime(timerSeconds) }}</span>
-                <button class="time-adjust-button" @click="adjustTime(-10)">-</button>
+                <button class="time-adjust-button" @click="adjustTime(-10)"> <Icon name="ic:round-minus"></Icon> </button>
               </div>
             </div>
           </div>
           <div class="timer-buttons">
-            <button class="timer-button" @click="startTimer">Iniciar</button>
-            <button class="timer-button" @click="pauseTimer" :disabled="!timerRunning">Pausa</button>
-            <button class="timer-button" @click="resetTimer">Reiniciar</button>
+            <button class="timer-button" @click="startTimer"> <Icon name="flowbite:play-solid"></Icon></button>
+            <button class="timer-button" @click="pauseTimer" :disabled="!timerRunning"> <Icon name="flowbite:circle-pause-solid"></Icon> </button>
+            <button class="timer-button" @click="resetTimer"> <Icon name="ic:round-restart-alt"></Icon> </button>
           </div>
         </div>
         <div v-if="loading" class="loading">
@@ -239,34 +239,53 @@ body {
   overflow-x: hidden;
 }
 
-/* Timer CSS */
-.time-adjust {
-  display: flex;
-  align-items: center;
-}
-
-.time-adjust-button {
-  width: 20px;
-  height: 20px;
-  font-size: 14px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
 .timer-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  text-align: center;
+  padding-bottom: 20px; /* Agregar espacio inferior */
+  background-color: #f8f8f8;
+  width: 100%;
 }
+
+.timer-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Espacio entre botones */
+}
+
+.timer-button {
+  width: 60px; /* Ancho del botón */
+  height: 60px; /* Altura del botón */
+  background-color: #ffa500; /* Cambiar el color de fondo */
+  border: none; /* Quitar borde */
+  border-radius: 50%; /* Hacer el botón redondo */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px; /* Tamaño del icono */
+  color: #fff; /* Color del icono */
+  transition: background-color 0.3s; /* Transición suave del color de fondo */
+}
+
+.timer-button:hover {
+  background-color: #ffbb33; /* Cambiar el color de fondo al pasar el mouse */
+}
+
+.timer-button:disabled {
+  background-color: #ccc; /* Cambiar el color de fondo cuando el botón está deshabilitado */
+  cursor: not-allowed; /* Cambiar el cursor cuando el botón está deshabilitado */
+}
+
 
 .timer {
   text-align: center;
+  margin-bottom: 20px; /* Agregar espacio inferior */
 }
 
 .timer span {
-  font-size: 30px;
+  font-size: 24px; /* Tamaño de la fuente del texto */
+  color: #333; /* Color del texto */
 }
 
 .time-adjust-container {
@@ -274,24 +293,27 @@ body {
   justify-content: center;
 }
 
-.timer-buttons {
-  margin-top: 10px;
+.time-adjust {
+  display: flex;
+  align-items: center;
 }
 
-.series-button {
+.time-adjust-button {
+  width: 40px; /* Ancho del botón */
+  height: 40px; /* Altura del botón */
+  font-size: 20px; /* Tamaño de la fuente del icono */
+  margin: 0 10px; /* Margen entre botones */
   cursor: pointer;
-  background-color: #e6e6e6; /* Color inicial del botón */
-  border: none; /* Estilo de borde */
-  padding: 10px; /* Relleno interno */
-  margin: 5px; /* Margen entre botones */
-  border-radius: 5px; /* Bordes redondeados */
+  border: none; /* Quitar borde */
+  border-radius: 50%; /* Hacer el botón redondo */
+  background-color: #ffa500; /* Cambiar el color de fondo */
+  color: #fff; /* Color del icono */
+  transition: background-color 0.3s; /* Transición suave del color de fondo */
 }
 
-.series-button.selected {
-  background-color: #fa0000;
-  color: #fff;
+.time-adjust-button:hover {
+  background-color: #ffbb33; /* Cambiar el color de fondo al pasar el mouse */
 }
-
 .arrow {
   width: 50px;
   height: 50px;
