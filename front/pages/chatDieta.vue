@@ -10,8 +10,7 @@
         <div class="chat">
           <!-- Mensajes de chat de usuario y asistente -->
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje"
-              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+            
               <div class="info-usuario" v-if="message.role === 'user'">
                 <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
                   class="avatar-usuario" />
@@ -22,7 +21,7 @@
                   class="avatar-asistente" />
                 <p><strong v-if="message.role === 'assistant'">Arturo: </strong>{{ message.content }}</p>
               </div>
-            </div>
+            
           </div>
 
 
@@ -43,9 +42,13 @@
 
 
       <div class="controles-inferiores">
-        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-          placeholder="Escriu la teva consulta"></textarea>
-        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+        <div class="entrada-mensaje-container">
+          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+
+          <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
+            <Icon id="send" name="i-ic:round-send"></Icon>
+          </button>
+        </div>
       </div>
       <navBar />
     </div>
@@ -286,17 +289,12 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-}
-
-
-body {
-  /* Establecer la fuente predeterminada */
   background: linear-gradient(to top right, #FFA500, #f45c36);
 
-
-  /* Color de fondo */
-  height: 100vh;
 }
+
+
+
 
 
 .contenedor {
@@ -363,7 +361,7 @@ body {
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
   margin: auto;
-  margin-top: 60px;
+  margin-top: 60%;
   margin-bottom: 20px;
   width: 90%;
 
@@ -387,25 +385,6 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
   margin: auto;
-}
-
-
-.mensaje-asistente button.boton-preseleccionado {
-  background-color: #0000002f;
-  color: white;
-  border: 4px solid #1b1b1b23;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1em;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 4px;
-  width: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin: 10px 0;
 }
 
 
@@ -450,13 +429,18 @@ body {
 
 
 .mensaje-usuario {
-  background-color: #FFDAB9;
+  background-color: #fda65975;
   padding: 10px;
   border-radius: 25px;
   border-top-right-radius: 0;
   align-self: flex-end;
   margin-bottom: 8px;
+  word-wrap: break-word;
+  max-width: 90%;
+  
 }
+
+
 
 
 .mensaje-asistente {
@@ -466,8 +450,10 @@ body {
   padding: 10px;
   border-radius: 25px;
   border-bottom-left-radius: 0;
-  background-color: #c7ab92;
+  background-color: #757575a2;
   margin-right: 10%;
+  max-width: 70%;
+  word-wrap: break-word;
 }
 
 
@@ -491,7 +477,12 @@ body {
 
 
 .contenido-mensaje-asistente {
-  max-width: 100%;
+  
+  word-wrap: break-word;
+}
+
+.contenido-mensaje {
+  word-wrap: break-word;
 }
 
 
@@ -520,46 +511,63 @@ body {
 
 
 .controles-inferiores {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
 }
 
+.entrada-mensaje-container {
+    display: flex;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 5fr .1fr .1fr;
+    width: 90%;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #333;
+    margin-top: 10px;
+}
 
 .entrada-mensaje {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin: 10px 0;
-  box-sizing: border-box;
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 8px;
+    margin-left: 2px;
+    width: 95%;
+    padding-left: 10px;
+    padding-top: 10px;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    height: 35px;
+    overflow-y: hidden;
 }
-
 
 .boton-enviar {
-  background-color: #000;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  margin: 10px 10px 0;
-  width: calc(100% - 20px);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ccc;
+    color: white;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
 }
-
 
 .boton-enviar:hover {
-  background-color: #333;
+    background-color: #333;
 }
 
+#send {
+    width: 100%;
+    height: 100%;
+    margin-left: 2px;
+    color: #333;
+}
 
 navBar {
   position: fixed;
