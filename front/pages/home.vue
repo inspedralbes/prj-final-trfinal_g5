@@ -2,19 +2,52 @@
   <body>
     <div class="flex-container">
       <capçalera />
+      <div class="logo">
+        <img src="../public/logo_fithub_black_orange.png" alt="">
+
+      </div>
       <div class="button-container">
-        <button class="large-button rutina-button" @click="redirectTo('rutina')">
-          Rutina
-        </button>
-        <button class="large-button dieta-button" @click="redirectTo('dieta')">
-          Dieta
-        </button>
-        <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
-          Assesorament
-        </button>
-        <button v-if="tipus_usuari === 'admin'" class="large-button admin-button" @click="redirectTo(`/admin/${nom_usuari}`)">
-          Administració
-        </button>
+        <div>
+          <button class="large-button rutina-button" @click="redirectTo('rutina')">
+            <div class="button-content">
+              <div class="img-container">
+                <img src="../public/rutina_full_orange.png" alt="">
+              </div>
+              <h1>Rutina</h1>
+            </div>
+          </button>
+        </div>
+        <div>
+          <button class="large-button dieta-button" @click="redirectTo('dieta')">
+            <div class="button-content">
+              <div class="img-container">
+                <img src="../public/diet_full_orange.png" alt="">
+              </div>
+              <h1>Dieta</h1>
+            </div>
+          </button>
+        </div>
+        <div>
+          <button class="large-button asesoramiento-button" @click="redirectTo('/chatia')">
+            <div class="button-content">
+              <div class="img-container">
+                <img src="../public/chatgpt_full_orange.png" alt="">
+              </div>
+              <h1>Asesoramiento</h1>
+            </div>
+          </button>
+        </div>
+        <div>
+          <button v-if="tipus_usuari === 'admin'" class="large-button admin-button"
+            @click="redirectTo(`/admin/${nom_usuari}`)">
+            <div class="button-content">
+              <div class="img-container">
+                <img src="../public/settings_orange.png" alt="">
+              </div>
+              <h1>Admin</h1>
+            </div>
+          </button>
+        </div>
       </div>
       <navBar />
     </div>
@@ -66,88 +99,79 @@ body {
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  width: 100%;
+  margin: auto;
   /* Mínimo 100% de la altura de la ventana */
   background-color: #FFF;
   position: relative;
 }
 
-.button-container {
+
+.logo {
+  margin-top: 20px;
+  width: 50%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  width: 80%;
+}
+
+.logo img {
+  width: 100%;
+}
+.button-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  width: 85%;
+  margin: auto;
   /* Empuja hacia abajo los botones */
 }
 
 .large-button {
-  position: relative;
-  /* Añade posición relativa al botón */
-  width: 100%;
-  /* Ancho del 80% del contenedor padre */
-  max-width: 400px;
-  height: 100px;
-  margin-bottom: 50px;
-  /* Espacio entre los botones */
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
-  cursor: pointer;
+  background-image: linear-gradient(to right, #ff7300, #FFA500);
+  color: #f0f0f0;
   border: none;
-  outline: none;
-  background-size: cover;
-  border-radius: 10px;
-  display: flex;
-  /* Añadido */
-  align-items: center;
-  /* Añadido */
-  justify-content: center;
-  /* Añadido */
-  text-decoration: none;
-  /* Añadido */
-}
-
-.rutina-button {
-  margin-top: 2.6em;
-  background-image: linear-gradient(to right, #ff7300, #FFA500);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-position: center;
-  font-size: 2.2em;
-  color: #474747;
-}
-
-.dieta-button {
-  background-image: linear-gradient(to right, #ff7300, #FFA500);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-position: center;
-  font-size: 2.2em;
-  color: #474747;
-}
-
-.asesoramiento-button {
-  background-image: linear-gradient(to right, #ff7300, #FFA500);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-position: center;
-  font-size: 2.2em;
-  color: #474747;
-}
-
-.admin-button {
-  background-image: linear-gradient(to right, #ff7300, #FFA500);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-position: center;
-  font-size: 2.2em;
-  color: #474747;
   text-align: center;
-  /* Añadido */
-  display: flex;
-  /* Añadido */
-  align-items: center;
-  /* Añadido */
-  justify-content: center;
-  /* Añadido */
   text-decoration: none;
-  /* Añadido */
+  display: inline-block;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 100%;
+  margin: auto;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.button-content {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: center;
+  width: 100%;
+}
+
+.img-container {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  margin-right: 20px;
+}
+
+.img-container img {
+  width: 50%;
+}
+
+.large-button h1 {
+  font-size: 1.5em;
+  margin: 0;
+  word-wrap: break-word;
+  text-align: left;
 }
 
 navBar {

@@ -289,17 +289,12 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-}
-
-
-body {
-  /* Establecer la fuente predeterminada */
   background: linear-gradient(to top right, #FFA500, #f45c36);
 
-
-  /* Color de fondo */
-  height: 100vh;
 }
+
+
+
 
 
 .contenedor {
