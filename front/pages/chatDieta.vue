@@ -42,9 +42,13 @@
 
 
       <div class="controles-inferiores">
-        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-          placeholder="Escriu la teva consulta"></textarea>
-        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+        <div class="entrada-mensaje-container">
+          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+
+          <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
+            <Icon id="send" name="i-ic:round-send"></Icon>
+          </button>
+        </div>
       </div>
       <navBar />
     </div>
@@ -362,7 +366,7 @@ body {
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
   margin: auto;
-  margin-top: 60px;
+  margin-top: 60%;
   margin-bottom: 20px;
   width: 90%;
 
@@ -512,46 +516,63 @@ body {
 
 
 .controles-inferiores {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
 }
 
+.entrada-mensaje-container {
+    display: flex;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 5fr .1fr .1fr;
+    width: 90%;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #333;
+    margin-top: 10px;
+}
 
 .entrada-mensaje {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin: 10px 0;
-  box-sizing: border-box;
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 8px;
+    margin-left: 2px;
+    width: 95%;
+    padding-left: 10px;
+    padding-top: 10px;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    height: 35px;
+    overflow-y: hidden;
 }
-
 
 .boton-enviar {
-  background-color: #000;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  margin: 10px 10px 0;
-  width: calc(100% - 20px);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ccc;
+    color: white;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
 }
-
 
 .boton-enviar:hover {
-  background-color: #333;
+    background-color: #333;
 }
 
+#send {
+    width: 100%;
+    height: 100%;
+    margin-left: 2px;
+    color: #333;
+}
 
 navBar {
   position: fixed;

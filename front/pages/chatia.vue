@@ -40,9 +40,13 @@
       </div>
       <!-- Movido el textarea y el botón al final del contenedor -->
       <div class="controles-inferiores">
-        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-          placeholder="Escriu la teva consulta"></textarea>
-        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+        <div class="entrada-mensaje-container">
+          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+
+          <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
+            <Icon id="send" name="i-ic:round-send"></Icon>
+          </button>
+        </div>
       </div>
       <navBar />
 
@@ -355,36 +359,57 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
   padding-bottom: 20px;
 }
 
-.entrada-mensaje {
-  width: calc(100% - 20px);
+.entrada-mensaje-container {
+  display: flex;
+  align-items: center;
+  display: grid;
+  grid-template-columns: 5fr .1fr .1fr;
+  width: 90%;
   padding: 10px;
-  margin: 10px 0;
+  border-radius: 30px;
+  background-color: #333;
+  margin-top: 10px;
+}
+
+.entrada-mensaje {
+  margin-left: 2px;
+  width: 95%;
+  padding-left: 10px;
+  padding-top: 10px;
   box-sizing: border-box;
   background-color: #f0f0f0;
   border: none;
-  border-radius: 8px;
+  border-radius: 20px;
+  height: 35px;
+  overflow-y: hidden;
 }
 
 .boton-enviar {
-  background-color: #000;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #ccc;
   color: white;
   border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  border-radius: 4px;
-  margin: 10px 10px 0;
-  width: calc(100% - 20px);
+  transition: background-color 0.3s;
+  margin-left: 10px;
 }
 
 .boton-enviar:hover {
   background-color: #333;
+}
+
+#send {
+  width: 100%;
+  height: 100%;
+  margin-left: 2px;
+  color: #333;
 }
 </style>
