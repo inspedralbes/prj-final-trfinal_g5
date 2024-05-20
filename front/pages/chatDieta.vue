@@ -10,8 +10,7 @@
         <div class="chat">
           <!-- Mensajes de chat de usuario y asistente -->
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje"
-              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+            
               <div class="info-usuario" v-if="message.role === 'user'">
                 <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
                   class="avatar-usuario" />
@@ -22,7 +21,7 @@
                   class="avatar-asistente" />
                 <p><strong v-if="message.role === 'assistant'">Arturo: </strong>{{ message.content }}</p>
               </div>
-            </div>
+            
           </div>
 
 
@@ -390,25 +389,6 @@ body {
 }
 
 
-.mensaje-asistente button.boton-preseleccionado {
-  background-color: #0000002f;
-  color: white;
-  border: 4px solid #1b1b1b23;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1em;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 4px;
-  width: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin: 10px 0;
-}
-
-
 .chat-container {
   overflow-y: auto;
   /* Hace que el contenido sea desplazable verticalmente si es necesario */
@@ -450,13 +430,18 @@ body {
 
 
 .mensaje-usuario {
-  background-color: #FFDAB9;
+  background-color: #fda65975;
   padding: 10px;
   border-radius: 25px;
   border-top-right-radius: 0;
   align-self: flex-end;
   margin-bottom: 8px;
+  word-wrap: break-word;
+  max-width: 90%;
+  
 }
+
+
 
 
 .mensaje-asistente {
@@ -466,8 +451,10 @@ body {
   padding: 10px;
   border-radius: 25px;
   border-bottom-left-radius: 0;
-  background-color: #c7ab92;
+  background-color: #757575a2;
   margin-right: 10%;
+  max-width: 70%;
+  word-wrap: break-word;
 }
 
 
@@ -491,7 +478,12 @@ body {
 
 
 .contenido-mensaje-asistente {
-  max-width: 100%;
+  
+  word-wrap: break-word;
+}
+
+.contenido-mensaje {
+  word-wrap: break-word;
 }
 
 

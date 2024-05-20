@@ -10,8 +10,6 @@
         <div class="chat">
           <!-- Mensajes de chat de usuario y asistente -->
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje"
-              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
               <div class="info-usuario" v-if="message.role === 'user'">
                 <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
                   class="avatar-usuario" />
@@ -20,9 +18,8 @@
               <div class="contenido-mensaje">
                 <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
                   class="avatar-asistente" />
-                <p><strong v-if="message.role === 'assistant'">Arturo: </strong>{{ message.content }}</p>
+                <p ><strong v-if="message.role === 'assistant'">Arturo: </strong>{{ message.content }}</p>
               </div>
-            </div>
           </div>
 
 
@@ -419,13 +416,18 @@ body {
 
 
 .mensaje-usuario {
-  background-color: #FFDAB9;
+  background-color: #fda65975;
   padding: 10px;
   border-radius: 25px;
   border-top-right-radius: 0;
   align-self: flex-end;
   margin-bottom: 8px;
+  word-wrap: break-word;
+  max-width: 90%;
+  
 }
+
+
 
 
 .mensaje-asistente {
@@ -435,8 +437,10 @@ body {
   padding: 10px;
   border-radius: 25px;
   border-bottom-left-radius: 0;
-  background-color: #c7ab92;
+  background-color: #757575a2;
   margin-right: 10%;
+  max-width: 70%;
+  word-wrap: break-word;
 }
 
 
@@ -460,7 +464,12 @@ body {
 
 
 .contenido-mensaje-asistente {
-  max-width: 100%;
+  
+  word-wrap: break-word;
+}
+
+.contenido-mensaje {
+  word-wrap: break-word;
 }
 
 
