@@ -36,7 +36,11 @@
 
 
           <!-- Mostrar animación de carga si isLoading es true -->
-          <div v-if="isLoading || isSending" class="animacion-carga"></div>
+          <div  v-if="isLoading || isSending" class="animacion-carga">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       </div>
 
@@ -486,26 +490,46 @@ body {
 }
 
 
+
+
 .animacion-carga {
   width: 20px;
   height: 20px;
-  border: 2px solid #4CAF50;
-  border-radius: 50%;
-  border-top: 2px solid #ccc;
-  animation: spin 1s linear infinite;
   align-self: flex-start;
   margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
 }
 
+.animacion-carga div {
+  width: 8px;
+  height: 8px;
+  background-color: #333;
+  border-radius: 50%;
+  display: inline-block;
+  animation: cambio-tamaño 1s infinite alternate;
+}
 
-@keyframes spin {
+.animacion-carga div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.animacion-carga div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes cambio-tamaño {
   0% {
-    transform: rotate(0deg);
+    transform: scale(1);
   }
 
+  50% {
+    transform: scale(1.5);
+  }
 
   100% {
-    transform: rotate(360deg);
+    transform: scale(1);
   }
 }
 

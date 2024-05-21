@@ -59,7 +59,8 @@
                                             <p id="reps">Reps: {{ ejercicio.repeticions }}</p>
                                         </div>
                                     </div>
-                                    <button id="guardar-rutina" @click="GuardarRutina(usuarioActual, rutinas2)">Guardar Rutina</button>
+                                    <button id="guardar-rutina" @click="GuardarRutina(usuarioActual, rutinas2)">Guardar
+                                        Rutina</button>
                                     <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
                                 </div>
                                 <div v-if="mensaje.idDieta">
@@ -124,7 +125,7 @@
                     <button @click="toggleModal" class="boton-agregar">
                         <Icon id="attach" name="i-ic:round-attach-file"></Icon>
                     </button>
-                    <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
+                    <button @click="sendMessage" :disabled="isSaving" class="boton-enviar">
                         <Icon id="send" name="i-ic:round-send"></Icon>
                     </button>
                 </div>
@@ -180,12 +181,36 @@ export default {
             diaSeleccionado: null, // Almacena el día seleccionado por el usuario
             dietas: [],
             dietas2: [],
+            messages: [], // Array para almacenar los mensajes
+            newMessage: '', // Variable para almacenar el mensaje escrito por el usuario
+            username: '' // Variable para almacenar el nombre de usuario
 
         };
+    },
+    mounted() {
+        
+        this.username = useUsuariPerfilStore().nom_usuari;
+        // Inicializar la conexión de sockets
+        this.socket = this.$nuxtSocket({
+            name: 'main'
+        });
+        // Emitir un evento de 'Nuevo usuario' con el nombre de usuario al servidor
+        this.socket.emit('Nuevo usuario', this.username);
+        // Escuchar el evento 'message' del servidor y agregar los mensajes recibidos al array de mensajes
+        this.socket.on('message', (message) => {
+            // Agregar el mensaje recibido a la lista de mensajes
+            this.messages.push(message);
+
+
+        });
+        this.mostrarAmigo();
+        this.mostrarMensajes();
     },
     methods: {
         async enviarMensaje() {
             try {
+
+
                 this.isSaving = true;
 
                 const id_usuario = useUsuariPerfilStore().id_usuari;
@@ -237,6 +262,20 @@ export default {
             } catch (error) {
                 // Manejar errores
                 console.error('Error al enviar el mensaje:', error);
+            }
+        },
+        sendMessage() {
+            this.enviarMensaje();
+            // Verificar si el nuevo mensaje no está vacío
+            if (this.newMessage.trim()) {
+                // Enviar el mensaje al servidor a través de sockets
+                this.socket.emit('message', {
+                    username: this.username,
+                    text: this.newMessage
+                });
+                // Limpiar el campo de entrada de mensaje después de enviar
+                this.newMessage = '';
+
             }
         },
         async enviarRutina() {
@@ -367,6 +406,8 @@ export default {
             }
         },
         async mostrarMensajes() {
+
+
             try {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 this.usuarioActual = id_usuario;
@@ -483,8 +524,8 @@ export default {
     async mounted() {
         await this.mostrarAmigo();
         await this.mostrarMensajes();
-        
-      
+
+
 
     },
     beforeRouteLeave(to, from, next) {
@@ -770,8 +811,8 @@ body {
     padding-bottom: 5px;
     max-width: 60%;
     vertical-align: baseline;
-    
-    
+
+
 
 }
 
@@ -905,7 +946,7 @@ video {
     text-align: right;
     margin-right: 5px;
     margin-top: 20px;
-    
+
 
 }
 
@@ -913,10 +954,10 @@ video {
     font-size: .60em;
     font-style: italic;
     color: #333;
-    
+
     margin-top: 20px;
     word-wrap: normal;
-    
+
 }
 
 #taula-rutina {
