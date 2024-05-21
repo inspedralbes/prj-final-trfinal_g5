@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@vesp/nuxt-fontawesome',
+    'nuxt-socket-io',
     'nuxt-icon',
     
   ],
@@ -21,6 +22,14 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' }
     
+  },
+  io: {
+    sockets: [
+      {
+        name: 'main',
+        url: 'http://localhost:3001' // URL del servidor de sockets
+      }
+    ],
   },
   
 
