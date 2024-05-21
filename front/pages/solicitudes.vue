@@ -30,8 +30,7 @@
                         </div>
                     </div>
                     <div class="botons-acceptar-rebutjar">
-                        <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button">Acceptar
-                        </button>
+                        <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button">Acceptar</button>
                         <button @click="rechazarAmigo(solicitud.id)" class="delete-friend-button">Rebutjar</button>
                     </div>
                 </div>
@@ -139,6 +138,7 @@ export default {
                     console.log(responseData.message);
                     // Actualizamos la lista de solicitudes eliminando la solicitud aceptada
                     this.solicitudes = this.solicitudes.filter(solicitud => solicitud.id !== solicitudId);
+                    this.$router.push('/chatusuaris');
                 } else {
                     console.log(responseData.message);
                 }
@@ -157,6 +157,7 @@ export default {
                     console.log(responseData.message);
                     // Actualizamos la lista de solicitudes eliminando la solicitud rechazada
                     this.solicitudes = this.solicitudes.filter(solicitud => solicitud.id !== solicitudId);
+                    this.$router.push('/chatusuaris');
                 } else {
                     console.log(responseData.message);
                 }

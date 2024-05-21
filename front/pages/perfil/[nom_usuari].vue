@@ -62,10 +62,11 @@
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
                     </div>
-
+                    
                     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                     <button type="submit" class="large-button">Guardar</button>
-
+                    
+                    <button type="button" class="large-button logout-button" @click="desloguearUsuario">Desloguejar</button>
                 </form>
                 <navBar />
 
@@ -77,7 +78,6 @@
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
-import { getDatosUsuario } from '@/stores/communicationManager';
 
 export default {
     data() {
@@ -359,9 +359,19 @@ export default {
                     this.usuario[property] = event.target.value.replace(/[^A-Za-z0-9\s]/g, '');
                 }
             }
-        }
-
-
+        },
+        desloguearUsuario() {
+            // Aquí puedes hacer cualquier acción adicional necesaria para desloguear al usuario
+            // Luego redirigir a la página principal
+            this.$router.push('/');
+            const store = useUsuariPerfilStore();
+            store.id_usuari = '';
+            store.username = '';
+            store.nom_usuari = '';
+            store.registre = false;
+            store.foto_perfil = '';
+            store.email_usuari = '';
+        },
     },
 };
 </script>
@@ -442,8 +452,14 @@ textarea {
     background-color: #FFA500;
     border-radius: 50px;
     margin: auto;
-    margin-top: 60px;
+    margin-top: 50px;
 
+}
+
+.logout-button {
+    background-color: #FF4500; /* Puedes elegir el color que prefieras */
+    margin-top: 30px;
+    width: 50%;
 }
 
 form {
