@@ -33,7 +33,7 @@
               <div class="img-container">
                 <img src="../public/chatgpt_full_orange.png" alt="">
               </div>
-              <h1>Asesoramiento</h1>
+              <h1>Assessorament</h1>
             </div>
           </button>
         </div>
@@ -44,7 +44,7 @@
               <div class="img-container">
                 <img src="../public/settings_orange.png" alt="">
               </div>
-              <h1>Admin</h1>
+              <h1>Administració</h1>
             </div>
           </button>
         </div>

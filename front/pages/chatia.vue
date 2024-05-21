@@ -8,9 +8,7 @@
       <!-- Movido el mensaje de bienvenida y cambiado el estilo -->
       <div class="mensaje-bienvenida">
         <img src="../public/img/icono_Arturo.jpg" alt="">
-        <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te?</h2>
-
-       
+        <h2>Sóc Arturo, el teu assessor nutricional i esportiu, ¿en què puc ajudar-te? Si vols rutina o dieta presiona un dels botons següents</h2>
       </div>
 
       <div class="botones-bienvenida">

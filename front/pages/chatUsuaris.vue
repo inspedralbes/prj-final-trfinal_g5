@@ -9,7 +9,7 @@
         <div class="lista-amigos">
             <div v-if="amics.length === 0">
                 <div class="vacio">
-                    <p>No tens amics, però pots mirar les sol·licituds o afegir amics</p>
+                    <p>No tens amics, però pots mirar les sol·licituts o afegir amics</p>
                 </div>
             </div>
             <div v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">

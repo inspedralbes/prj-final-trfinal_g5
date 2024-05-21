@@ -8,18 +8,18 @@
 
             <form class="form-container" @submit.prevent="login">
                 <div class="form-field">
-                    <label class="form-label" for="username">Correu electrónic:</label>
-                    <input v-model="email" class="form-input" type="email" placeholder="Correu electrónic"
+                    <label class="form-label" for="username">Correu electrònic:</label>
+                    <input v-model="email" class="form-input" type="email" placeholder="Correu electrònic"
                         :class="{ 'error': showError && !isValid }" />
                 </div>
                 <div class="form-field">
                     <label class="form-label" for="contrasenya">Contrasenya:</label>
                     <input v-model="contrasenya" class="form-input" type="password" placeholder="Contrasenya"
                         :class="{ 'error': showError && !isValid }" />
-                    <p v-if="showError && !isValid" class="form-error">Correu electrónic o contrasenya incorrectes.</p>
+                    <p v-if="showError && !isValid" class="form-error">Correu electrònic o contrasenya incorrectes.</p>
                 </div>
                 <div class="button-container">
-                    <button class="button button--primary" type="submit">Iniciar sesió</button>
+                    <button class="button button--primary" type="submit">Iniciar sessió</button>
                     <button class="button button--secondary" type="button" @click="goToRegister">Registre</button>
                 </div>
             </form>

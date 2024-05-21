@@ -2,7 +2,7 @@
     <body>
         <div class="flex-container">
             <capçalera />
-            <h1>Rutina</h1>
+            <h1>Rutines</h1>
             <div class="sidebar">
                 <ul>
                     <li v-for="(value, key) in rutinasPorFecha" :key="key">
@@ -13,22 +13,22 @@
             <div class="main-content">
                 <h2 v-if="fechaSeleccionada">{{ fechaSeleccionada }}</h2>
                 <div class="day-selector">
-                    <button @click="decrementSelectedDay">Día Anterior</button>
+                    <!-- <button @click="decrementSelectedDay">Día Anterior</button> -->
                     <select v-model="selectedDay" @change="filtrarRutinasPorDia">
                         <option v-for="day in availableDays" :value="day">{{ 'Día ' + day }}</option>
                     </select>
-                    <button @click="incrementSelectedDay">Día Siguiente</button>
+                    <!-- <button @click="incrementSelectedDay">Día Siguiente</button> -->
                 </div>
                 <div v-for="rutina in exercises" :key="rutina.id" v-if="fechaSeleccionada">
                     <div class="exercise-item">
                         <img :src="rutina.image" alt="Imagen del ejercicio" class="exercise-image" />
                         <h3>{{ rutina.nom_exercici }}</h3>
-                        <p>Día: {{ rutina.dia }}</p>
+                        <p>Dia: {{ rutina.dia }}</p>
                         <p>Series: {{ rutina.series }}</p>
-                        <p>Repeticiones: {{ rutina.repeticions }}</p>
+                        <p>Repeticions: {{ rutina.repeticions }}</p>
                     </div>
                 </div>
-                <button class="borrar-button" v-if="fechaSeleccionada && exercises.length > 0" @click="borrarRutinaSeleccionada">Borrar Rutina</button>
+                <button class="borrar-button" v-if="fechaSeleccionada && exercises.length > 0" @click="borrarRutinaSeleccionada">Esborrar Rutina</button>
             </div>
             <navBar />
         </div>

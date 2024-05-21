@@ -17,17 +17,17 @@
                                 @input="capitalizeOnInput($event, 'cognoms')" maxlength="80">
                         </div>
                         <div class="input-container">
-                            <label>Nom usuari:</label>
+                            <label>Nom d'usuari:</label>
                             <input type="text" placeholder="Usuari" v-model="usuario.nom_usuari" maxlength="20">
                         </div>
                         <div class="input-container">
-                            <label>Telefon:</label>
+                            <label>Telèfon:</label>
                             <input type="tel" placeholder="ex: 123456789" v-model="usuario.telefon"
                                 @input="validatePhoneNumber" maxlength="9">
                         </div>
 
                         <div class="input-container">
-                            <label>Data naixement:</label>
+                            <label>Data de naixement:</label>
                             <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
                         </div>
                         <div class="input-container">
@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="input-container">
-                            <label>Alergia/Intolerancia:</label>
+                            <label>Alergia/Intolerància:</label>
                             <textarea placeholder="Introdueix la teva alergia o intolerencia (opcional)"
                                 v-model="usuario.alergia_intolerancia"
                                 @input="validateInput($event, 'alergia_intolerancia')" maxlength="255"></textarea>

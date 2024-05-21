@@ -2,7 +2,7 @@
     <body>
         <div class="flex-container">
             <capçalera />
-            <h1>Dietas</h1>
+            <h1>Dietes</h1>
             <div class="sidebar">
                 <ul>
                     <li v-for="(value, key) in dietasPorFecha" :key="key">
@@ -15,13 +15,13 @@
                 <div v-for="dieta in dietas" :key="dieta.id" v-if="fechaSeleccionada">
                     <div class="exercise-item">
                         <h3>{{ dieta.nom_plat }}</h3>
-                        <p>Calorías: {{ dieta.calories }}</p>
-                        <p>Proteínas: {{ dieta.proteines }}</p>
-                        <p>Carbohidratos: {{ dieta.carbohidrats }}</p>
+                        <p>Calories: {{ dieta.calories }}</p>
+                        <p>Proteïnes: {{ dieta.proteines }}</p>
+                        <p>Carbohidrats: {{ dieta.carbohidrats }}</p>
                         <p>Greixos: {{ dieta.grases }}</p>
                     </div>
                 </div>
-                <button class="borrar-button" v-if="fechaSeleccionada && dietas.length > 0" @click="borrarDietaSeleccionada()">Borrar Dieta</button>
+                <button class="borrar-button" v-if="fechaSeleccionada && dietas.length > 0" @click="borrarDietaSeleccionada()">Esborrar Dieta</button>
             </div>
             <navBar />
         </div>

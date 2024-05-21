@@ -100,8 +100,8 @@ const arbrePreguntes = {
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta de equilibrada amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
-            "Post-entrenament": "Dieta de equilibrada amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+            "Segon esmorzar": "Dieta equilibrada amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
+            "Post-entrenament": "Dieta equilibrada amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
           }
         },
         "6": "Dieta equilibrada amb 6 apats"
