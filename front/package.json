@@ -3,12 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vue-cli-service build",
+    "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "lint": "eslint ."
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
@@ -19,10 +18,7 @@
     "nuxt": "^3.11.2",
     "nuxt-icon": "^0.6.10",
     "vue": "^3.4.19",
-    "vue-router": "^4.3.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^7.17.0",
-    "vue-cli-service": "^5.0.8" 
+    "vue-router": "^4.3.0"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
