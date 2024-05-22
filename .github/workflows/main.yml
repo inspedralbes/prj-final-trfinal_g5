@@ -10,23 +10,58 @@ jobs:
   setup-laravel-nuxt:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:20.10.7
-        options: --privileged
-
     steps:
       - name: Obtenint el codi del respositori
         uses: actions/checkout@v2
 
-      - name: Configurar Docker
-        run: |
-          docker-compose -f ./docker-compose.yml up -d
+      # Configuración de Laravel
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, zip, pdo, pdo_mysql, gd
 
-      - name: Esperar a que los servicios estén listos
+      - name: Install system dependencies for Laravel
         run: |
-          while ! curl -s http://localhost:8000 > /dev/null; do sleep 1; done
-          while ! curl -s http://localhost:3000 > /dev/null; do sleep 1; done
+          sudo apt-get update
+          sudo apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev zip unzip git libonig-dev libxml2-dev
+          composer self-update
+
+      - name: Install Composer dependencies
+        run: composer install
+        working-directory: ./back
+
+      - name: Set up Laravel environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+        working-directory: ./back
+
+      - name: Run Laravel migrations and seeders
+        run: php artisan migrate:refresh --seed
+        working-directory: ./back
+
+      - name: Start Laravel server
+        run: php artisan serve --host=0.0.0.0 --port=8000 &
+        working-directory: ./back
+
+      # Configuración de Nuxt
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install npm dependencies
+        run: npm install
+        working-directory: ./front
+
+      - name: Build Nuxt project
+        run: npm run build
+        working-directory: ./front
+
+      - name: Start Nuxt server
+        run: npm run dev &
+        working-directory: ./front
 
       - name: Verificar la aplicación Laravel
         run: curl -f http://localhost:8000 || exit 1
@@ -34,14 +69,7 @@ jobs:
       - name: Verificar la aplicación Nuxt
         run: curl -f http://localhost:3000 || exit 1
 
-      - name: Instalar dependencias del proyecto Vue
-        run: npm install
-        working-directory: ./front
-
-      - name: Construir el proyecto Vue
-        run: npm run build
-        working-directory: ./front
-
+      # Subida a producción
       - name: Subir a producción con SCP
         run: |
           echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
