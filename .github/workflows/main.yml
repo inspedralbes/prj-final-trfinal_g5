@@ -45,6 +45,11 @@ jobs:
           sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=${{ secrets.PROD_DB_PASS }}/' .env
         working-directory: ./back
 
+      - name: Test Database Connection
+        run: |
+          sudo apt-get install -y mysql-client
+          mysql -h ${{ secrets.PROD_DB_HOST }} -u ${{ secrets.PROD_DB_USER }} -p${{ secrets.PROD_DB_PASS }} -e "SHOW DATABASES;"
+          
       - name: Run Laravel migrations and seeders
         run: php artisan migrate:refresh --seed
         working-directory: ./back
