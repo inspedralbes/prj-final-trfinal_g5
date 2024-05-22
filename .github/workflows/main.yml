@@ -28,12 +28,17 @@ jobs:
         run: npm run build
         working-directory: ./front
 
+      # Verificación de la construcción de Nuxt
+      - name: Verificar la construcción de Nuxt
+        run: ls -la ./front/.output/public
+        working-directory: ./
+
       # Subida a producción
       - name: Subir el build de Nuxt y la carpeta back a producción con SCP
         run: |
           echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
           chmod 600 ~/prod_key.pem
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./front/dist/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/public_html/
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./front/.output/public/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/public_html/
           scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./back/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/api/
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
