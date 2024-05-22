@@ -361,9 +361,6 @@ export default {
             }
         },
         desloguearUsuario() {
-            // Aquí puedes hacer cualquier acción adicional necesaria para desloguear al usuario
-            // Luego redirigir a la página principal
-            this.$router.push('/');
             const store = useUsuariPerfilStore();
             store.id_usuari = '';
             store.username = '';
@@ -371,6 +368,8 @@ export default {
             store.registre = false;
             store.foto_perfil = '';
             store.email_usuari = '';
+            store.tipus_usuari = '';
+            this.$router.push('/');
         },
     },
 };
@@ -403,11 +402,12 @@ body {
 
 
 .user-info-container {
-    margin-top: 5px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 30px;
-    margin: auto;
+    /* margin: auto; */
+    margin-left: 15px;
+    margin-top: -30px;
     width: 90%;
 }
 
@@ -452,7 +452,7 @@ textarea {
     background-color: #FFA500;
     border-radius: 50px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 30px;
 
 }
 
@@ -460,6 +460,7 @@ textarea {
     background-color: #FF4500; /* Puedes elegir el color que prefieras */
     margin-top: 30px;
     width: 50%;
+    margin-bottom: -20px;
 }
 
 form {
