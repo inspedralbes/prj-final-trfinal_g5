@@ -51,7 +51,7 @@ jobs:
           mysql -h ${{ secrets.PROD_DB_HOST }} -u ${{ secrets.PROD_DB_USER }} -p${{ secrets.PROD_DB_PASS }} -e "SHOW DATABASES;"
           
       - name: Run Laravel migrations and seeders
-        run: php artisan migrate:refresh --seed
+        run: php artisan migrate:refresh 
         working-directory: ./back
 
       - name: Start Laravel server
