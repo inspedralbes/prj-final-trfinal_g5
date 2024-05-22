@@ -79,7 +79,7 @@
 
                                     <div id="mensaje-texto"> {{ mensaje.mensaje }}</div>
                                     <div class="hora-container">
-                                        <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
+                                        <!-- <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span> -->
 
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                     <button @click="toggleModal" class="boton-agregar">
                         <Icon id="attach" name="i-ic:round-attach-file"></Icon>
                     </button>
-                    <button @click="sendMessage" :disabled="isSaving" class="boton-enviar">
+                    <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
                         <Icon id="send" name="i-ic:round-send"></Icon>
                     </button>
                 </div>
@@ -184,49 +184,51 @@ export default {
             messages: [], // Array para almacenar los mensajes
             newMessage: '', // Variable para almacenar el mensaje escrito por el usuario
             username: '' // Variable para almacenar el nombre de usuario
-
         };
     },
     mounted() {
-        
-        this.username = useUsuariPerfilStore().nom_usuari;
-        // Inicializar la conexión de sockets
-        this.socket = this.$nuxtSocket({
-            name: 'main'
-        });
-        // Emitir un evento de 'Nuevo usuario' con el nombre de usuario al servidor
-        this.socket.emit('Nuevo usuario', this.username);
-        // Escuchar el evento 'message' del servidor y agregar los mensajes recibidos al array de mensajes
-        this.socket.on('message', (message) => {
-            // Agregar el mensaje recibido a la lista de mensajes
-            this.messages.push(message);
-
-
-        });
-        this.mostrarAmigo();
         this.mostrarMensajes();
     },
+
     methods: {
+        connectToSocket() {
+            this.username = useUsuariPerfilStore().nom_usuari;
+            // Inicializar la conexión de sockets
+            this.socket = this.$nuxtSocket({
+                name: 'main'
+            });
+            // Emitir un evento de 'Nuevo usuario' con el nombre de usuario al servidor
+            this.socket.emit('Nuevo usuario', this.username);
+            // Escuchar el evento 'message' del servidor y agregar los mensajes recibidos al array de mensajes
+            this.socket.on('message', (message) => {
+                // Agregar el mensaje recibido a la lista de mensajes
+                this.messages.push(message);
+                this.actualizarMensajes(message);
+            });
+        },
         async enviarMensaje() {
             try {
-
-
                 this.isSaving = true;
 
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
                 const mensaje = this.mensaje;
-                //  Verificar si tanto el mensaje como la imagen están vacíos
+
+                // Verificar si tanto el mensaje como la imagen están vacíos
                 if (!this.mensaje.trim() && !this.imagenSeleccionada && !this.videoSeleccionado) {
-                    // Si no hay mensaje ni imagen, muestra un mensaje de error y no envíes la solicitud
                     console.error('No puedes enviar un mensaje vacío.');
                     this.isSaving = false;
-
                     return; // Salir del método
                 }
 
-                // Obtener todos los IDs de rutina mostrados
-                let data = { mensaje }; // Incluir idRutinas en los datos que se envían al servidor
+                // Obtener la hora actual
+                const horaMensaje = new Date().toLocaleTimeString('es-ES');
+
+                // Construir el objeto de datos a enviar al servidor
+                let data = {
+                    mensaje: mensaje,
+                    horaMensaje: horaMensaje // Agregar la hora del mensaje
+                };
 
                 // Si hay una imagen seleccionada, agregarla a los datos
                 if (this.imagenSeleccionada) {
@@ -235,7 +237,7 @@ export default {
                 if (this.videoSeleccionado) {
                     data.video_base64 = this.videoSeleccionado.split(',')[1];
                 }
-                console.log(data);
+
                 const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
                     method: 'POST',
                     headers: {
@@ -248,13 +250,23 @@ export default {
                 console.log(responseData);
                 if (responseData.status === 1) {
                     // Mensaje enviado correctamente
-                    await this.mostrarMensajes();
                     // Vaciar el área de texto después de enviar el mensaje
                     this.mensaje = '';
                     // Vaciar la imagen seleccionada después de enviar el mensaje
                     this.imagenSeleccionada = null;
                     this.videoSeleccionado = null;
                     this.isSaving = false;
+
+                    // Enviar el mensaje al servidor a través de sockets
+                    this.socket.emit('message', {
+                        username: this.username,
+                        text: mensaje,
+                        horaMensaje: horaMensaje // Enviar la hora del mensaje
+                    });
+                    console.log('Mensaje enviado:', mensaje);
+
+
+                    await this.mostrarMensajes();
                 } else {
                     // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);
@@ -264,20 +276,7 @@ export default {
                 console.error('Error al enviar el mensaje:', error);
             }
         },
-        sendMessage() {
-            this.enviarMensaje();
-            // Verificar si el nuevo mensaje no está vacío
-            if (this.newMessage.trim()) {
-                // Enviar el mensaje al servidor a través de sockets
-                this.socket.emit('message', {
-                    username: this.username,
-                    text: this.newMessage
-                });
-                // Limpiar el campo de entrada de mensaje después de enviar
-                this.newMessage = '';
 
-            }
-        },
         async enviarRutina() {
             try {
                 this.isSaving = true;
@@ -305,7 +304,6 @@ export default {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
                     this.isSaving = false;
-
                 } else {
                     // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);
@@ -342,7 +340,6 @@ export default {
                     // Mensaje enviado correctamente
                     await this.mostrarMensajes();
                     this.isSaving = false;
-
                 } else {
                     // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);
@@ -352,15 +349,10 @@ export default {
                 console.error('Error al enviar el mensaje:', error);
             }
         },
-
-
-
         async toggleDia(dia) {
             // Si el día seleccionado es el mismo que el anterior, lo deseleccionamos
             this.diaSeleccionado = this.diaSeleccionado === dia ? null : dia;
         },
-
-
         handleFileChange(event) {
             const file = event.target.files[0]; // Obtener el archivo del evento
 
@@ -406,8 +398,6 @@ export default {
             }
         },
         async mostrarMensajes() {
-
-
             try {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 this.usuarioActual = id_usuario;
@@ -441,8 +431,16 @@ export default {
                     this.mensajes = mensajesPorDia;
                 }
             } catch (error) {
-                // console.error('Error al obtener los mensajes del chat:', error);
+                // Manejar errores
+                console.error('Error al obtener los mensajes del chat:', error);
             }
+        },
+        actualizarMensajes(nuevoMensaje) {
+            const fecha = new Date(nuevoMensaje.created_at).toLocaleDateString('ca-ES');
+            if (!this.mensajes[fecha]) {
+                this.mensajes[fecha] = [];
+            }
+            this.mensajes[fecha].push(nuevoMensaje);
         },
         async GuardarRutina(usuario, rutinas2) {
             // Modificar rutinas2 para cambiar el id_usuario según el usuario actual
@@ -465,14 +463,10 @@ export default {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(rutinas2), // Enviar los datos de la rutina al servidor
-
             });
             const responseData = await response.json();
             console.log(responseData);
-
-
         },
-
         ordenarMensajesPorId(mensajes) {
             // Convertir el objeto de mensajes a un array
             const mensajesArray = Object.values(mensajes);
@@ -517,24 +511,18 @@ export default {
         },
         cerrarModal() {
             this.mostrar = false; // Cerrar el modal
-        },
-
-
+        }
     },
-    async mounted() {
-        await this.mostrarAmigo();
-        await this.mostrarMensajes();
-
-
-
+    mounted() {
+        this.mostrarAmigo();
+        this.mostrarMensajes();
+        this.connectToSocket();
     },
     beforeRouteLeave(to, from, next) {
         // Deja el campo 'amic' del almacenamiento de Pinia como null al salir de la página
         useUsuariPerfilStore().amic = null;
         next();
-    },
-
-
+    }
 };
 </script>
 

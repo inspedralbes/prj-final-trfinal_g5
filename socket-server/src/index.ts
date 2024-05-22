@@ -41,6 +41,7 @@ io.on('connection', (socket) => {
         const message = { id: Date.now(), username: data.username, text: data.text };
         messages.push(message);
         io.emit('message', message);
+        console.log('Mensaje:', message);
     });
 
     socket.on('disconnect', () => {
