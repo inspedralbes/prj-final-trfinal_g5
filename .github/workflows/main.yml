@@ -5,53 +5,47 @@ on:
   push:
     branches:
       - main
-      
+
 jobs:
-  # eslint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '20.x'
-
-  #     - name: Install npm dependencies
-  #       run: npm install
-  #       working-directory: ./front
-
-  #     - name: Run ESLint
-  #       run: npm run lint
-  #       working-directory: ./front
-
-  deploy:
+  setup-laravel-nuxt:
     runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:20.10.7
+        options: --privileged
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Obtenint el codi del respositori
+        uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.x'
+      - name: Configurar Docker
+        run: |
+          docker-compose -f ./docker-compose.yml up -d
 
-      - name: Install npm dependencies
+      - name: Esperar a que los servicios estén listos
+        run: |
+          while ! curl -s http://localhost:8000 > /dev/null; do sleep 1; done
+          while ! curl -s http://localhost:3000 > /dev/null; do sleep 1; done
+
+      - name: Verificar la aplicación Laravel
+        run: curl -f http://localhost:8000 || exit 1
+
+      - name: Verificar la aplicación Nuxt
+        run: curl -f http://localhost:3000 || exit 1
+
+      - name: Instalar dependencias del proyecto Vue
         run: npm install
         working-directory: ./front
 
-      - name: Build Vue project
+      - name: Construir el proyecto Vue
         run: npm run build
         working-directory: ./front
 
-      - name: Deploy to production with SCP
+      - name: Subir a producción con SCP
         run: |
           echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
           chmod 600 ~/prod_key.pem
-          cd ${{ github.workspace }}
-          echo "Action desplegant a produccio" > ./last_deploy.txt
-          date >> ./last_deploy.txt
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/prod_key.pem ./front/dist/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a16miqbargim/web/actions.a16miqbargim.daw.inspedralbes.cat/public_html/
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./front/dist/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a16miqbargim/web/actions.a16miqbargim.daw.inspedralbes.cat/public_html/
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
