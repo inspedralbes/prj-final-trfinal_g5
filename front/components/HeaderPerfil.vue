@@ -12,13 +12,13 @@
                         <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
                             class="user-icon"@click="openFileInput" />
                     </div>
-                <h1>{{ username }}</h1>
+                <!-- <h1>{{ username }}</h1> -->
             </div>
             <div v-if="!registre" class="alert-sign">
                 !
             </div>
             <div id="myProfile">
-                <h1>El meu perfil</h1>
+                <h1>Perfil de {{ username }}</h1>
             </div>
         </div>
     </div>

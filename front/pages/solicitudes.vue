@@ -1,13 +1,9 @@
 <template>
     <div class="main-content">
-
-
         <HeaderChat />
-
-
         <div class="opcion-container">
-            <div @click="mostrarSolicitudes" :class="{ 'selected': mostrarContenido }" class="opcion">Solicitudes</div>
-            <div @click="mostrarAdios" :class="{ 'selected': !mostrarContenido }" class="opcion">Mis solicitudes</div>
+            <div @click="mostrarSolicitudes" :class="{ 'selected': mostrarContenido }" class="opcion">Sol·licituds</div>
+            <div @click="mostrarAdios" :class="{ 'selected': !mostrarContenido }" class="opcion">Les meves Sol·licituds</div>
         </div>
         <div class="llista-solicituds" v-if="mostrarContenido">
             <h1>{{ titulo }}</h1>
@@ -15,7 +11,6 @@
                 <div class="vacio">
                     <p>No tens sol·licituds pendents</p>
                 </div>
-
             </div>
             <div v-else>
                 <div v-for="solicitud in solicitudes" :key="solicitud.id" class="usuario-container">
@@ -23,15 +18,12 @@
                         <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + solicitud.usuario.usuario.foto_perfil"
                             alt="Usuario" class="user-icon" />
                         <div class="user-details">
-                            <p class="user-name">{{ solicitud.usuario.usuario.nom }} {{
-                solicitud.usuario.usuario.cognoms }}
-                            </p>
+                            <p class="user-name">{{ solicitud.usuario.usuario.nom }} {{ solicitud.usuario.usuario.cognoms }}</p>
                             <p class="username">{{ solicitud.usuario.usuario.nom_usuari }}</p>
                         </div>
                     </div>
                     <div class="botons-acceptar-rebutjar">
-                        <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button">Acceptar
-                        </button>
+                        <button @click="AceptarAmigo(solicitud.id)" class="add-friend-button">Acceptar</button>
                         <button @click="rechazarAmigo(solicitud.id)" class="delete-friend-button">Rebutjar</button>
                     </div>
                 </div>
@@ -54,7 +46,7 @@
                         </div>
                     </div>
                     <div class="estado-solicitud">
-                        <p>Pendent d'aceptació</p>
+                        <p>Pendent d'aceptar</p>
                     </div>
                 </div>
             </div>
@@ -139,6 +131,7 @@ export default {
                     console.log(responseData.message);
                     // Actualizamos la lista de solicitudes eliminando la solicitud aceptada
                     this.solicitudes = this.solicitudes.filter(solicitud => solicitud.id !== solicitudId);
+                    this.$router.push('/chatusuaris');
                 } else {
                     console.log(responseData.message);
                 }
@@ -157,6 +150,7 @@ export default {
                     console.log(responseData.message);
                     // Actualizamos la lista de solicitudes eliminando la solicitud rechazada
                     this.solicitudes = this.solicitudes.filter(solicitud => solicitud.id !== solicitudId);
+                    this.$router.push('/chatusuaris');
                 } else {
                     console.log(responseData.message);
                 }

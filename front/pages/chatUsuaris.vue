@@ -9,7 +9,7 @@
         <div class="lista-amigos">
             <div v-if="amics.length === 0">
                 <div class="vacio">
-                    <p>No tens amics, però pots mirar les sol·licituds o afegir amics</p>
+                    <p>No tens amics, però pots mirar les sol·licituts o afegir amics</p>
                 </div>
             </div>
             <div v-for="amigo in amicsFiltrados" :key="amigo.id" class="amigo">
@@ -108,21 +108,13 @@ export default {
             useUsuariPerfilStore().amic = idAmigo;
         },
         async mostrarUltimoMensajeEntreEllos(idUsuario, idAmigo) {
-            try {
-                const response = await fetch(`http://localhost:8000/api/ultim-missatge/${idUsuario}/${idAmigo}`);
-                const responseData = await response.json();
-                // console.log(responseData);
-                if (responseData.status === 1) {
-                    console.log(responseData.message);
-
-                    return responseData.message; // Devuelve el mensaje si se encontró uno
-                } else {
-                    return ''; // Devuelve una cadena vacía si no se encontró ningún mensaje
-                }
-            } catch (error) {
-                console.error('Error al obtener el último mensaje entre los usuarios:', error);
-                return ''; // Devuelve una cadena vacía en caso de error
-            }
+            mostrarUltimoMensajeEllos(idUsuario, idAmigo)
+            .then(response => {
+                return response.mensaje;
+            })
+            .catch(error => {
+                console.error("Error al obtenir l'últim missatge entre els dos usuaris:", error);
+            })
         },
         formatHora(fecha) {
             if (!fecha) return '';

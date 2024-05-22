@@ -149,6 +149,24 @@ export async function getDieta(idUsuario) {
     }
 }
 
+export async function mostrarUltimoMensajeEllos(idUsuario, idAmigo) {
+    try {
+        const response = await fetch(`${url}/ultim-missatge/${idUsuario}/${idAmigo}`);
+        const responseData = await response.json();
+        // console.log(responseData);
+        if (responseData.status === 1) {
+            console.log(responseData.message);
+
+            return responseData.message; // Devuelve el mensaje si se encontró uno
+        } else {
+            return ''; // Devuelve una cadena vacía si no se encontró ningún mensaje
+        }
+    } catch (error) {
+        console.error('Error al obtener el último mensaje entre los usuarios:', error);
+        return ''; // Devuelve una cadena vacía en caso de error
+    }
+}
+
 //ejemplo de peticion fetch post
 
 export async function iniciarSesion(email, contrasenya) {

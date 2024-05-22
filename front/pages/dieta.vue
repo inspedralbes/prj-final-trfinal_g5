@@ -22,15 +22,16 @@
                 </div>
                 <div v-for="(comida, index) in dietas" :key="index">
                     <h2 id="apat">{{ comida.apat }}</h2>
-                    <div v-for="(plato, index) in comida.platos" :key="index" class="meal-item">
+                    <div v-for="(plato, platoIndex) in comida.platos" :key="platoIndex" class="meal-item">
+                        <h3 class="meal-option">Opción {{ platoIndex + 1 }}</h3> <!-- Añadido el título de opción -->
                         <h3 class="meal-name">{{ plato.nom_plat }}</h3>
                         <p class="calories">Calories: {{ plato.calories }}</p>
                         <p>Proteïnes: {{ plato.proteines }}</p>
                         <p>Carbohidrats: {{ plato.carbohidrats }}</p>
-                        <p>Graixos: {{ plato.grases }}</p>
+                        <p>Greixos: {{ plato.grases }}</p>
                         <p>Ingredients:</p>
                         <ul>
-                            <li v-for="(ingredient, index) in plato.ingredients" :key="index">
+                            <li v-for="(ingredient, ingredientIndex) in plato.ingredients" :key="ingredientIndex">
                                 {{ ingredient.quantitat }} {{ ingredient.unitat }} de {{ ingredient.nom_ingredient }}
                             </li>
                         </ul>

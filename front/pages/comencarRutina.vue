@@ -45,7 +45,7 @@
           />
         </div>
         <div id="rutinaBuida" v-if="exercises.length == 0 && !loading">
-          <p>No hay datos de rutina disponibles. Haz clic en el botón para crear una rutina.</p>
+          <p>No hi ha dades de rutina disponibles. Feu clic al botó per crear una rutina.</p>
           <button class="dieta-button" @click="redirectTo('/chatRutina')">Crear Rutina</button>
         </div>
         <div v-else class="main-content">
@@ -63,7 +63,7 @@
                   {{ exercise.dia }} <br /> <br />
                   <Icon class="" name="ic:baseline-fitness-center" />Series:
                   {{ exercise.series }} <br /> <br />
-                  <Icon class="" name="ic:baseline-cached" />Repeticiones:
+                  <Icon class="" name="ic:baseline-cached" />Repeticions:
                   {{ exercise.repeticions }}
                 </div>
                 <div class="exercise-controls">

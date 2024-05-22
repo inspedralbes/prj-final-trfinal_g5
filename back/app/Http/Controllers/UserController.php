@@ -18,8 +18,7 @@ use App\Models\Solicitud;
 class UserController extends Controller
 
 {
-    public function registre(Request $request)
-{
+    public function registre(Request $request){
     try {
         $validator = $request->validate([
             'email' => 'required|string|email|max:255|unique:usuaris',
@@ -96,22 +95,23 @@ class UserController extends Controller
             'altura' => $usuari->altura,
             'registre' => $usuari->registre
         ]);
-    } catch (ValidationException $e) {
-        // Captura las excepciones de validación y obtén los mensajes de error
-        $errors = $e->errors();
 
-        return response()->json([
-            'status' => 0,
-            'message' => 'Error en el registro: ' . implode(', ', Arr::flatten($errors))
-        ]);
-    } catch (\Exception $e) {
-        // Captura otras excepciones y proporciona un mensaje de error general
-        return response()->json([
-            'status' => 0,
-            'message' => 'Error en el registro: ' . $e->getMessage()
-        ]);
+        } catch (ValidationException $e) {
+            // Captura las excepciones de validación y obtén los mensajes de error
+            $errors = $e->errors();
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error en el registro: ' . implode(', ', Arr::flatten($errors))
+            ]);
+        } catch (\Exception $e) {
+            // Captura otras excepciones y proporciona un mensaje de error general
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error en el registro: ' . $e->getMessage()
+            ]);
+        }
     }
-}
 
     public function loguejat(Request $request){
         $request->validate([
@@ -149,8 +149,7 @@ class UserController extends Controller
     }
     
 
-    public function mostrarUsuario(Request $request, string $id)
-    {
+    public function mostrarUsuario(Request $request, string $id){
         $usuario = Usuaris::find($id);
 
         if ($usuario) {
@@ -172,20 +171,20 @@ class UserController extends Controller
             ->orWhere('nom', 'LIKE', '%' . $nombre . '%')
             ->first();
 
-    if ($usuario) {
-        return response()->json([
-            'status' => 1,
-            'usuario' => $usuario
-        ]);
-    } else {
-        return response()->json([
-            'status' => 0,
-            'message' => 'No se encontró ningún usuario'
-        ]);
+        if ($usuario) {
+            return response()->json([
+                'status' => 1,
+                'usuario' => $usuario
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No se encontró ningún usuario'
+            ]);
+        }
     }
-}
-    public function comprovarCorreuUsuari(Request $request)
-    {
+    
+    public function comprovarCorreuUsuari(Request $request){
         $request->validate([
             'email' => 'required|string|email|max:255',
         ]);
@@ -204,8 +203,8 @@ class UserController extends Controller
             ]);
         }
     }
-    public function comprovarNomUsuari(Request $request)
-    {
+
+    public function comprovarNomUsuari(Request $request){
         $request->validate([
             'nom_usuari' => 'required|string|max:255',
         ]);
@@ -225,8 +224,8 @@ class UserController extends Controller
             ]);
         }
     }
-    public function editarUsuari(Request $request, $id)
-    {   
+
+    public function editarUsuari(Request $request, $id){   
         // Validación de los datos recibidos en la solicitud
         $validator = Validator::make($request->all(), [
             'nom' => 'sometimes|string|max:255',
@@ -309,8 +308,7 @@ class UserController extends Controller
         
     }
     
-    public function listarUsuaris()
-    {
+    public function listarUsuaris(){
         try {
             $usuaris = Usuaris::all();
             return response()->json([
@@ -338,8 +336,7 @@ class UserController extends Controller
         }
     }
     
-    public function mostrarUsuariosExceptoYo(Request $request, $idUsuario)
-    {
+    public function mostrarUsuariosExceptoYo(Request $request, $idUsuario){
       // Busca el usuario por el ID proporcionado desde el frontend
       $usuario = Usuaris::find($idUsuario);
 
@@ -380,17 +377,14 @@ class UserController extends Controller
           'message' => 'Usuarios excluyendo el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud.',
           'usuarios' => $usuarios
       ]);
-  }
+    }
 
-
-
-     public function getUsers(Request $request) {
+    public function getUsers(Request $request) {
           $users = Usuaris::all();
           return response()->json($users);
-     }
+    }
 
-     public function getAmics(Request $request, string $id)
-    {
+    public function getAmics(Request $request, string $id){
       // Busca al usuario por su ID
       $usuario = Usuaris::find($id);
 
@@ -439,6 +433,5 @@ class UserController extends Controller
           'message' => 'Amigos del usuario',
           'amigos' => $amigosUsuarios
       ]);
-  }
-
+    }
 }    

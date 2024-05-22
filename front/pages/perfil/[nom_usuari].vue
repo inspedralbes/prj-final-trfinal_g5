@@ -17,17 +17,17 @@
                                 @input="capitalizeOnInput($event, 'cognoms')" maxlength="80">
                         </div>
                         <div class="input-container">
-                            <label>Nom usuari:</label>
+                            <label>Nom d'usuari:</label>
                             <input type="text" placeholder="Usuari" v-model="usuario.nom_usuari" maxlength="20">
                         </div>
                         <div class="input-container">
-                            <label>Telefon:</label>
+                            <label>Telèfon:</label>
                             <input type="tel" placeholder="ex: 123456789" v-model="usuario.telefon"
                                 @input="validatePhoneNumber" maxlength="9">
                         </div>
 
                         <div class="input-container">
-                            <label>Data naixement:</label>
+                            <label>Data de naixement:</label>
                             <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
                         </div>
                         <div class="input-container">
@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="input-container">
-                            <label>Alergia/Intolerancia:</label>
+                            <label>Alergia/Intolerància:</label>
                             <textarea placeholder="Introdueix la teva alergia o intolerencia (opcional)"
                                 v-model="usuario.alergia_intolerancia"
                                 @input="validateInput($event, 'alergia_intolerancia')" maxlength="255"></textarea>
@@ -62,10 +62,11 @@
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
                     </div>
-
+                    
                     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
                     <button type="submit" class="large-button">Guardar</button>
-
+                    
+                    <button type="button" class="large-button logout-button" @click="desloguearUsuario">Desloguejar</button>
                 </form>
                 <navBar />
 
@@ -77,7 +78,6 @@
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
-import { getDatosUsuario } from '@/stores/communicationManager';
 
 export default {
     data() {
@@ -359,9 +359,18 @@ export default {
                     this.usuario[property] = event.target.value.replace(/[^A-Za-z0-9\s]/g, '');
                 }
             }
-        }
-
-
+        },
+        desloguearUsuario() {
+            const store = useUsuariPerfilStore();
+            store.id_usuari = '';
+            store.username = '';
+            store.nom_usuari = '';
+            store.registre = false;
+            store.foto_perfil = '';
+            store.email_usuari = '';
+            store.tipus_usuari = '';
+            this.$router.push('/');
+        },
     },
 };
 </script>
@@ -393,11 +402,12 @@ body {
 
 
 .user-info-container {
-    margin-top: 5px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 30px;
-    margin: auto;
+    /* margin: auto; */
+    margin-left: 15px;
+    margin-top: -30px;
     width: 90%;
 }
 
@@ -442,8 +452,15 @@ textarea {
     background-color: #FFA500;
     border-radius: 50px;
     margin: auto;
-    margin-top: 60px;
+    margin-top: 30px;
 
+}
+
+.logout-button {
+    background-color: #FF4500; /* Puedes elegir el color que prefieras */
+    margin-top: 30px;
+    width: 50%;
+    margin-bottom: -20px;
 }
 
 form {

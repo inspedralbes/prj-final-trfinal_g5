@@ -26,11 +26,11 @@
                 <input v-if="registrationQuestions[currentQuestionIndex].inputType === 'textarea'"
                     v-model="currentAnswer" placeholder="Escribe tu respuesta"></input>
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'email'"
-                    v-model="currentAnswer" type="email" placeholder="Correu electronic" @input="validateEmailInput">
+                    v-model="currentAnswer" type="email" placeholder="Correu electrònic" @input="validateEmailInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
-                    v-model="currentAnswer" type="password" placeholder="Contraseña" @input="validatePassword">
+                    v-model="currentAnswer" type="password" placeholder="Contrasenya" @input="validatePassword">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom_usuari'"
-                    v-model="currentAnswer" type="text" placeholder="Nom usuari" maxlength="20">
+                    v-model="currentAnswer" type="text" placeholder="Nom d'usuari" maxlength="20">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom'"
                     v-model="currentAnswer" type="text" placeholder="Nom" @input="validateNameInput" maxlength="25">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
@@ -41,7 +41,7 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'"
                     v-model="currentAnswer" type="text" placeholder="Pes (kg)" @input="validatePesInput" maxlength="6">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
-                    v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
+                    v-model="currentAnswer" type="tel" placeholder="Numero de telèfon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date" @input="validateDate">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
@@ -108,7 +108,7 @@ export default {
 
             registrationQuestions: [
                 {
-                    question: "Quin es el teu correu electronic?",
+                    question: "Quin es el teu correu electrònic?",
                     inputType: 'email',
                     required: true,
 
@@ -131,7 +131,7 @@ export default {
 
                 },
                 {
-                    question: "Quin es el teus cognoms?",
+                    question: "Quins son els teus cognoms?",
                     inputType: 'cognoms',
                     required: true,
 
@@ -143,7 +143,7 @@ export default {
                     respuesta: ['Home', 'Dona', 'Altres'],
                 },
                 {
-                    question: "Quin es la teva data de naixement?",
+                    question: "Quina es la teva data de naixement?",
                     inputType: 'data_naixement',
                 },
                 {
@@ -155,7 +155,7 @@ export default {
                     inputType: 'pes',
                 },
                 {
-                    question: "Quin es el teu numero de telefon?",
+                    question: "Quin es el teu numero de telèfon?",
                     inputType: 'telefon',
                 }
 

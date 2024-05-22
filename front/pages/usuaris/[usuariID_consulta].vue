@@ -12,11 +12,11 @@
                 <p><strong>Génere:</strong> {{ usuario.genere }}</p>
                 <p><strong>Pes:</strong> {{ usuario.pes }}</p>
                 <p><strong>Altura:</strong> {{ usuario.altura }}</p>
-                <p><strong>Teléfon:</strong> {{ usuario.telefon }}</p>
+                <p><strong>Telèfon:</strong> {{ usuario.telefon }}</p>
                 <p><strong>Tipus d'Usuari:</strong> {{ usuario.tipus }}</p>
 
 
-                <button class="borrar-button" @click="borrarUsuari(usuario.id)">Borrar Usuari</button>
+                <button class="borrar-button" @click="borrarUsuari(usuario.id)">Esborrar Usuari</button>
                 <button class="rutina-button" @click="anarRutina(usuario.id)" >Rutines Usuari</button>
                 <button class="dieta-button" @click="anarDieta(usuario.id)" >Dietes Usuari</button>
                 <button class="tornar-button" @click="tornar()">Tornar</button>
