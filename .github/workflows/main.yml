@@ -14,50 +14,6 @@ jobs:
       - name: Obtenint el codi del respositori
         uses: actions/checkout@v2
 
-      # Configuración de Laravel
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: mbstring, xml, zip, pdo, pdo_mysql, gd
-
-      - name: Install system dependencies for Laravel
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev zip unzip git libonig-dev libxml2-dev
-          composer self-update
-
-      - name: Install Composer dependencies
-        run: composer install
-        working-directory: ./back
-
-      - name: Set up Laravel environment
-        run: |
-          cp .env.example .env
-          php artisan key:generate
-        working-directory: ./back
-
-      - name: Update .env for Production Database
-        run: |
-          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=${{ secrets.PROD_DB_HOST }}/' .env
-          sed -i 's/DB_DATABASE=homestead/DB_DATABASE=${{ secrets.PROD_DB_NAME }}/' .env
-          sed -i 's/DB_USERNAME=homestead/DB_USERNAME=${{ secrets.PROD_DB_USER }}/' .env
-          sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=${{ secrets.PROD_DB_PASS }}/' .env
-        working-directory: ./back
-
-      - name: Test Database Connection
-        run: |
-          sudo apt-get install -y mysql-client
-          mysql -h ${{ secrets.PROD_DB_HOST }} -u ${{ secrets.PROD_DB_USER }} -p${{ secrets.PROD_DB_PASS }} -e "SHOW DATABASES;"
-          
-      - name: Run Laravel migrations and seeders
-        run: php artisan migrate:refresh 
-        working-directory: ./back
-
-      - name: Start Laravel server
-        run: php artisan serve --host=0.0.0.0 --port=8000 &
-        working-directory: ./back
-
       # Configuración de Nuxt
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -72,21 +28,12 @@ jobs:
         run: npm run build
         working-directory: ./front
 
-      - name: Start Nuxt server
-        run: npm run dev &
-        working-directory: ./front
-
-      - name: Verificar la aplicación Laravel
-        run: curl -f http://localhost:8000 || exit 1
-
-      - name: Verificar la aplicación Nuxt
-        run: curl -f http://localhost:3000 || exit 1
-
       # Subida a producción
-      - name: Subir a producción con SCP
+      - name: Subir el build de Nuxt y la carpeta back a producción con SCP
         run: |
           echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
           chmod 600 ~/prod_key.pem
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./front/dist/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a16miqbargim/web/actions.a16miqbargim.daw.inspedralbes.cat/public_html/
-
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./front/dist/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/public_html/
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./back/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/api/
+          
       - run: echo "🍏 This job's status is ${{ job.status }}."
