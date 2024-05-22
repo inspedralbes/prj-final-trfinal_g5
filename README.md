@@ -32,8 +32,10 @@ Actualment, el projecte es troba en fase de desenvolupament i no disposa d'una U
 ## Estat
 El projecte es troba en una fase de desenvolupament. S'ha configurat l'entorn Docker per a desplegar-lo fàcilment en mode de desenvolupament.
 
+## Manual d'Instal·lació / Desplegament
+El nostre projecte es facil d'instal·lar i de desplegar. Només has de fer un git clone del nostre repositori i despres utilitzar docker
 ### Docker & Docker Compose
-Per desplegar el projecte en mode desenvolupament, executeu lo següent comanda de Docker Compose:
+Per desplegar el projecte executeu lo següent comanda de Docker Compose:
 
 ```bash
 docker login
