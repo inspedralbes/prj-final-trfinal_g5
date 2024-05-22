@@ -15,103 +15,101 @@ use App\Models\Solicitud;
 
 
 
-class UserController extends Controller
+class UserController extends Controller{
 
-{
-    public function registre(Request $request)
-{
-    try {
-        $validator = $request->validate([
-            'email' => 'required|string|email|max:255|unique:usuaris',
-            'contrasenya' => 'required|string|min:6',
-            // 'tipus' => 'string',
-            'nom_usuari' => 'required|string|max:255|unique:usuaris',
-            'nom' => 'required|string|max:255',
-            'cognoms' => 'required|string|max:255',
-            'data_naixement' => 'date',
-            'genere' => 'string',
-            'pes' => 'numeric',
-            'altura' => 'numeric',
-            'telefon' => 'integer|digits:9',
+    public function registre(Request $request){
+        try {
+            $validator = $request->validate([
+                'email' => 'required|string|email|max:255|unique:usuaris',
+                'contrasenya' => 'required|string|min:6',
+                // 'tipus' => 'string',
+                'nom_usuari' => 'required|string|max:255|unique:usuaris',
+                'nom' => 'required|string|max:255',
+                'cognoms' => 'required|string|max:255',
+                'data_naixement' => 'date',
+                'genere' => 'string',
+                'pes' => 'numeric',
+                'altura' => 'numeric',
+                'telefon' => 'integer|digits:9',
+                
+            ]);
+
+            $usuari = new Usuaris();
+            $usuari->email = $request->email;
+            $usuari->contrasenya = Hash::make($request->contrasenya);
+            $usuari->nom_usuari = $request->nom_usuari;
+            $usuari->nom = $request->nom;
+            $usuari->cognoms = $request->cognoms;
+
+            if ($request->has('data_naixement')) {
+                $usuari->data_naixement = $request->data_naixement;
+            }
+            if ($request->has('genere')) {
+                $usuari->genere = $request->genere;
+            }
+
+            if ($request->has('tipus')) {
+                $usuari->tipus = $request->tipus;
+            }
+
+            if ($request->has('pes')) {
+                $usuari->pes = $request->pes;
+            }
+
+            if ($request->has('altura')) {
+                $usuari->altura = $request->altura;
+            }
+
+            if ($request->has('telefon')) {
+                $usuari->telefon = $request->telefon;
+            }
             
-        ]);
+            // Verificar si todos los campos necesarios están presentes y no están vacíos
+            if ($request->filled(['email', 'contrasenya','nom', 'nom_usuari', 'cognoms', 'data_naixement', 'genere','pes','altura','telefon'])) {
+                $usuari->registre = true;
+            }
+            else{
+                $usuari->registre = false;
+            }
+            $usuari->tipus = ($usuari->email == "a20aitbaresc@inspedralbes.cat" ||
+            $usuari->email == "a16miqbargim@inspedralbes.cat"|| 
+            $usuari->email == "a21aledelfel@inspedralbes.cat" || 
+            $usuari->email == "a22erirodnos@inspedralbes.cat") ? "admin" : "usuari";
 
-        $usuari = new Usuaris();
-        $usuari->email = $request->email;
-        $usuari->contrasenya = Hash::make($request->contrasenya);
-        $usuari->nom_usuari = $request->nom_usuari;
-        $usuari->nom = $request->nom;
-        $usuari->cognoms = $request->cognoms;
 
-        if ($request->has('data_naixement')) {
-            $usuari->data_naixement = $request->data_naixement;
+            $usuari->save();
+            // \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
+
+            $idUsuario = $usuari->id;
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Usuari creat correctament',
+                'idUsuario' => $idUsuario,
+                'telefon' => $usuari->telefon,
+                'tipus' => $usuari->tipus,
+                'data_naixement' => $usuari->data_naixement,
+                'genere' => $usuari->genere,
+                'pes' => $usuari->pes,
+                'altura' => $usuari->altura,
+                'registre' => $usuari->registre
+            ]);
+        } catch (ValidationException $e) {
+            // Captura las excepciones de validación y obtén los mensajes de error
+            $errors = $e->errors();
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error en el registro: ' . implode(', ', Arr::flatten($errors))
+            ]);
+        } catch (\Exception $e) {
+            // Captura otras excepciones y proporciona un mensaje de error general
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error en el registro: ' . $e->getMessage()
+            ]);
         }
-        if ($request->has('genere')) {
-            $usuari->genere = $request->genere;
-        }
-
-        if ($request->has('tipus')) {
-            $usuari->tipus = $request->tipus;
-        }
-
-        if ($request->has('pes')) {
-            $usuari->pes = $request->pes;
-        }
-
-        if ($request->has('altura')) {
-            $usuari->altura = $request->altura;
-        }
-
-        if ($request->has('telefon')) {
-            $usuari->telefon = $request->telefon;
-        }
-        
-        // Verificar si todos los campos necesarios están presentes y no están vacíos
-        if ($request->filled(['email', 'contrasenya','nom', 'nom_usuari', 'cognoms', 'data_naixement', 'genere','pes','altura','telefon'])) {
-            $usuari->registre = true;
-        }
-        else{
-            $usuari->registre = false;
-        }
-        $usuari->tipus = ($usuari->email == "a20aitbaresc@inspedralbes.cat" ||
-        $usuari->email == "a16miqbargim@inspedralbes.cat"|| 
-        $usuari->email == "a21aledelfel@inspedralbes.cat" || 
-        $usuari->email == "a22erirodnos@inspedralbes.cat") ? "admin" : "usuari";
-
-
-        $usuari->save();
-        // \Mail::to($usuari->email)->send(new RegistroCorreo($usuari));
-
-        $idUsuario = $usuari->id;
-
-        return response()->json([
-            'status' => 1,
-            'message' => 'Usuari creat correctament',
-            'idUsuario' => $idUsuario,
-            'telefon' => $usuari->telefon,
-            'tipus' => $usuari->tipus,
-            'data_naixement' => $usuari->data_naixement,
-            'genere' => $usuari->genere,
-            'pes' => $usuari->pes,
-            'altura' => $usuari->altura,
-            'registre' => $usuari->registre
-        ]);
-    } catch (ValidationException $e) {
-        // Captura las excepciones de validación y obtén los mensajes de error
-        $errors = $e->errors();
-
-        return response()->json([
-            'status' => 0,
-            'message' => 'Error en el registro: ' . implode(', ', Arr::flatten($errors))
-        ]);
-    } catch (\Exception $e) {
-        // Captura otras excepciones y proporciona un mensaje de error general
-        return response()->json([
-            'status' => 0,
-            'message' => 'Error en el registro: ' . $e->getMessage()
-        ]);
     }
-}
 
     public function loguejat(Request $request){
         $request->validate([
@@ -149,8 +147,7 @@ class UserController extends Controller
     }
     
 
-    public function mostrarUsuario(Request $request, string $id)
-    {
+    public function mostrarUsuario(Request $request, string $id){
         $usuario = Usuaris::find($id);
 
         if ($usuario) {
@@ -172,20 +169,20 @@ class UserController extends Controller
             ->orWhere('nom', 'LIKE', '%' . $nombre . '%')
             ->first();
 
-    if ($usuario) {
-        return response()->json([
-            'status' => 1,
-            'usuario' => $usuario
-        ]);
-    } else {
-        return response()->json([
-            'status' => 0,
-            'message' => 'No se encontró ningún usuario'
-        ]);
+        if ($usuario) {
+            return response()->json([
+                'status' => 1,
+                'usuario' => $usuario
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No se encontró ningún usuario'
+            ]);
+        }
     }
-}
-    public function comprovarCorreuUsuari(Request $request)
-    {
+
+    public function comprovarCorreuUsuari(Request $request){
         $request->validate([
             'email' => 'required|string|email|max:255',
         ]);
@@ -204,8 +201,8 @@ class UserController extends Controller
             ]);
         }
     }
-    public function comprovarNomUsuari(Request $request)
-    {
+
+    public function comprovarNomUsuari(Request $request){
         $request->validate([
             'nom_usuari' => 'required|string|max:255',
         ]);
@@ -225,8 +222,8 @@ class UserController extends Controller
             ]);
         }
     }
-    public function editarUsuari(Request $request, $id)
-    {   
+
+    public function editarUsuari(Request $request, $id){   
         // Validación de los datos recibidos en la solicitud
         $validator = Validator::make($request->all(), [
             'nom' => 'sometimes|string|max:255',
@@ -309,8 +306,7 @@ class UserController extends Controller
         
     }
     
-    public function listarUsuaris()
-    {
+    public function listarUsuaris(){
         try {
             $usuaris = Usuaris::all();
             return response()->json([
@@ -338,59 +334,57 @@ class UserController extends Controller
         }
     }
     
-    public function mostrarUsuariosExceptoYo(Request $request, $idUsuario)
-    {
-      // Busca el usuario por el ID proporcionado desde el frontend
-      $usuario = Usuaris::find($idUsuario);
+    public function mostrarUsuariosExceptoYo(Request $request, $idUsuario){
+        // Busca el usuario por el ID proporcionado desde el frontend
+        $usuario = Usuaris::find($idUsuario);
 
-      if (!$usuario) {
+        if (!$usuario) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Usuario no encontrado'
+            ]);
+        }
+
+        // Obtenemos la lista de IDs de amigos del usuario
+        $amigosIds = $usuario->amics ? json_decode($usuario->amics, true) : [];
+
+        // Obtenemos la lista de IDs de usuarios a los que se les ha enviado una solicitud de amistad
+        $solicitudesEnviadasIds = Solicitud::where('usuario_envia_id', $idUsuario)
+                                            ->pluck('usuario_recibe_id')
+                                            ->toArray();
+
+        // Unimos las listas de amigos y usuarios a los que se les ha enviado solicitud
+        $usuariosExcluidosIds = array_merge($amigosIds, $solicitudesEnviadasIds);
+
+        // Buscamos todos los usuarios excepto el usuario actual y los usuarios excluidos
+        $usuarios = Usuaris::select('nom', 'nom_usuari', 'cognoms','foto_perfil','id')
+                            ->where('id', '!=', $idUsuario)
+                            ->whereNotIn('id', $usuariosExcluidosIds)
+                            ->get();
+
+        if ($usuarios->isEmpty()) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No se encontraron otros usuarios.'
+            ]);
+        }
+
+        // Retorna la lista de usuarios excepto el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud
         return response()->json([
-            'status' => 0,
-            'message' => 'Usuario no encontrado'
+            'status' => 1,
+            'message' => 'Usuarios excluyendo el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud.',
+            'usuarios' => $usuarios
         ]);
-      }
-
-      // Obtenemos la lista de IDs de amigos del usuario
-      $amigosIds = $usuario->amics ? json_decode($usuario->amics, true) : [];
-
-      // Obtenemos la lista de IDs de usuarios a los que se les ha enviado una solicitud de amistad
-      $solicitudesEnviadasIds = Solicitud::where('usuario_envia_id', $idUsuario)
-                                        ->pluck('usuario_recibe_id')
-                                        ->toArray();
-
-      // Unimos las listas de amigos y usuarios a los que se les ha enviado solicitud
-      $usuariosExcluidosIds = array_merge($amigosIds, $solicitudesEnviadasIds);
-
-      // Buscamos todos los usuarios excepto el usuario actual y los usuarios excluidos
-      $usuarios = Usuaris::select('nom', 'nom_usuari', 'cognoms','foto_perfil','id')
-                        ->where('id', '!=', $idUsuario)
-                        ->whereNotIn('id', $usuariosExcluidosIds)
-                        ->get();
-
-      if ($usuarios->isEmpty()) {
-          return response()->json([
-              'status' => 0,
-              'message' => 'No se encontraron otros usuarios.'
-          ]);
-      }
-
-      // Retorna la lista de usuarios excepto el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud
-      return response()->json([
-          'status' => 1,
-          'message' => 'Usuarios excluyendo el usuario proporcionado, tus amigos y usuarios a los que se les ha enviado solicitud.',
-          'usuarios' => $usuarios
-      ]);
-  }
+    }
 
 
 
-     public function getUsers(Request $request) {
+    public function getUsers(Request $request) {
           $users = Usuaris::all();
           return response()->json($users);
-     }
+    }
 
-     public function getAmics(Request $request, string $id)
-    {
+    public function getAmics(Request $request, string $id){
       // Busca al usuario por su ID
       $usuario = Usuaris::find($id);
 

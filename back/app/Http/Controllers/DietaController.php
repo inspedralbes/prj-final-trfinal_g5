@@ -11,8 +11,7 @@ use Carbon\Carbon;
 
 class DietaController extends Controller
 {
-    public function getDietas(Request $request, $id)
-    {
+    public function getDietas(Request $request, $id){
         $dietas = Dieta::where('id_usuari', $id)->get();
         return response()->json($dietas);
     }
@@ -22,8 +21,7 @@ class DietaController extends Controller
     //     return response()->json($dieta);
     // }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         DB::beginTransaction();
     
         try {
@@ -71,8 +69,7 @@ class DietaController extends Controller
     }    
 
 
-    public function delete (Request $request, $id)
-    {
+    public function delete (Request $request, $id){
         try {
             // Encuentra y elimina todas las dietas asociadas al ID de usuario
             Dieta::where('id_usuari', $id_usuari)->delete();
@@ -83,8 +80,7 @@ class DietaController extends Controller
         }
     }
 
-    public function destroyToday($id)
-    {
+    public function destroyToday($id){
         try {
             $today = Carbon::today()->toDateString();
             Dieta::where('id_usuari', $id)
@@ -97,8 +93,7 @@ class DietaController extends Controller
         }
     }
 
-    public function destroyByDate($id_usuari, $fecha)
-    {
+    public function destroyByDate($id_usuari, $fecha){
         try {
             Dieta::where('id_usuari', $id_usuari)
                   ->whereDate('data_inici', $fecha)
