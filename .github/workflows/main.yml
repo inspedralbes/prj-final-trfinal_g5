@@ -39,6 +39,6 @@ jobs:
           echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
           chmod 600 ~/prod_key.pem
           scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./front/.output/public/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/public_html/
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./back/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/api/
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./back/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/public_html/
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
