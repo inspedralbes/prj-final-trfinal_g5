@@ -36,7 +36,7 @@
                                         class="imagen-chat">
                                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
                                     <div class="hora-container">
-                                        <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
+                                        <span class="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
 
                                     </div>
                                 </div>
@@ -49,7 +49,7 @@
                                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
 
                                     <div class="hora-container">
-                                        <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
+                                        <span class="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
 
                                     </div>
                                 </template>
@@ -64,7 +64,7 @@
                                     </div>
                                     <button id="guardar-rutina" @click="GuardarRutina(usuarioActual, rutinas2)">Guardar
                                         Rutina</button>
-                                    <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
+                                    <p class="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
                                 </div>
                                 <div v-if="mensaje.idDieta">
                                     <p v-if="mensaje.idDieta">Dieta</p>
@@ -72,7 +72,7 @@
                                         <div v-for="(plat, index) in dietas2" :key="index">
                                             <p>{{ plat.nom_plat }}</p>
                                         </div>
-                                        <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
+                                        <p class="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
 
                                     </div>
                                 </div>
@@ -84,7 +84,7 @@
 
                                     <div id="mensaje-texto"> {{ mensaje.mensaje }}</div>
                                     <div class="hora-container">
-                                        <!-- <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span> -->
+                                        <span class="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
 
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@
 
                                     </div>
                                     <div class="hora-container">
-                                        <span id="hora-missatge-enviat">{{ formatDate(mensaje.created_at) }}</span>
+                                        <span class="hora-missatge-enviat">{{ formatDate(mensaje.created_at) }}</span>
 
                                     </div>
 
@@ -110,18 +110,21 @@
                                 :class="{ 'mensaje-recibido': message.username === usuario.nom, 'mensaje-enviado': message.username !== usuario.nom }">
                                 <div
                                     :class="{ 'mensaje-recibido-container': message.username === usuario.nom, 'mensaje-texto-container': message.username !== usuario.nom }">
-    
-                                    {{ message.text }}
-                                    
+
+                                    {{ message.text }} 
+
                                 </div>
-    
+                                <div class="hora-container">
+                                    <span :class="{'hora-missatge': message.username === usuario.nom, 'hora-missatge-enviat': message.username !== usuario.nom}" >{{message.horaMensaje}}</span> 
+                                </div>
+
                             </div>
-    
+
                         </div>
                     </div>
                 </div>
 
-                
+
 
                 <!-- Controles inferiores -->
             </div>
@@ -209,9 +212,7 @@ export default {
             username: '' // Variable para almacenar el nombre de usuario
         };
     },
-    mounted() {
-        this.mostrarMensajes();
-    },
+    
 
     methods: {
         connectToSocket() {
@@ -227,19 +228,11 @@ export default {
             this.socket.on('message', (message) => {
                 // Agregar el mensaje recibido a la lista de mensajes
                 this.messages.push(message);
-                this.actualizarMensajes(message);
+                //this.actualizarMensajes(message);
             });
             this.connectedSockets = true;
         },
-        sendMessage() {
-            if (this.newMessage.trim()) {
-                this.socket.emit('message', {
-                    username: this.username,
-                    text: this.newMessage
-                });
-                this.newMessage = '';
-            }
-        },
+
         async enviarMensaje() {
             try {
                 this.isSaving = true;
@@ -300,7 +293,7 @@ export default {
                     console.log('Mensaje enviado:', mensaje);
 
 
-                    await this.mostrarMensajes();
+                    //await this.mostrarMensajes();
                 } else {
                     // Manejar el caso de error al enviar el mensaje
                     console.error('Error al enviar el mensaje:', responseData.message);
@@ -961,7 +954,7 @@ video {
 
 }
 
-#hora-missatge {
+.hora-missatge {
     font-size: .60em;
     font-style: italic;
     color: #333;
@@ -972,7 +965,7 @@ video {
 
 }
 
-#hora-missatge-enviat {
+.hora-missatge-enviat {
     font-size: .60em;
     font-style: italic;
     color: #333;

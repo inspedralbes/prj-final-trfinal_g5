@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 
 const usersConectados: { id: string, username: string }[] = [];
-const messages: { id: number, username: string, text: string }[] = [];
+const messages: { id: number, username: string, text: string, horaMensaje: string }[] = [];
 
 const server = createServer(app);
 const io = new Server(server, {
@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('message', (data) => {
-        const message = { id: Date.now(), username: data.username, text: data.text };
+        const message = { id: Date.now(), username: data.username, text: data.text, horaMensaje: data.horaMensaje};
         messages.push(message);
         io.emit('message', message);
         console.log('Mensaje:', message);
