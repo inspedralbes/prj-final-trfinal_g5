@@ -62,11 +62,12 @@
                                 @input="validateInput($event, 'lesio')" maxlength="255"></textarea>
                         </div>
                     </div>
-                    
+
                     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-                    <button type="submit" class="large-button">Guardar</button>
-                    
-                    <button type="button" class="large-button logout-button" @click="desloguearUsuario">Desloguejar</button>
+                    <button type="submit" class="large-button" @click="redirectToHome">Guardar</button>
+
+                    <button type="button" class="large-button logout-button"
+                        @click="desloguearUsuario">Desloguejar</button>
                 </form>
                 <navBar />
 
@@ -106,6 +107,9 @@ export default {
         this.obtenerDatosUsuario();
     },
     methods: {
+        redirectToHome() {
+            this.$router.push({ path: '/home' }); // Redirige a la página principal (home)
+        },
         obtenerDatosUsuario() {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
@@ -457,7 +461,8 @@ textarea {
 }
 
 .logout-button {
-    background-color: #FF4500; /* Puedes elegir el color que prefieras */
+    background-color: #FF4500;
+    /* Puedes elegir el color que prefieras */
     margin-top: 30px;
     width: 50%;
     margin-bottom: -20px;
