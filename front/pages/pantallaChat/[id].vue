@@ -107,15 +107,16 @@
                     <div class="mensajes-container" v-if="connectedSockets">
                         <div class="mensaje-container" v-for="message in messages" :key="message.id">
                             <div
-                                :class="{ 'mensaje-recibido': message.username === usuario.nom, 'mensaje-enviado': message.username !== usuario.nom }">
+                                :class="{ 'mensaje-recibido': message.username === useUsuariPerfilStore().id_usuari, 'mensaje-enviado': message.username !== useUsuariPerfilStore().id_usuari }">
                                 <div
-                                    :class="{ 'mensaje-recibido-container': message.username === usuario.nom, 'mensaje-texto-container': message.username !== usuario.nom }">
+                                    :class="{ 'mensaje-recibido-container': message.username === useUsuariPerfilStore().id_usuari, 'mensaje-texto-container': message.username !== useUsuariPerfilStore().id_usuari }">
 
-                                    {{ message.text }} 
+                                    {{ message.text }}
 
                                 </div>
                                 <div class="hora-container">
-                                    <span :class="{'hora-missatge': message.username === usuario.nom, 'hora-missatge-enviat': message.username !== usuario.nom}" >{{message.horaMensaje}}</span> 
+                                    <span
+                                        :class="{ 'hora-missatge': message.username === usuario.nom, 'hora-missatge-enviat': message.username !== usuario.nom }">{{ message.horaMensaje }}</span>
                                 </div>
 
                             </div>
@@ -212,25 +213,46 @@ export default {
             username: '' // Variable para almacenar el nombre de usuario
         };
     },
-    
+
 
     methods: {
         connectToSocket() {
-            this.username = useUsuariPerfilStore().nom_usuari;
-            console.log('Nombre de usuario:', this.username);
+            const id_usuario = useUsuariPerfilStore().id_usuari;
+            //const id_amic = useUsuariPerfilStore().amic;
+            //console.log('Nombre de usuario:', this.username);
             // Inicializar la conexión de sockets
             this.socket = this.$nuxtSocket({
                 name: 'main'
             });
             // Emitir un evento de 'Nuevo usuario' con el nombre de usuario al servidor
-            this.socket.emit('Nuevo usuario', this.username);
+            this.socket.emit('Nuevo usuario', id_usuario);
             // Escuchar el evento 'message' del servidor y agregar los mensajes recibidos al array de mensajes
             this.socket.on('message', (message) => {
                 // Agregar el mensaje recibido a la lista de mensajes
                 this.messages.push(message);
                 //this.actualizarMensajes(message);
             });
-            this.connectedSockets = true;
+           // this.connectedSockets = true;
+        },
+
+        async connectToRoomSocket() {
+            try {
+                this.socket = this.$nuxtSocket({
+                    name: 'room', // Nombre del socket de la sala
+                    query: {
+                        room: this.usuario.nom, // Nombre de la sala es el nombre del usuario por ahora
+                    },
+                });
+
+                // Escuchar eventos de mensaje solo para la sala actual
+                this.socket.on('message', (message) => {
+                    this.messages.push(message);
+                });
+
+                this.connectedSockets = true;
+            } catch (error) {
+                console.error('Error al conectar al socket de la sala:', error);
+            }
         },
 
         async enviarMensaje() {
@@ -240,6 +262,7 @@ export default {
                 const id_usuario = useUsuariPerfilStore().id_usuari;
                 const id_amic = useUsuariPerfilStore().amic;
                 const mensaje = this.mensaje;
+
 
                 // Verificar si tanto el mensaje como la imagen están vacíos
                 if (!this.mensaje.trim() && !this.imagenSeleccionada && !this.videoSeleccionado) {
@@ -286,10 +309,11 @@ export default {
 
                     // Enviar el mensaje al servidor a través de sockets
                     this.socket.emit('message', {
-                        username: this.username,
+                        username: id_usuario,
                         text: mensaje,
                         horaMensaje: horaMensaje, // Enviar la hora del mensaje
-                        room: this.username,
+                        sender: id_usuario,
+                        receiver: useUsuariPerfilStore().amic,
                     });
                     console.log('Mensaje enviado:', mensaje);
 
@@ -545,6 +569,9 @@ export default {
         this.mostrarAmigo();
         this.mostrarMensajes();
         this.connectToSocket();
+        this.connectToRoomSocket();
+        console.log('Datos pinia: ', useUsuariPerfilStore());
+
     },
     beforeRouteLeave(to, from, next) {
         // Deja el campo 'amic' del almacenamiento de Pinia como null al salir de la página
