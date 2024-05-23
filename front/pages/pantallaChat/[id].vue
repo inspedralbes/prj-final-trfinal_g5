@@ -288,7 +288,8 @@ export default {
                     this.socket.emit('message', {
                         username: this.username,
                         text: mensaje,
-                        horaMensaje: horaMensaje // Enviar la hora del mensaje
+                        horaMensaje: horaMensaje, // Enviar la hora del mensaje
+                        room: this.username,
                     });
                     console.log('Mensaje enviado:', mensaje);
 
