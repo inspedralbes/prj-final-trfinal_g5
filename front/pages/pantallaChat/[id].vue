@@ -1,6 +1,8 @@
 <template>
 
     <body>
+
+
         <div class="main-content">
             <div class="cabecera">
                 <!-- Mostrar foto de perfil del usuario -->
@@ -15,6 +17,7 @@
                 <!-- Cabecera del chat -->
                 <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange">
                 <input type="file" ref="videoInput" style="display: none;" @change="handleVideoChange">
+
 
                 <!-- Contenedor de mensajes -->
                 <div class="mensajes-container">
@@ -74,6 +77,8 @@
                                     </div>
                                 </div>
 
+
+
                                 <div class="mensaje-recibido-container"
                                     v-if="mensaje.usuario_envia_mensaje === usuario.id && !mensaje.idRutina && !mensaje.idDieta && !mensaje.video && !mensaje.imagen">
 
@@ -99,7 +104,24 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mensajes-container" v-if="connectedSockets">
+                        <div class="mensaje-container" v-for="message in messages" :key="message.id">
+                            <div
+                                :class="{ 'mensaje-recibido': message.username === usuario.nom, 'mensaje-enviado': message.username !== usuario.nom }">
+                                <div
+                                    :class="{ 'mensaje-recibido-container': message.username === usuario.nom, 'mensaje-texto-container': message.username !== usuario.nom }">
+    
+                                    {{ message.text }}
+                                    
+                                </div>
+    
+                            </div>
+    
+                        </div>
+                    </div>
                 </div>
+
+                
 
                 <!-- Controles inferiores -->
             </div>
@@ -167,6 +189,7 @@ import { useUsuariPerfilStore } from '@/stores/index';
 export default {
     data() {
         return {
+            connectedSockets: false,
             usuario: {}, // Objeto para almacenar la información del usuario
             mensajes: {}, // Objeto para almacenar los mensajes agrupados por día
             mensaje: '', // Variable para almacenar el mensaje escrito por el usuario
@@ -193,6 +216,7 @@ export default {
     methods: {
         connectToSocket() {
             this.username = useUsuariPerfilStore().nom_usuari;
+            console.log('Nombre de usuario:', this.username);
             // Inicializar la conexión de sockets
             this.socket = this.$nuxtSocket({
                 name: 'main'
@@ -205,6 +229,16 @@ export default {
                 this.messages.push(message);
                 this.actualizarMensajes(message);
             });
+            this.connectedSockets = true;
+        },
+        sendMessage() {
+            if (this.newMessage.trim()) {
+                this.socket.emit('message', {
+                    username: this.username,
+                    text: this.newMessage
+                });
+                this.newMessage = '';
+            }
         },
         async enviarMensaje() {
             try {
