@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="input-container">
-                            <label>Alergia/Intolerància:</label>
+                            <label>Al·lèrgies/Intoleràncies:</label>
                             <textarea placeholder="Introdueix la teva alergia o intolerencia (opcional)"
                                 v-model="usuario.alergia_intolerancia"
                                 @input="validateInput($event, 'alergia_intolerancia')" maxlength="255"></textarea>
@@ -67,7 +67,7 @@
                     <button type="submit" class="large-button" @click="redirectToHome">Guardar</button>
 
                     <button type="button" class="large-button logout-button"
-                        @click="desloguearUsuario">Desloguejar</button>
+                        @click="desloguearUsuario">Tanca Sessió</button>
                 </form>
                 <navBar />
 

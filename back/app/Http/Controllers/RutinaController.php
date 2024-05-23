@@ -52,7 +52,7 @@ class RutinaController extends Controller
     {
         $rutina = Rutina::where('id_usuari', $id_usuari)
             ->join('ejercicios', 'rutinas.id_exercici', '=', 'ejercicios.id')
-            ->select('rutinas.*', 'ejercicios.descripció', 'ejercicios.link')
+            ->select('rutinas.*', 'ejercicios.descripció', 'ejercicios.link','ejercicios.imatge')
             ->get();
     
         if ($rutina->isEmpty()) {
