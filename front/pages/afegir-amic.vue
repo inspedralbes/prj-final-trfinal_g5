@@ -17,7 +17,7 @@
         </div>
         <div v-for="usuario in usuariosFiltrados" :key="usuario.id" class="usuario-container">
           <div class="info-usuario">
-            <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Usuario"
+            <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Usuari"
               class="user-icon" />
             <div class="user-details">
               <p class="user-name">{{ usuario.nom }} {{ usuario.cognoms }}</p>
