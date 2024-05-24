@@ -2,13 +2,13 @@
     <div class="header-container">
         <div class="imgContainer">
             <div class="user-info">
-                <nuxt-link v-if="nom_usuari" :to="`/perfil/${nom_usuari}`">
+                <nuxt-link v-if="nom_usuari" :to="`/perfil/${username}`">
                     <div :class="{ 'user-icon-container': true, 'incomplete-profile': !registre }">
                         <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
                             class="user-icon" />
                     </div>
                 </nuxt-link>
-                <h1 id="nomUsuri">{{ nom_usuari }}</h1>
+                <h1 id="nomUsuri">{{ username }}</h1>
             </div>
             <div v-if="!registre" class="alert-sign">
                 !
@@ -38,6 +38,9 @@ export default {
         },
         registre() {
             return useUsuariPerfilStore().registre;
+        },
+        username() {
+            return useUsuariPerfilStore().username;
         }
     },
 }

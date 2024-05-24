@@ -17,17 +17,17 @@
                                 @input="capitalizeOnInput($event, 'cognoms')" maxlength="80">
                         </div>
                         <div class="input-container">
-                            <label>Correu electrònic:</label>
-                            <input type="email" placeholder="Correu electronic" v-model="usuario.email" disabled>
+                            <label>Nom d'usuari:</label>
+                            <input type="text" placeholder="Usuari" v-model="usuario.nom_usuari" maxlength="20">
                         </div>
                         <div class="input-container">
-                            <label>Telefon:</label>
+                            <label>Telèfon:</label>
                             <input type="tel" placeholder="ex: 123456789" v-model="usuario.telefon"
                                 @input="validatePhoneNumber" maxlength="9">
                         </div>
 
                         <div class="input-container">
-                            <label>Data naixement:</label>
+                            <label>Data de naixement:</label>
                             <input type="date" v-model="usuario.data_naixement" @change="validateFecha">
                         </div>
                         <div class="input-container">
@@ -42,7 +42,7 @@
                         <div class="input-container">
                             <label>Altura:</label><br>
                             <input type="text" v-model="usuario.altura" placeholder="Altura (cm)"
-                                @input="validateAltura"maxlength="4">
+                                @input="validateAltura" maxlength="4">
                         </div>
 
                         <div class="input-container">
@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="input-container">
-                            <label>Alergia/Intolerancia:</label>
+                            <label>Al·lèrgies/Intoleràncies:</label>
                             <textarea placeholder="Introdueix la teva alergia o intolerencia (opcional)"
                                 v-model="usuario.alergia_intolerancia"
                                 @input="validateInput($event, 'alergia_intolerancia')" maxlength="255"></textarea>
@@ -64,8 +64,10 @@
                     </div>
 
                     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-                    <button type="submit" class="large-button">Guardar</button>
+                    <button type="submit" class="large-button" @click="redirectToHome">Guardar</button>
 
+                    <button type="button" class="large-button logout-button"
+                        @click="desloguearUsuario">Tanca Sessió</button>
                 </form>
                 <navBar />
 
@@ -77,7 +79,6 @@
 
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
-import { getDatosUsuario } from '@/stores/communicationManager';
 
 export default {
     data() {
@@ -85,6 +86,7 @@ export default {
             usuario: {
                 nom: '',
                 cognoms: '',
+                nom_usuari: '',
                 email: '',
                 telefon: '',
                 data_naixement: '',
@@ -105,6 +107,9 @@ export default {
         this.obtenerDatosUsuario();
     },
     methods: {
+        redirectToHome() {
+            this.$router.push({ path: '/home' }); // Redirige a la página principal (home)
+        },
         obtenerDatosUsuario() {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
@@ -120,22 +125,64 @@ export default {
                 });
         },
         guardarDatosUsuario() {
-            // Verificar si ya se está guardando para evitar múltiples envíos
-            if (this.isSaving) return;
-
+            this.errorMessage = ''; // Limpiar el mensaje de error antes de guardar los datos
             // Verificar si hay errores de validación
             if (this.errorMessage) {
                 // Mostrar un mensaje de error y no continuar con el guardado
                 return;
             }
 
-            this.isSaving = true; // Establecer la variable de estado a true para indicar que se está guardando
+            // Verificar si los campos obligatorios están vacíos
+            if (!this.usuario.nom || !this.usuario.cognoms || !this.usuario.nom_usuari) {
+                this.errorMessage = "Els camps nom, cognoms i nom d'usuari són requerits.";
+                return;
+            }
 
+            // Verificar si el nom_usuari ha sido modificado y existe
+            if (this.usuario.nom_usuari !== this.datosOriginales.nom_usuari) {
+                this.comprobarNomUsuari();
+            } else {
+                // Si el nom_usuari no ha sido modificado o es el mismo que el original, continuar con el guardado
+                this.continuarGuardado();
+            }
+        },
+        async comprobarNomUsuari() {
+            // console.log(this.usuario.nom_usuari)
+            try {
+                const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/comprovarnomusuari', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nom_usuari: this.usuario.nom_usuari,
+                    }),
+                });
+                const data = await response.json();
+
+                // Verificar si el nom_usuari existe
+                if (data.status === 1) {
+                    // El nom_usuari ya existe, mostrar mensaje de error
+                    this.errorMessage = 'El nom d\'usuari ja existeix. Si us plau, tria un altre.';
+                } else if (data.status === 0) {
+                    // El nom_usuari no existe, continuar con el guardado
+                    this.continuarGuardado();
+                }
+            } catch (error) {
+                console.error('Error al comprobar el nom d\'usuari:', error);
+                this.errorMessage = 'S\'ha produït un error al comprovar el nom d\'usuari.';
+                this.isSaving = false; // Restablecer la variable de estado a false si hay un error
+            }
+        },
+
+
+        continuarGuardado() {
             // Si hay otros campos modificados además de la foto de perfil
             if (this.hayOtrosCamposModificados()) {
                 this.guardarDatosUsuarioSinFotoPerfil();
             }
         },
+
 
         hayOtrosCamposModificados() {
             // Verifica si hay otros campos modificados además de la foto de perfil
@@ -185,6 +232,9 @@ export default {
                     // Verificar si el nombre ha sido modificado y actualizar la tienda solo si es así
                     if (this.usuario.nom) {
                         useUsuariPerfilStore().nom_usuari = this.usuario.nom;
+                    }
+                    if (this.usuario.nom_usuari) {
+                        useUsuariPerfilStore().username = this.usuario.nom_usuari;
                     }
 
                     // Actualizar los datos originales con los datos modificados
@@ -313,14 +363,24 @@ export default {
                     this.usuario[property] = event.target.value.replace(/[^A-Za-z0-9\s]/g, '');
                 }
             }
-        }
-
-
+        },
+        desloguearUsuario() {
+            const store = useUsuariPerfilStore();
+            store.id_usuari = '';
+            store.username = '';
+            store.nom_usuari = '';
+            store.registre = false;
+            store.foto_perfil = '';
+            store.email_usuari = '';
+            store.tipus_usuari = '';
+            this.$router.push('/');
+        },
     },
 };
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
+
 html,
 body {
     margin: 0;
@@ -346,18 +406,20 @@ body {
 
 
 .user-info-container {
-    margin-top: 5px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-    margin: auto;
+    grid-gap: 30px;
+    /* margin: auto; */
+    margin-left: 15px;
+    margin-top: -30px;
+    width: 90%;
 }
 
 input {
     background-color: transparent;
     padding: 2rem;
     margin-bottom: 2.5rem;
-    width: 160px;
+    width: 100%;
 
 }
 
@@ -394,8 +456,16 @@ textarea {
     background-color: #FFA500;
     border-radius: 50px;
     margin: auto;
-    margin-top: 60px;
+    margin-top: 30px;
 
+}
+
+.logout-button {
+    background-color: #FF4500;
+    /* Puedes elegir el color que prefieras */
+    margin-top: 30px;
+    width: 50%;
+    margin-bottom: -20px;
 }
 
 form {
@@ -406,7 +476,6 @@ form {
     padding-top: 40px;
     border-radius: 20px;
     margin-top: 0;
-    width: 85%;
     margin-bottom: 20px;
 }
 

@@ -12,13 +12,13 @@
                         <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
                             class="user-icon"@click="openFileInput" />
                     </div>
-                <h1>{{ nom_usuari }}</h1>
+                <!-- <h1>{{ username }}</h1> -->
             </div>
             <div v-if="!registre" class="alert-sign">
                 !
             </div>
             <div id="myProfile">
-                <h1>El meu perfil</h1>
+                <h1>Perfil de {{ username }}</h1>
             </div>
         </div>
     </div>
@@ -38,8 +38,8 @@ export default {
         };
     },
     computed: {
-        nom_usuari() {
-            return useUsuariPerfilStore().nom_usuari;
+        username() {
+            return useUsuariPerfilStore().username;
         },
         foto_perfil() {
             return useUsuariPerfilStore().foto_perfil;

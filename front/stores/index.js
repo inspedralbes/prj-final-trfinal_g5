@@ -4,9 +4,11 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
     const loguejat = ref(false);
     const tipus_usuari = ref("");
     const nom_usuari = ref("");
+    const amic= ref("");
     const cognoms = ref("");
     const id_usuari = ref("");
     const email_usuari = ref("");
+    const username = ref("");
     const foto_perfil = ref("");
     const altura = ref("");
     const pes = ref("");
@@ -16,6 +18,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
     const alergia_intolerancia = ref("");
     const telefon = ref("");
     const registre = ref(false);
+    const usuariID_consulta = ref("");
 
 
     function iniciarSesionExitoso() {
@@ -35,6 +38,7 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         cognoms.value = dades.cognoms;
         id_usuari.value = dades.id;
         email_usuari.value = dades.email;
+        username.value = dades.username;
         foto_perfil.value = dades.foto_perfil;
         altura.value = dades.altura;
         pes.value = dades.pes;
@@ -50,14 +54,17 @@ export const useUsuariPerfilStore = defineStore('usuariPerfil', () => {
         iniciarSesionExitoso,
         loguejat,
         tipus_usuari,
+        amic,
         nom_usuari,
         email_usuari,
         id_usuari,
         foto_perfil,
+        username,
         registre,
         registreIncomplet,
         registratExitosament,
         actualitzarDadesUsuari,
+        usuariID_consulta,
     };
 },
     {

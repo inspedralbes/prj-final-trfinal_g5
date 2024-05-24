@@ -8,6 +8,7 @@
             </div>
             <div class="button-container">
                 <button class="button button--secondary" @click="startRegistration">Començar Registre</button>
+                <button class="button button--secondary" @click="goToIniciarSesion">Iniciar sesió</button>
             </div>
         </div>
 
@@ -26,9 +27,11 @@
                 <input v-if="registrationQuestions[currentQuestionIndex].inputType === 'textarea'"
                     v-model="currentAnswer" placeholder="Escribe tu respuesta"></input>
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'email'"
-                    v-model="currentAnswer" type="email" placeholder="Correu electronic" @input="validateEmailInput">
+                    v-model="currentAnswer" type="email" placeholder="Correu electrònic" @input="validateEmailInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'contrasenya'"
-                    v-model="currentAnswer" type="password" placeholder="Contraseña" @input="validatePassword">
+                    v-model="currentAnswer" type="password" placeholder="Contrasenya" @input="validatePassword">
+                <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom_usuari'"
+                    v-model="currentAnswer" type="text" placeholder="Nom d'usuari" maxlength="20">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'nom'"
                     v-model="currentAnswer" type="text" placeholder="Nom" @input="validateNameInput" maxlength="25">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'cognoms'"
@@ -39,7 +42,7 @@
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'pes'"
                     v-model="currentAnswer" type="text" placeholder="Pes (kg)" @input="validatePesInput" maxlength="6">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'telefon'"
-                    v-model="currentAnswer" type="tel" placeholder="Numero de telefon" @input="validateTelefonInput">
+                    v-model="currentAnswer" type="tel" placeholder="Numero de telèfon" @input="validateTelefonInput">
                 <input v-else-if="registrationQuestions[currentQuestionIndex].inputType === 'data_naixement'"
                     v-model="currentAnswer" type="date" @input="validateDate">
                 <div v-if="registrationQuestions[currentQuestionIndex].inputType === 'genere'">
@@ -91,6 +94,7 @@ export default {
             userData: {
                 email: "",
                 contrasenya: "",
+                nom_usuari: "",
                 nom: "",
                 cognoms: "",
                 data_naixement: "",
@@ -105,7 +109,7 @@ export default {
 
             registrationQuestions: [
                 {
-                    question: "Quin es el teu correu electronic?",
+                    question: "Quin es el teu correu electrònic?",
                     inputType: 'email',
                     required: true,
 
@@ -117,13 +121,18 @@ export default {
 
                 },
                 {
+                    question: "Quin es el teu nom d'usuari?",
+                    inputType: 'nom_usuari',
+                    required: true,
+                },
+                {
                     question: "Quin es el teu nom?",
                     inputType: 'nom',
                     required: true,
 
                 },
                 {
-                    question: "Quin es el teus cognoms?",
+                    question: "Quins son els teus cognoms?",
                     inputType: 'cognoms',
                     required: true,
 
@@ -135,7 +144,7 @@ export default {
                     respuesta: ['Home', 'Dona', 'Altres'],
                 },
                 {
-                    question: "Quin es la teva data de naixement?",
+                    question: "Quina es la teva data de naixement?",
                     inputType: 'data_naixement',
                 },
                 {
@@ -147,7 +156,7 @@ export default {
                     inputType: 'pes',
                 },
                 {
-                    question: "Quin es el teu numero de telefon?",
+                    question: "Quin es el teu numero de telèfon?",
                     inputType: 'telefon',
                 }
 
@@ -164,6 +173,9 @@ export default {
         startRegistration() {
             this.showStartButton = false;
             this.totalQuestions = this.registrationQuestions.length; // Establecer el número total de preguntas
+        },
+        goToIniciarSesion() {
+            this.$router.push('/');
         },
         async seguentPregunta() {
             // Obtener la pregunta actual
@@ -212,6 +224,33 @@ export default {
             }
 
             // Validar el correo electrónico si es la pregunta de correo electrónico
+            if (currentQuestion.inputType === 'nom_usuari') {
+
+                this.checkingEmail = true;
+                // Realizar la comprobación de correo electrónico solo si la respuesta no está vacía
+                const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/comprovarnomusuari', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nom_usuari: this.currentAnswer
+                    }),
+                });
+
+                this.checkingEmail = false;
+
+                // Convertir la respuesta a formato JSON
+                const responseData = await response.json();
+
+                // Si el correo ya existe, mostrar el mensaje de error y no avanzar
+                if (responseData.status === 1) {
+                    this.showErrorMessage = true;
+                    this.errorMessage = responseData.message;
+                    return;
+                }
+
+            }
             if (currentQuestion.inputType === 'email') {
                 this.validateEmailInput(); // Validar el correo electrónico
                 if (this.showErrorMessage) {
@@ -426,7 +465,7 @@ export default {
 
 
         async registerUser() {
-            // console.log(this.userData);
+            //console.log(this.userData);
             // Filtrar los campos que no estén vacíos
             const filteredUserData = Object.fromEntries(
                 Object.entries(this.userData).filter(([key, value]) => value !== "")
@@ -448,19 +487,21 @@ export default {
                 // Convertir la respuesta a formato JSON
                 const userDataResponse = await response.json();
 
-                // console.log(userDataResponse);
+                //console.log(userDataResponse);
 
                 // Verificar si alguno de los campos devueltos es null
                 const nullFields = Object.values(userDataResponse).some(value => value === null);
 
                 // Actualizar el estado 'registre' en la tienda Pinia
-                useUsuariPerfilStore().registre = !nullFields;
+                useUsuariPerfilStore().registre = userDataResponse.registre;
 
                 // Actualizar otros estados de la tienda Pinia si es necesario
                 useUsuariPerfilStore().nom_usuari = filteredUserData.nom;
+                useUsuariPerfilStore().username = filteredUserData.nom_usuari;
                 useUsuariPerfilStore().email_usuari = filteredUserData.email;
                 useUsuariPerfilStore().loguejat = true;
                 useUsuariPerfilStore().id_usuari = userDataResponse.idUsuario;
+                useUsuariPerfilStore().tipus_usuari = userDataResponse.tipus;
                 useUsuariPerfilStore().foto_perfil = "usuario.png";
 
                 // Redirigir a la página de inicio después del registro

@@ -1,4 +1,5 @@
 <template>
+
   <body>
     <div class="contenedor">
       <capçalera />
@@ -9,8 +10,7 @@
         <div class="chat">
           <!-- Mensajes de chat de usuario y asistente -->
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje"
-              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
+            
               <div class="info-usuario" v-if="message.role === 'user'">
                 <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
                   class="avatar-usuario" />
@@ -19,9 +19,9 @@
               <div class="contenido-mensaje">
                 <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
                   class="avatar-asistente" />
-                  <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
+                <p><strong v-if="message.role === 'assistant'">Arturo: </strong>{{ message.content }}</p>
               </div>
-            </div>
+            
           </div>
 
 
@@ -42,9 +42,13 @@
 
 
       <div class="controles-inferiores">
-        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-          placeholder="Escriu la teva consulta"></textarea>
-        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+        <div class="entrada-mensaje-container">
+          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escriure el teu missatge..."></textarea>
+
+          <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
+            <Icon id="send" name="i-ic:round-send"></Icon>
+          </button>
+        </div>
       </div>
       <navBar />
     </div>
@@ -61,46 +65,50 @@ const arbrePreguntes = {
   pregunta: "Quin tipus de dieta vols?",
   opcions: {
     Volum: {
-      pregunta: "Quants apats prefereixes fer al dia per a una dieta de volum?",
+      pregunta: "Quants àpats prefereixes fer al dia per a una dieta de volum?",
       opcions: {
-        "4": "Dieta de volum de 4 apats esmorzar, dinar, berenar, sopar"
+        "4": "Dieta de volum de 4 àpats esmorzar, dinar, berenar, sopar"
         ,
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta de volum de 5 apats esmorzar, segon esmorzar, dinar, berenar, sopar",
-            "Post-entrenament": "Dieta de volum de 5 apats esmorzar, dinar, berenar, Post-entrenament, sopar"
+
+            "Segon esmorzar": "Dieta de volum de 5 apats Esmorzar, Segon esmorzar, Dinar, Berenar, Sopar",
+            "Post-entrenament": "Dieta de volum de 5 apats Esmorzar, Dinar, Berenar, Post-entrenament, Sopar"
           }
         },
-        "6": "Dieta de volum de 6 apats esmorzar, segon esmorzar , dinar, berenar, Post-entrenament, sopar"
+        "6": "Dieta de volum de 6 apats Esmorzar, Segon esmorzar , Dinar, Berenar, Post-entrenament, Sopar"
       }
     },
     Definició: {
-      pregunta: "Quants apats prefereixes fer al dia per a una dieta de definició?",
+      pregunta: "Quants àpats prefereixes fer al dia per a una dieta de definició?",
       opcions: {
-        "4": "Dieta de definicío de 4 apats esmorzar, dinar, berenar, sopar",
+        "4": "Dieta de definicío de 4 apats Esmorzar, Dinar, Berenar, Sopar",
+
         "5": {
-          pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
+          pregunta: "Vols incloure un Segon esmorzar o un Post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta de definició amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
-            "Post-entrenament": "Dieta de definició amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+            "Segon esmorzar": "Dieta de definició amb 5 apats Esmorzar, Segon Esmorzar, Dinar, Berenar, Sopar",
+            "Post-entrenament": "Dieta de definició amb 5 apats: Esmorzar, Dinar, Post-entrenament, Berenar, Sopar."
           }
         },
-        "6": "Dieta de definició amb 6 apats: esmorzar, segon esmorzar, dinar, post-entrenament, sopar."
+        "6": "Dieta de definició amb 6 apats: Esmorzar, Segon Esmorzar, Dinar, Post-entrenament, Berenar, Sopar"
+
       }
     },
     Equilibrada: {
-      pregunta: "Quants apats prefereixes al dia per a una dieta equilibrada?",
+      pregunta: "Quants àpats prefereixes al dia per a una dieta equilibrada?",
       opcions: {
-        "4": "Dieta equilibrada amb 4 apats",
+        "4": "Dieta equilibrada amb 4 àpats",
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta de equilibrada amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
-            "Post-entrenament": "Dieta de equilibrada amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+            "Segon esmorzar": "Dieta equilibrada amb 5 apats: Esmorzar, Segon Esmorzar, Dinar, Berenar, Sopar",
+            "Post-entrenament": "Dieta equilibrada amb 5 apats: Esmorzar, Dinar, Post-entrenament, Berenar, Sopar"
+
           }
         },
-        "6": "Dieta equilibrada amb 6 apats"
+        "6": "Dieta equilibrada amb 6 àpats"
       }
     }
   }
@@ -154,13 +162,30 @@ export default {
         // Opcional: Llamar a enviarMensaje directamente si se desea enviar inmediatamente
         this.enviarMensaje();
       }
+    }, async obtenirDietaDeHoy(idUsuari) {
+      try {
+        const response = await getDieta(idUsuari);
+        const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        return response.some(dieta => new Date(dieta.data_inici).toISOString().split('T')[0] === today);
+      } catch (error) {
+        //console.error(error);
+        return false;
+      }
+    },
+    async borrarDietaDeHoy(idUsuari) {
+      try {
+        const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        const response = await deleteDietaByDate(idUsuari, today);
+        //console.log('Dietas de hoy eliminadas:', response);
+      } catch (error) {
+        //console.error('Error al eliminar las dietas de hoy:', error);
+      }
     },
     async enviarMensaje() {
       try {
         if (!this.message.trim()) {
           return;
         }
-
 
         if (this.chatMessages.length === 0) {
           document.querySelector('.mensaje-bienvenida').style.display = 'none';
@@ -169,43 +194,38 @@ export default {
           document.querySelector('.botones-preseleccionados').style.display = 'none';
         }
 
-
         this.chatMessages.push({
           role: 'user',
           content: this.message,
         });
 
-
-        const store = useUsuariPerfilStore();
-        const idUsuario = store.id_usuari;
-
-
         this.isLoading = true;
         this.isSending = true;
 
+        const store = useUsuariPerfilStore();
+        const idUsuario = store.id_usuari;
 
         const datosUsuario = await getDatosUsuario2(idUsuario);
         const aliments = await getDatosAliments();
         const generatedText = await enviarMensajeOpenAIDieta(this.message, datosUsuario, aliments);
 
-
-        // console.log(generatedText);
+        //console.log(generatedText);
 
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
+        // Comprueba si hoy ya hay una dieta y elimínala si existe
+        const existeDietaHoy = await this.obtenirDietaDeHoy(idUsuario);
+        if (existeDietaHoy) {
+          await this.borrarDietaDeHoy(idUsuario);
+        }
 
         await enviarDietaAlServidor(dietaJSON); // Enviar el JSON al backend
 
-
         // Construir el mensaje con la lista de apats y platos
         let mensajeDieta = '\nAquí tens la teva dieta:\n'; // Comienza el mensaje con la introducción
-
-
         dietaJSON.apats.forEach((apat) => {
           // Iterar sobre cada apat de la dieta
           mensajeDieta += `\n${apat.apat}:\n`; // Agregar el nombre del apat al mensaje
-
-
           apat.plats.forEach((plat) => {
             // Iterar sobre cada plat del apat
             mensajeDieta += `\n- ${plat.nom_plat} (proteines: ${plat.proteines}, carbohidrats: ${plat.carbohidrats}, greixos: ${plat.greixos}, calories: ${plat.calories})\n`;
@@ -217,16 +237,15 @@ export default {
           });
         });
 
-
         this.chatMessages.push({
           role: 'assistant',
           content: mensajeDieta,
         });
 
-
         this.message = '';
       } catch (error) {
-        // console.error('Error al enviar el mensaje:', error);
+        //console.error('Error al enviar el mensaje:', error);
+        alert('Error al enviar el missatje. Siusplau, tora-ho a intentar.');
         if (error.message.startsWith("HTTP error! status: 429")) {
           alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
         }
@@ -249,7 +268,8 @@ export default {
     },
   },
   mounted() {
-    this.usuario = localStorage.getItem('username');
+    const store = useUsuariPerfilStore();
+    this.usuario = store.nom_usuari;
     this.chatMessages.push({
       role: 'assistant',
       content: this.currentQuestion
@@ -273,17 +293,12 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-}
-
-
-body {
-  /* Establecer la fuente predeterminada */
   background: linear-gradient(to top right, #FFA500, #f45c36);
 
-
-  /* Color de fondo */
-  height: 100vh;
 }
+
+
+
 
 
 .contenedor {
@@ -350,7 +365,7 @@ body {
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
   margin: auto;
-  margin-top: 60px;
+  margin-top: 60%;
   margin-bottom: 20px;
   width: 90%;
 
@@ -374,25 +389,6 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
   margin: auto;
-}
-
-
-.mensaje-asistente button.boton-preseleccionado {
-  background-color: #0000002f;
-  color: white;
-  border: 4px solid #1b1b1b23;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1em;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 4px;
-  width: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin: 10px 0;
 }
 
 
@@ -437,13 +433,18 @@ body {
 
 
 .mensaje-usuario {
-  background-color: #FFDAB9;
+  background-color: #fda65975;
   padding: 10px;
   border-radius: 25px;
   border-top-right-radius: 0;
   align-self: flex-end;
   margin-bottom: 8px;
+  word-wrap: break-word;
+  max-width: 90%;
+  
 }
+
+
 
 
 .mensaje-asistente {
@@ -453,8 +454,10 @@ body {
   padding: 10px;
   border-radius: 25px;
   border-bottom-left-radius: 0;
-  background-color: #c7ab92;
+  background-color: #757575a2;
   margin-right: 10%;
+  max-width: 70%;
+  word-wrap: break-word;
 }
 
 
@@ -478,7 +481,12 @@ body {
 
 
 .contenido-mensaje-asistente {
-  max-width: 100%;
+  
+  word-wrap: break-word;
+}
+
+.contenido-mensaje {
+  word-wrap: break-word;
 }
 
 
@@ -507,46 +515,63 @@ body {
 
 
 .controles-inferiores {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
 }
 
+.entrada-mensaje-container {
+    display: flex;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 5fr .1fr .1fr;
+    width: 90%;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #333;
+    margin-top: 10px;
+}
 
 .entrada-mensaje {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin: 10px 0;
-  box-sizing: border-box;
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 8px;
+    margin-left: 2px;
+    width: 95%;
+    padding-left: 10px;
+    padding-top: 10px;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    height: 35px;
+    overflow-y: hidden;
 }
-
 
 .boton-enviar {
-  background-color: #000;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  margin: 10px 10px 0;
-  width: calc(100% - 20px);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ccc;
+    color: white;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
 }
-
 
 .boton-enviar:hover {
-  background-color: #333;
+    background-color: #333;
 }
 
+#send {
+    width: 100%;
+    height: 100%;
+    margin-left: 2px;
+    color: #333;
+}
 
 navBar {
   position: fixed;

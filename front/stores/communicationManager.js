@@ -1,7 +1,7 @@
 // const url = 'http://localhost:8000/api';
 const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '1234567890';
+const apiKey = '';
 
 
 //ejemplo de peticion fetch get
@@ -37,7 +37,60 @@ export async function getDatosUsuario2(idUsuario) {
     }
     catch (error) {
         throw new Error('Error de red al obtener los datos del usuario: ' + error.message);
-    }  
+    }
+}
+
+
+export function getTotosUsuaris() {
+    return new Promise((resolve, reject) => {
+        fetch(`${url}/tots-usuaris`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    reject('Error al obtener los usuarios: ' + response.statusText);
+                }
+            })
+            .then(data => {
+                resolve(data);
+            })
+            .catch(error => {
+                reject('Error de red al obtener los usuarios: ' + error.message);
+            });
+    });
+}
+
+export async function getUsuariosChat(idUsuario) {
+    try {
+        const response = await fetch(`${url}/chatUsuaris/${idUsuario}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del usuario: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        //console.log('Datos recibidos del servidor:', data); // Agregar esta línea para verificar los datos recibidos
+        return data; // Devuelve los datos del usuario en JSON
+    }
+    catch (error) {
+        throw new Error('Error de red al obtener los datos del usuario: ' + error.message);
+    }
+}
+
+export async function getUsers() {
+    try {
+        const response = await fetch(`${url}/usuaris`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del usuario: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        //console.log('Datos recibidos del servidor:', data); // Agregar esta línea para verificar los datos recibidos
+        return data; // Devuelve los datos del usuario en JSON
+    }
+    catch (error) {
+        throw new Error('Error de red al obtener los datos del usuario: ' + error.message);
+    }
+
 }
 
 export async function getDatosEjercicio() {
@@ -46,8 +99,9 @@ export async function getDatosEjercicio() {
         if (!response.ok) {
             throw new Error('Error al obtener los datos del ejercicio: ' + response.statusText);
         }
-        
+
         const data = await response.json();
+       
         return data; // Devuelve los datos del ejercicio en JSON
     } catch (error) {
         throw new Error('Error de red al obtener los datos del ejercicio: ' + error.message);
@@ -69,9 +123,9 @@ export async function getDatosAliments() {
 }
 
 export async function getRutina(idUsuario) {
-    try{
+    try {
         const response = await fetch(`${url}/rutina/${idUsuario}`);
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error('Error al obtener los datos del ejercicio: ' + response.statusText);
         }
         const data = await response.json();
@@ -82,15 +136,33 @@ export async function getRutina(idUsuario) {
 }
 
 export async function getDieta(idUsuario) {
-    try{
+    try {
         const response = await fetch(`${url}/dieta/${idUsuario}`);
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error('Error al obtener los datos de la dieta: ' + response.statusText);
         }
         const data = await response.json();
         return data;
     } catch (error) {
         throw new Error('Error de red al obtener los datos de la dieta: ' + error.message);
+    }
+}
+
+export async function mostrarUltimoMensajeEllos(idUsuario, idAmigo) {
+    try {
+        const response = await fetch(`${url}/ultim-missatge/${idUsuario}/${idAmigo}`);
+        const responseData = await response.json();
+        //console.log(responseData);
+        if (responseData.status === 1) {
+            //console.log(responseData.message);
+
+            return responseData.message; // Devuelve el mensaje si se encontró uno
+        } else {
+            return ''; // Devuelve una cadena vacía si no se encontró ningún mensaje
+        }
+    } catch (error) {
+        console.error('Error al obtener el último mensaje entre los usuarios:', error);
+        return ''; // Devuelve una cadena vacía en caso de error
     }
 }
 
@@ -137,7 +209,7 @@ export async function enviarRutinaAlServidor(rutina) {
         }
 
         const data = await response.json();
-        // console.log('datos guardados correctamente');
+        //console.log('datos guardados correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al enviar la rutina al servidor: ' + error.message);
@@ -159,10 +231,35 @@ export async function enviarDietaAlServidor(rutina) {
         }
 
         const data = await response.json();
-        // console.log('datos guardados correctamente');
+        //console.log('datos guardados correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al enviar la rutina al servidor: ' + error.message);
+    }
+}
+
+export async function enviarSolicitudAmistad(usuarioEnviaId, usuarioRecibeId) {
+    try {
+        const response = await fetch(`${url}/enviar-solicitud`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                usuario_envia_id: usuarioEnviaId,
+                usuario_recibe_id: usuarioRecibeId,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al enviar la solicitud de amistad: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        //console.log('Solicitud de amistad enviada correctamente:', data);
+        return data;
+    } catch (error) {
+        throw new Error('Error al enviar la solicitud de amistad: ' + error.message);
     }
 }
 
@@ -184,6 +281,138 @@ export async function actualizarDatosUsuario(idUsuario, formData) {
     return data;
 }
 
+// fetch de delete
+
+export async function borrarRutina(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-rutina/${idUsuario}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar la rutina');
+        }
+
+        const data = await response.json();
+        //console.log('Rutina borrada correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar la rutina: ' + error.message);
+    }
+}
+
+export async function borrarRutinaDia(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-rutina-hoy/${idUsuario}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar la rutina');
+        }
+
+        const data = await response.json();
+        //console.log('Rutina borrada correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar la rutina: ' + error.message);
+    }
+}
+
+
+export async function borrarDieta(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-dieta/${idUsuario}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar la dieta');
+        }
+
+        const data = await response.json();
+        //console.log('Dieta borrada correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar la dieta: ' + error.message);
+    }
+}
+
+export async function borrarDietaHoy(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-dieta-hoy/${idUsuario}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar la dieta');
+        }
+
+        const data = await response.json();
+        //console.log('Dieta borrada correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar la dieta: ' + error.message);
+    }
+}
+
+export async function borrarUsuari(idUsuario) {
+    try {
+        const response = await fetch(`${url}/eliminar-usuari/${idUsuario}`, { // Ajusta la URL según tu backend
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al borrar el usuario');
+        }
+
+        const data = await response.json();
+        //console.log('Usuario borrado correctamente');
+        return data; // Puedes modificar esto si el servidor responde con algún dato específico
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
+}
+
+export async function deleteRutinaByDate(idUsuario, fecha) {
+    try {
+        const response = await fetch(`${url}/rutinas/${idUsuario}/${fecha}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al eliminar la rutina');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
+}
+
+export async function deleteDietaByDate(idUsuario, fecha) {
+    try {
+        const response = await fetch(`${url}/dietas/${idUsuario}/${fecha}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al eliminar la rutina');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw new Error('Error al borrar el usuario: ' + error.message);
+    }
+}
 
 //fetch para la api de openai
 
@@ -195,15 +424,16 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
             messages: [
                 {
                     role: 'system',
-                    content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb el fitness ja que ets un expert en fitness només tens permès parlar de fer rutines."+
-                    " Si et demanen alguna cosa que no sigui una rutina digues el següent: En aquest apartat només puc donar consells de nutrició i generar rutines. "+
-                    " Pots donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació."+
-                    " Nomes pots respondre amb format JSON quan i seguint aquesta estructura:"+
-                    " { id_usuari:'', dias:[{dia: '1', exercicis: [{'nom_exercici':'','series':'','repeticions':'','id_exercici':''},...]},...]}"+
-                    " Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis."+
-                    " Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret."+
-                    " Si en el missatge conte dies fes la rutina dels dies que et demanen; si no fes una rutina de 5 dies." +
-                    " Agafa les dades del usuari per fer rutines mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari.",
+                    content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb el fitness ja que ets un expert en fitness només tens permès parlar de fer rutines." +
+                        " Si et demanen alguna cosa que no sigui una rutina digues el següent: En aquest apartat només puc donar consells de nutrició i generar rutines. " +
+                        " Pots donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació." +
+                        " Nomes pots respondre amb format JSON quan i seguint aquesta estructura:" +
+                        " { id_usuari:'', dias:[{dia: '1', exercicis: [{'nom_exercici':'','series':'','repeticions':'','id_exercici':''},...]},...]}" +
+                        " Segueix aquesta estructura de JSON pero posa per dia un minim de 5 exercicis i un maxim de 7 exercicis." +
+                        " Fes un grup muscular per dia i no repetir exercicis en la mateixa rutina. A no ser que et digui el contrari o algo mes concret." +
+                        " Si  el missatge conte dades epsecifiques o informació agafa tota l'informació i crea la dieta; si no fes una rutina de 5 dies amb 5 musculs per dia i que sigui variada," +
+                        " Si en el missatge s'especifica quin tipus de rutina volen i els dies, fes-la com ho diuen. Si falta informacio fes 5 dies amb 5 musculs per dia variats" +
+                        " Agafa les dades del usuari per fer rutines mes personalitzades i tambe agafa el id del usuari per posarlo a id_usuari.",
                 },
                 {
                     role: 'system',
@@ -217,9 +447,9 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
                     role: 'user',
                     content: message
                 },
-                
+
             ]
-            
+
         };
 
         const response = await fetch(apiUrl, {
@@ -249,34 +479,33 @@ export async function enviarMensajeOpenAIRutina(message, ejercicios, daotsUsuari
 export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) {
     try {
         const payload = {
-            model: 'gpt-3.5-turbo',
+            model: 'gpt-4-turbo',
             messages: [
                 {
                     role: 'system',
-                    content: " Eres una persona que solo habla catalán y tienes prohibido hablar de nada que no esté relacionado con el fitness y la nutrición porque eres un experto en nutrición y fitness pero tienes muy prohibido hacer rutinas y dietas. "+
-                    " Si te piden una rutina di lo siguiente: En esta sección solo puedo dar consejos de nutrición y deporte si quieres generar rutinas ve a la sección de Rutinas y si quieres una dieta en la sección de Dietas. "+
-                    " Si puedes dar consejos y argumentos pero hacerlo de forma resumida en 2 líneas, que no te digan que quieren más información." +
-                    " Coje los alimentos y toda la información que encuentres en el json de alimentos para crear la dieta. " +
-                    " Sólo puedes responder con formato JSON y siguiendo esta estructura: "+
-                    " {id_usuari:'',apats:[apat:'',plats:[{nom_plat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',caloreis:''},],apat:'',plats:[nom_plat:'',...],apat:'',plats:[nom_plat:'',...]]}" +
-                    // " Si te piden definicion o adelgazar o definir, toma platos que sean para ello; si quieren volumen, ganar mucho músculo o ganar peso toma los platos necesarios para ello. Si no te especifican una dieta neutra" +
-                    " Coge los datos del usuario para hacer dietas más personalizadas y también coge el id del usuario para ponerlo en id_usuari."+
-                    " Crea dietas de 5 comidas al día y que sean equilibradas y saludables. Si te especifican algo más concreto hazlo de forma más concreta." +
-                    " Haz que las 5 comdias diarias sean: desayuno, segundo desayuno, comida, merienda y cena. " +
-                    " Para cada comida diaria ponle 3 platos para cada una de las 5 comidas. Si te piden algo más concreto hazlo de forma más concreta.",
-                    
+                    content: " Eres una persona que solo habla catalán y tienes prohibido hablar de nada que no esté relacionado con el fitness y la nutrición porque eres un experto en nutrición y fitness pero tienes muy prohibido hacer rutinas y dietas. " +
+                        " Si te piden una rutina di lo siguiente: En esta sección solo puedo dar consejos de nutrición y deporte si quieres generar rutinas ve a la sección de Rutinas y si quieres una dieta en la sección de Dietas. " +
+                        " Si puedes dar consejos y argumentos pero hacerlo de forma resumida en 2 líneas, que no te digan que quieren más información." +
+                        " Coje los alimentos y toda la información que encuentres en el json de alimentos para crear la dieta. " +
+                        " Sólo puedes responder con formato JSON y siguiendo esta estructura: " +
+                        " {id_usuari:'',apats:[apat:'',plats:[{nom_plat:'',ingredients:[nom_ingredient:'',quantitat:'',unitat:''],proteines:'',carbohidrats:'',greixos:'',calories:''},],apat:'',plats:[nom_plat:'',...],apat:'',plats:[nom_plat:'',...]]}" +
+                        // " Si te piden definicion o adelgazar o definir, toma platos que sean para ello; si quieren volumen, ganar mucho músculo o ganar peso toma los platos necesarios para ello. Si no te especifican una dieta neutra" +
+                        " Coge los datos del usuario para hacer dietas más personalizadas y también coge el id del usuario para ponerlo en id_usuari." +
+                        " Haz que las 5 comdias diarias sean: Desayuno, Segundo desayuno, Comida, Merienda y Cena. " +
+                        " Para cada comida diaria ponle 3 platos para cada una de las 5 comidas. Si te piden algo más concreto hazlo de forma más concreta."+
+                        " No pongas los platos que tengan el alimento que les de alergia basandote en la informacion del usuario",
                 },
                 {
-                    role: 'user',
-                    content: message
+                    role: 'system',
+                    content: JSON.stringify(aliments)
                 },
                 {
                     role: 'system',
                     content: JSON.stringify(datosUsuario)
                 },
                 {
-                    role: 'system',
-                    content: JSON.stringify(aliments)
+                    role: 'user',
+                    content: message
                 },
             ]
         };
@@ -296,10 +525,8 @@ export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) 
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-
         const data = await response.json();
         const generatedText = data.choices[0].message.content;
-
 
         return generatedText;
     } catch (error) {
@@ -311,11 +538,14 @@ export async function enviarMensajeOpenAIDieta(message, aliments, datosUsuario) 
 export async function enviarMensajeOpenAI(message) {
     try {
         const payload = {
-            model: 'gpt-3.5-turbo',
+            model: 'gpt-4-turbo',
             messages: [
                 {
                     role: 'system',
-                    content: "Ets una persona que només parla en català i tens prohibit parlar d'alguna cosa que no tingui relació amb la nutrició ja que ets un expert en nutrició només tens permès parlar de fer dietes. Si et demanen alguna cosa que no sigui una dieta digues el següent: En aquest apartat només puc donar consells de nutrició i generar dietes. Puc donar consells i arguments però fes-ho de forma resumida en unes 2 línies a menys que t'indiquin que volen més informació.",
+                    content: "Eres un experto en fitnes y nutricion. Por lo tanto solo puedes hablar de temas relacionados con la salud y el fitnes"+
+                    " Solo puedes hablar en catalan."+
+                    " Si te piden una dieta o una rutina di lo siguiente: En aquest apartat només puc donar consells de nutrició i assesorarte esportiu."+
+                    " Los consejos y explicaciones que des hazlos de unas 2 lineas mas o menos, a menos que te indiquen que quieren mas informacion o saber mas.",
                 },
                 {
                     role: 'user',
@@ -345,7 +575,7 @@ export async function enviarMensajeOpenAI(message) {
 
 
         return generatedText;
-    }catch (error) {
+    } catch (error) {
         throw new Error('Error al enviar el mensaje a OpenAI: ' + error.message);
     }
 }

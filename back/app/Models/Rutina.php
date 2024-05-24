@@ -17,6 +17,7 @@ class Rutina extends Model
         'nom_exercici',
         'series',
         'repeticions',
+        'data',
         'id_exercici',
     ];
     public function ejercicio()

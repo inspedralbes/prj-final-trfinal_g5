@@ -17,6 +17,7 @@ class Ejercicio extends Model
         'dificultat',
         'imatge',
         'descripció',
+        'link',
         'idCategoria',
 
     ];

@@ -1,4 +1,5 @@
 <template>
+
   <body>
     <div class="contenedor">
       <capçalera />
@@ -9,18 +10,15 @@
         <div class="chat">
           <!-- Mensajes de chat de usuario y asistente -->
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            <div class="mensaje"
-              :class="{ 'mensaje-usuario': message.role === 'user', 'mensaje-asistente': message.role === 'assistant' }">
-              <div class="info-usuario" v-if="message.role === 'user'">
-                <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
-                  class="avatar-usuario" />
-                <p class="nombre-usuario">{{ nom_usuari }}</p>
-              </div>
-              <div class="contenido-mensaje">
-                <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                  class="avatar-asistente" />
-                <p><strong v-if="message.role === 'assistant'">Arturo</strong>{{ message.content }}</p>
-              </div>
+            <div class="info-usuario" v-if="message.role === 'user'">
+              <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuari"
+                class="avatar-usuario" />
+              <p class="nombre-usuario">{{ nom_usuari }}</p>
+            </div>
+            <div class="contenido-mensaje">
+              <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
+                class="avatar-asistente" />
+              <p><strong v-if="message.role === 'assistant'">Arturo: </strong>{{ message.content }}</p>
             </div>
           </div>
 
@@ -36,15 +34,23 @@
 
 
           <!-- Mostrar animación de carga si isLoading es true -->
-          <div v-if="isLoading || isSending" class="animacion-carga"></div>
+          <div  v-if="isLoading || isSending" class="animacion-carga">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       </div>
 
 
       <div class="controles-inferiores">
-        <textarea v-model="message" @keydown.enter="enviarMensajeOnEnter" class="entrada-mensaje"
-          placeholder="Escriu la teva consulta"></textarea>
-        <button @click="enviarMensaje" class="boton-enviar" :disabled="!message.trim() || isSending">Enviar</button>
+        <div class="entrada-mensaje-container">
+          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escriure el teu missatge..."></textarea>
+
+          <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
+            <Icon id="send" name="i-ic:round-send"></Icon>
+          </button>
+        </div>
       </div>
       <navBar />
     </div>
@@ -59,27 +65,30 @@ const arbrePreguntes = {
   pregunta: "Quin tipus de rutina vols?",
   opcions: {
     Hipertrofia: {
-      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      pregunta: "Quants dies prefereixes entrenar a la setmana?",
       opcions: {
-        "3": "Rutina de hipertrofia de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
-        "4": "Rutina de hipertrofia de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
-        "5": "Rutina de hipertrofia de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+        "3": "Rutina d'hipertrofia de 3 dies.",
+        "4": "Rutina d'hipertrofia de 4 dies.",
+        "5": "Rutina d'hipertrofia de 5 dies.",
+        "6": "Rutina d'hipertrofia de 6 dies.",
       }
     },
     Calistenia: {
-      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      pregunta: "Quants dies prefereixes entrenar a la setmana?",
       opcions: {
-        "3": "Rutina de calistenia de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
-        "4": "Rutina de calistenia de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
-        "5": "Rutina de calistenia de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+        "3": "Rutina de calistenia de 3 dies.",
+        "4": "Rutina de calistenia de 4 dies.",
+        "5": "Rutina de calistenia de 5 dies.",
+        "6": "Rutina de calistenia de 6 dies.",
       }
     },
     Equilibrada: {
-      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      pregunta: "Quants dies prefereixes entrenar a la setmana?",
       opcions: {
-        "3": "Rutina de equilibrada de 4 dies: Dilluns, Dimarts, Dijous, Divendres",
-        "4": "Rutina de equilibrada de 5 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres",
-        "5": "Rutina de equilibrada de 6 dies: Dilluns, Dimarts, Dimecres, Dijous, Divendres, Dissabte",
+        "3": "Rutina equilibrada de 3 dies.",
+        "4": "Rutina equilibrada de 4 dies.",
+        "5": "Rutina equilibrada de 5 dies. ",
+        "6": "Rutina equilibrada de 6 dies.",
       }
     }
   }
@@ -134,6 +143,25 @@ export default {
         this.enviarMensaje();
       }
     },
+    async obtenirRutinaDeHoy(idUsuari) {
+      try {
+        const response = await getRutina(idUsuari);
+        const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
+        return response.some(exercise => new Date(exercise.data).toISOString().split('T')[0] === today);
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    },
+
+    async borrarRutinaDeHoy(idUsuari) {
+      try {
+        const response = await borrarRutinaDia(idUsuari);
+        //console.log('Rutinas de hoy eliminadas:', response);
+      } catch (error) {
+        console.error('Error al eliminar las rutinas de hoy:', error);
+      }
+    },
     async enviarMensaje() {
       try {
         if (!this.message.trim()) {
@@ -163,50 +191,45 @@ export default {
         const idUsuario = store.id_usuari;
 
 
-
-
         const daotsUsuario = await getDatosUsuario2(idUsuario);
         const ejercicios = await getDatosEjercicio();
         const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);
 
 
-        // console.log(generatedText);
+        //console.log(generatedText);
 
         const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
+        // Comprueba si hoy ya hay una rutina y elimínala si existe
+        const existeRutinaHoy = await this.obtenirRutinaDeHoy(idUsuario);
+        if (existeRutinaHoy) {
+          await this.borrarRutinaDeHoy(idUsuario);
+        }
 
+        // await borrarRutina(idUsuario); // Borrar la rutina actual del usuario
         await enviarRutinaAlServidor(rutinaJSON); // Enviar el JSON al backend
 
 
         // Construir el mensaje con la lista de días y ejercicios
         let mensajeRutina = '\nAquí tens la teva rutina:\n'; // Comienza el mensaje con la introducción
-
-
         rutinaJSON.dias.forEach((dia) => {
           // Iterar sobre cada día de la rutina
           mensajeRutina += `\nDía: ${dia.dia}\n`; // Agregar el número del día al mensaje
-
-
           dia.exercicis.forEach((exercicio) => {
             // Iterar sobre cada ejercicio del día
             mensajeRutina += `\n- ${exercicio.nom_exercici}( series de ${exercicio.series} amb  ${exercicio.repeticions} repeticions) \n`;
           });
         });
 
-
-
-
         this.chatMessages.push({
           role: 'assistant',
           content: mensajeRutina,
         });
 
-
-
-
         this.message = '';
       } catch (error) {
-        // console.error('Error al enviar el mensaje:', error);
+        console.error('Error al enviar el mensaje:', error);
+        alert('Error al enviar el missatje. Siusplau, tora-ho a intentar.');
         if (error.message.startsWith("HTTP error! status: 429")) {
           alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
         }
@@ -333,9 +356,10 @@ body {
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
   margin: auto;
-  margin-top: 60px;
+  margin-top: 60%;
   margin-bottom: 20px;
   width: 90%;
+
 
 
 }
@@ -401,13 +425,18 @@ body {
 
 
 .mensaje-usuario {
-  background-color: #FFDAB9;
+  background-color: #fda65975;
   padding: 10px;
   border-radius: 25px;
   border-top-right-radius: 0;
   align-self: flex-end;
   margin-bottom: 8px;
+  word-wrap: break-word;
+  max-width: 90%;
+
 }
+
+
 
 
 .mensaje-asistente {
@@ -417,8 +446,10 @@ body {
   padding: 10px;
   border-radius: 25px;
   border-bottom-left-radius: 0;
-  background-color: #c7ab92;
+  background-color: #757575a2;
   margin-right: 10%;
+  max-width: 70%;
+  word-wrap: break-word;
 }
 
 
@@ -442,75 +473,114 @@ body {
 
 
 .contenido-mensaje-asistente {
-  max-width: 100%;
+
+  word-wrap: break-word;
+}
+
+.contenido-mensaje {
+  word-wrap: break-word;
 }
 
 
 .animacion-carga {
   width: 20px;
   height: 20px;
-  border: 2px solid #4CAF50;
-  border-radius: 50%;
-  border-top: 2px solid #ccc;
-  animation: spin 1s linear infinite;
   align-self: flex-start;
   margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
 }
 
+.animacion-carga div {
+  width: 8px;
+  height: 8px;
+  background-color: #333;
+  border-radius: 50%;
+  display: inline-block;
+  animation: cambio-tamaño 1s infinite alternate;
+}
 
-@keyframes spin {
+.animacion-carga div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.animacion-carga div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes cambio-tamaño {
   0% {
-    transform: rotate(0deg);
+    transform: scale(1);
   }
 
+  50% {
+    transform: scale(1.5);
+  }
 
   100% {
-    transform: rotate(360deg);
+    transform: scale(1);
   }
 }
-
 
 .controles-inferiores {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
   padding-bottom: 20px;
 }
 
+.entrada-mensaje-container {
+  display: flex;
+  align-items: center;
+  display: grid;
+  grid-template-columns: 5fr .1fr .1fr;
+  width: 90%;
+  padding: 10px;
+  border-radius: 30px;
+  background-color: #333;
+  margin-top: 10px;
+}
 
 .entrada-mensaje {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin: 10px 0;
+  margin-left: 2px;
+  width: 95%;
+  padding-left: 10px;
+  padding-top: 10px;
   box-sizing: border-box;
   background-color: #f0f0f0;
   border: none;
-  border-radius: 8px;
+  border-radius: 20px;
+  height: 35px;
+  overflow-y: hidden;
 }
-
 
 .boton-enviar {
-  background-color: #000;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #ccc;
   color: white;
   border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  border-radius: 4px;
-  margin: 10px 10px 0;
-  width: calc(100% - 20px);
+  transition: background-color 0.3s;
+  margin-left: 10px;
 }
-
 
 .boton-enviar:hover {
   background-color: #333;
 }
 
+#send {
+  width: 100%;
+  height: 100%;
+  margin-left: 2px;
+  color: #333;
+}
 
 navBar {
   position: fixed;
