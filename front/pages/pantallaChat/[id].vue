@@ -9,7 +9,6 @@
             </div>
             <!-- Mostrar el título solo cuando se activa la rutina -->
 
-
             <!-- Resto del contenido del chat -->
             <div class="chat-container">
                 <!-- Cabecera del chat -->
@@ -34,7 +33,6 @@
                                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
                                     <div class="hora-container">
                                         <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
-
                                     </div>
                                 </div>
                                 <template v-if="mensaje.video">
@@ -44,10 +42,8 @@
                                         Your browser does not support the video tag.
                                     </video>
                                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
-
                                     <div class="hora-container">
                                         <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
-
                                     </div>
                                 </template>
                                 <div v-if="mensaje.idRutina">
@@ -59,7 +55,8 @@
                                             <p id="reps">Reps: {{ ejercicio.repeticions }}</p>
                                         </div>
                                     </div>
-                                    <button id="guardar-rutina" @click="GuardarRutina(usuarioActual, rutinas2)">Guardar Rutina</button>
+                                    <button id="guardar-rutina" @click="GuardarRutina(usuarioActual, rutinas2)">Guardar
+                                        Rutina</button>
                                     <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
                                 </div>
                                 <div v-if="mensaje.idDieta">
@@ -69,7 +66,6 @@
                                             <p>{{ plat.nom_plat }}</p>
                                         </div>
                                         <p id="hora-missatge">{{ formatDate(mensaje.created_at) }}</p>
-
                                     </div>
                                 </div>
 
@@ -79,21 +75,16 @@
                                     <div id="mensaje-texto"> {{ mensaje.mensaje }}</div>
                                     <div class="hora-container">
                                         <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
-
                                     </div>
                                 </div>
                                 <div class="mensaje-texto-container"
                                     v-if="mensaje.usuario_envia_mensaje !== usuario.id && !mensaje.idRutina && !mensaje.idDieta && !mensaje.video && !mensaje.imagen">
                                     <div id="mensaje-texto">
-
                                         {{ mensaje.mensaje }}
-
                                     </div>
                                     <div class="hora-container">
                                         <span id="hora-missatge-enviat">{{ formatDate(mensaje.created_at) }}</span>
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -158,8 +149,6 @@
     </body>
 </template>
 
-
-
 <script>
 import { useUsuariPerfilStore } from '@/stores/index';
 
@@ -180,7 +169,6 @@ export default {
             diaSeleccionado: null, // Almacena el día seleccionado por el usuario
             dietas: [],
             dietas2: [],
-
         };
     },
     methods: {
@@ -314,13 +302,10 @@ export default {
             }
         },
 
-
-
         async toggleDia(dia) {
             // Si el día seleccionado es el mismo que el anterior, lo deseleccionamos
             this.diaSeleccionado = this.diaSeleccionado === dia ? null : dia;
         },
-
 
         handleFileChange(event) {
             const file = event.target.files[0]; // Obtener el archivo del evento
@@ -428,8 +413,6 @@ export default {
             });
             const responseData = await response.json();
             console.log(responseData);
-
-
         },
 
         ordenarMensajesPorId(mensajes) {
@@ -477,23 +460,22 @@ export default {
         cerrarModal() {
             this.mostrar = false; // Cerrar el modal
         },
-
-
     },
     async mounted() {
         await this.mostrarAmigo();
         await this.mostrarMensajes();
-        
-      
-
+        // Llamar a mostrarMensajes cada 2 segundos
+        this.interval = setInterval(this.mostrarMensajes, 1000);
     },
     beforeRouteLeave(to, from, next) {
         // Deja el campo 'amic' del almacenamiento de Pinia como null al salir de la página
         useUsuariPerfilStore().amic = null;
         next();
     },
-
-
+    beforeDestroy() {
+        // Limpiar el intervalo al destruir el componente
+        clearInterval(this.interval);
+    },
 };
 </script>
 
@@ -770,8 +752,8 @@ body {
     padding-bottom: 5px;
     max-width: 60%;
     vertical-align: baseline;
-    
-    
+
+
 
 }
 
@@ -905,7 +887,7 @@ video {
     text-align: right;
     margin-right: 5px;
     margin-top: 20px;
-    
+
 
 }
 
@@ -913,10 +895,10 @@ video {
     font-size: .60em;
     font-style: italic;
     color: #333;
-    
+
     margin-top: 20px;
     word-wrap: normal;
-    
+
 }
 
 #taula-rutina {
