@@ -61,7 +61,7 @@ export default {
         obtenirDieta(idUsuari) {
             getDieta(idUsuari)
                 .then(response => {
-                    console.log('Dieta:', response);
+                    //console.log('Dieta:', response);
                     // Encontrar la dieta más reciente
                     const recentDate = Math.max(...response.map(plato => new Date(plato.data_inici).getTime()));
                     const recentDiet = response.filter(plato => new Date(plato.data_inici).getTime() === recentDate);

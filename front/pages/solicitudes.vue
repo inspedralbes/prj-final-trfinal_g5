@@ -69,14 +69,14 @@ export default {
     async created() {
         try {
             const id_usuario = useUsuariPerfilStore().id_usuari;
-            const response = await fetch(`http://localhost:8000/api/mostrar-solicitudes/${id_usuario}`);
+            const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/mostrar-solicitudes/${id_usuario}`);
             const responseData = await response.json();
             // console.log(responseData);
             if (responseData.status === 1) {
                 // Recorremos las solicitudes y hacemos un fetch para obtener información del usuario
                 for (const solicitud of responseData.solicitudes) {
                     try {
-                        const usuarioResponse = await fetch(`http://localhost:8000/api/usuari/${solicitud.usuario_envia_id}`);
+                        const usuarioResponse = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/usuari/${solicitud.usuario_envia_id}`);
                         const usuarioData = await usuarioResponse.json();
                         // Guardamos la información del usuario en cada solicitud
                         solicitud.usuario = usuarioData;
@@ -97,23 +97,23 @@ export default {
     async mounted() {
         try {
             const id_usuario = useUsuariPerfilStore().id_usuari;
-            const response = await fetch(`http://localhost:8000/api/mostrar-solicitudes-enviades/${id_usuario}`);
+            const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/mostrar-solicitudes-enviades/${id_usuario}`);
             const responseData = await response.json();
-            console.log(responseData);
+            //console.log(responseData);
             if (responseData.status === 1) {
                 this.enviadas = responseData.enviadas; // Almacenar las solicitudes enviadas
                 for (const envia of this.enviadas) {
                     try {
-                        const usuarioResponse = await fetch(`http://localhost:8000/api/usuari/${envia.usuario_recibe_id}`);
+                        const usuarioResponse = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/usuari/${envia.usuario_recibe_id}`);
                         const usuarioData = await usuarioResponse.json();
                         envia.usuario = usuarioData;
-                        console.log(envia.usuario.usuario.nom);
+                        //console.log(envia.usuario.usuario.nom);
                     } catch (error) {
                         console.error('Error al obtener información del usuario:', error);
                     }
                 }
             } else {
-                console.log(responseData.message);
+                //console.log(responseData.message);
             }
         } catch (error) {
             console.error('Error al obtener las solicitudes:', error);
@@ -123,17 +123,17 @@ export default {
     methods: {
         async AceptarAmigo(solicitudId) {
             try {
-                const response = await fetch(`http://localhost:8000/api/aceptar-solicitud/${solicitudId}`, {
+                const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/aceptar-solicitud/${solicitudId}`, {
                     method: 'POST'
                 });
                 const responseData = await response.json();
                 if (responseData.status === 1) {
-                    console.log(responseData.message);
+                    //console.log(responseData.message);
                     // Actualizamos la lista de solicitudes eliminando la solicitud aceptada
                     this.solicitudes = this.solicitudes.filter(solicitud => solicitud.id !== solicitudId);
                     this.$router.push('/chatusuaris');
                 } else {
-                    console.log(responseData.message);
+                    //console.log(responseData.message);
                 }
             } catch (error) {
                 console.error('Error al aceptar la solicitud:', error);
@@ -142,17 +142,17 @@ export default {
 
         async rechazarAmigo(solicitudId) {
             try {
-                const response = await fetch(`http://localhost:8000/api/eliminar-solicitud/${solicitudId}`, {
+                const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/eliminar-solicitud/${solicitudId}`, {
                     method: 'DELETE'
                 });
                 const responseData = await response.json();
                 if (responseData.status === 1) {
-                    console.log(responseData.message);
+                    //console.log(responseData.message);
                     // Actualizamos la lista de solicitudes eliminando la solicitud rechazada
                     this.solicitudes = this.solicitudes.filter(solicitud => solicitud.id !== solicitudId);
                     this.$router.push('/chatusuaris');
                 } else {
-                    console.log(responseData.message);
+                    //console.log(responseData.message);
                 }
             } catch (error) {
                 console.error('Error al rechazar la solicitud:', error);

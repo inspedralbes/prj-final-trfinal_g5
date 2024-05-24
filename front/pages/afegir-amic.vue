@@ -66,7 +66,7 @@ export default {
   methods: {
     async fetchUsuarios() {
       try {
-        const response = await fetch(`http://localhost:8000/api/usuarios-excepto/${this.id_usuari}`);
+        const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/usuarios-excepto/${this.id_usuari}`);
         if (!response.ok) {
           throw new Error('Error al obtener la lista de usuarios');
         }

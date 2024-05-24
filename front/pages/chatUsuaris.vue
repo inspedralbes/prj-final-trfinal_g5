@@ -90,7 +90,7 @@ export default {
         obtenerAmigos() {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
-            console.log(idUsuario);
+            //console.log(idUsuario);
 
             getUsuariosChat(idUsuario).then(async response => { // Agrega async aquí
                 this.amics = response.amigos;

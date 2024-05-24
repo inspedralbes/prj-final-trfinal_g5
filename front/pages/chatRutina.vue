@@ -157,7 +157,7 @@ export default {
     async borrarRutinaDeHoy(idUsuari) {
       try {
         const response = await borrarRutinaDia(idUsuari);
-        console.log('Rutinas de hoy eliminadas:', response);
+        //console.log('Rutinas de hoy eliminadas:', response);
       } catch (error) {
         console.error('Error al eliminar las rutinas de hoy:', error);
       }
@@ -196,7 +196,7 @@ export default {
         const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);
 
 
-        console.log(generatedText);
+        //console.log(generatedText);
 
         const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 

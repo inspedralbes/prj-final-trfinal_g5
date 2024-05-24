@@ -168,7 +168,7 @@ export default {
         const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
         return response.some(dieta => new Date(dieta.data_inici).toISOString().split('T')[0] === today);
       } catch (error) {
-        console.error(error);
+        //console.error(error);
         return false;
       }
     },
@@ -176,9 +176,9 @@ export default {
       try {
         const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
         const response = await deleteDietaByDate(idUsuari, today);
-        console.log('Dietas de hoy eliminadas:', response);
+        //console.log('Dietas de hoy eliminadas:', response);
       } catch (error) {
-        console.error('Error al eliminar las dietas de hoy:', error);
+        //console.error('Error al eliminar las dietas de hoy:', error);
       }
     },
     async enviarMensaje() {
@@ -209,7 +209,7 @@ export default {
         const aliments = await getDatosAliments();
         const generatedText = await enviarMensajeOpenAIDieta(this.message, datosUsuario, aliments);
 
-        console.log(generatedText);
+        //console.log(generatedText);
 
         const dietaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 
@@ -244,7 +244,7 @@ export default {
 
         this.message = '';
       } catch (error) {
-        console.error('Error al enviar el mensaje:', error);
+        //console.error('Error al enviar el mensaje:', error);
         alert('Error al enviar el missatje. Siusplau, tora-ho a intentar.');
         if (error.message.startsWith("HTTP error! status: 429")) {
           alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");

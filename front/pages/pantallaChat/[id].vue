@@ -166,7 +166,7 @@
             data.video_base64 = this.videoSeleccionado.split(',')[1];
           }
   
-          const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+          const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -196,7 +196,7 @@
           const id_usuario = useUsuariPerfilStore().id_usuari;
           const id_amic = useUsuariPerfilStore().amic;
   
-          const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+          const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -225,7 +225,7 @@
           const id_usuario = useUsuariPerfilStore().id_usuari;
           const id_amic = useUsuariPerfilStore().amic;
   
-          const response = await fetch(`http://localhost:8000/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
+          const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/enviar-mensaje/${id_usuario}/${id_amic}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -252,7 +252,7 @@
           this.usuarioActual = id_usuario;
           const id_amic = useUsuariPerfilStore().amic;
   
-          const response = await fetch(`http://localhost:8000/api/missatges/${id_usuario}/${id_amic}`);
+          const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/missatges/${id_usuario}/${id_amic}`);
           const responseData = await response.json();
   
           if (responseData.status === 1) {
@@ -265,12 +265,12 @@
               mensajesPorDia[fecha].push(mensaje);
   
               if (mensaje.idRutina) {
-                const rutinaResponse = await fetch(`http://localhost:8000/api/rutina/${mensaje.idRutina}`);
+                const rutinaResponse = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/rutina/${mensaje.idRutina}`);
                 const rutinaData = await rutinaResponse.json();
                 this.rutinas2 = rutinaData;
               }
               if (mensaje.idDieta) {
-                const dietaResponse = await fetch(`http://localhost:8000/api/dietas/${mensaje.idDieta}`);
+                const dietaResponse = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/dietas/${mensaje.idDieta}`);
                 const dietaData = await dietaResponse.json();
                 this.dietas2 = dietaData;
               }
@@ -290,7 +290,7 @@
           }
         });
   
-        const response = await fetch(`http://localhost:8000/api/descargarRutina`, {
+        const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/descargarRutina`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -298,7 +298,7 @@
           body: JSON.stringify(rutinas2),
         });
         const responseData = await response.json();
-        console.log(responseData);
+        //console.log(responseData);
       },
       ordenarMensajesPorId(mensajes) {
         const mensajesArray = Object.values(mensajes);
@@ -307,7 +307,7 @@
       async mostrarAmigo() {
         try {
           const id_usuario = useUsuariPerfilStore().amic;
-          const response = await fetch(`http://localhost:8000/api/usuari/${id_usuario}`);
+          const response = await fetch(`http://fithub.daw.inspedralbes.cat/back/public/api/usuari/${id_usuario}`);
           const responseData = await response.json();
           if (responseData.status === 1) {
             this.usuario = responseData.usuario;

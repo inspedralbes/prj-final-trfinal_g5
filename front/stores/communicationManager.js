@@ -1,5 +1,5 @@
-const url = 'http://localhost:8000/api';
-//const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
+// const url = 'http://localhost:8000/api';
+const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
 const apiKey = '';
 
@@ -68,7 +68,7 @@ export async function getUsuariosChat(idUsuario) {
         }
 
         const data = await response.json();
-        console.log('Datos recibidos del servidor:', data); // Agregar esta línea para verificar los datos recibidos
+        //console.log('Datos recibidos del servidor:', data); // Agregar esta línea para verificar los datos recibidos
         return data; // Devuelve los datos del usuario en JSON
     }
     catch (error) {
@@ -84,7 +84,7 @@ export async function getUsers() {
         }
 
         const data = await response.json();
-        console.log('Datos recibidos del servidor:', data); // Agregar esta línea para verificar los datos recibidos
+        //console.log('Datos recibidos del servidor:', data); // Agregar esta línea para verificar los datos recibidos
         return data; // Devuelve los datos del usuario en JSON
     }
     catch (error) {
@@ -152,9 +152,9 @@ export async function mostrarUltimoMensajeEllos(idUsuario, idAmigo) {
     try {
         const response = await fetch(`${url}/ultim-missatge/${idUsuario}/${idAmigo}`);
         const responseData = await response.json();
-        // console.log(responseData);
+        //console.log(responseData);
         if (responseData.status === 1) {
-            console.log(responseData.message);
+            //console.log(responseData.message);
 
             return responseData.message; // Devuelve el mensaje si se encontró uno
         } else {
@@ -209,7 +209,7 @@ export async function enviarRutinaAlServidor(rutina) {
         }
 
         const data = await response.json();
-        console.log('datos guardados correctamente');
+        //console.log('datos guardados correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al enviar la rutina al servidor: ' + error.message);
@@ -231,7 +231,7 @@ export async function enviarDietaAlServidor(rutina) {
         }
 
         const data = await response.json();
-        console.log('datos guardados correctamente');
+        //console.log('datos guardados correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al enviar la rutina al servidor: ' + error.message);
@@ -256,7 +256,7 @@ export async function enviarSolicitudAmistad(usuarioEnviaId, usuarioRecibeId) {
         }
 
         const data = await response.json();
-        console.log('Solicitud de amistad enviada correctamente:', data);
+        //console.log('Solicitud de amistad enviada correctamente:', data);
         return data;
     } catch (error) {
         throw new Error('Error al enviar la solicitud de amistad: ' + error.message);
@@ -294,7 +294,7 @@ export async function borrarRutina(idUsuario) {
         }
 
         const data = await response.json();
-        console.log('Rutina borrada correctamente');
+        //console.log('Rutina borrada correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al borrar la rutina: ' + error.message);
@@ -312,7 +312,7 @@ export async function borrarRutinaDia(idUsuario) {
         }
 
         const data = await response.json();
-        console.log('Rutina borrada correctamente');
+        //console.log('Rutina borrada correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al borrar la rutina: ' + error.message);
@@ -331,7 +331,7 @@ export async function borrarDieta(idUsuario) {
         }
 
         const data = await response.json();
-        console.log('Dieta borrada correctamente');
+        //console.log('Dieta borrada correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al borrar la dieta: ' + error.message);
@@ -349,7 +349,7 @@ export async function borrarDietaHoy(idUsuario) {
         }
 
         const data = await response.json();
-        console.log('Dieta borrada correctamente');
+        //console.log('Dieta borrada correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al borrar la dieta: ' + error.message);
@@ -367,7 +367,7 @@ export async function borrarUsuari(idUsuario) {
         }
 
         const data = await response.json();
-        console.log('Usuario borrado correctamente');
+        //console.log('Usuario borrado correctamente');
         return data; // Puedes modificar esto si el servidor responde con algún dato específico
     } catch (error) {
         throw new Error('Error al borrar el usuario: ' + error.message);

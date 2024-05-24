@@ -149,7 +149,7 @@ export default {
         async comprobarNomUsuari() {
             // console.log(this.usuario.nom_usuari)
             try {
-                const response = await fetch('http://localhost:8000/api/comprovarnomusuari', {
+                const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/comprovarnomusuari', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
