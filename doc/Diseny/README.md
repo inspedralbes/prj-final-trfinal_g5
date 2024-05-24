@@ -9,8 +9,8 @@ El Wireframe es pot veure també al pdf adjunt dins la carpeta.
 
 ## Diagrames:
 ### Diagrama de Classes:
-![Diagrama de classes](C:\Users\a16miqbargim_inspedr\Downloads\prj-final-trfinal_g5\doc\Diseny\mermaid-diagram-2024-05-23-100842.svg)
+![Diagrama de classes](C:\Users\a16miqbargim_inspedr\Downloads\prj-final-trfinal_g5\doc\Diseny\mermaid-diagram-2024-05-24-105129.png)
 ### Diagrama d'Activitats:
-![Diagrama d'activitats](C:\Users\a16miqbargim_inspedr\Downloads\prj-final-trfinal_g5\doc\Diseny\mermaid-diagram-2024-05-23-104638.svg)
+![Diagrama d'activitats](C:\Users\a16miqbargim_inspedr\Downloads\prj-final-trfinal_g5\doc\Diseny\mermaid-diagram-2024-05-23-104638.png)
 ### Diagrama  de base de dades:
-![Diagrama d'activitats](C:\Users\a16miqbargim_inspedr\Downloads\prj-final-trfinal_g5\doc\Diseny\mermaid-diagram-2024-05-23-100756.svg)
+![Diagrama d'activitats](C:\Users\a16miqbargim_inspedr\Downloads\prj-final-trfinal_g5\doc\Diseny\mermaid-diagram-2024-05-23-100756.png)
