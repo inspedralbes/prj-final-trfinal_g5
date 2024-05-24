@@ -9,7 +9,7 @@
                     <img src="../public/editar.png">
                 </div>
                 <div :class="{ 'user-icon-container': true, 'incomplete-profile': !registre }">
-                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuario"
+                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuari"
                             class="user-icon"@click="openFileInput" />
                     </div>
                 <!-- <h1>{{ username }}</h1> -->

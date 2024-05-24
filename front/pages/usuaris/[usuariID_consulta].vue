@@ -13,7 +13,7 @@
                 <p><strong>Pes:</strong> {{ usuario.pes }}</p>
                 <p><strong>Altura:</strong> {{ usuario.altura }}</p>
                 <p><strong>Telèfon:</strong> {{ usuario.telefon }}</p>
-                <p><strong>Tipus d'Usuari:</strong> {{ usuario.tipus }}</p>
+                <p><strong>Tipus d'usuari:</strong> {{ usuario.tipus }}</p>
 
 
                 <button class="borrar-button" @click="borrarUsuari(usuario.id)">Esborrar Usuari</button>

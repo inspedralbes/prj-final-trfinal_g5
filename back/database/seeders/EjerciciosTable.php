@@ -23,7 +23,7 @@ class EjerciciosTable extends Seeder
                 "idCategoria" => 1,
                 "imatge" => "1imatge_curl_martillo_inclinado.jpg",
                 "link" =>"https://www.lyfta.app/video/GymvisualMP4/24941201.mp4",
-                "descripció" => "Flexiona els colzes elevant les mancurnes cap als muscles en banc inclinat."
+                "descripció" => "Flexiona els colzes elevant les mancuernes cap als muscles en banc inclinat."
             ],
             [
                 "id" => 2,
@@ -41,7 +41,7 @@ class EjerciciosTable extends Seeder
                 "idCategoria" => 1,
                 "imatge" => "3imatge_curl_martillo.jpg",
                 "link" =>"https://www.lyfta.app/video/GymvisualMP4/03121201.mp4",
-                "descripció" => "Aixeca les mancurnes cap als muscles mantenint les palmes cap a dins."
+                "descripció" => "Aixeca les mancuernes cap als muscles mantenint les palmes cap a dins."
             ],
             [
                 "id" => 4,
@@ -76,7 +76,7 @@ class EjerciciosTable extends Seeder
             //     "dificultat" => "principiant",
             //     "idCategoria" => 1,
             //     "imatge" => "imatge_curl_martillo_inclinado_flexor.jpg",
-            //     "descripció" => "Flexiona els colzes elevant les mancurnes cap als muscles amb agafada neutra."
+            //     "descripció" => "Flexiona els colzes elevant les mancuernes cap als muscles amb agafada neutra."
             // ],
             [
                 "id" => 8,
@@ -125,12 +125,12 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 13,
-                "nom_exercici" => "Llançador de sortilegis amb mancurnes",
+                "nom_exercici" => "Llançador de sortilegis amb Mancuernes",
                 "dificultat" => "principiant",
                 "idCategoria" => 2,
                 "imatge" => "13imatge_lanzador_hechizos_mancuernas.jpg",
                 "link" =>"https://www.lyfta.app/video/GymvisualMP4/07771201.mp4",
-                "descripció" => "Dret, aixeca les mancurnes amb braços estesos."
+                "descripció" => "Dret, aixeca les mancuernes amb braços estesos."
             ],
             [
                 "id" => 14,
@@ -169,12 +169,12 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 18,
-                "nom_exercici" => "Press de Banca amb Mancurnes",
+                "nom_exercici" => "Press de Banca amb Mancuernes",
                 "dificultat" => "principiant",
                 "idCategoria" => 4,
                 "imatge" => "18imatge_press_banca_mancuernas.jpg",
                 "link" =>"https://www.lyfta.app/video/GymvisualMP4/02891201.mp4",
-                "descripció" => "Acostat, press de banca amb mancurnes per pectorals."
+                "descripció" => "Acostat, press de banca amb mancuernes per pectorals."
             ],
             [
                 "id" => 19,
@@ -187,12 +187,12 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 20,
-                "nom_exercici" => "Press de Inclinat amb Mancurnes",
+                "nom_exercici" => "Press de Inclinat amb Mancuernes",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
                 "imatge" => "20imatge_press_inclinado_mancuernas.jpg",
                 "link" =>"https://www.lyfta.app/video/GymvisualMP4/24411201.mp4",
-                "descripció" => "Press de banca inclinat amb mancurnes per pectorals superiors."
+                "descripció" => "Press de banca inclinat amb mancuernes per pectorals superiors."
             ],
             [
                 "id" => 21,
@@ -223,21 +223,21 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 24,
-                "nom_exercici" => "Apertures amb Mancurnes inclinades",
+                "nom_exercici" => "Apertures amb Mancuernes inclinades",
                 "dificultat" => "intermedi",
                 "idCategoria" => 4,
                 "imatge" => "24imatge_aperturas_mancuernas_inclinadas.jpg",
                 "link" =>"https://youtu.be/3bBv7kgOzmE",
-                "descripció" => "Apertures amb mancurnes inclinades per pectorals inferiors."
+                "descripció" => "Apertures amb mancuernes inclinades per pectorals inferiors."
             ],
             [
                 "id" => 25,
-                "nom_exercici" => "Apertures amb Mancurnes planes",
+                "nom_exercici" => "Apertures amb Mancuernes planes",
                 "dificultat" => "principiant",
                 "idCategoria" => 4,
                 "imatge" => "25imatge_aperturas_mancuernas_planes.jpg",
                 "link" =>"https://www.lyfta.app/video/GymvisualMP4/22161201.mp4",
-                "descripció" => "Apertures amb mancurnes per pectorals amb el banc pla."
+                "descripció" => "Apertures amb mancuernes per pectorals amb el banc pla."
             ],
             [
                 "id" => 26,
@@ -322,7 +322,7 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 35,
-                "nom_exercici" => "Pes Mort Roma amb Mancuernes",
+                "nom_exercici" => "Pes Mort Roma amb mancuernes",
                 "dificultat" => "principiant",
                 "idCategoria" => 6,
                 "imatge" => "35imatge_peso_muerto_mancuernas.jpg",
@@ -466,7 +466,7 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 51,
-                "nom_exercici" => "Pes Mort amb Mancuernes",
+                "nom_exercici" => "Pes Mort amb mancuernes",
                 "dificultat" => "principiant",
                 "idCategoria" => 8,
                 "imatge" => "51imatge_peso_muerto_mancuernas.jpg",
@@ -489,7 +489,7 @@ class EjerciciosTable extends Seeder
                 "idCategoria" => 9,
                 "imatge" => "53imatge_remo_barraT.jpg",
                 "link" =>"https://www.lyfta.app/video/GymvisualMP4/06061201.mp4",
-                "descripció" => "Agafa l'asa i tira cap a l'abdomen mantenint l'esquena recta. Es pot fer amb barra, mancurnes o maquina."
+                "descripció" => "Agafa l'asa i tira cap a l'abdomen mantenint l'esquena recta. Es pot fer amb barra, mancuernes o maquina."
             ],
             [
                 "id" => 54,
@@ -556,7 +556,7 @@ class EjerciciosTable extends Seeder
             ],
             [
                 "id" => 61,
-                "nom_exercici" => "Rem Inclinat amb Mancuernes",
+                "nom_exercici" => "Rem Inclinat amb mancuernes",
                 "dificultat" => "intermedi",
                 "idCategoria" => 9,
                 "imatge" => "61imatge_remo_inclinado_mancuernas.jpg",

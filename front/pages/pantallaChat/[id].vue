@@ -4,7 +4,7 @@
         <div class="main-content">
             <div class="cabecera">
                 <!-- Mostrar foto de perfil del usuario -->
-                <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Foto de perfil">
+                <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Imatge de perfil">
                 <p>{{ usuario.nom }}</p>
             </div>
             <!-- Mostrar el título solo cuando se activa la rutina -->
@@ -28,7 +28,7 @@
                                 :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
                                 <!-- Verificar si el mensaje tiene una imagen -->
                                 <div class="mensaje-imagen" v-if="mensaje.imagen">
-                                    <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Foto Chat"
+                                    <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Imatge Chat"
                                         class="imagen-chat">
                                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
                                     <div class="hora-container">

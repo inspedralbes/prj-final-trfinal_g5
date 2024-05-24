@@ -21,7 +21,7 @@
                 </div>
                 <div v-for="rutina in exercises" :key="rutina.id" v-if="fechaSeleccionada">
                     <div class="exercise-item">
-                        <img :src="rutina.image" alt="Imagen del ejercicio" class="exercise-image" />
+                        <img :src="rutina.image" alt="Imatge de l'exersisi" class="exercise-image" />
                         <h3>{{ rutina.nom_exercici }}</h3>
                         <p>Dia: {{ rutina.dia }}</p>
                         <p>Series: {{ rutina.series }}</p>
