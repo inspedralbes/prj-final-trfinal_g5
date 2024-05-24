@@ -1,7 +1,7 @@
 const url = 'http://localhost:8000/api';
 //const url = 'http://fithub.daw.inspedralbes.cat/back/public/api';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-const apiKey = '11';
+const apiKey = '';
 
 
 //ejemplo de peticion fetch get
@@ -92,7 +92,6 @@ export async function getUsers() {
     }
 
 }
-
 
 export async function getDatosEjercicio() {
     try {
