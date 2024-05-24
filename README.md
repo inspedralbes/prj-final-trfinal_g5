@@ -3,7 +3,7 @@
 ## Taula de continguts
 1. [Descripció](#Descripció)
 2. [Esquema Carpetes](#Esquema-Carpetes)
-3. [Características](#características)
+3. [Integrants](#Integrants)
 4. [Contribuir](#contribuir)
 5. [Créditos](#créditos)
 6. [Estructura de codi](#Estructuradelcodi)
