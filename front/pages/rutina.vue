@@ -134,7 +134,7 @@ export default {
                     //console.log("¿Es response un array?", Array.isArray(response)); // Verificar si response es un array
 
                     // Verificar la estructura de cada objeto de ejercicio en response
-                    response.forEach(exercise => //console.log("Ejercicio:", exercise));
+                    //response.forEach(exercise => console.log("Ejercicio:", exercise));
 
                     // Filtrar las rutinas para obtener solo la más reciente
                     const recentDate = Math.max(...response.map(exercise => new Date(exercise.data).getTime()));
