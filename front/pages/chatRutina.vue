@@ -11,7 +11,7 @@
           <!-- Mensajes de chat de usuario y asistente -->
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
             <div class="info-usuario" v-if="message.role === 'user'">
-              <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+              <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuari"
                 class="avatar-usuario" />
               <p class="nombre-usuario">{{ nom_usuari }}</p>
             </div>
@@ -45,7 +45,7 @@
 
       <div class="controles-inferiores">
         <div class="entrada-mensaje-container">
-          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escriure el teu missatge..."></textarea>
 
           <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
             <Icon id="send" name="i-ic:round-send"></Icon>
@@ -65,7 +65,7 @@ const arbrePreguntes = {
   pregunta: "Quin tipus de rutina vols?",
   opcions: {
     Hipertrofia: {
-      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      pregunta: "Quants dies prefereixes entrenar a la setmana?",
       opcions: {
         "3": "Rutina d'hipertrofia de 3 dies.",
         "4": "Rutina d'hipertrofia de 4 dies.",
@@ -74,7 +74,7 @@ const arbrePreguntes = {
       }
     },
     Calistenia: {
-      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      pregunta: "Quants dies prefereixes entrenar a la setmana?",
       opcions: {
         "3": "Rutina de calistenia de 3 dies.",
         "4": "Rutina de calistenia de 4 dies.",
@@ -83,7 +83,7 @@ const arbrePreguntes = {
       }
     },
     Equilibrada: {
-      pregunta: "Quants dies prefereixes entrenar a la semana?",
+      pregunta: "Quants dies prefereixes entrenar a la setmana?",
       opcions: {
         "3": "Rutina equilibrada de 3 dies.",
         "4": "Rutina equilibrada de 4 dies.",
