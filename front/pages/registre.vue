@@ -8,6 +8,7 @@
             </div>
             <div class="button-container">
                 <button class="button button--secondary" @click="startRegistration">Començar Registre</button>
+                <button class="button button--secondary" @click="goToIniciarSesion">Iniciar sesió</button>
             </div>
         </div>
 
@@ -172,6 +173,9 @@ export default {
         startRegistration() {
             this.showStartButton = false;
             this.totalQuestions = this.registrationQuestions.length; // Establecer el número total de preguntas
+        },
+        goToIniciarSesion() {
+            this.$router.push('/');
         },
         async seguentPregunta() {
             // Obtener la pregunta actual
