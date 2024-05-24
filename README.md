@@ -1,5 +1,14 @@
 # Projecte Transversal: FitHub
 
+## Tabla de Contenidos
+1. [Descripció](##Descripció)
+2. [Uso](#uso)
+3. [Características](#características)
+4. [Contribuir](#contribuir)
+5. [Créditos](#créditos)
+6. [Estructura de codi](###Estructuradelcodi)
+
+
 ## Descripció
 Aquest projecte té com a objectiu desenvolupar un projecte final que tracta d'una aplicacio de gimnas que amb un chatIA et fa les rutines i dietes i assesorament de gimnas
 
