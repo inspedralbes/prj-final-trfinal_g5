@@ -4,7 +4,7 @@
 1. [Descripció](#Descripció)
 2. [Esquema Carpetes](#Esquema-Carpetes)
 3. [Integrants](#Integrants)
-4. [Contribuir](#contribuir)
+4. [Contribuir](#gestor-de-tasques)
 5. [Créditos](#créditos)
 6. [Estructura de codi](#Estructuradelcodi)
 
