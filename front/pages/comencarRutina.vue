@@ -51,7 +51,7 @@
         <div class="exercise-list">
           <div v-for="exercise in exercises" :key="exercise.id">
             <div class="exercise-item">
-              <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
+              <img :src="'/rutina/' + exercise.imatge" :alt="exercise.nom_exercici" class="exercise-image" />
               <h2>{{ exercise.nom_exercici }}</h2>
               <div class="exercise-details">
                 <Icon class="info-icon" @click="showExerciseDetails(exercise)" name="ic:baseline-info" /> <br>
@@ -62,9 +62,10 @@
               <div class="exercise-controls">
                 <div class="series-buttons">
                   <button v-for="serie in [1, 2, 3, 4]" :key="serie" @click="setSerieBase(exercise.id, serie)"
-                    :class="['series-button', { 'selected': isSerieSelected(exercise.id, serie) }]">
+                    :class="['series-button', { 'selected': isSerieSelected(exercise.id, serie) }, { 'orange-bg': isSerieSelected(exercise.id, serie) }]">
                     {{ serie }}
                   </button>
+
                 </div>
               </div>
             </div>
@@ -308,6 +309,10 @@ body {
   margin-bottom: 20px;
   /* Agregar espacio inferior */
 }
+.orange-bg {
+  background-color: orange;
+}
+
 
 .timer span {
   font-size: 24px;
@@ -354,33 +359,35 @@ body {
 }
 
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 80%;
-    max-height: 80%;
-    overflow: auto;
-    position: relative; /* Añadido */
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 80%;
+  max-height: 80%;
+  overflow: auto;
+  position: relative;
+  /* Añadido */
 }
 
 .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 24px; /* Tamaño del icono de cierre */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 24px;
+  /* Tamaño del icono de cierre */
 }
 
 
