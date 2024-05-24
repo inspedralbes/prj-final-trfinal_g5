@@ -235,7 +235,7 @@ class EjerciciosTable extends Seeder
                 "nom_exercici" => "Apertures amb Mancuernes planes",
                 "dificultat" => "principiant",
                 "idCategoria" => 4,
-                "imatge" => "25imatge_aperturas_mancuernas_planes.jpg",
+                "imatge" => "25imatge_aperturas_mancuernas.jpg",
                 "link" =>"https://www.lyfta.app/video/GymvisualMP4/22161201.mp4",
                 "descripció" => "Apertures amb mancuernes per pectorals amb el banc pla."
             ],
