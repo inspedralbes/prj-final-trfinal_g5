@@ -27,7 +27,7 @@ Utilitzem Taiga com a gestor de tasques. Podeu accedir-hi a través del següent
 Per a la visualització del prototip gràfic del projecte, podeu accedir a penpot: [Penpot](https://design.penpot.app/#/view/93d0ad32-dfe5-8194-8003-d196a1776455?page-id=93d0ad32-dfe5-8194-8003-d196a1776456&section=interactions&frame-id=c57b177c-d2d1-8023-8003-d1c548b8c65b&index=0&share-id=93d0ad32-dfe5-8194-8003-d1ca957c9e03)
 
 ## URL de Producció
-[Producció](https://fithub.daw.inspedralbes.cat/)
+Aqui es troba la url de l'aplicació [Producció](https://fithub.daw.inspedralbes.cat/)
 
 ## Estat
 El projecte es troba en una fase de desenvolupament. S'ha configurat l'entorn Docker per a desplegar-lo fàcilment en mode de desenvolupament.
