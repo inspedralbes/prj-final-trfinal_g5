@@ -35,8 +35,7 @@
 
                             <h2>{{ exercise.nom_exercici }}</h2>
                             <div class="exercise-details">
-                                <Icon class="info-icon" @click="showExerciseDetails(exercise)"
-                                    name="ic:baseline-info" /> <br>
+                                <Icon class="info-icon" @click="showExerciseDetails(exercise)"name="ic:baseline-info" /> <br>
                                 <Icon class="" name="ic:baseline-insert-invitation" />
                                 Dia: {{ exercise.dia }} <br> <br>
 
