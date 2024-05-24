@@ -1,12 +1,13 @@
 # Projecte Transversal: FitHub
 
 ## Taula de continguts
-1. [Descripció](#Descripció)
-2. [Esquema Carpetes](#Esquema-Carpetes)
-3. [Integrants](#Integrants)
-4. [Contribuir](#gestor-de-tasques)
-5. [Créditos](#créditos)
-6. [Estructura de codi](#Estructuradelcodi)
+1. [Descripció](#descripció)
+2. [Esquema Carpetes](#esquema-carpetes)
+3. [Integrants](#integrants)
+4. [Gestor de tasques](#gestor-de-tasques)
+5. [Prototip Gràfic](#prototip-grafic)
+6. [URL de Producció](#url-de-producció)
+7. [Estructura de codi](#estructura-de-codi)
 
 
 ## Descripció
