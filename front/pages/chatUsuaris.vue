@@ -32,13 +32,13 @@
 
                                     <!-- Mostrar el mensaje si existe -->
                                     {{ amigo.ultimoMensaje && amigo.ultimoMensaje.mensaje ? amigo.ultimoMensaje.mensaje
-                                        : ''}}
-                                        {{ amigo.ultimoMensaje && amigo.ultimoMensaje.idRutina ? 'Rutina' : ''}}
-                                        {{ amigo.ultimoMensaje&& amigo.ultimoMensaje.idDieta ? 'Dieta' : ''}}
+            : '' }}
+                                    {{ amigo.ultimoMensaje && amigo.ultimoMensaje.idRutina ? 'Rutina' : '' }}
+                                    {{ amigo.ultimoMensaje && amigo.ultimoMensaje.idDieta ? 'Dieta' : '' }}
                                 </div>
                             </div>
                             <div class="ultima-hora">{{ amigo.ultimoMensaje ?
-                                formatHora(amigo.ultimoMensaje.created_at) : '' }}</div>
+            formatHora(amigo.ultimoMensaje.created_at) : '' }}</div>
 
 
                         </div>
@@ -87,35 +87,37 @@ export default {
         }
     },
     methods: {
-        obtenerAmigos() {
+        async obtenerAmigos() {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
-            console.log(idUsuario);
 
-            getUsuariosChat(idUsuario).then(async response => { // Agrega async aquí
+            try {
+                const response = await getUsuariosChat(idUsuario);
                 this.amics = response.amigos;
 
-                // console.log(this.amics);
-                // Usa Promise.all para esperar a que se resuelvan todas las promesas
-                await Promise.all(this.amics.map(async amigo => {
-                    const ultimoMensaje = await this.mostrarUltimoMensajeEntreEllos(idUsuario, amigo.id); // Cambia a this.mostrarUltimoMensajeEntreEllos
+                // Iterar sobre los amigos y obtener el último mensaje para cada uno
+                for (const amigo of this.amics) {
+                    const ultimoMensaje = await this.mostrarUltimoMensajeEntreEllos(idUsuario, amigo.id);
                     amigo.ultimoMensaje = ultimoMensaje;
-                }));
-            });
+                }
+            } catch (error) {
+                console.error("Error al obtener la lista de amigos:", error);
+            }
         },
         seleccionarAmigo(idAmigo) {
             // Guarda el ID del amigo en el store
             useUsuariPerfilStore().amic = idAmigo;
         },
         async mostrarUltimoMensajeEntreEllos(idUsuario, idAmigo) {
-            mostrarUltimoMensajeEllos(idUsuario, idAmigo)
-            .then(response => {
-                return response.mensaje;
-            })
-            .catch(error => {
-                console.error("Error al obtenir l'últim missatge entre els dos usuaris:", error);
-            })
+            try {
+                const response = await mostrarUltimoMensajeEllos(idUsuario, idAmigo);
+                return response; // Retorna directamente la respuesta completa
+            } catch (error) {
+                console.error("Error al obtener el último mensaje entre los dos usuarios:", error);
+                return null;
+            }
         },
+
         formatHora(fecha) {
             if (!fecha) return '';
             const hora = new Date(fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
