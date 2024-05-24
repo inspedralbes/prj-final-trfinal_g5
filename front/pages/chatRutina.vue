@@ -11,7 +11,7 @@
           <!-- Mensajes de chat de usuario y asistente -->
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
             <div class="info-usuario" v-if="message.role === 'user'">
-              <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuari"
+              <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuari"
                 class="avatar-usuario" />
               <p class="nombre-usuario">{{ nom_usuari }}</p>
             </div>
@@ -157,7 +157,7 @@ export default {
     async borrarRutinaDeHoy(idUsuari) {
       try {
         const response = await borrarRutinaDia(idUsuari);
-        console.log('Rutinas de hoy eliminadas:', response);
+        //console.log('Rutinas de hoy eliminadas:', response);
       } catch (error) {
         console.error('Error al eliminar las rutinas de hoy:', error);
       }
@@ -196,7 +196,7 @@ export default {
         const generatedText = await enviarMensajeOpenAIRutina(this.message, ejercicios, daotsUsuario);
 
 
-        console.log(generatedText);
+        //console.log(generatedText);
 
         const rutinaJSON = JSON.parse(generatedText); // Convertir el texto generado en JSON
 

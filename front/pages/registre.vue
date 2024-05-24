@@ -228,7 +228,7 @@ export default {
 
                 this.checkingEmail = true;
                 // Realizar la comprobación de correo electrónico solo si la respuesta no está vacía
-                const response = await fetch('http://localhost:8000/api/comprovarnomusuari', {
+                const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/comprovarnomusuari', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -259,7 +259,7 @@ export default {
                 } else {
                     // Realizar la comprobación de correo electrónico solo si la respuesta no está vacía
                     this.checkingEmail = true;
-                    const response = await fetch('http://localhost:8000/api/comprovaremail', {
+                    const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/comprovaremail', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -465,13 +465,13 @@ export default {
 
 
         async registerUser() {
-            console.log(this.userData);
+            //console.log(this.userData);
             // Filtrar los campos que no estén vacíos
             const filteredUserData = Object.fromEntries(
                 Object.entries(this.userData).filter(([key, value]) => value !== "")
             );
 
-            const response = await fetch('http://localhost:8000/api/registre', {
+            const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/registre', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -487,7 +487,7 @@ export default {
                 // Convertir la respuesta a formato JSON
                 const userDataResponse = await response.json();
 
-                console.log(userDataResponse);
+                //console.log(userDataResponse);
 
                 // Verificar si alguno de los campos devueltos es null
                 const nullFields = Object.values(userDataResponse).some(value => value === null);

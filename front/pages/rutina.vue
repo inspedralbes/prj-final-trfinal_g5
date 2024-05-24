@@ -94,14 +94,15 @@ export default {
     mounted() {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
         this.idUsuari = useUsuariPerfilStore().id_usuari;
-        console.log(this.idUsuari);
+        //console.log(this.idUsuari);
+
         this.obtenirRutina(this.idUsuari);
         this.obtenirDies(this.idUsuari);
     },
     methods: {
         redirectTo(page) {
             this.$router.push(page);
-            console.log("Redirecting to:", page); // Agregado: Verificar la redirección
+            //console.log("Redirecting to:", page); // Agregado: Verificar la redirección
         },
 
         async redirectToPage(page) {
@@ -127,27 +128,28 @@ export default {
         obtenirRutina(idUsuari) {
             getRutina(idUsuari)
                 .then((response) => {
-                    console.log("Datos de rutina recibidos:", response); // Verificar los datos recibidos
-                    // console.log("Día seleccionado:", this.selectedDay); // Verificar el día seleccionado
-                    // console.log("¿Es response un array?", Array.isArray(response)); // Verificar si response es un array
+
+                    //console.log("Datos de rutina recibidos:", response); // Verificar los datos recibidos
+                    //console.log("Día seleccionado:", this.selectedDay); // Verificar el día seleccionado
+                    //console.log("¿Es response un array?", Array.isArray(response)); // Verificar si response es un array
+
                     // Verificar la estructura de cada objeto de ejercicio en response
-                    response.forEach(exercise => console.log("Ejercicio:", exercise));
+                    response.forEach(exercise => //console.log("Ejercicio:", exercise));
 
                     // Filtrar las rutinas para obtener solo la más reciente
                     const recentDate = Math.max(...response.map(exercise => new Date(exercise.data).getTime()));
                     const recentExercises = response.filter(exercise => new Date(exercise.data).getTime() === recentDate);
-
                     // Filtrar los ejercicios para mostrar solo los del día seleccionado
                     const selectedDayString = this.selectedDay.toString();
                     this.exercises = recentExercises.filter(exercise => exercise.dia == selectedDayString); // Usamos == en lugar de ===
-                    console.log("Ejercicios filtrados:", this.exercises); // Verificar los ejercicios filtrados
+                    //console.log("Ejercicios filtrados:", this.exercises); // Verificar los ejercicios filtrados
                 })
                 .catch((error) => {
-                    console.error(error);
+                    // console.error(error);
                 })
                 .finally(() => {
                     this.loading = false; // Marcar la carga de datos como completa
-                    console.log("Loading:", this.loading); // Verificar el valor de loading
+                    //console.log("Loading:", this.loading); // Verificar el valor de loading
                 });
         },
         obtenirDies(idUsuari) {
@@ -158,10 +160,10 @@ export default {
                     const recentExercises = response.filter(exercise => new Date(exercise.data).getTime() === recentDate);
 
                     this.dies = [...new Set(recentExercises.map(exercise => exercise.dia))];
-                    console.log(this.dies);
+                    //console.log(this.dies);
                 })
                 .catch((error) => {
-                    console.error(error);
+                    // console.error(error);
                 });
         },
         incrementSelectedDay() {

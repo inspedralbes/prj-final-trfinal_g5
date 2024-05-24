@@ -1,0 +1,44 @@
+name: Preparant per producció
+run-name: ${{ github.actor }} està pujant l'aplicació a PROD 🚀
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup-laravel-nuxt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtenint el codi del respositori
+        uses: actions/checkout@v2
+
+      # Configuración de Nuxt
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install npm dependencies
+        run: npm install
+        working-directory: ./front
+
+      - name: Build Nuxt project
+        run: npm run build
+        working-directory: ./front
+
+      # Verificación de la construcción de Nuxt
+      - name: Verificar la construcción de Nuxt
+        run: ls -la ./front/.output/public
+        working-directory: ./
+
+      # Subida a producción
+      - name: Subir el build de Nuxt y la carpeta back a producción con SCP
+        run: |
+          echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
+          chmod 600 ~/prod_key.pem
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./front/.output/public/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/public_html/
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./back/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a20aitbaresc/web/fithub.daw.inspedralbes.cat/public_html/
+          
+      - run: echo "🍏 This job's status is ${{ job.status }}."

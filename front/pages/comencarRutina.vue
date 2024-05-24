@@ -116,19 +116,19 @@ export default {
   },
   mounted() {
     this.idUsuari = useUsuariPerfilStore().id_usuari;
-    console.log(this.idUsuari);
+    //console.log(this.idUsuari);
     this.obtenirRutina(this.idUsuari);
     this.obtenirDies(this.idUsuari);
   },
   methods: {
     redirectTo(page) {
       this.$router.push(page);
-      console.log("Redirecting to:", page);
+      //console.log("Redirecting to:", page);
     },
     showExerciseDetails(exercise) {
       this.selectedExercise = exercise;
       this.showModal = true;
-      console.log("Showing details for exercise:", exercise);
+      //console.log("Showing details for exercise:", exercise);
     },
     // Método para ocultar el modal
     hideModal() {
@@ -152,7 +152,7 @@ export default {
           } else {
             clearInterval(this.timerInterval);
             this.timerRunning = false;
-            console.log("¡El temporizador ha finalizado!");
+            //console.log("¡El temporizador ha finalizado!");
           }
         }, 1000);
       }
@@ -173,7 +173,7 @@ export default {
     },
     setSerieBase(exerciseId, serie) {
       this.selectedSeries[exerciseId] = serie;
-      console.log("Serie base seleccionada para ejercicio", exerciseId, ":", serie);
+      //console.log("Serie base seleccionada para ejercicio", exerciseId, ":", serie);
     },
     isSerieSelected(exerciseId, serie) {
       return this.selectedSeries[exerciseId] === serie;
@@ -183,41 +183,41 @@ export default {
       if (confirm("Si crees una rutina nova, la rutina actual s'eliminarà. ¿Estàs segur?")) {
         borrarRutina(this.idUsuari)
           .then((response) => {
-            console.log(response);
+            //console.log(response);
             this.$router.push(page);
           })
           .catch((error) => {
-            console.error(error);
+            //console.error(error);
           });
       }
     },
     obtenirRutina(idUsuari) {
       getRutina(idUsuari)
         .then((response) => {
-          console.log("Datos de rutina recibidos:", response);
-          console.log("Día seleccionado:", this.selectedDay);
-          console.log("¿Es response un array?", Array.isArray(response));
-          response.forEach(exercise => console.log("Ejercicio:", exercise));
+          //console.log("Datos de rutina recibidos:", response);
+          //console.log("Día seleccionado:", this.selectedDay);
+          //console.log("¿Es response un array?", Array.isArray(response));
+          response.forEach(exercise => //console.log("Ejercicio:", exercise));
           const selectedDayString = this.selectedDay.toString();
           this.exercises = response.filter(exercise => exercise.dia == selectedDayString);
-          console.log("Ejercicios filtrados:", this.exercises);
+          //console.log("Ejercicios filtrados:", this.exercises);
         })
         .catch((error) => {
-          console.error(error);
+          //console.error(error);
         })
         .finally(() => {
           this.loading = false;
-          console.log("Loading:", this.loading);
+          //console.log("Loading:", this.loading);
         });
     },
     obtenirDies(idUsuari) {
       getRutina(idUsuari)
         .then((response) => {
           this.dies = [...new Set(response.map(exercise => exercise.dia))];
-          console.log(this.dies);
+          //console.log(this.dies);
         })
         .catch((error) => {
-          console.error(error);
+          //console.error(error);
         });
     },
     incrementSelectedDay() {

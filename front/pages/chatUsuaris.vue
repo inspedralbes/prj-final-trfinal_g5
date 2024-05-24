@@ -91,6 +91,7 @@ export default {
             const store = useUsuariPerfilStore();
             const idUsuario = store.id_usuari;
 
+
             try {
                 const response = await getUsuariosChat(idUsuario);
                 this.amics = response.amigos;
