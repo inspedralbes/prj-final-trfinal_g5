@@ -95,6 +95,7 @@ export default {
         // Recuperar el nombre de usuario del almacenamiento local y asignarlo a la variable usuario
         this.idUsuari = useUsuariPerfilStore().id_usuari;
         //console.log(this.idUsuari);
+
         this.obtenirRutina(this.idUsuari);
         this.obtenirDies(this.idUsuari);
     },
@@ -136,14 +137,13 @@ export default {
                     // Filtrar las rutinas para obtener solo la más reciente
                     const recentDate = Math.max(...response.map(exercise => new Date(exercise.data).getTime()));
                     const recentExercises = response.filter(exercise => new Date(exercise.data).getTime() === recentDate);
-
                     // Filtrar los ejercicios para mostrar solo los del día seleccionado
                     const selectedDayString = this.selectedDay.toString();
                     this.exercises = recentExercises.filter(exercise => exercise.dia == selectedDayString); // Usamos == en lugar de ===
                     //console.log("Ejercicios filtrados:", this.exercises); // Verificar los ejercicios filtrados
                 })
                 .catch((error) => {
-                    console.error(error);
+                    // console.error(error);
                 })
                 .finally(() => {
                     this.loading = false; // Marcar la carga de datos como completa
@@ -161,7 +161,7 @@ export default {
                     //console.log(this.dies);
                 })
                 .catch((error) => {
-                    console.error(error);
+                    // console.error(error);
                 });
         },
         incrementSelectedDay() {

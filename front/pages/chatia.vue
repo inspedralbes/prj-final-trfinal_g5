@@ -22,7 +22,7 @@
         <div class="chat">
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
               <div class="info-usuario" v-if="message.role === 'user'">
-                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
                   class="avatar-usuario" />
                 <p class="nombre-usuario">{{ nom_usuari }}</p>
               </div>
@@ -103,7 +103,7 @@ export default {
 
         this.message = '';
       } catch (error) {
-        console.error('Error al enviar el mensaje:', error);
+        // console.error('Error al enviar el mensaje:', error);
         if (error.message.startsWith("HTTP error! status: 429")) {
           alert("Has superado el límite de solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
         }

@@ -65,7 +65,6 @@ export default {
                     // Encontrar la dieta más reciente
                     const recentDate = Math.max(...response.map(plato => new Date(plato.data_inici).getTime()));
                     const recentDiet = response.filter(plato => new Date(plato.data_inici).getTime() === recentDate);
-
                     // Organizar los platos por tipo de comida
                     const comidas = {};
                     recentDiet.forEach(plato => {
@@ -84,7 +83,7 @@ export default {
                     }));
                 })
                 .catch(error => {
-                    console.error('Error al obtener la dieta:', error);
+                    // console.error('Error al obtener la dieta:', error);
                 })
                 .finally(() => {
                     this.loading = false; // Marcar la carga de datos como completa
