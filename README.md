@@ -1,8 +1,8 @@
 # Projecte Transversal: FitHub
 
-## Tabla de Contenidos
+## Taula de continguts
 1. [Descripció](#Descripció)
-2. [Uso](#uso)
+2. [Esquema Carpetes](#Esquema-Carpetes)
 3. [Características](#características)
 4. [Contribuir](#contribuir)
 5. [Créditos](#créditos)
