@@ -48,11 +48,11 @@ docker-compose up
 
 ## Api Laravel Fithub
 
-# Descripció
+### Descripció
 
 Aquest projecte es una API desenvolupada amb Laravel. Proporciona serveis per ["gestió d'usuaris, gestió de missatges també gestió de rutina i dieta"].
 
-## Estructura del codi
+### Estructura del codi
 
 - `app/`: Conté el codi font del projecte, inclos models, controlador i també email.
 - `routes/`: Definix les rutes de la API.
