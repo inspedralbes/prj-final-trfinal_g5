@@ -7,7 +7,10 @@
 4. [Gestor de tasques](#gestor-de-tasques)
 5. [Prototip Gràfic](#prototip-grafic)
 6. [URL de Producció](#url-de-producció)
-7. [Estructura de codi](#estructura-de-codi)
+7. [Estat](#estat)
+8. [hola]
+9. [Api Laravel Fithub](#)
+   
 
 
 ## Descripció
