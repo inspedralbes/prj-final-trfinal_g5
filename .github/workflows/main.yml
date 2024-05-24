@@ -33,6 +33,10 @@ jobs:
         run: ls -la ./front/.output/public
         working-directory: ./
 
+      # Exportar el secret como variable de entorno
+      - name: Set API key as environment variable
+        run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+
       # Subida a producción
       - name: Subir el build de Nuxt y la carpeta back a producción con SCP
         run: |
