@@ -57,5 +57,5 @@ Aquest projecte es una API desenvolupada amb Laravel. Proporciona serveis per ["
 - `app/`: Conté el codi font del projecte, inclos models, controlador i també email.
 - `routes/`: Definix les rutes de la API.
 - `database/`: Conté les migracions i els seeds per la base de dades.
-- `public/storage`: Aqui trobarem dins una carpetes on emmagatzemem les fotos i videos de l'aplicació.
-- `resources/views/email`: Conté el missatge que enviem per correu a l'usuari
+- `public/storage/`: Aqui trobarem dins una carpetes on emmagatzemem les fotos i videos de l'aplicació.
+- `resources/views/email/`: Conté el missatge que enviem per correu a l'usuari
