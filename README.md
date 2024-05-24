@@ -1,12 +1,12 @@
 # Projecte Transversal: FitHub
 
 ## Tabla de Contenidos
-1. [Descripció](##Descripció)
+1. [Descripció](#Descripció)
 2. [Uso](#uso)
 3. [Características](#características)
 4. [Contribuir](#contribuir)
 5. [Créditos](#créditos)
-6. [Estructura de codi](###Estructuradelcodi)
+6. [Estructura de codi](#Estructuradelcodi)
 
 
 ## Descripció
