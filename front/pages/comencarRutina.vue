@@ -197,7 +197,7 @@ export default {
           //console.log("Datos de rutina recibidos:", response);
           //console.log("Día seleccionado:", this.selectedDay);
           //console.log("¿Es response un array?", Array.isArray(response));
-          response.forEach(exercise => //console.log("Ejercicio:", exercise));
+          // response.forEach(exercise => console.log("Ejercicio:", exercise));
           const selectedDayString = this.selectedDay.toString();
           this.exercises = response.filter(exercise => exercise.dia == selectedDayString);
           //console.log("Ejercicios filtrados:", this.exercises);
