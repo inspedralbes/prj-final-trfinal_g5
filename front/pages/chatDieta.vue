@@ -12,7 +12,7 @@
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
             
               <div class="info-usuario" v-if="message.role === 'user'">
-                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
+                <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuari"
                   class="avatar-usuario" />
                 <p class="nombre-usuario">{{ nom_usuari }}</p>
               </div>
@@ -43,7 +43,7 @@
 
       <div class="controles-inferiores">
         <div class="entrada-mensaje-container">
-          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escriure tu mensaje..."></textarea>
 
           <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
             <Icon id="send" name="i-ic:round-send"></Icon>
@@ -65,46 +65,46 @@ const arbrePreguntes = {
   pregunta: "Quin tipus de dieta vols?",
   opcions: {
     Volum: {
-      pregunta: "Quants apats prefereixes fer al dia per a una dieta de volum?",
+      pregunta: "Quants àpats prefereixes fer al dia per a una dieta de volum?",
       opcions: {
-        "4": "Dieta de volum de 4 apats esmorzar, dinar, berenar, sopar"
+        "4": "Dieta de volum de 4 àpats esmorzar, dinar, berenar, sopar"
         ,
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta de volum de 5 apats esmorzar, segon esmorzar, dinar, berenar, sopar",
-            "Post-entrenament": "Dieta de volum de 5 apats esmorzar, dinar, berenar, Post-entrenament, sopar"
+            "Segon esmorzar": "Dieta de volum de 5 àpats esmorzar, segon esmorzar, dinar, berenar, sopar",
+            "Post-entrenament": "Dieta de volum de 5 àpats esmorzar, dinar, berenar, Post-entrenament, sopar"
           }
         },
-        "6": "Dieta de volum de 6 apats esmorzar, segon esmorzar , dinar, berenar, Post-entrenament, sopar"
+        "6": "Dieta de volum de 6 àpats esmorzar, segon esmorzar , dinar, berenar, Post-entrenament, sopar"
       }
     },
     Definició: {
-      pregunta: "Quants apats prefereixes fer al dia per a una dieta de definició?",
+      pregunta: "Quants àpats prefereixes fer al dia per a una dieta de definició?",
       opcions: {
-        "4": "Dieta de definicío de 4 apats esmorzar, dinar, berenar, sopar",
+        "4": "Dieta de definició de 4 àpats esmorzar, dinar, berenar, sopar",
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta de definició amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
-            "Post-entrenament": "Dieta de definició amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+            "Segon esmorzar": "Dieta de definició amb 5 àpats: esmorzar, segon esmorzar, dinar, sopar.",
+            "Post-entrenament": "Dieta de definició amb 5 àpats: esmorzar, dinar, post-entrenament, sopar."
           }
         },
-        "6": "Dieta de definició amb 6 apats: esmorzar, segon esmorzar, dinar, post-entrenament, sopar."
+        "6": "Dieta de definició amb 6 àpats: esmorzar, segon esmorzar, dinar, post-entrenament, sopar."
       }
     },
     Equilibrada: {
-      pregunta: "Quants apats prefereixes al dia per a una dieta equilibrada?",
+      pregunta: "Quants àpats prefereixes al dia per a una dieta equilibrada?",
       opcions: {
-        "4": "Dieta equilibrada amb 4 apats",
+        "4": "Dieta equilibrada amb 4 àpats",
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta equilibrada amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
-            "Post-entrenament": "Dieta equilibrada amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+            "Segon esmorzar": "Dieta equilibrada amb 5 àpats: esmorzar, segon esmorzar, dinar, sopar.",
+            "Post-entrenament": "Dieta equilibrada amb 5 àpats: esmorzar, dinar, post-entrenament, sopar."
           }
         },
-        "6": "Dieta equilibrada amb 6 apats"
+        "6": "Dieta equilibrada amb 6 àpats"
       }
     }
   }
