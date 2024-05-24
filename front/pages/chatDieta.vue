@@ -72,25 +72,25 @@ const arbrePreguntes = {
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta de volum de 5 apats esmorzar, segon esmorzar, dinar, berenar, sopar",
-            "Post-entrenament": "Dieta de volum de 5 apats esmorzar, dinar, berenar, Post-entrenament, sopar"
+            "Segon esmorzar": "Dieta de volum de 5 apats Esmorzar, Segon esmorzar, Dinar, Berenar, Sopar",
+            "Post-entrenament": "Dieta de volum de 5 apats Esmorzar, Dinar, Berenar, Post-entrenament, Sopar"
           }
         },
-        "6": "Dieta de volum de 6 apats esmorzar, segon esmorzar , dinar, berenar, Post-entrenament, sopar"
+        "6": "Dieta de volum de 6 apats Esmorzar, Segon esmorzar , Dinar, Berenar, Post-entrenament, Sopar"
       }
     },
     Definició: {
       pregunta: "Quants apats prefereixes fer al dia per a una dieta de definició?",
       opcions: {
-        "4": "Dieta de definicío de 4 apats esmorzar, dinar, berenar, sopar",
+        "4": "Dieta de definicío de 4 apats Esmorzar, Dinar, Berenar, Sopar",
         "5": {
-          pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
+          pregunta: "Vols incloure un Segon esmorzar o un Post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta de definició amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
-            "Post-entrenament": "Dieta de definició amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+            "Segon esmorzar": "Dieta de definició amb 5 apats Esmorzar, Segon Esmorzar, Dinar, Berenar, Sopar",
+            "Post-entrenament": "Dieta de definició amb 5 apats: Esmorzar, Dinar, Post-entrenament, Berenar, Sopar."
           }
         },
-        "6": "Dieta de definició amb 6 apats: esmorzar, segon esmorzar, dinar, post-entrenament, sopar."
+        "6": "Dieta de definició amb 6 apats: Esmorzar, Segon Esmorzar, Dinar, Post-entrenament, Berenar, Sopar"
       }
     },
     Equilibrada: {
@@ -100,8 +100,8 @@ const arbrePreguntes = {
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-            "Segon esmorzar": "Dieta equilibrada amb 5 apats: esmorzar, segon esmorzar, dinar, sopar.",
-            "Post-entrenament": "Dieta equilibrada amb 5 apats: esmorzar, dinar, post-entrenament, sopar."
+            "Segon esmorzar": "Dieta equilibrada amb 5 apats: Esmorzar, Segon Esmorzar, Dinar, Berenar, Sopar",
+            "Post-entrenament": "Dieta equilibrada amb 5 apats: Esmorzar, Dinar, Post-entrenament, Berenar, Sopar"
           }
         },
         "6": "Dieta equilibrada amb 6 apats"
