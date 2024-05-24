@@ -17,7 +17,7 @@
         </div>
         <div v-for="usuario in usuariosFiltrados" :key="usuario.id" class="usuario-container">
           <div class="info-usuario">
-            <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Usuari"
+            <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Usuari"
               class="user-icon" />
             <div class="user-details">
               <p class="user-name">{{ usuario.nom }} {{ usuario.cognoms }}</p>
@@ -84,7 +84,7 @@ export default {
         const usuario_envia_id = this.id_usuari; // Obtener el ID del usuario que envía desde la variable de datos
         const usuario_recibe_id = idUsuario; // El ID del usuario que recibe es el ID del usuario seleccionado
 
-        const response = await fetch('http://127.0.0.1:8000/api/enviar-solicitud', {
+        const response = await fetch('http://fithub.daw.inspedralbes.cat/back/public/api/enviar-solicitud', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

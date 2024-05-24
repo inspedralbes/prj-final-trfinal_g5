@@ -54,7 +54,7 @@
               <img :src="'/rutina/' + exercise.imatge" :alt="exercise.nom_exercici" class="exercise-image" />
               <h2>{{ exercise.nom_exercici }}</h2>
               <div class="exercise-details">
-                <Icon class="info-icon" @click="showExerciseDetails(exercise)" name="ic:baseline-info" /> <br>
+                <Icon class="info-icon" @click="showExerciseDetails(exercise)" name="ic:baseline-info" /> Info <br>
                 <Icon class="" name="ic:baseline-insert-invitation" /> Día: {{ exercise.dia }} <br /> <br />
                 <Icon class="" name="ic:baseline-fitness-center" />Series: {{ exercise.series }} <br /> <br />
                 <Icon class="" name="ic:baseline-cached" />Repeticions: {{ exercise.repeticions }}

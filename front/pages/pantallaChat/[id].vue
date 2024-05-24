@@ -2,7 +2,7 @@
     <body>
       <div class="main-content">
         <div class="cabecera">
-          <img :src="'http://localhost:8000/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Imatge de perfil">
+          <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + usuario.foto_perfil" alt="Imatge de perfil">
           <p>{{ usuario.nom }}</p>
         </div>
         <div class="chat-container">
@@ -14,7 +14,7 @@
               <div v-for="mensaje in ordenarMensajesPorId(mensajesDia)" :key="mensaje.id" class="mensaje-container">
                 <div :class="{ 'mensaje-recibido': mensaje.usuario_envia_mensaje === usuario.id, 'mensaje-enviado': mensaje.usuario_envia_mensaje !== usuario.id }">
                   <div class="mensaje-imagen" v-if="mensaje.imagen">
-                    <img :src="'http://localhost:8000/storage/imagen/' + mensaje.imagen" alt="Imatge Chat" class="imagen-chat">
+                    <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagen/' + mensaje.imagen" alt="Imatge Chat" class="imagen-chat">
                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>
                     <div class="hora-container">
                       <span id="hora-missatge">{{ formatDate(mensaje.created_at) }}</span>
@@ -22,7 +22,7 @@
                   </div>
                   <template v-if="mensaje.video">
                     <video width="1920" height="240" controls>
-                      <source :src="'http://localhost:8000/storage/video/' + mensaje.video" type="video/mp4">
+                      <source :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/video/' + mensaje.video" type="video/mp4">
                       Your browser does not support the video tag.
                     </video>
                     <p v-if="mensaje.mensaje">{{ mensaje.mensaje }}</p>

@@ -4,7 +4,7 @@
             <div class="user-info">
                 <nuxt-link v-if="nom_usuari" :to="`/perfil/${username}`">
                     <div class="user-icon-container" :class="{ 'incomplete-profile': !registre }">
-                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + foto_perfil" alt="Usuari" class="user-icon" />
+                        <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Usuario" class="user-icon" />
                     </div>
                 </nuxt-link>
             </div>

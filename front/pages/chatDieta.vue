@@ -1,29 +1,22 @@
 <template>
-
   <body>
     <div class="contenedor">
       <capçalera />
       <div class="cabecera">Assessorament Dieta</div>
 
-
       <div class="chat-container">
         <div class="chat">
           <!-- Mensajes de chat de usuario y asistente -->
           <div v-for="(message, index) in chatMessages" :key="index" :class="getMessageClass(message)">
-            
-              <div class="info-usuario" v-if="message.role === 'user'">
-                <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario"
-                  class="avatar-usuario" />
-                <p class="nombre-usuario">{{ nom_usuari }}</p>
-              </div>
-              <div class="contenido-mensaje">
-                <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo"
-                  class="avatar-asistente" />
-                <p><strong v-if="message.role === 'assistant'">Arturo: </strong>{{ message.content }}</p>
-              </div>
-            
+            <div class="info-usuario" v-if="message.role === 'user'">
+              <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + foto_perfil" alt="Avatar usuario" class="avatar-usuario" />
+              <p class="nombre-usuario">{{ nom_usuari }}</p>
+            </div>
+            <div class="contenido-mensaje">
+              <img v-if="message.role === 'assistant'" src="@/public/img/icono_Arturo.jpg" alt="Avatar de Arturo" class="avatar-asistente" />
+              <p><strong v-if="message.role === 'assistant'">Arturo: </strong>{{ message.content }}</p>
+            </div>
           </div>
-
 
           <!-- Opciones de respuesta como botones -->
           <div v-if="currentOptions && showOptions" class="botones-preseleccionados">
@@ -32,14 +25,14 @@
             </button>
           </div>
 
-
-
-
           <!-- Mostrar animación de carga si isLoading es true -->
-          <div v-if="isLoading || isSending" class="animacion-carga"></div>
+          <div v-if="isLoading || isSending" class="animacion-carga">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       </div>
-
 
       <div class="controles-inferiores">
         <div class="entrada-mensaje-container">
@@ -55,11 +48,9 @@
   </body>
 </template>
 
-
 <script>
 import { enviarMensajeOpenAIDieta } from '@/stores/communicationManager';
 import { useUsuariPerfilStore } from '@/stores/index';
-
 
 const arbrePreguntes = {
   pregunta: "Quin tipus de dieta vols?",
@@ -67,12 +58,10 @@ const arbrePreguntes = {
     Volum: {
       pregunta: "Quants àpats prefereixes fer al dia per a una dieta de volum?",
       opcions: {
-        "4": "Dieta de volum de 4 àpats esmorzar, dinar, berenar, sopar"
-        ,
+        "4": "Dieta de volum de 4 àpats esmorzar, dinar, berenar, sopar",
         "5": {
           pregunta: "Vols incloure un segon esmorzar o un post-entrenament?",
           opcions: {
-
             "Segon esmorzar": "Dieta de volum de 5 apats Esmorzar, Segon esmorzar, Dinar, Berenar, Sopar",
             "Post-entrenament": "Dieta de volum de 5 apats Esmorzar, Dinar, Berenar, Post-entrenament, Sopar"
           }
@@ -84,7 +73,6 @@ const arbrePreguntes = {
       pregunta: "Quants àpats prefereixes fer al dia per a una dieta de definició?",
       opcions: {
         "4": "Dieta de definicío de 4 apats Esmorzar, Dinar, Berenar, Sopar",
-
         "5": {
           pregunta: "Vols incloure un Segon esmorzar o un Post-entrenament?",
           opcions: {
@@ -93,7 +81,6 @@ const arbrePreguntes = {
           }
         },
         "6": "Dieta de definició amb 6 apats: Esmorzar, Segon Esmorzar, Dinar, Post-entrenament, Berenar, Sopar"
-
       }
     },
     Equilibrada: {
@@ -105,7 +92,6 @@ const arbrePreguntes = {
           opcions: {
             "Segon esmorzar": "Dieta equilibrada amb 5 apats: Esmorzar, Segon Esmorzar, Dinar, Berenar, Sopar",
             "Post-entrenament": "Dieta equilibrada amb 5 apats: Esmorzar, Dinar, Post-entrenament, Berenar, Sopar"
-
           }
         },
         "6": "Dieta equilibrada amb 6 àpats"
@@ -113,7 +99,6 @@ const arbrePreguntes = {
     }
   }
 };
-
 
 export default {
   data() {
@@ -136,7 +121,6 @@ export default {
   methods: {
     handleOptionSelect(optionKey) {
       let nextStep = this.currentOptions[optionKey];
-
 
       // Comprobar si hay un siguiente nivel de opciones
       if (nextStep && typeof nextStep === 'object' && nextStep.pregunta) {
@@ -162,7 +146,8 @@ export default {
         // Opcional: Llamar a enviarMensaje directamente si se desea enviar inmediatamente
         this.enviarMensaje();
       }
-    }, async obtenirDietaDeHoy(idUsuari) {
+    },
+    async obtenirDietaDeHoy(idUsuari) {
       try {
         const response = await getDieta(idUsuari);
         const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
@@ -286,7 +271,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 html,
 body {
@@ -294,12 +278,7 @@ body {
   padding: 0;
   height: 100vh;
   background: linear-gradient(to top right, #FFA500, #f45c36);
-
 }
-
-
-
-
 
 .contenedor {
   display: flex;
@@ -308,7 +287,6 @@ body {
   align-items: center;
   height: 100vh;
 }
-
 
 .cabecera {
   background-color: #333;
@@ -324,25 +302,17 @@ body {
   margin-bottom: 10px;
 }
 
-
 .mensaje-bienvenida {
   display: grid;
   grid-template-columns: .1fr 1fr;
   margin-top: 15%;
-
-
-
-
 }
-
 
 .mensaje-bienvenida h2 {
   font-size: 1.5em;
   font-weight: 600;
   text-align: center;
   padding: 15px;
-
-
   background-color: #33333327;
   font-style: italic;
   /* Add this line to make the text italic */
@@ -351,14 +321,12 @@ body {
   border-radius: 10px;
 }
 
-
 .mensaje-bienvenida img {
   width: 55px;
   height: 55px;
   border-radius: 50%;
   margin-left: 45px;
 }
-
 
 .botones-preseleccionados {
   display: grid;
@@ -368,10 +336,7 @@ body {
   margin-top: 60%;
   margin-bottom: 20px;
   width: 90%;
-
-
 }
-
 
 .botones-preseleccionados button {
   background-color: #0000002f;
@@ -391,7 +356,6 @@ body {
   margin: auto;
 }
 
-
 .chat-container {
   overflow-y: auto;
   /* Hace que el contenido sea desplazable verticalmente si es necesario */
@@ -399,7 +363,6 @@ body {
   /* Permite que el área del chat ocupe el espacio disponible */
   width: 90%;
 }
-
 
 .chat {
   display: flex;
@@ -409,16 +372,12 @@ body {
   width: 90%;
 }
 
-
 .chat img {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
-
-
 }
-
 
 .info-usuario {
   display: grid;
@@ -426,11 +385,9 @@ body {
   align-items: center;
 }
 
-
 .info-usuario p {
   font-style: italic;
 }
-
 
 .mensaje-usuario {
   background-color: #fda65975;
@@ -441,11 +398,7 @@ body {
   margin-bottom: 8px;
   word-wrap: break-word;
   max-width: 90%;
-  
 }
-
-
-
 
 .mensaje-asistente {
   display: flex;
@@ -460,16 +413,12 @@ body {
   word-wrap: break-word;
 }
 
-
-
-
 .avatar-usuario {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
 }
-
 
 .avatar-asistente {
   width: 30px;
@@ -479,9 +428,7 @@ body {
   background-color: #FFA500;
 }
 
-
 .contenido-mensaje-asistente {
-  
   word-wrap: break-word;
 }
 
@@ -489,88 +436,102 @@ body {
   word-wrap: break-word;
 }
 
-
 .animacion-carga {
   width: 20px;
   height: 20px;
-  border: 2px solid #4CAF50;
-  border-radius: 50%;
-  border-top: 2px solid #ccc;
-  animation: spin 1s linear infinite;
   align-self: flex-start;
   margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
 }
 
+.animacion-carga div {
+  width: 8px;
+  height: 8px;
+  background-color: #333;
+  border-radius: 50%;
+  display: inline-block;
+  animation: cambio-tamaño 1s infinite alternate;
+}
 
-@keyframes spin {
+.animacion-carga div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.animacion-carga div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes cambio-tamaño {
   0% {
-    transform: rotate(0deg);
+    transform: scale(1);
   }
-
-
+  50% {
+    transform: scale(1.5);
+  }
   100% {
-    transform: rotate(360deg);
+    transform: scale(1);
   }
 }
-
 
 .controles-inferiores {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 20px;
 }
 
 .entrada-mensaje-container {
-    display: flex;
-    align-items: center;
-    display: grid;
-    grid-template-columns: 5fr .1fr .1fr;
-    width: 90%;
-    padding: 10px;
-    border-radius: 30px;
-    background-color: #333;
-    margin-top: 10px;
+  display: flex;
+  align-items: center;
+  display: grid;
+  grid-template-columns: 5fr .1fr .1fr;
+  width: 90%;
+  padding: 10px;
+  border-radius: 30px;
+  background-color: #333;
+  margin-top: 10px;
 }
 
 .entrada-mensaje {
-    margin-left: 2px;
-    width: 95%;
-    padding-left: 10px;
-    padding-top: 10px;
-    box-sizing: border-box;
-    background-color: #f0f0f0;
-    border: none;
-    border-radius: 20px;
-    height: 35px;
-    overflow-y: hidden;
+  margin-left: 2px;
+  width: 95%;
+  padding-left: 10px;
+  padding-top: 10px;
+  box-sizing: border-box;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 20px;
+  height: 35px;
+  overflow-y: hidden;
 }
 
 .boton-enviar {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: #ccc;
-    color: white;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-left: 10px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #ccc;
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 10px;
 }
 
 .boton-enviar:hover {
-    background-color: #333;
+  background-color: #333;
 }
 
 #send {
-    width: 100%;
-    height: 100%;
-    margin-left: 2px;
-    color: #333;
+  width: 100%;
+  height: 100%;
+  margin-left: 2px;
+  color: #333;
 }
 
 navBar {

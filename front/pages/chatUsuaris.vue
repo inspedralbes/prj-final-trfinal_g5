@@ -16,7 +16,7 @@
                 <!-- Aquí agregamos el evento @click para redirigir al usuario y guardar el ID del amigo -->
                 <nuxt-link :to="`/pantallaChat/${amigo.id}`" @click="seleccionarAmigo(amigo.id)">
                     <div class="chat-element">
-                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + amigo.foto_perfil"
+                        <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + amigo.foto_perfil"
                             :alt="'Imagen de perfil de ' + amigo.nom">
                         <div class="info-chat">
                             <div>

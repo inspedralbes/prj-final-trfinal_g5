@@ -15,7 +15,7 @@
             <div v-else>
                 <div v-for="solicitud in solicitudes" :key="solicitud.id" class="usuario-container">
                     <div class="info-usuario">
-                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + solicitud.usuario.usuario.foto_perfil"
+                        <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + solicitud.usuario.usuario.foto_perfil"
                             alt="Usuario" class="user-icon" />
                         <div class="user-details">
                             <p class="user-name">{{ solicitud.usuario.usuario.nom }} {{ solicitud.usuario.usuario.cognoms }}</p>
@@ -38,7 +38,7 @@
             <div  v-else>
                 <div v-for="envia in enviadas" :key="envia.id" class="usuario-container">
                     <div class="info-usuario">
-                        <img :src="'http://127.0.0.1:8000/storage/imagenes_perfil/' + envia.usuario.usuario.foto_perfil"
+                        <img :src="'http://fithub.daw.inspedralbes.cat/back/public/storage/imagenes_perfil/' + envia.usuario.usuario.foto_perfil"
                             alt="Usuario" class="user-icon" />
                         <div class="user-details">
                             <div class="user-name">{{ envia.usuario.usuario.nom }} {{ envia.usuario.usuario.cognoms }}</div>
