@@ -31,11 +31,11 @@
                 <div class="exercise-list">
                     <div v-for="exercise in exercises" :key="exercise.id">
                         <div class="exercise-item">
-                            <img :src="exercise.imatge" :alt="exercise.nom_exercici" class="exercise-image" />
+                            <img :src="'/rutina/' + exercise.imatge" :alt="exercise.nom_exercici" class="exercise-image" />
 
                             <h2>{{ exercise.nom_exercici }}</h2>
                             <div class="exercise-details">
-                                <Icon class="info-icon" @click="showExerciseDetails(exercise)"name="ic:baseline-info" /> <br>
+                                <Icon class="info-icon" @click="showExerciseDetails(exercise)"name="ic:baseline-info" />Info <br><br>
                                 <Icon class="" name="ic:baseline-insert-invitation" />
                                 Dia: {{ exercise.dia }} <br> <br>
 
@@ -128,8 +128,8 @@ export default {
             getRutina(idUsuari)
                 .then((response) => {
                     console.log("Datos de rutina recibidos:", response); // Verificar los datos recibidos
-                    console.log("Día seleccionado:", this.selectedDay); // Verificar el día seleccionado
-                    console.log("¿Es response un array?", Array.isArray(response)); // Verificar si response es un array
+                    // console.log("Día seleccionado:", this.selectedDay); // Verificar el día seleccionado
+                    // console.log("¿Es response un array?", Array.isArray(response)); // Verificar si response es un array
                     // Verificar la estructura de cada objeto de ejercicio en response
                     response.forEach(exercise => console.log("Ejercicio:", exercise));
 
@@ -256,7 +256,6 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Fondo oscuro semitransparente */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -269,6 +268,7 @@ body {
     max-width: 80%;
     max-height: 80%;
     overflow: auto;
+    position: relative; /* Añadido */
 }
 
 .close {
@@ -276,6 +276,7 @@ body {
     top: 10px;
     right: 10px;
     cursor: pointer;
+    font-size: 24px; /* Tamaño del icono de cierre */
 }
 
 .arrow {

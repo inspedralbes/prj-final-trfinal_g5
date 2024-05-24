@@ -54,12 +54,9 @@ class RutinaController extends Controller
             ->join('ejercicios', 'rutinas.id_exercici', '=', 'ejercicios.id')
             ->select('rutinas.*', 'ejercicios.descripció', 'ejercicios.link','ejercicios.imatge')
             ->get();
+
     
-        if ($rutina->isEmpty()) {
-            return response()->json(['error' => 'Rutina not found'], 404);
-        }
-    
-        return response()->json($rutina, 200);
+        return response()->json($rutina);
     }
   
     /**

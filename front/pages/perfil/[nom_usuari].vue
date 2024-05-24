@@ -373,6 +373,7 @@ export default {
             store.foto_perfil = '';
             store.email_usuari = '';
             store.tipus_usuari = '';
+            store.amic = '';
             this.$router.push('/');
         },
     },

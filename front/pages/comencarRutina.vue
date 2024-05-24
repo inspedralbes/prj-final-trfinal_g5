@@ -51,7 +51,7 @@
         <div class="exercise-list">
           <div v-for="exercise in exercises" :key="exercise.id">
             <div class="exercise-item">
-              <img :src="exercise.image" :alt="exercise.nom_exercici" class="exercise-image" />
+              <img :src="'/rutina/' + exercise.imatge" :alt="exercise.nom_exercici" class="exercise-image" />
               <h2>{{ exercise.nom_exercici }}</h2>
               <div class="exercise-details">
                 <Icon class="info-icon" @click="showExerciseDetails(exercise)" name="ic:baseline-info" /> <br>
