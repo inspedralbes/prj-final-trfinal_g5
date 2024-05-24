@@ -1,5 +1,18 @@
 # Projecte Transversal: FitHub
 
+## Taula de continguts
+1. [Descripció](#descripció)
+2. [Esquema Carpetes](#esquema-carpetes)
+3. [Integrants](#integrants)
+4. [Gestor de tasques](#gestor-de-tasques)
+5. [Prototip Gràfic](#prototip-grafic)
+6. [URL de Producció](#url-de-producció)
+7. [Estat](#estat)
+8. [Manual d'Instal·lació / Desplegament](#manual-dinstallació--desplegament)
+9. [Api Laravel Fithub](#api-laravel-fithub)
+   
+
+
 ## Descripció
 Aquest projecte té com a objectiu desenvolupar un projecte final que tracta d'una aplicacio de gimnas que amb un chatIA et fa les rutines i dietes i assesorament de gimnas
 
