@@ -43,7 +43,7 @@
 
       <div class="controles-inferiores">
         <div class="entrada-mensaje-container">
-          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escriure tu mensaje..."></textarea>
+          <textarea v-model="mensaje" class="entrada-mensaje" placeholder="Escriure el teu missatge..."></textarea>
 
           <button @click="enviarMensaje" :disabled="isSaving" class="boton-enviar">
             <Icon id="send" name="i-ic:round-send"></Icon>
