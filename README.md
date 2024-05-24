@@ -8,7 +8,7 @@
 5. [Prototip Gràfic](#prototip-grafic)
 6. [URL de Producció](#url-de-producció)
 7. [Estat](#estat)
-8. [hola]
+8. [Manual d'Instal·lació / Desplegament](#manual-dinstallació--desplegament)
 9. [Api Laravel Fithub](#api-laravel-fithub)
    
 
