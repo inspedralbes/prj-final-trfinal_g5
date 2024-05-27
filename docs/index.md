@@ -1,7 +1,7 @@
 ---
+layout: page
 title: Inici
 ---
-
 # Benvinguts a la Documentació de Fithub
 
 Aquí trobaràs tota l'informació necessaria per poder utilitzar amb facilitat la nostra aplicació.
