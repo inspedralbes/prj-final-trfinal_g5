@@ -1,13 +1,10 @@
 # Manual d’usuaris
 <img src="../Diseny/logo_fithub_black_orange.png" alt="Logo de Fithub" width="200" />
 
-
-```
 AlexDelgado
 MiquelBarcelo
 EricRodriguez
 AitorBarreiro
-```
 
 ## IndexManuald’Usuaris
 
