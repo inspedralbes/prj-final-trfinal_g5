@@ -29,7 +29,7 @@ Aquest es el nostre esquema de carpetes:
 ## Integrants
 - Aitor Barreiro
 - Alex Delgado
-- Eric Rodrigez
+- Eric Rodríguez
 - Miquel Barceló
 
 ## Gestor de Tasques
