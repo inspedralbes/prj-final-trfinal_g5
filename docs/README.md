@@ -1,3 +1,8 @@
+---
+layout: page
+title: Documentació bàsica
+---
+
 # Documentació bàsica del projecte
 Alguns dels punts que han de quedar explicats:
  * Objectius
