@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Inici
+title: Manual d'usuaris
 ---
 
 Podeu veure el manual d'usuaris de l'aplicació, a través de l'enllàç següent:
