@@ -1,6 +1,5 @@
 ---
 layout: page
-title: Inici
 ---
 <img src="Diseny/logo_fithub_black_orange.png" alt="Logo de Fithub" width="200" />
 # Benvinguts a la Documentació de Fithub 
