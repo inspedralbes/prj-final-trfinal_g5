@@ -1,5 +1,5 @@
 # Manual d’usuaris
-<img src="images/logo_fithub_black_orange.png" alt="Logo de Fithub" width="200" />
+<img src="Diseny/logo_fithub_black_orange.png" alt="Logo de Fithub" width="200" />
 
 
 ```
