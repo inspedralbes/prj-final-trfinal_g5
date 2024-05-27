@@ -1,4 +1,3 @@
-# PLANIFICACIÓ
 
 ## Sprint 1:
 
