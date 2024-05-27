@@ -1,3 +1,8 @@
+---
+layout: page
+title: Disseny i Diagrames
+---
+
 # Disseny i Diagrames
 
 ## Dissenys:
