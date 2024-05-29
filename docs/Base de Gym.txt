@@ -1,0 +1,575 @@
+Gym
+
+{
+    "nombre": "Curl de Martillo Inclinado",
+    "dificultad": "principiante",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_martillo_inclinado.jpg",
+    "descripcion": "Realiza curls con mancuernas inclinado para fortalecer los bíceps."
+},
+{
+    "nombre": "Curl de Barra de Agarre Ancho",
+    "dificultad": "principiante",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_barra_agarre_ancho.jpg",
+    "descripcion": "Realiza curls con barra ancha para fortalecer los bíceps."
+},
+{
+    "nombre": "Curl de Araña con Barra EZ",
+    "dificultad": "intermedio",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_arana_barra_ez.jpg",
+    "descripcion": "Realiza curls con la barra EZ en forma de araña para fortalecer los bíceps."
+},
+{
+    "nombre": "Curl de Martillo",
+    "dificultad": "intermedio",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_martillo.jpg",
+    "descripcion": "Realiza curls con mancuernas en posición neutra para fortalecer los bíceps."
+},
+{
+    "nombre": "Curl de Barra EZ",
+    "dificultad": "intermedio",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_barra_ez.jpg",
+    "descripcion": "Realiza curls con la barra EZ para fortalecer los bíceps."
+},
+{
+    "nombre": "Curl Zottman",
+    "dificultad": "intermedio",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_zottman.jpg",
+    "descripcion": "Realiza curls Zottman para trabajar los bíceps y los antebrazos."
+},
+{
+    "nombre": "Curl de Bíceps a Press de Hombros",
+    "dificultad": "principiante",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_biceps_press_hombros.jpg",
+    "descripcion": "Realiza curls de bíceps seguidos de un press de hombros para fortalecer los brazos."
+},
+{
+    "nombre": "Curl de Barra",
+    "dificultad": "intermedio",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_barra.jpg",
+    "descripcion": "Realiza curls con barra recta para fortalecer los bíceps."
+},
+{
+    "nombre": "Curl Concentrado",
+    "dificultad": "intermedio",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_concentrado.jpg",
+    "descripcion": "Realiza curls concentrados para aislar y fortalecer los bíceps."
+},
+{
+    "nombre": "Curl de Martillo Inclinado Flexor",
+    "dificultad": "principiante",
+    "musculo": "bíceps",
+    "imagen": "imagen_curl_martillo_inclinado_flexor.jpg",
+    "descripcion": "Realiza curls inclinado con agarre neutro para fortalecer los bíceps."
+},
+{
+    "nombre": "Giro de barra",
+    "dificultad": "intermedio",
+    "musculo": "abdominales",
+    "imagen": "imagen_giro_barra.jpg",
+    "descripcion": "Realiza giros con una barra para fortalecer los abdominales."
+},
+{
+    "nombre": "Plancha de codos",
+    "dificultad": "intermedio",
+    "musculo": "abdominales",
+    "imagen": "imagen_plancha_codos.jpg",
+    "descripcion": "Mantén la posición de plancha apoyado en los codos para fortalecer los abdominales."
+},
+{
+    "nombre": "Abdominales suspendidos",
+    "dificultad": "intermedia",
+    "músculo": "abdominales",
+    "imagen": "imagen_abdominales_suspendidos.jpg",
+    "descripcion": "Levanta las piernas con el torso suspendido para fortalecer el core."
+},
+{
+    "nombre": "Jab Cruzado V-Sit con Mancuerna",
+    "dificultad": "intermedia",
+    "músculo": "abdominales",
+    "imagen": "imagen_jab_cruzado_vsit_mancuerna.jpg",
+    "descripcion": "Sentado en posición V-Sit, realiza un jab cruzado con mancuerna para trabajar los oblicuos."
+},
+{
+    "nombre": "Giro de cable de pie de bajo a alto",
+    "dificultad": "intermedia",
+    "músculo": "abdominales",
+    "imagen": "imagen_giro_cable_pie_bajo_alto.jpg",
+    "descripcion": "De pie, realiza un giro con el cable desde la posición baja hasta la alta para fortalecer los oblicuos."
+},
+{
+    "nombre": "Lanzador de hechizos con mancuernas",
+    "dificultad": "principiante",
+    "músculo": "abdominales",
+    "imagen": "imagen_lanzador_hechizos_mancuernas.jpg",
+    "descripcion": "Acostado, levanta una mancuerna con ambos brazos extendidos para fortalecer los abdominales."
+},
+{
+    "nombre": "Crunch inverso declinado",
+    "dificultad": "intermedia",
+    "músculo": "abdominales",
+    "imagen": "imagen_crunch_inverso_declinado.jpg",
+    "descripcion": "Realiza un crunch inverso en un banco declinado para trabajar los abdominales inferiores."
+},
+{
+    "nombre": "Círculos de Cadera de Pie",
+    "dificultad": "principiante",
+    "músculo": "abductores",
+    "imagen": "imagen_circulos_cadera_pie.jpg",
+    "descripcion": "De pie, realiza círculos con la cadera para fortalecer los abductores."
+},
+{
+    "nombre": "Bombero",
+    "dificultad": "principiante",
+    "músculo": "abductores",
+    "imagen": "imagen_bombero.jpg",
+    "descripcion": "Simula el movimiento de un bombero arrastrando una manguera para trabajar los abductores."
+},
+{
+    "nombre": "Molinillos",
+    "dificultad": "intermedia",
+    "músculo": "abductores",
+    "imagen": "imagen_molinillos.jpg",
+    "descripcion": "De pie, realiza movimientos circulares con las piernas para fortalecer los abductores y el core."
+},
+{
+    "nombre": "Caminata del Monstruo",
+    "dificultad": "intermedia",
+    "músculo": "abductores",
+    "imagen": "imagen_caminata_monstruo.jpg",
+    "descripcion": "Realiza una caminata lateral para fortalecer los abductores y las piernas."
+},
+{
+    "nombre": "Estiramiento de la Banda Iliotibial y Glúteos",
+    "dificultad": "intermedia",
+    "músculo": "abductores",
+    "imagen": "imagen_estiramiento_banda_iliotibial_gluteos.jpg",
+    "descripcion": "Realiza un estiramiento para mejorar la flexibilidad de la banda iliotibial y los glúteos."
+},
+{
+    "nombre": "Estiramiento Cruzado Acostado de una Pierna",
+    "dificultad": "principiante",
+    "músculo": "abductores",
+    "imagen": "imagen_estiramiento_cruzado_acostado_pierna.jpg",
+    "descripcion": "Acostado, cruza una pierna sobre el cuerpo para estirar los abductores."
+},
+{
+    "nombre": "Press de Banca plano con Mancuernas",
+    "dificultad": "principiante",
+    "músculo": "pectoral",
+    "descripcion": "Realiza press de banca acostado, con mancuernas, para trabajar los pectorales."
+},
+{
+    "nombre": "Flexiones de Pecho",
+    "dificultad": "intermedio",
+    "músculo": "pectoral",
+    "descripcion": "Realiza flexiones desde una posición de plancha para fortalecer los pectorales."
+},
+{
+    "nombre": "Press de Banca Inclinado con Mancuernas",
+    "dificultad": "intermedio",
+    "músculo": "pectoral",
+    "descripcion": "Realiza press de banca inclinado, con mancuernas, para enfocar en los pectorales superiores."
+},
+{
+    "nombre": "Cross-over de Cable Bajo",
+    "dificultad": "principiante",
+    "músculo": "pectoral",
+    "descripcion": "Realiza cross-over con cables bajos para aislar los pectorales."
+},
+{
+    "nombre": "Press de Banca plano con Barra",
+    "dificultad": "intermedio",
+    "músculo": "pectoral",
+    "descripcion": "Realiza press de banca acostado, con barra, para desarrollar los pectorales."
+},
+{
+    "nombre": "Dips de Pecho",
+    "dificultad": "intermedio",
+    "músculo": "pectoral",
+    "descripcion": "Realiza dips enfocados en el pecho para fortalecer los pectorales y tríceps."
+},
+{
+    "nombre": "Aperturas Mancuernas Declinadas",
+    "dificultad": "intermedio",
+    "músculo": "pectoral",
+    "descripcion": "Realiza aperturas con mancuernas declinadas para trabajar los pectorales inferiores."
+},
+{
+    "nombre": "Aperturas Mancuernas",
+    "dificultad": "principiante",
+    "músculo": "pectoral",
+    "descripcion": "Realiza aperturas con mancuernas para trabajar los pectorales."
+},
+{
+    "nombre": "Hip-Thrust",
+    "dificultad": "intermedio",
+    "músculo": "glúteos",
+    "descripcion": "Realiza el movimiento de empuje de cadera desde una posición sentada para fortalecer los glúteos."
+},
+{
+    "nombre": "Extensión de Cadera con Cable en una Pierna",
+    "dificultad": "intermedio",
+    "músculo": "glúteos",
+    "descripcion": "Realiza extensiones de cadera con un cable enfocado en una pierna para fortalecer los glúteos."
+},
+{
+    "nombre": "Puente de Glúteos",
+    "dificultad": "principiante",
+    "músculo": "glúteos",
+    "descripcion": "Realiza el puente de glúteos desde una posición acostada para fortalecer los glúteos."
+},
+{
+    "nombre": "Puente de Glúteos en una Pierna",
+    "dificultad": "intermedio",
+    "músculo": "glúteos",
+    "descripcion": "Realiza el puente de glúteos enfocado en una pierna para fortalecer los glúteos y la estabilidad."
+},
+{
+    "nombre": "Elevación de Rodilla en el Paso",
+    "dificultad": "principiante",
+    "músculo": "glúteos",
+    "descripcion": "Levanta la rodilla hacia el pecho mientras das un paso para fortalecer los glúteos."
+},
+{
+    "nombre": "Sentadilla Arrodillada",
+    "dificultad": "principiante",
+    "músculo": "glúteos",
+    "descripcion": "Realiza una sentadilla desde una posición arrodillada para fortalecer los glúteos."
+},
+{
+    "nombre": "Patadas de Mariposa",
+    "dificultad": "intermedio",
+    "músculo": "glúteos",
+    "descripcion": "Realiza patadas hacia los lados desde una posición cuadrúpeda para trabajar los glúteos."
+},
+{
+    "nombre": "Patada de Glúteos",
+    "dificultad": "principiante",
+    "músculo": "glúteos",
+    "descripcion": "Realiza una patada hacia atrás desde una posición de pie para fortalecer los glúteos."
+},
+{
+    "nombre": "Peso Muerto con Barra",
+    "dificultad": "intermedio",
+    "músculo": "isquiotibiales",
+    "descripcion": "Levanta la barra desde el suelo con la espalda recta para fortalecer los isquiotibiales."
+},
+{
+    "nombre": "Peso Muerto Rumano con Mancuernas",
+    "dificultad": "principiante",
+    "músculo": "isquiotibiales",
+    "descripcion": "Realiza un peso muerto con mancuernas desde una posición inclinada para trabajar los isquiotibiales."
+},
+{
+    "nombre": "Peso Muerto Limpio",
+    "dificultad": "principiante",
+    "músculo": "isquiotibiales",
+    "descripcion": "Levanta la barra desde el suelo hasta los hombros en un solo movimiento para fortalecer los isquiotibiales."
+},
+{
+    "nombre": "Peso Muerto Sumo",
+    "dificultad": "principiante",
+    "músculo": "isquiotibiales",
+    "descripcion": "Realiza un peso muerto con los pies más separados que el ancho de los hombros para trabajar los isquiotibiales."
+},
+{
+    "nombre": "Peso Muerto Rumano desde un Deficit",
+    "dificultad": "principiante",
+    "músculo": "isquiotibiales",
+    "descripcion": "Realiza un peso muerto rumano desde una posición más baja para estirar los isquiotibiales."
+},
+{
+    "nombre": "Elevación Natural de Glúteos e Isquiotibiales",
+    "dificultad": "principiante",
+    "músculo": "isquiotibiales",
+    "descripcion": "Levanta las piernas hacia arriba mientras estás tumbado para fortalecer los glúteos e isquiotibiales."
+},
+{
+    "nombre": "Elevación de Glúteos e Isquiotibiales",
+    "dificultad": "principiante",
+    "músculo": "isquiotibiales",
+    "descripcion": "Levanta las caderas hacia arriba mientras estás tumbado para fortalecer los glúteos e isquiotibiales."
+},
+{
+    "nombre": "Peso Muerto de Arrancada",
+    "dificultad": "principiante",
+    "músculo": "isquiotibiales",
+    "descripcion": "Levanta la barra desde el suelo hasta los hombros en un solo movimiento explosivo para fortalecer los isquiotibiales."
+},
+{
+        "nombre": "Dominadas con Peso",
+        "dificultad": "experto",
+        "músculo": "dorsales",
+        "imagen": "imagen_dominadas_con_peso.jpg",
+        "descripcion": "Realiza dominadas con peso adicional para fortalecer los dorsales."
+},
+{
+        "nombre": "Jalon Abierto Poleas Altas",
+        "dificultad": "principiante",
+        "músculo": "dorsales",
+        "imagen": "imagen_jalon_abierto_poleas_altas.jpg",
+        "descripcion": "Realiza un jalón abierto desde la polea alta para trabajar los dorsales."
+},
+{
+        "nombre": "Jalon de Agarre Cerrado",
+        "dificultad": "intermedio",
+        "músculo": "dorsales",
+        "imagen": "imagen_jalon_agarre_cerrado.jpg",
+        "descripcion": "Realiza un jalón con agarre cerrado para fortalecer los dorsales."
+},
+{
+        "nombre": "Dominadas",
+        "dificultad": "principiante",
+        "músculo": "dorsales",
+        "imagen": "imagen_dominadas.jpg",
+        "descripcion": "Realiza dominadas en una barra fija para fortalecer los dorsales."
+},
+{
+        "nombre": "Muscle Up",
+        "dificultad": "intermedio",
+        "músculo": "dorsales",
+        "imagen": "imagen_muscle_up.jpg",
+        "descripcion": "Realiza un movimiento combinado de dominadas y fondos para fortalecer los dorsales."
+},
+{
+        "nombre": "Remo con Barra (Shotgun Row)",
+        "dificultad": "intermedio",
+        "músculo": "dorsales",
+        "imagen": "imagen_remo_barra_shotgun_row.jpg",
+        "descripcion": "Realiza un remo con barra desde una posición inclinada para trabajar los dorsales."
+},
+{
+        "nombre": "Jalon de Agarre Cerrado Frontal",
+        "dificultad": "intermedio",
+        "músculo": "dorsales",
+        "imagen": "imagen_jalon_agarre_cerrado_frontal.jpg",
+        "descripcion": "Realiza un jalón con agarre cerrado hacia el frente para fortalecer los dorsales."
+},
+{
+        "nombre": "Dominadas con Barra en V",
+        "dificultad": "intermedio",
+        "músculo": "dorsales",
+        "imagen": "imagen_dominadas_barra_en_v.jpg",
+        "descripcion": "Realiza dominadas en una barra en V para fortalecer los dorsales."
+},
+{
+        "nombre": "Peso Muerto en Déficit con Barra",
+        "dificultad": "principiante",
+        "músculo": "parte baja de la espalda",
+        "imagen": "imagen_peso_muerto_deficit_barra.jpg",
+        "descripcion": "Levanta la barra desde un punto más bajo para fortalecer la parte baja de la espalda."
+},
+{
+        "nombre": "Hiperextensiones",
+        "dificultad": "intermedio",
+        "músculo": "parte baja de la espalda",
+        "imagen": "imagen_hiperextensiones.jpg",
+        "descripcion": "Realiza una extensión hacia atrás desde una posición tumbada para fortalecer la parte baja de la espalda."
+},
+{
+        "nombre": "Peso Muerto con Eje",
+        "dificultad": "principiante",
+        "músculo": "parte baja de la espalda",
+        "imagen": "imagen_peso_muerto_eje.jpg",
+        "descripcion": "Levanta la barra desde el suelo hasta la cadera para fortalecer la parte baja de la espalda."
+},
+{
+        "nombre": "Hiperextensiones sin Banco de Hiperextensiones",
+        "dificultad": "principiante",
+        "músculo": "parte baja de la espalda",
+        "imagen": "imagen_hiperextensiones_sin_banco.jpg",
+        "descripcion": "Realiza una extensión hacia atrás sin un banco para fortalecer la parte baja de la espalda."
+},
+{
+        "nombre": "Peso Muerto con Bandas",
+        "dificultad": "principiante",
+        "músculo": "parte baja de la espalda",
+        "imagen": "imagen_peso_muerto_bandas.jpg",
+        "descripcion": "Levanta la barra con bandas de resistencia para fortalecer la parte baja de la espalda."
+},
+{
+        "nombre": "Peso Muerto con Mancuernas",
+        "dificultad": "principiante",
+        "músculo": "parte baja de la espalda",
+        "imagen": "imagen_peso_muerto_mancuernas.jpg",
+        "descripcion": "Levanta las mancuernas desde el suelo hasta la cadera para fortalecer la parte baja de la espalda."
+},
+{
+        "nombre": "Peso Muerto en Rack con Bandas",
+        "dificultad": "principiante",
+        "músculo": "parte baja de la espalda",
+        "descripcion": "Levanta la barra desde un rack con bandas de resistencia para fortalecer la parte baja de la espalda."
+},
+{
+        "nombre": "Superman",
+        "dificultad": "intermedio",
+        "músculo": "parte baja de la espalda",
+        "descripcion": "Realiza un movimiento de levantamiento de brazos y piernas para fortalecer la parte baja de la espalda."
+},
+{
+        "nombre": "Remo T-Bar con Asa",
+        "dificultad": "intermedia",
+        "músculo": "parte media de la espalda",
+        "descripcion": "Realiza un remo con una barra T-Bar para fortalecer la parte media de la espalda."
+},
+{
+        "nombre": "Remo con Barra Inclinada de Agarre Revertido",
+        "dificultad": "intermedia",
+        "músculo": "parte media de la espalda",
+        "descripcion": "Realiza un remo con barra desde una posición inclinada con agarre revertido para fortalecer la parte media de la espalda."
+},
+{
+        "nombre": "Remo con Mancuerna de un Brazo",
+        "dificultad": "intermedia",
+        "músculo": "parte media de la espalda",
+        "descripcion": "Realiza un remo con mancuerna de un brazo para fortalecer la parte media de la espalda."
+},
+  {
+    "nombre": "Remo con Barra de un Brazo",
+    "dificultad": "intermedia",
+    "músculo": "parte media de la espalda"
+  },
+  {
+    "nombre": "Remo T-Bar",
+    "dificultad": "intermedia",
+    "músculo": "parte media de la espalda"
+  },
+  {
+    "nombre": "Remo con Barra de Dos Brazos Inclinado",
+    "dificultad": "intermedia",
+    "músculo": "parte media de la espalda"
+  },
+  {
+    "nombre": "Alternancia de Pasos a Través con Encogimiento",
+    "dificultad": "intermedia",
+    "músculo": "parte media de la espalda"
+  },
+  {
+    "nombre": "Remo de Máquina",
+    "dificultad": "intermedia",
+    "músculo": "parte media de la espalda"
+  },
+  {
+    "nombre": "Remo Sentado con Polea",
+    "dificultad": "intermedia",
+    "músculo": "parte media de la espalda"
+  },
+  {
+    "nombre": "Remo Inclinado con Mancuernas",
+    "dificultad": "intermedia",
+    "músculo": "parte media de la espalda"
+  },
+{
+    "nombre": "Prensa de Pierna con una Pierna",
+    "dificultad": "intermedia",
+    "músculo": "cuádriceps"
+  },
+  {
+    "nombre": "Prensa Inclinada",
+    "dificultad": "principiante",
+    "músculo": "cuádriceps"
+  },
+  {
+    "nombre": "Sentadilla Completa con Barra",
+    "dificultad": "intermedia",
+    "músculo": "cuádriceps"
+  },
+  {
+    "nombre": "Sentadilla con Barra a Caja",
+    "dificultad": "intermedia",
+    "músculo": "cuádriceps"
+  },
+  {
+    "nombre": "Push-press",
+    "dificultad": "intermedia",
+    "músculo": "cuádriceps"
+  },
+  {
+    "nombre": "Snatch de Potencia",
+    "dificultad": "experto",
+    "músculo": "cuádriceps"
+  },
+  {
+    "nombre": "Elevacion barra hombrofrontal sentadilla",
+    "dificultad": "intermedia",
+    "músculo": "cuádriceps"
+  },
+  {
+    "nombre": "Sentadilla con Banda",
+    "dificultad": "intermedia",
+    "músculo": "cuádriceps"
+  },
+  {
+    "nombre": "Salto de Cuerda",
+    "dificultad": "principiante",
+    "músculo": "cuádriceps"
+  },
+ {
+    "nombre": "Elevación de hombros en máquina",
+    "dificultad": "intermedia",
+    "músculo": "trapecios"
+},
+{
+    "nombre": "Encogimiento de hombros con peso",
+    "dificultad": "principiante",
+    "músculo": "trapecios"
+},
+{
+    "nombre": "Dips de tríceps",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Press Frances",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Press Frances con mancuernas",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Empuje hacia abajo con Barra-V polea",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Dips de banco con peso",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Press Frances con barra Z",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Empuje hacia abajo de tríceps con agarre invertido",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Flexiones de tríceps - Posición de manos cerrada",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Extensión de tríceps con cable de un solo brazo",
+    "dificultad": "intermedia",
+    "músculo": "tríceps"
+},
+{
+    "nombre": "Extensión de tríceps con mancuerna",
+    "dificultad": "principiante",
+    "músculo": "tríceps"
+}
